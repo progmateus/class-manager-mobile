@@ -31,7 +31,7 @@ export function SignUp() {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-      <VStack flex={1} px={10}>
+      <VStack px={10}>
         <Center mb={12} mt={24}>
           <LogoSVG width={48} height={48} />
           <Heading color="brand.500" fontFamily="heading" mt={2}> Class Manager </Heading>
@@ -43,7 +43,7 @@ export function SignUp() {
           </Heading>
 
           <VStack space={6} w="full">
-            <HStack space={4} w="full">
+            <HStack space={4} w={'48%'}>
               <Controller
                 name="name"
                 control={control}
