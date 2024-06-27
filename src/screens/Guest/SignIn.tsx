@@ -2,11 +2,18 @@ import { Center, Heading, Text, VStack, ScrollView, Image, Icon } from "native-b
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import LogoSVG from "@assets/logo.svg"
+import { useNavigation } from "@react-navigation/native";
+import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
 
 export function SignIn() {
+  const navigation = useNavigation<GuestNavigatorRoutesProps>();
+
+  function handleClickSignUp() {
+    navigation.navigate('signUp');
+  }
   return (
-    <ScrollView _contentContainerStyle={{ flexGrow: 1 }}>
-      <VStack flex={1} w="xs">
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <VStack flex={1} px={10}>
         <Center mb={12} mt={24}>
           <LogoSVG width={48} height={48} />
           <Heading color="brand.500" fontFamily="heading" mt={2}> Class Manager </Heading>
@@ -30,7 +37,7 @@ export function SignIn() {
         <Center my={4}>
           <Text color="gray.500" fontSize="sm" mb={3} fontFamily="body"> Ainda não tem acesso?</Text>
         </Center>
-        <Button title="CADASTRE-SE" variant="outline" />
+        <Button title="CADASTRE-SE" variant="outline" onPress={handleClickSignUp} />
       </VStack >
     </ScrollView >
   )

@@ -5,6 +5,8 @@ import LogoSVG from "@assets/logo.svg"
 import { Controller, useForm } from "react-hook-form"
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useNavigation } from "@react-navigation/native";
+import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
 
 
 const signUpSchema = z.object({
@@ -16,19 +18,20 @@ const signUpSchema = z.object({
 
 type signUpProps = z.infer<typeof signUpSchema>
 
-export function signUp() {
+export function SignUp() {
   const { control, handleSubmit, formState: { errors } } = useForm<signUpProps>({
     resolver: zodResolver(signUpSchema)
   });
 
-  function handleSignUp() {
+  const navigation = useNavigation<GuestNavigatorRoutesProps>();
 
+  function handleClicksignIn() {
+    navigation.navigate('signIn');
   }
 
-
   return (
-    <ScrollView _contentContainerStyle={{ flexGrow: 1 }}>
-      <VStack flex={1} w="xs">
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <VStack flex={1} px={10}>
         <Center mb={12} mt={24}>
           <LogoSVG width={48} height={48} />
           <Heading color="brand.500" fontFamily="heading" mt={2}> Class Manager </Heading>
@@ -81,7 +84,7 @@ export function signUp() {
         <Center my={4}>
           <Text color="gray.500" fontSize="sm" mb={3} fontFamily="body"> Já possui uma conta?</Text>
         </Center>
-        <Button title="FAZER LOGIN" variant="outline" onPress={handleSubmit(handleSignUp)} />
+        <Button title="FAZER LOGIN" variant="outline" onPress={handleClicksignIn} />
       </VStack >
     </ScrollView >
   )
