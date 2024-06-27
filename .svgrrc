@@ -1,0 +1,6 @@
+{
+  "replaceAttrValues": {
+    "#000": "{props.fill}",
+    "brand": "#03A6A5"
+  }
+}
