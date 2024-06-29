@@ -9,9 +9,10 @@ type GuestRoutes = {
 
 export type GuestNavigatorRoutesProps = NativeStackNavigationProp<GuestRoutes>;
 
-const { Navigator, Screen } = createNativeStackNavigator<GuestRoutes>();
 
 export function GuestRoutes() {
+  const { Navigator, Screen } = createNativeStackNavigator<GuestRoutes>();
+
   return (
     <Navigator screenOptions={{ headerShown: false }}>
       <Screen

@@ -3,9 +3,10 @@ import { Button as NativeBaseButton, IButtonProps, Text } from "native-base";
 type Props = IButtonProps & {
   title: string;
   variant?: "solid" | "outline";
+  fontSize?: string;
 }
 
-export function Button({ title, variant = "solid", ...rest }: Props) {
+export function Button({ title, variant = "solid", fontSize = "sm", ...rest }: Props) {
   return (
     <NativeBaseButton
       w="full"
@@ -21,7 +22,6 @@ export function Button({ title, variant = "solid", ...rest }: Props) {
       <Text
         color={variant === "outline" ? "brand.500" : "white"}
         fontFamily="heading"
-        fontSize="sm"
       >
         {title}
       </Text>
