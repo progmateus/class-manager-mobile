@@ -11,20 +11,22 @@ export function Button({ title, variant = "solid", fontSize = "sm", ...rest }: P
     <NativeBaseButton
       w="full"
       h={12}
-      bg={variant === "outline" ? "transparent" : "brand.500"}
+      bg={variant === "outline" ? "transparent" : "brand.600"}
       borderWidth={variant === "outline" ? 1 : 0}
       rounded="xl"
       _pressed={{
-        bg: variant === "outline" ? "coolGray.100" : "brand.400",
+        bg: variant === "outline" ? "coolGray.100" : "brand.500",
       }}
       {...rest}
     >
       <Text
-        color={variant === "outline" ? "brand.500" : "white"}
+        color={variant === "outline" ? "brand.600" : "white"}
         fontFamily="heading"
+        fontSize={fontSize}
       >
         {title}
       </Text>
+
     </NativeBaseButton>
   );
 }
