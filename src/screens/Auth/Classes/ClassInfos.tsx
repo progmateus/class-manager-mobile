@@ -1,13 +1,8 @@
 import { PageHeader } from "@components/PageHeader";
-import { HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
-import CalendarSVG from "@assets/calendar.svg"
-import ClockSVG from "@assets/clock-outline.svg"
-import MapSVG from "@assets/map-marker-outline.svg"
-import PersonSVG from "@assets/person-outline.svg"
-import { TouchableOpacity } from "react-native";
+import { Heading, ScrollView, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { StudentItem } from "@components/StudentItem";
-import { ClassInfos } from "@components/ClassPage/ClassInfos";
+import { Info } from "@components/ClassPage/Info";
 
 export function Class() {
 
@@ -44,7 +39,7 @@ export function Class() {
     <View flex={1}>
       <PageHeader title="Detalhes da aula" />
       <ScrollView pb={20}>
-        <ClassInfos infos={classItem} />
+        <Info infos={classItem} />
         <Heading px={4} fontFamily="heading" fontSize="md" mt={8}> Lista de presença</Heading>
         <VStack px={4} mt={2}>
           {

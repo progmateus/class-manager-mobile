@@ -16,7 +16,7 @@ import MoneySVG from "@assets/money.svg"
 import { Bills } from "@screens/Auth/Bills";
 import { Tenant } from "@screens/Auth/Tenant";
 import { Classes } from "@screens/Auth/Classes/Classes";
-import { Class } from "@screens/Auth/Classes/Class";
+import { Class } from "@screens/Auth/Classes/ClassInfos";
 
 
 type AuthRoutes = {

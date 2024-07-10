@@ -17,7 +17,7 @@ interface IProps {
   }
 }
 
-export function ClassInfos({ infos }: IProps) {
+export function Info({ infos }: IProps) {
 
   const getDate = (date: Date) => {
     return new Intl.DateTimeFormat('pt-BR', {
