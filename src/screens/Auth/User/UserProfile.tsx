@@ -13,6 +13,51 @@ import LogoutSVG from "@assets/logout-outline.svg";
 
 export function Profile() {
 
+  const subscriptions = [
+    {
+      tenant: {
+        name: "Vôlei Na Ilha",
+        avatar: "https://img.freepik.com/vetores-premium/modelo-de-vetor-de-esporte-de-volei-ilustracao-grafica-de-voleibol-no-estilo-de-remendo-do-emblema-distintivo_687309-317.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
+      },
+    },
+    {
+      tenant: {
+        name: "Bica Beach",
+        avatar: "https://img.freepik.com/vetores-gratis/silhueta-de-volei-desenhada-de-mao_23-2149397214.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
+      },
+    },
+    {
+      tenant: {
+        name: "Beach tennis",
+        avatar: "https://img.freepik.com/fotos-premium/jogadores-de-voleibol-profissional-feminino-em-acao-no-estadio-3d_654080-1098.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
+      },
+    },
+    {
+      tenant: {
+        name: "Vôlei Insulanos",
+        avatar: "https://img.freepik.com/fotos-gratis/jogadores-de-basquete-na-grande-arena-profissional-durante-o-jogo_654080-388.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
+      },
+    },
+    {
+      tenant: {
+        name: "Vôlei Insulanos",
+        avatar: "https://img.freepik.com/fotos-gratis/jogadores-de-basquete-na-grande-arena-profissional-durante-o-jogo_654080-388.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
+      },
+    },
+    {
+      tenant: {
+        name: "Vôlei Insulanos",
+        avatar: "https://img.freepik.com/fotos-gratis/jogadores-de-basquete-na-grande-arena-profissional-durante-o-jogo_654080-388.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
+      },
+    },
+    {
+      tenant: {
+        name: "Vôlei Insulanos",
+        avatar: "https://img.freepik.com/fotos-gratis/jogadores-de-basquete-na-grande-arena-profissional-durante-o-jogo_654080-388.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
+      },
+    }
+  ]
+
   const user = {
     name: "John",
     lastname: "Doe",
@@ -23,7 +68,7 @@ export function Profile() {
     <View>
       <PageHeader title="Perfil" />
       <ScrollView>
-        <HStack space={2} mt={16} mb={8} px={4}>
+        <HStack space={2} mt={16} px={4}>
           <Image
             rounded="full"
             w={16}
@@ -39,7 +84,35 @@ export function Profile() {
             <Text fontFamily="body"> @{user.username}</Text>
           </VStack>
         </HStack>
-        <HStack space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
+
+        <Text px={4} mt={8} mb={4}> Minhas inscrições</Text>
+
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <HStack space={4} px={4} >
+            {
+              subscriptions && subscriptions.length > 0 && (
+                subscriptions.map((subscription) => {
+                  return (
+                    <VStack justifyContent="center" alignItems="center" space={2}>
+                      <Image
+                        rounded="full"
+                        w={12}
+                        h={12}
+                        alt="user image"
+                        source={{
+                          uri: subscription.tenant.avatar,
+                        }}
+                        defaultSource={{ uri: subscription.tenant.avatar }}
+                      />
+                      <Text fontSize="xs"> {subscription.tenant.name}</Text>
+                    </VStack>
+                  )
+                })
+              )
+            }
+          </HStack>
+        </ScrollView>
+        <HStack mt={8} space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
           <SettingsSVG width={22} height={22} />
           <Text> Configurar Conta</Text>
         </HStack>
