@@ -10,7 +10,7 @@ export function Input({ errorMessage = null, isInvalid = false, ...rest }: Props
   return (
     <FormControl isInvalid={invalid}>
       <NativeBaseInput
-        bg="blueGray.100"
+        bg="coolGray.100"
         h={10}
         px={4}
         borderWidth={0}
@@ -18,7 +18,7 @@ export function Input({ errorMessage = null, isInvalid = false, ...rest }: Props
         fontSize="md"
         color="white"
         fontFamily="body"
-        placeholderTextColor="gray.300"
+        placeholderTextColor="coolGray.400"
         _focus={{
           borderWidth: 1,
           borderColor: 'brand.500'

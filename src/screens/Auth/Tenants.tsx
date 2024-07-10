@@ -8,6 +8,7 @@ export function Tenants() {
       id: '1',
       image: "https://imagens.ebc.com.br/-ZvfoGkRxj3IGhth9K5DyZix0AU=/1170x700/smart/https://agenciabrasil.ebc.com.br/sites/default/files/thumbnails/image/e38skrzx0aythza.jpg?itok=obCfIY5Q",
       name: "Vôlei Paralelo",
+      username: "voleiparalelo",
       description: "s simply dummy text of the printing and typesetting industry. Lorem Ipsum",
       categories: ["Vôlei", "Esporte", "Lazer"]
     },
@@ -15,6 +16,7 @@ export function Tenants() {
       id: '2',
       image: "https://imply.com/wp-content/uploads/female-professional-volleyball-players-action-3d-stadium-750x500.jpg",
       name: "Vôlei Resenha",
+      username: "voleiresenha",
       description: "s simply dummy text of the printing and typesetting industry. Lorem Ipsum",
       categories: ["Vôlei", "Lazer", "Brigas"]
     }
@@ -27,8 +29,8 @@ export function Tenants() {
         px={4}
         data={items}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <TenantItem image={item.image} name={item.name} description={item.description} categories={item.categories} />
+        renderItem={({ item, index }) => (
+          <TenantItem key={index} image={item.image} name={item.name} username={item.username} description={item.description} categories={item.categories} />
         )}>
       </FlatList>
     </View>

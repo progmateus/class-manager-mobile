@@ -13,6 +13,7 @@ import SearchSVG from "@assets/search.svg"
 import ProfileSVG from "@assets/profile.svg"
 import MoneySVG from "@assets/money.svg"
 import { Bills } from "@screens/Auth/Bills";
+import { Tenant } from "@screens/Auth/Tenant";
 
 
 type AuthRoutes = {
@@ -20,6 +21,7 @@ type AuthRoutes = {
   search: undefined;
   profile: undefined;
   bills: undefined;
+  tenant: undefined;
 }
 export type AuthNavigatorRoutesProps = BottomTabNavigationProp<AuthRoutes>;
 
@@ -43,7 +45,7 @@ export function AuthRoutes() {
       }}>
       <Screen
         name="tenants"
-        component={Tenants}
+        component={Tenant}
         options={{
           tabBarIcon: ({ color }) => (
             <TenantSVG fill={color} width={iconSize} height={iconSize} />
@@ -74,6 +76,12 @@ export function AuthRoutes() {
       <Screen
         name="bills"
         component={Bills}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="tenant"
+        component={Tenant}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

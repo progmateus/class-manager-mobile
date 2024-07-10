@@ -15,7 +15,7 @@ export function Button({ title, variant = "solid", fontSize = "sm", ...rest }: P
       borderWidth={variant === "outline" ? 1 : 0}
       rounded="xl"
       _pressed={{
-        bg: variant === "outline" ? "blueGray.100" : "brand.400",
+        bg: variant === "outline" ? "coolGray.100" : "brand.400",
       }}
       {...rest}
     >
