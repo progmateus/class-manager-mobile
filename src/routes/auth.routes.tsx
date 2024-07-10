@@ -3,18 +3,15 @@ import {
   BottomTabNavigationProp,
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
-import { Profile } from "@screens/Auth/Profile";
+import { Profile } from "@screens/Auth/User/UserProfile";
 import { Search } from "@screens/Auth/Search";
-import { Tenants } from "@screens/Auth/Tenants";
 import { useTheme } from "native-base";
-import { UserCircle, MagnifyingGlass, Buildings } from "phosphor-react-native"
 import TenantSVG from "@assets/tenant.svg"
 import SearchSVG from "@assets/search.svg"
 import CalendarSVG from "@assets/calendar.svg"
 import ProfileSVG from "@assets/profile.svg"
-import MoneySVG from "@assets/money.svg"
 import { Bills } from "@screens/Auth/Bills";
-import { Tenant } from "@screens/Auth/Tenant";
+import { Tenant } from "@screens/Auth/Tenants/TenantProfile";
 import { Classes } from "@screens/Auth/Classes/Classes";
 import { Class } from "@screens/Auth/Classes/ClassInfos";
 
