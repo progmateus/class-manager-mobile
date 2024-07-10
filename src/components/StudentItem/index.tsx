@@ -14,7 +14,7 @@ interface IProps {
 export function StudentItem({ student }: IProps) {
   return (
     <TouchableOpacity key={student.avatar}>
-      <HStack px={2} py={3} alignItems="center" rounded="md">
+      <HStack py={3} alignItems="center" rounded="md">
         <Image
           rounded="md"
           w={12}

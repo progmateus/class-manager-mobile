@@ -38,7 +38,7 @@ export function ClassDayInfo() {
   return (
     <View flex={1}>
       <PageHeader title="Detalhes da aula" />
-      <ScrollView pb={20}>
+      <ScrollView pb={20} px={2}>
         <Info infos={classItem} />
         <Heading px={4} fontFamily="heading" fontSize="md" mt={8}> Lista de presença</Heading>
         <VStack px={4} mt={2}>
