@@ -15,7 +15,8 @@ import ProfileSVG from "@assets/profile.svg"
 import MoneySVG from "@assets/money.svg"
 import { Bills } from "@screens/Auth/Bills";
 import { Tenant } from "@screens/Auth/Tenant";
-import { Classes } from "@screens/Auth/Classes";
+import { Classes } from "@screens/Auth/Classes/Classes";
+import { Class } from "@screens/Auth/Classes/Class";
 
 
 type AuthRoutes = {
@@ -48,7 +49,7 @@ export function AuthRoutes() {
       }}>
       <Screen
         name="tenants"
-        component={Tenant}
+        component={Class}
         options={{
           tabBarIcon: ({ color }) => (
             <TenantSVG fill={color} width={iconSize} height={iconSize} />
