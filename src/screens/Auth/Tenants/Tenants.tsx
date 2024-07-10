@@ -24,15 +24,6 @@ export function Tenants() {
   return (
     <View flex={1}>
       <HomeHeader />
-      <FlatList
-        flex={1}
-        px={4}
-        data={items}
-        keyExtractor={item => item.id}
-        renderItem={({ item, index }) => (
-          <TenantItem key={index} image={item.image} name={item.name} username={item.username} description={item.description} categories={item.categories} />
-        )}>
-      </FlatList>
     </View>
   );
 }

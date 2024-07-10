@@ -3,6 +3,8 @@ import Constants from "expo-constants";
 import { Input } from "@components/Input";
 import { TenantItem } from "@components/TenantItem";
 import { MagnifyingGlass } from "phosphor-react-native"
+import { useNavigation } from "@react-navigation/native";
+import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -116,6 +118,12 @@ export function Search() {
     }
   ]
 
+  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+
+  function handleClickTenant() {
+    navigation.navigate('tenant');
+  }
+
   return (
     <VStack flex={1} mt={statusBarHeight + 18}>
       <View px={4}>
@@ -132,7 +140,7 @@ export function Search() {
           data={items}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <TenantItem image={item.image} username={item.username} name={item.name} description={item.description} categories={item.categories} />
+            <TenantItem onPress={handleClickTenant} image={item.image} username={item.username} name={item.name} description={item.description} categories={item.categories} />
           )}>
         </FlatList>
       </View>

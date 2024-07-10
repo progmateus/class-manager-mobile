@@ -13,7 +13,7 @@ import ProfileSVG from "@assets/profile.svg"
 import { Bills } from "@screens/Auth/Bills";
 import { Tenant } from "@screens/Auth/Tenants/TenantProfile";
 import { Classes } from "@screens/Auth/Classes/Classes";
-import { Class } from "@screens/Auth/Classes/ClassInfos";
+import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
 
 
 type AuthRoutes = {
@@ -23,6 +23,7 @@ type AuthRoutes = {
   bills: undefined;
   tenant: undefined;
   classes: undefined;
+  classDayInfo: undefined;
 }
 export type AuthNavigatorRoutesProps = BottomTabNavigationProp<AuthRoutes>;
 
@@ -46,7 +47,7 @@ export function AuthRoutes() {
       }}>
       <Screen
         name="tenants"
-        component={Class}
+        component={ClassDayInfo}
         options={{
           tabBarIcon: ({ color }) => (
             <TenantSVG fill={color} width={iconSize} height={iconSize} />
@@ -93,6 +94,12 @@ export function AuthRoutes() {
       <Screen
         name="tenant"
         component={Tenant}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="classDayInfo"
+        component={ClassDayInfo}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

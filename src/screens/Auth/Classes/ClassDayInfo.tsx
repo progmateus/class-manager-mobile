@@ -4,7 +4,7 @@ import { Button } from "@components/Button";
 import { StudentItem } from "@components/StudentItem";
 import { Info } from "@components/ClassPage/Info";
 
-export function Class() {
+export function ClassDayInfo() {
 
   const students = [
     { avatar: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },

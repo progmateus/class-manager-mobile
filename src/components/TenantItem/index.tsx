@@ -7,11 +7,12 @@ type Props = {
   username: string;
   description: string;
   categories: string[];
+  onPress: () => void;
 }
 
-export function TenantItem({ image, name, username, description, categories }: Props) {
+export function TenantItem({ image, name, username, description, categories, onPress }: Props) {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <HStack px={2} py={3} alignItems="center" rounded="md">
         <Image
           rounded="md"
