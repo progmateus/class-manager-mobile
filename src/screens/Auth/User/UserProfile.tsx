@@ -7,6 +7,7 @@ import ShieldSVG from "@assets/shield-outline.svg";
 import SubscriptionsSVG from "@assets/subscriptions-outline.svg";
 import HistorySVG from "@assets/history-outline.svg";
 import LogoutSVG from "@assets/logout-outline.svg";
+import { MenuOption } from "@components/MenuOption/Index";
 
 
 
@@ -112,34 +113,15 @@ export function Profile() {
             }
           </HStack>
         </ScrollView>
-        <HStack mt={8} space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
-          <SettingsSVG width={22} height={22} />
-          <Text> Configurar Conta</Text>
-        </HStack>
-        <HStack space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
-          <CardSVG width={22} height={22} />
-          <Text> Dados Pessoais</Text>
-        </HStack>
-        <HStack space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
-          <ShieldSVG width={22} height={22} />
-          <Text> Alterar Senha</Text>
-        </HStack>
-        <HStack space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
-          <MoneySVG width={22} height={22} />
-          <Text> Cobranças</Text>
-        </HStack>
-        <HStack space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
-          <HistorySVG width={22} height={22} />
-          <Text> Histórico de Aulas</Text>
-        </HStack>
-        <HStack space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
-          <SubscriptionsSVG width={22} height={22} />
-          <Text> Gerenciar Inscrições </Text>
-        </HStack>
-        <HStack space={1} alignItems="center" py={4} borderTopColor="coolGray.500" borderTopWidth={0.5} px={4}>
-          <LogoutSVG width={22} height={22} />
-          <Text> Sair</Text>
-        </HStack>
+        <View mt={8}>
+          <MenuOption icon={<SettingsSVG width={22} height={22} />} title="Configurar Conta" />
+          <MenuOption icon={<CardSVG width={22} height={22} />} title="Dados Pessoais" />
+          <MenuOption icon={<ShieldSVG width={22} height={22} />} title="Alterar Senha" />
+          <MenuOption icon={<MoneySVG width={22} height={22} />} title="Cobranças" />
+          <MenuOption icon={<HistorySVG width={22} height={22} />} title="Histórico de Aulas" />
+          <MenuOption icon={<SubscriptionsSVG width={22} height={22} />} title="Gerenciar Inscrições" />
+          <MenuOption icon={<LogoutSVG width={22} height={22} />} title="Sair" />
+        </View>
       </ScrollView>
     </View>
 
