@@ -10,10 +10,12 @@ import { useTheme } from "native-base";
 import { UserCircle, MagnifyingGlass, Buildings } from "phosphor-react-native"
 import TenantSVG from "@assets/tenant.svg"
 import SearchSVG from "@assets/search.svg"
+import CalendarSVG from "@assets/calendar.svg"
 import ProfileSVG from "@assets/profile.svg"
 import MoneySVG from "@assets/money.svg"
 import { Bills } from "@screens/Auth/Bills";
 import { Tenant } from "@screens/Auth/Tenant";
+import { Classes } from "@screens/Auth/Classes";
 
 
 type AuthRoutes = {
@@ -22,6 +24,7 @@ type AuthRoutes = {
   profile: undefined;
   bills: undefined;
   tenant: undefined;
+  classes: undefined;
 }
 export type AuthNavigatorRoutesProps = BottomTabNavigationProp<AuthRoutes>;
 
@@ -59,6 +62,16 @@ export function AuthRoutes() {
         options={{
           tabBarIcon: ({ color }) => (
             <SearchSVG fill={color} width={iconSize} height={iconSize} />
+          )
+        }}
+      />
+
+      <Screen
+        name="classes"
+        component={Classes}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <CalendarSVG fill={color} width={iconSize} height={iconSize} />
           )
         }}
       />
