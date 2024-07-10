@@ -77,7 +77,7 @@ export function Profile() {
     <View>
       <PageHeader title="Perfil" />
       <ScrollView>
-        <HStack space={2} mt={16} px={4}>
+        <HStack space={2} mt={8} px={4}>
           <Image
             rounded="full"
             w={16}
