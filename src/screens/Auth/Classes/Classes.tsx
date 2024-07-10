@@ -1,5 +1,5 @@
 import ClockSVG from "@assets/clock-outline.svg"
-import { Center, HStack, Heading, Image, Text, VStack, View } from "native-base";
+import { Center, HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { PageHeader } from "@components/PageHeader";
 
@@ -116,86 +116,88 @@ export function Classes() {
   return (
     <View flex={1}>
       <PageHeader title="Aulas" />
-      <VStack flex={1}>
-        <HStack>
-          {dates && dates.length && (
-            dates.map((date, index) => {
-              return (
-                <VStack key={index} flex={1} justifyContent="space-between" mt={4}>
-                  <TouchableOpacity>
-                    <Center>
-                      <Text textTransform="capitalize">
-                        {getWeekDay(date).replace('.', '')}
-                      </Text>
-                      <Text fontFamily="heading" mt={2} fontSize="xl">
-                        {getDay(date)}
-                      </Text>
-                      <View mt={2} w="1/3" borderBottomColor="coolGray.300" borderBottomWidth={2}></View>
-                    </Center>
-                  </TouchableOpacity>
-                </VStack>
-              )
-            })
-          )}
-        </HStack>
-
-        <VStack flex={1} px={4} space={4} mt={12}>
-          {
-            classes && classes.length && (
-              classes.map((classItem) => {
+      <ScrollView flex={1}>
+        <View pb={20}>
+          <HStack>
+            {dates && dates.length && (
+              dates.map((date, index) => {
                 return (
-                  <HStack p={4} space={4} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
-                    <VStack>
+                  <VStack key={index} flex={1} justifyContent="space-between" mt={4}>
+                    <TouchableOpacity>
                       <Center>
-                        <ClockSVG />
-                        <Text> {getHours(classItem.date)}</Text>
+                        <Text textTransform="capitalize">
+                          {getWeekDay(date).replace('.', '')}
+                        </Text>
+                        <Text fontFamily="heading" mt={2} fontSize="xl">
+                          {getDay(date)}
+                        </Text>
+                        <View mt={2} w="1/3" borderBottomColor="coolGray.300" borderBottomWidth={2}></View>
                       </Center>
-                    </VStack>
-                    <VStack space={0.5} flex={1}>
-                      <Heading fontSize="sm">{classItem.tenantName}</Heading>
-                      <Text fontSize="xs">{classItem.className}</Text>
-                      <Text fontSize="xs">{classItem.local}</Text>
-                    </VStack>
-
-                    <HStack>
-                      {
-                        classItem.students && classItem.students.length > 0 && (
-                          classItem.students.map((student, index) => {
-                            return (
-                              index < 3 && (
-                                <Image
-                                  key={index}
-                                  rounded="md"
-                                  ml={-5}
-                                  w={9}
-                                  h={9}
-                                  alt="image profile"
-                                  source={{
-                                    uri: student.avatar,
-                                  }}
-                                  defaultSource={{ uri: student.avatar }}
-                                />
-                              )
-                            )
-                          })
-                        )
-                      }
-
-                      {
-                        classItem.students && classItem.students.length > 3 && (
-                          <View w={9} h={9} backgroundColor="brand.600" rounded="md" ml={-5} alignItems="center" justifyContent="center">
-                            <Text color="coolGray.100" fontSize="xs"> +{classItem.students.length - 3}</Text>
-                          </View>
-                        )
-                      }
-                    </HStack>
-
-                  </HStack>
+                    </TouchableOpacity>
+                  </VStack>
                 )
               })
             )}
-        </VStack>
-      </VStack>
+          </HStack>
+
+          <VStack flex={1} px={4} space={4} mt={12}>
+            {
+              classes && classes.length && (
+                classes.map((classItem) => {
+                  return (
+                    <HStack p={4} space={4} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
+                      <VStack>
+                        <Center>
+                          <ClockSVG />
+                          <Text> {getHours(classItem.date)}</Text>
+                        </Center>
+                      </VStack>
+                      <VStack space={0.5} flex={1}>
+                        <Heading fontSize="sm">{classItem.tenantName}</Heading>
+                        <Text fontSize="xs">{classItem.className}</Text>
+                        <Text fontSize="xs">{classItem.local}</Text>
+                      </VStack>
+
+                      <HStack>
+                        {
+                          classItem.students && classItem.students.length > 0 && (
+                            classItem.students.map((student, index) => {
+                              return (
+                                index < 3 && (
+                                  <Image
+                                    key={index}
+                                    rounded="md"
+                                    ml={-5}
+                                    w={9}
+                                    h={9}
+                                    alt="image profile"
+                                    source={{
+                                      uri: student.avatar,
+                                    }}
+                                    defaultSource={{ uri: student.avatar }}
+                                  />
+                                )
+                              )
+                            })
+                          )
+                        }
+
+                        {
+                          classItem.students && classItem.students.length > 3 && (
+                            <View w={9} h={9} backgroundColor="brand.600" rounded="md" ml={-5} alignItems="center" justifyContent="center">
+                              <Text color="coolGray.100" fontSize="xs"> +{classItem.students.length - 3}</Text>
+                            </View>
+                          )
+                        }
+                      </HStack>
+
+                    </HStack>
+                  )
+                })
+              )}
+          </VStack>
+        </View>
+      </ScrollView>
     </View>
   );
 }
