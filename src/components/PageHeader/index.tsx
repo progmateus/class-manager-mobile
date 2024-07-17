@@ -1,7 +1,8 @@
 import { HStack, Heading, Icon } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { ArrowLeft } from "phosphor-react-native"
-
+import Constants from "expo-constants";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = {
   title: string;
@@ -9,9 +10,6 @@ type Props = {
   rightAction?: () => {};
   rightIconColor?: string;
 }
-
-import Constants from "expo-constants";
-import { useNavigation } from "@react-navigation/native";
 
 export function PageHeader({ title, rightIcon, rightAction, rightIconColor = "success.600" }: Props) {
   const statusBarHeight = Constants.statusBarHeight;
