@@ -21,7 +21,7 @@ export function UpdateClassDayStatus() {
       <VStack justifyContent="space-between" px={4} py={8} flex={1}>
         <Input value={observation} onChangeText={setObservation} label="Observação" variant="outline" h={24} color="coolGray.800" />
         <VStack space={4}>
-          <Button title="CONFIRMAR AULA" onPress={() => handleUpdateStatus("confirm")} bg="success.600"> </Button>
+          <Button title="CONFIRMAR AULA" onPress={() => handleUpdateStatus("confirm")}> </Button>
           <Button title="CANCELAR AULA" variant="outline" onPress={() => handleUpdateStatus("cancel")} color="danger.500"> </Button>
         </VStack>
       </VStack>
