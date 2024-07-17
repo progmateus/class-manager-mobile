@@ -4,10 +4,8 @@ import { Button } from "@components/Button";
 import { StudentItem } from "@components/StudentItem";
 import { Info } from "@components/ClassPage/Info";
 import { GetRole } from "@utils/GetRole";
-import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 
-export function ClassDayInfo() {
+export function UpdateClassDayStatus() {
   const roles = [
     {
       tenantId: "123",
@@ -18,7 +16,7 @@ export function ClassDayInfo() {
     }
   ]
 
-  const isTeacher = GetRole(roles, "123", "teacher")
+  const isTeacher = !!GetRole(roles, "123", "teacher")
 
   const students = [
     { avatar: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
@@ -48,12 +46,6 @@ export function ClassDayInfo() {
     }
   }
 
-  const navigation = useNavigation<AuthNavigatorRoutesProps>();
-
-  function handleClickUpdateStatus() {
-    navigation.navigate('updateClassDayStatus');
-  }
-
 
   return (
     <View flex={1}>
@@ -76,7 +68,7 @@ export function ClassDayInfo() {
             {
               isTeacher && (
                 <>
-                  <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" color="success.600" onPress={handleClickUpdateStatus}></Button>
+                  <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" color="success.600"></Button>
                 </>
               )
             }

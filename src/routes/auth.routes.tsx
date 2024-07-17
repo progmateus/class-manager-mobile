@@ -14,6 +14,7 @@ import { Bills } from "@screens/Auth/Bills";
 import { Tenant } from "@screens/Auth/Tenants/TenantProfile";
 import { Classes } from "@screens/Auth/Classes/Classes";
 import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
+import { UpdateClassDayStatus } from "@screens/Auth/Classes/UpdateClassDayStatus";
 
 
 type AuthRoutes = {
@@ -24,6 +25,7 @@ type AuthRoutes = {
   tenant: undefined;
   classes: undefined;
   classDayInfo: undefined;
+  updateClassDayStatus: undefined;
 }
 export type AuthNavigatorRoutesProps = BottomTabNavigationProp<AuthRoutes>;
 
@@ -73,7 +75,9 @@ export function AuthRoutes() {
             <CalendarSVG fill={color} width={iconSize} height={iconSize} />
           )
         }}
-      />
+      >
+
+      </Screen>
 
       <Screen
         name="profile"
@@ -100,6 +104,12 @@ export function AuthRoutes() {
       <Screen
         name="classDayInfo"
         component={ClassDayInfo}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="updateClassDayStatus"
+        component={UpdateClassDayStatus}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>
