@@ -76,7 +76,7 @@ export function ClassDayInfo() {
             {
               isTeacher && (
                 <>
-                  <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" color="success.600" onPress={handleClickUpdateStatus}></Button>
+                  <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
                 </>
               )
             }

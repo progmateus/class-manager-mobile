@@ -5,7 +5,7 @@ import { AuthRoutes } from "./auth.routes";
 
 export function Routes() {
   const { colors } = useTheme();
-  const token = null;
+  const token = "123456";
 
   const theme = DefaultTheme;
   theme.colors.background = colors.white
