@@ -32,7 +32,11 @@ export function PageHeader({ title, rightIcon, rightAction, rightIconColor = "su
       <TouchableOpacity onPress={handleBack}>
         <Icon as={ArrowLeft} />
       </TouchableOpacity>
-      <Heading flex={1} textAlign="center" fontFamily="heading" fontSize="2xl"> {title} </Heading>
+      <Heading
+        style={{
+          marginLeft: rightAction ? 0 : -28
+        }}
+        flex={1} textAlign="center" fontFamily="heading" fontSize="2xl"> {title} </Heading>
       {
         rightIcon && (
           <TouchableOpacity onPress={rightAction}>
