@@ -4,14 +4,16 @@ import { ArrowLeft } from "phosphor-react-native"
 
 
 type Props = {
-  title: string
+  title: string;
+  rightIcon?: any;
+  rightAction?: () => {};
+  rightIconColor?: string;
 }
 
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
 
-
-export function PageHeader({ title }: Props) {
+export function PageHeader({ title, rightIcon, rightAction, rightIconColor = "success.600" }: Props) {
   const statusBarHeight = Constants.statusBarHeight;
   const navigation = useNavigation();
 
@@ -33,6 +35,13 @@ export function PageHeader({ title }: Props) {
         <Icon as={ArrowLeft} onPress={handlePress} />
       </TouchableOpacity>
       <Heading flex={1} textAlign="center" fontFamily="heading" fontSize="2xl"> {title} </Heading>
+      {
+        rightIcon && (
+          <TouchableOpacity onPress={rightAction}>
+            <Icon as={rightIcon} color={rightIconColor} />
+          </TouchableOpacity>
+        )
+      }
     </HStack>
   );
 }
