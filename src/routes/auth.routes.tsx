@@ -10,7 +10,8 @@ import TenantSVG from "@assets/tenant.svg"
 import SearchSVG from "@assets/search.svg"
 import CalendarSVG from "@assets/calendar.svg"
 import ProfileSVG from "@assets/profile.svg"
-import { Bills } from "@screens/Auth/Bills";
+import MoneySVG from "@assets/money-outline.svg"
+import { Bills } from "@screens/Auth/Billing/Bills";
 import { Tenant } from "@screens/Auth/Tenants/TenantProfile";
 import { Classes } from "@screens/Auth/Classes/Classes";
 import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
@@ -71,6 +72,7 @@ export function AuthRoutes() {
         }}
       />
 
+
       <Screen
         name="classes"
         component={Classes}
@@ -79,9 +81,17 @@ export function AuthRoutes() {
             <CalendarSVG fill={color} width={iconSize} height={iconSize} />
           )
         }}
-      >
+      />
 
-      </Screen>
+      <Screen
+        name="bills"
+        component={Bills}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <MoneySVG fill={color} width={iconSize} height={iconSize} />
+          )
+        }}
+      />
 
       <Screen
         name="profile"
@@ -91,12 +101,6 @@ export function AuthRoutes() {
             <ProfileSVG fill={color} width={iconSize} height={iconSize} />
           )
         }}
-      />
-
-      <Screen
-        name="bills"
-        component={Bills}
-        options={{ tabBarButton: () => (null) }}
       />
 
       <Screen
