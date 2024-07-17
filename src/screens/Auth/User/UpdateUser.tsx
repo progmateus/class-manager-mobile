@@ -14,7 +14,7 @@ const updateUserSchema = z.object({
   name: z.string().min(3).max(80).trim(),
   lastname: z.string().min(3).max(80).trim(),
   email: z.string().email().trim(),
-  docuemnt: z.string().regex(CPFRegex, "CPF Inválido").trim(),
+  document: z.string().regex(CPFRegex, "CPF Inválido").trim(),
   phone: z.string().trim(),
 });
 
@@ -83,10 +83,10 @@ export function UpdateUser() {
             />
 
             <Controller
-              name="docuemnt"
+              name="document"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input label="CPF" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.docuemnt?.message} />
+                <Input label="CPF" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.document?.message} />
               )}
             />
 
