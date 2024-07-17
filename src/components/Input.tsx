@@ -32,7 +32,7 @@ export function Input({ errorMessage = null, isInvalid = false, label, ...rest }
           }}
           {...rest}
         />
-        {errorMessage && (<Text fontSize="sm" fontWeight="medium" color="danger.500"> opa eai beleza </Text>)}
+        {errorMessage && (<Text fontSize="sm" fontWeight="medium" color="danger.500"> {errorMessage}</Text>)}
       </VStack>
     </FormControl>
   );
