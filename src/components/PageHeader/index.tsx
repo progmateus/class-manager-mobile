@@ -17,7 +17,7 @@ export function PageHeader({ title, rightIcon, rightAction, rightIconColor = "su
   const statusBarHeight = Constants.statusBarHeight;
   const navigation = useNavigation();
 
-  const handlePress = () => {
+  const handleBack = () => {
     navigation.goBack();
   }
 
@@ -31,8 +31,8 @@ export function PageHeader({ title, rightIcon, rightAction, rightIconColor = "su
       py={3}
       borderBottomColor="coolGray.400"
     >
-      <TouchableOpacity>
-        <Icon as={ArrowLeft} onPress={handlePress} />
+      <TouchableOpacity onPress={handleBack}>
+        <Icon as={ArrowLeft} />
       </TouchableOpacity>
       <Heading flex={1} textAlign="center" fontFamily="heading" fontSize="2xl"> {title} </Heading>
       {
