@@ -38,7 +38,7 @@ export function UpdatePassword() {
   }
   return (
     <View flex={1}>
-      <PageHeader title="Dados Pessoais" rightIcon={Check} rightAction={handleSubmit(handleUpdate)} />
+      <PageHeader title="Alterar Senha" rightIcon={Check} rightAction={handleSubmit(handleUpdate)} />
       <ScrollContainer>
         <VStack pb={20}>
           <View>
