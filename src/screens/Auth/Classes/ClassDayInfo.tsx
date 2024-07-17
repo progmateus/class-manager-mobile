@@ -44,9 +44,9 @@ export function ClassDayInfo() {
         <VStack px={4} mt={2}>
           {
             students && students.length > 0 && (
-              students.map((student) => {
+              students.map((student, index) => {
                 return (
-                  <StudentItem student={student} />
+                  <StudentItem key={index} student={student} />
                 )
               })
             )

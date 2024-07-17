@@ -30,7 +30,7 @@ export function Info({ infos }: IProps) {
   };
 
   return (
-    <VStack space={1} p={4} mt={2}>
+    <VStack space={2} p={4} mt={2}>
       <HStack alignItems="center" space={1}>
         <CalendarSVG width={24} height={24} />
         <Text fontSize="sm" textTransform="capitalize"> {getDate(infos.date)} </Text>
