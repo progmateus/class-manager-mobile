@@ -77,7 +77,7 @@ export function Profile() {
   }
   return (
     <View>
-      <PageHeader title="Perfil" />
+      <PageHeader title="Informações" />
       <ScrollView>
         <HStack space={2} mt={8} px={4}>
           <Image
