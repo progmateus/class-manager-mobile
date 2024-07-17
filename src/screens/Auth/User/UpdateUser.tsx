@@ -11,11 +11,11 @@ const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
 
 const updateUserSchema = z.object({
-  name: z.string().min(3).max(80).trim(),
-  lastname: z.string().min(3).max(80).trim(),
-  email: z.string().email().trim(),
-  document: z.string().regex(CPFRegex, "CPF Inválido").trim(),
-  phone: z.string().trim(),
+  name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
+  lastname: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
+  email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
+  document: z.string().regex(CPFRegex, "CPF Inválido").trim().optional(),
+  phone: z.string().trim().optional(),
 });
 
 type updateUserProps = z.infer<typeof updateUserSchema>

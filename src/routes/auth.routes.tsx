@@ -16,6 +16,7 @@ import { Classes } from "@screens/Auth/Classes/Classes";
 import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
 import { UpdateClassDayStatus } from "@screens/Auth/Classes/UpdateClassDayStatus";
 import { UpdateUser } from "@screens/Auth/User/UpdateUser";
+import { UpdatePassword } from "@screens/Auth/User/UpdatePassword";
 
 
 type AuthRoutes = {
@@ -28,6 +29,7 @@ type AuthRoutes = {
   classDayInfo: undefined;
   updateClassDayStatus: undefined;
   updateUser: undefined;
+  updatePassword: undefined;
 }
 export type AuthNavigatorRoutesProps = BottomTabNavigationProp<AuthRoutes>;
 
@@ -118,6 +120,12 @@ export function AuthRoutes() {
       <Screen
         name="updateUser"
         component={UpdateUser}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="updatePassword"
+        component={UpdatePassword}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>
