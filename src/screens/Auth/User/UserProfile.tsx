@@ -9,11 +9,13 @@ import HistorySVG from "@assets/history-outline.svg";
 import LogoutSVG from "@assets/logout-outline.svg";
 import { MenuOption } from "@components/MenuOption/Index";
 import { SubscriptionOption } from "@components/SubscriptionOption";
-
-
+import { useNavigation } from "@react-navigation/native";
+import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 
 
 export function Profile() {
+
+  const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
   const subscriptions = [
     {
@@ -110,13 +112,13 @@ export function Profile() {
           </HStack>
         </ScrollView>
         <View mt={8}>
-          <MenuOption icon={<SettingsSVG width={22} height={22} />} title="Configurar Conta" />
-          <MenuOption icon={<CardSVG width={22} height={22} />} title="Dados Pessoais" />
-          <MenuOption icon={<ShieldSVG width={22} height={22} />} title="Alterar Senha" />
-          <MenuOption icon={<MoneySVG width={22} height={22} />} title="Cobranças" />
-          <MenuOption icon={<HistorySVG width={22} height={22} />} title="Histórico de Aulas" />
-          <MenuOption icon={<SubscriptionsSVG width={22} height={22} />} title="Gerenciar Inscrições" />
-          <MenuOption icon={<LogoutSVG width={22} height={22} />} title="Sair" />
+          <MenuOption icon={<SettingsSVG width={22} height={22} />} title="Configurar Conta" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<CardSVG width={22} height={22} />} title="Dados Pessoais" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<ShieldSVG width={22} height={22} />} title="Alterar Senha" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<MoneySVG width={22} height={22} />} title="Cobranças" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<HistorySVG width={22} height={22} />} title="Histórico de Aulas" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<SubscriptionsSVG width={22} height={22} />} title="Gerenciar Inscrições" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<LogoutSVG width={22} height={22} />} title="Sair" onPress={() => navigation.navigate('updateUser')} />
         </View>
       </ScrollView>
     </View>
