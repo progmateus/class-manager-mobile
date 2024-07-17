@@ -1,9 +1,6 @@
 import { PageHeader } from "@components/PageHeader";
-import { Heading, ScrollView, VStack, View } from "native-base";
+import { VStack, View } from "native-base";
 import { Button } from "@components/Button";
-import { StudentItem } from "@components/StudentItem";
-import { Info } from "@components/ClassPage/Info";
-import { GetRole } from "@utils/GetRole";
 import { Input } from "@components/Input";
 import { useState } from "react";
 

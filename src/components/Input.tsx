@@ -8,18 +8,24 @@ type Props = IInputProps & {
 
 export function Input({ errorMessage = null, isInvalid = false, label, ...rest }: Props) {
   const invalid = !!errorMessage || isInvalid;
+
+  const { color, bg, bgColor, backgroundColor, background, variant } = rest
+
+  const definedBg = variant && variant !== "filled" ? "transparent" : bg || bgColor || backgroundColor || background || "coolGray.100";
+  const definedColor = color ? color : variant !== "filled" ? "coolGray.800" : "white"
+
   return (
     <FormControl isInvalid={invalid}>
       <VStack space={1.5}>
         {label && (<Text fontSize="sm" fontWeight="medium" color="coolGray.700"> Nome </Text>)}
         <NativeBaseInput
-          bg="coolGray.100"
+          bg={definedBg}
           h={10}
           px={4}
-          borderWidth={0}
           isInvalid={invalid}
+          borderWidth={variant && variant !== "filled" ? 1 : 0}
           fontSize="md"
-          color="white"
+          color={definedColor}
           fontFamily="body"
           placeholderTextColor="coolGray.400"
           _focus={{
