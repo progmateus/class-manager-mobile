@@ -3,8 +3,20 @@ import { Heading, ScrollView, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { StudentItem } from "@components/StudentItem";
 import { Info } from "@components/ClassPage/Info";
+import { GetRole } from "@utils/GetRole";
 
 export function ClassDayInfo() {
+  const roles = [
+    {
+      tenantId: "123",
+      roleId: "456",
+      role: {
+        name: "teacher"
+      }
+    }
+  ]
+
+  const isTeacher = !!GetRole(roles, "123", "teacher")
 
   const students = [
     { avatar: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
@@ -51,7 +63,17 @@ export function ClassDayInfo() {
               })
             )
           }
-          <Button title="PARTICIPAR" my={8} h={10} fontSize="xs" rounded="md"></Button>
+          <VStack space={4} my={8}>
+            <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md"></Button>
+            {
+              isTeacher && (
+                <>
+                  <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" color="success.600"></Button>
+                </>
+              )
+            }
+          </VStack>
+
         </VStack>
       </ScrollView>
     </View>
