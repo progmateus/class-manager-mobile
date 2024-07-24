@@ -10,12 +10,12 @@ import LogoutSVG from "@assets/logout-outline.svg";
 import { MenuOption } from "@components/MenuOption/Index";
 import { SubscriptionOption } from "@components/SubscriptionOption";
 import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+import { UserNavigatorRoutesProps } from "@routes/user.routes";
 
 
 export function Profile() {
 
-  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const subscriptions = [
     {

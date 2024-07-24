@@ -4,7 +4,7 @@ import { Input } from "@components/Input";
 import { TenantItem } from "@components/TenantItem";
 import { MagnifyingGlass } from "phosphor-react-native"
 import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+import { UserNavigatorRoutesProps } from "@routes/user.routes";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -118,7 +118,7 @@ export function Search() {
     }
   ]
 
-  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   function handleClickTenant() {
     navigation.navigate('tenant');

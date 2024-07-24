@@ -20,7 +20,7 @@ import { UpdateUser } from "@screens/Auth/User/UpdateUser";
 import { UpdatePassword } from "@screens/Auth/User/UpdatePassword";
 
 
-type AuthRoutes = {
+type UserRoutes = {
   tenants: undefined;
   search: undefined;
   profile: undefined;
@@ -32,11 +32,11 @@ type AuthRoutes = {
   updateUser: undefined;
   updatePassword: undefined;
 }
-export type AuthNavigatorRoutesProps = BottomTabNavigationProp<AuthRoutes>;
+export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;
 
-export function AuthRoutes() {
+export function UserRoutes() {
   const { sizes, colors } = useTheme();
-  const { Navigator, Screen } = createBottomTabNavigator<AuthRoutes>();
+  const { Navigator, Screen, Group } = createBottomTabNavigator<UserRoutes>();
 
   const iconSize = sizes[6]
   return (

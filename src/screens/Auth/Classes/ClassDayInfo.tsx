@@ -5,7 +5,7 @@ import { StudentItem } from "@components/StudentItem";
 import { Info } from "@components/ClassPage/Info";
 import { GetRole } from "@utils/GetRole";
 import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+import { UserNavigatorRoutesProps } from "@routes/user.routes";
 
 export function ClassDayInfo() {
   const roles = [
@@ -48,7 +48,7 @@ export function ClassDayInfo() {
     }
   }
 
-  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   function handleClickUpdateStatus() {
     navigation.navigate('updateClassDayStatus');

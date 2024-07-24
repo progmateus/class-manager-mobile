@@ -3,7 +3,7 @@ import { Center, HStack, Heading, Image, ScrollView, Text, VStack, View } from "
 import { TouchableOpacity } from "react-native";
 import { PageHeader } from "@components/PageHeader";
 import { useNavigation } from "@react-navigation/native";
-import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+import { UserNavigatorRoutesProps } from "@routes/user.routes";
 
 export function Classes() {
   const dates = [
@@ -93,7 +93,7 @@ export function Classes() {
 
   ]
 
-  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   function handleClickClassDay() {
     navigation.navigate('classDayInfo');
