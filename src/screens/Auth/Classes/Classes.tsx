@@ -85,10 +85,10 @@ export function Classes() {
   const classes = [
     { id: "1", date: new Date(2024, 7, 9), tenantName: "Vôlei na ilha", className: "Iniciantes", local: "praia da bica, 255", students: students },
     { id: "2", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Dupla", local: "praia da bica, 255", students: students },
-    { id: "3", date: new Date(2024, 7, 9), tenantName: "Vôlei na ilha", className: "Iniciantes", local: "praia da bica, 255", students: students },
-    { id: "4", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Dupla", local: "praia da bica, 255", students: students },
+    { id: "3", date: new Date(2024, 7, 9), tenantName: "B4 Futvôlei", className: "Iniciantes", local: "praia da bica, 255", students: students },
+    { id: "4", date: new Date(2024, 7, 9), tenantName: "Futvôlei AR", className: "Dupla", local: "praia da bica, 255", students: students },
     { id: "5", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Intermediarios", local: "praia da bica, 255", students: students },
-    { id: "6", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Avançados", local: "praia da bica, 255", students: students },
+    { id: "6", date: new Date(2024, 7, 9), tenantName: "B4 Futvôlei", className: "Avançados", local: "praia da bica, 255", students: students },
     { id: "7", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Avançados", local: "praia da bica, 255", students: students }
 
   ]
