@@ -1,6 +1,7 @@
 import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
+import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
 import { tranforSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
 import { Center, HStack, Icon, Image, Link, Text, View, VStack } from "native-base"
 import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, IdentificationCard, ArrowsLeftRight, CurrencyDollar, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar, Target, Check, CheckCircle, LockKey, Money } from "phosphor-react-native"
@@ -23,7 +24,12 @@ export function StudentInfo() {
     plan: {
       name: "Básico"
     },
-    status: 1
+    status: 1,
+    payments: [
+      {
+        status: 1
+      }
+    ]
   }
   return (
     <View flex={1}>
@@ -77,7 +83,7 @@ export function StudentInfo() {
           <HStack space={4} justifyContent="space-between">
             <HStack borderWidth={0.8} rounded="lg" px={4} alignItems="center" justifyContent="space-between" flex={1}>
               <VStack>
-                <Text fontSize="xs" color="coolGray.400"> SITUAÇÃO </Text>
+                <Text fontSize="xs" color="coolGray.400">SITUAÇÃO</Text>
                 <Text w={16} fontSize="lg" color="brand.500">
                   {tranforSubscriptionStatus(subscription.status)}
                 </Text>
@@ -87,9 +93,9 @@ export function StudentInfo() {
 
             <HStack borderWidth={0.8} rounded="lg" px={4} py={1} alignItems="center" justifyContent="space-between" flex={1}>
               <VStack>
-                <Text fontSize="xs" color="coolGray.400"> SITUAÇÃO </Text>
+                <Text fontSize="xs" color="coolGray.400">PAGAMENTO</Text>
                 <Text w={16} fontSize="lg" color="success.500">
-                  {tranforSubscriptionStatus(subscription.status)}
+                  {transformInvoiceStatus(subscription.payments[0].status)}
                 </Text>
               </VStack>
               <Icon as={CheckCircle} color="success.500" />
