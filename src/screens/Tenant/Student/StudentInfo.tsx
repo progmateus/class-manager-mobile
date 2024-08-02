@@ -1,8 +1,10 @@
 import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
+import { tranforSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
 import { Center, HStack, Icon, Image, Link, Text, View, VStack } from "native-base"
-import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, CalendarBlank, ArrowsLeftRight, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar } from "phosphor-react-native"
+import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, IdentificationCard, ArrowsLeftRight, CurrencyDollar, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar, Target, Check, CheckCircle, LockKey, Money } from "phosphor-react-native"
+import { TouchableOpacity } from "react-native"
 
 export function StudentInfo() {
   const subscription = {
@@ -20,13 +22,14 @@ export function StudentInfo() {
     },
     plan: {
       name: "Básico"
-    }
+    },
+    status: 1
   }
   return (
     <View flex={1}>
       <PageHeader title={subscription.user.name} />
       <ScrollContainer>
-        <VStack>
+        <VStack space={8}>
           <HStack justifyContent="space-between">
             <VStack space={1}>
               <HStack alignItems="center" space={1}>
@@ -39,7 +42,7 @@ export function StudentInfo() {
               </HStack>
 
               <HStack alignItems="center" space={1}>
-                <Icon as={Info} />
+                <Icon as={IdentificationCard} />
                 <Text fontSize="sm" > {subscription.user.document} </Text>
               </HStack>
 
@@ -65,75 +68,64 @@ export function StudentInfo() {
                   }}
                   defaultSource={{ uri: subscription.user.avatar }}
                 />
-                <Text fontSize="sm" mt={4} color="coolGray.400">{subscription.user.username}</Text>
+                <Text fontSize="sm" mt={2} color="coolGray.400">{subscription.user.username}</Text>
               </Center>
             </VStack>
           </HStack>
-          <Text fontSize="sm" mt={4} fontWeight="bold" color="coolGray.400"> Mês atual</Text>
-          <HStack space={4} mt={4}>
-            <VStack h={24} borderWidth={0.8} rounded="lg" px={2}>
-              <Text fontSize="3xl" color="success.500"> 49 </Text>
-              <Text w={16} fontSize="xs">Alunos novos</Text>
-            </VStack>
-            <VStack h={24} borderWidth={0.8} rounded="lg" px={2}>
-              <Text fontSize="3xl" color="danger.500"> 8 </Text>
-              <Text maxW={20} fontSize="xs">Alunos cancelados</Text>
-            </VStack>
-            <VStack h={24} borderWidth={0.8} rounded="lg" px={2}>
-              <Text fontSize="3xl" color="brand.600"> 3489 </Text>
-              <Text maxW={20} fontSize="xs">Aulas concluídas</Text>
-            </VStack>
+
+
+          <HStack space={4} justifyContent="space-between">
+            <HStack borderWidth={0.8} rounded="lg" px={4} alignItems="center" justifyContent="space-between" flex={1}>
+              <VStack>
+                <Text fontSize="xs" color="coolGray.400"> SITUAÇÃO </Text>
+                <Text w={16} fontSize="lg" color="brand.500">
+                  {tranforSubscriptionStatus(subscription.status)}
+                </Text>
+              </VStack>
+              <Icon as={Target} color="brand.500" />
+            </HStack>
+
+            <HStack borderWidth={0.8} rounded="lg" px={4} py={1} alignItems="center" justifyContent="space-between" flex={1}>
+              <VStack>
+                <Text fontSize="xs" color="coolGray.400"> SITUAÇÃO </Text>
+                <Text w={16} fontSize="lg" color="success.500">
+                  {tranforSubscriptionStatus(subscription.status)}
+                </Text>
+              </VStack>
+              <Icon as={CheckCircle} color="success.500" />
+            </HStack>
           </HStack>
-          <VStack mt={8} space={4} pb={20}>
-            <MenuItem.Root>
-              <MenuItem.Icon icon={GraduationCap} />
-              <MenuItem.Content title="Gerenciar alunos" description="Gerencie os alunos manualmente" />
-              <MenuItem.Actions>
-                <MenuItem.Action icon={ArrowRight} />
-              </MenuItem.Actions>
-            </MenuItem.Root>
 
+          <TouchableOpacity>
+            <HStack bg="brand.100" rounded="md" px={4} py={2} space={4} alignItems="center">
+              <View bg="brand.500" p={2} rounded="full">
+                <Icon as={Money} color="white" />
+              </View>
+              <VStack flex={1}>
+                <Text color="brand.500" fontWeight="bold">Seu aluno já pagou?</Text>
+                <Text color="coolGray.400" fontSize="xs">
+                  Se o seu aluno já pagou a assinatura por fora da plataforma, você pode informar manualmente.
+                </Text>
+              </VStack>
+            </HStack>
+          </TouchableOpacity>
 
+          <VStack space={4} pb={20}>
             <MenuItem.Root>
-              <MenuItem.Icon icon={IdentificationBadge} />
-              <MenuItem.Content title="Gerenciar professores" description="Gerencie os professores manualmente" />
-              <MenuItem.Actions>
-                <MenuItem.Action icon={ArrowRight} />
-              </MenuItem.Actions>
-            </MenuItem.Root>
-
-            <MenuItem.Root>
-              <MenuItem.Icon icon={LinkSimple} />
-              <MenuItem.Content title="Gerar link de convite" description="Adiocone alunos automaticamnete" />
-              <MenuItem.Actions>
-                <MenuItem.Action icon={ArrowRight} />
-              </MenuItem.Actions>
-            </MenuItem.Root>
-
-            <MenuItem.Root>
-              <MenuItem.Icon icon={Clock} />
-              <MenuItem.Content title="Configurar horários" description="gerencie os horários das aulas" />
+              <MenuItem.Icon icon={LockKey} />
+              <MenuItem.Content title="Gerenciar assinatura" description="Gerencie os alunos manualmente" />
               <MenuItem.Actions>
                 <MenuItem.Action icon={ArrowRight} />
               </MenuItem.Actions>
             </MenuItem.Root>
 
             <MenuItem.Root>
-              <MenuItem.Icon icon={CalendarBlank} />
-              <MenuItem.Content title="criar aula" description="Crie aulas manualmente" />
+              <MenuItem.Icon icon={BookBookmark} />
+              <MenuItem.Content title="Definir turma" description="Altere a turma do aluno" />
               <MenuItem.Actions>
                 <MenuItem.Action icon={ArrowRight} />
               </MenuItem.Actions>
             </MenuItem.Root>
-
-            <MenuItem.Root>
-              <MenuItem.Icon icon={ArrowsLeftRight} />
-              <MenuItem.Content title="Transferir alunos" description="transfira todos os alunos para outra turma" />
-              <MenuItem.Actions>
-                <MenuItem.Action icon={ArrowRight} />
-              </MenuItem.Actions>
-            </MenuItem.Root>
-
           </VStack>
         </VStack>
       </ScrollContainer>
