@@ -117,6 +117,7 @@ export function StudentInfo() {
           </TouchableOpacity>
 
           <VStack space={4} pb={20}>
+            <Text color="coolGray.400" fontSize="md" mb={-2}> Ações</Text>
             <MenuItem.Root>
               <MenuItem.Icon icon={LockKey} />
               <MenuItem.Content title="Gerenciar assinatura" description="Gerencie os alunos manualmente" />
