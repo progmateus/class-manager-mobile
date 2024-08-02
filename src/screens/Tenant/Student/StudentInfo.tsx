@@ -2,13 +2,12 @@ import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { Center, HStack, Icon, Image, Link, Text, View, VStack } from "native-base"
-import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, CalendarBlank, ArrowsLeftRight, Clipboard, MapPin, Phone } from "phosphor-react-native"
+import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, CalendarBlank, ArrowsLeftRight, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar } from "phosphor-react-native"
 
 export function StudentInfo() {
   const subscription = {
     user: {
       name: "John Doe",
-      classes: [{ name: "Intermediário" }],
       username: "@johndoe",
       document: "759.785.860-47",
       phone: "(21) 94002-8922",
@@ -16,7 +15,11 @@ export function StudentInfo() {
       address: {
         street: "Estrada da bica",
         number: "241"
-      }
+      },
+      classes: [{ name: "Intermediário" }]
+    },
+    plan: {
+      name: "Básico"
     }
   }
   return (
@@ -27,7 +30,11 @@ export function StudentInfo() {
           <HStack justifyContent="space-between">
             <VStack space={1}>
               <HStack alignItems="center" space={1}>
-                <Icon as={Clipboard} />
+                <Icon as={CurrencyCircleDollar} />
+                <Text fontSize="sm" textTransform="capitalize"> {subscription.plan.name} </Text>
+              </HStack>
+              <HStack alignItems="center" space={1}>
+                <Icon as={BookBookmark} />
                 <Text fontSize="sm" textTransform="capitalize"> {subscription.user.classes[0].name} </Text>
               </HStack>
 
