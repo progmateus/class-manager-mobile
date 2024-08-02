@@ -8,11 +8,13 @@ import HomeSVG from "@assets/home-outline.svg"
 import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
 import { ClassInfo } from "@screens/Tenant/Class/ClassInfo";
 import { StudentInfo } from "@screens/Tenant/Student/StudentInfo";
+import { StudentsList } from "@screens/Tenant/Student/StudentsList";
 
 
 type TenantRoutes = {
   home: undefined;
   studentInfo: undefined;
+  students: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -34,6 +36,16 @@ export function TenantRoutes() {
           paddingTop: sizes[6]
         }
       }}>
+
+      <Screen
+        name="students"
+        component={StudentsList}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <HomeSVG fill={color} width={iconSize} height={iconSize} />
+          )
+        }}
+      />
 
       <Screen
         name="studentInfo"
