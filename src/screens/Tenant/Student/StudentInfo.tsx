@@ -9,7 +9,7 @@ import { TouchableOpacity } from "react-native"
 export function StudentInfo() {
   const subscription = {
     user: {
-      name: "John Doe",
+      name: "Jane Doe",
       username: "@johndoe",
       document: "759.785.860-47",
       phone: "(21) 94002-8922",
