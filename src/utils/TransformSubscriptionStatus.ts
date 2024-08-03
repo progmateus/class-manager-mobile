@@ -1,4 +1,4 @@
-export const tranforSubscriptionStatus = (status: number) => {
+export const transformSubscriptionStatus = (status: number) => {
   const situations: any = {
     1: "Ativo",
     2: "Inativo",

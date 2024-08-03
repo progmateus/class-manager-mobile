@@ -2,7 +2,7 @@ import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
-import { tranforSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
+import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
 import { Center, HStack, Icon, Image, Link, Text, View, VStack } from "native-base"
 import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, IdentificationCard, ArrowsLeftRight, CurrencyDollar, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar, Target, Check, CheckCircle, LockKey, Money } from "phosphor-react-native"
 import { TouchableOpacity } from "react-native"
@@ -85,7 +85,7 @@ export function StudentInfo() {
               <VStack>
                 <Text fontSize="xs" color="coolGray.400">SITUAÇÃO</Text>
                 <Text w={16} fontSize="lg" color="brand.500">
-                  {tranforSubscriptionStatus(subscription.status)}
+                  {transformSubscriptionStatus(subscription.status)}
                 </Text>
               </VStack>
               <Icon as={Target} color="brand.500" />
