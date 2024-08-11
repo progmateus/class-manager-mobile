@@ -1,6 +1,7 @@
 import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
+import { SubscriptionItem } from "@components/subscriptionItem"
 import { Viewcontainer } from "@components/ViewContainer"
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
 import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
@@ -21,8 +22,8 @@ export function StudentsList() {
           street: "Estrada da bica",
           number: "241"
         },
-        classes: [{ name: "Intermediário" }]
       },
+      classes: [{ name: "Intermediário" }],
       subscriptions: [
         {
           plan: {
@@ -34,6 +35,7 @@ export function StudentsList() {
               status: 1
             }
           ],
+          createdAt: '12/04/2024'
         }
       ]
     }
@@ -47,27 +49,7 @@ export function StudentsList() {
             students && students.length && (
               students.map((student) => {
                 return (
-                  <HStack space={4} alignItems="center">
-                    <Image
-                      rounded="full"
-                      w={12}
-                      h={12}
-                      alt="Foto de perfil"
-                      source={{
-                        uri: student.user.avatar,
-                      }}
-                      defaultSource={{ uri: student.user.avatar }}
-                    />
-                    <VStack flex={1}>
-                      <Text fontSize="sm" color="coolGray.800">{student.user.name}</Text>
-                      <Text fontSize="sm" color="coolGray.800">{student.subscriptions[0].plan.name}</Text>
-                    </VStack>
-
-                    <VStack>
-                      <Text fontSize="sm" color="coolGray.800">{transformSubscriptionStatus(student.subscriptions[0].status)}</Text>
-                      <Text fontSize="sm" color="coolGray.800">{transformInvoiceStatus(student.subscriptions[0].invoices[0].status)}</Text>
-                    </VStack>
-                  </HStack>
+                  <SubscriptionItem subscription={student} />
                 )
               })
             )
