@@ -8,7 +8,7 @@ import HomeSVG from "@assets/home-outline.svg"
 import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
 import { ClassInfo } from "@screens/Tenant/Class/ClassInfo";
 import { StudentInfo } from "@screens/Tenant/Student/StudentInfo";
-import { StudentsList } from "@screens/Tenant/Student/StudentsList";
+import { SubscriptionsList } from "@screens/Tenant/Subscriptions/SubscriptionsList";
 
 
 type TenantRoutes = {
@@ -39,7 +39,7 @@ export function TenantRoutes() {
 
       <Screen
         name="students"
-        component={StudentsList}
+        component={SubscriptionsList}
         options={{
           tabBarIcon: ({ color }) => (
             <HomeSVG fill={color} width={iconSize} height={iconSize} />

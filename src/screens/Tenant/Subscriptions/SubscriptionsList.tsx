@@ -9,7 +9,7 @@ import { Center, HStack, Icon, Image, Link, Text, View, VStack } from "native-ba
 import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, IdentificationCard, ArrowsLeftRight, CurrencyDollar, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar, Target, Check, CheckCircle, LockKey, Money } from "phosphor-react-native"
 import { TouchableOpacity } from "react-native"
 
-export function StudentsList() {
+export function SubscriptionsList() {
   const students = [
     {
       user: {
