@@ -1,6 +1,9 @@
+import { ClassInfoItem } from "@components/Class/InfoItem"
 import { MenuItem } from "@components/MenuItem"
+import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
-import { Center, HStack, Icon, Image, Link, Text, View, VStack } from "native-base"
+import { Viewcontainer } from "@components/ViewContainer"
+import { Center, HStack, Icon, Image, Link, SimpleGrid, Text, View, VStack } from "native-base"
 import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Calendar, CalendarBlank, ArrowsLeftRight } from "phosphor-react-native"
 
 export function ClassInfo() {
@@ -10,37 +13,16 @@ export function ClassInfo() {
     avatar: "https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
   }
   return (
-    <ScrollContainer>
-      <VStack>
-        <Center mt={12}>
-          <Image
-            rounded="full"
-            w={24}
-            h={24}
-            alt="Foto de perfil"
-            mr={4}
-            source={{
-              uri: classInfo.avatar,
-            }}
-            defaultSource={{ uri: classInfo.avatar }}
-          />
-          <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
-        </Center>
-        <Text fontSize="sm" mt={4} fontWeight="bold" color="coolGray.400"> Mês atual</Text>
-        <HStack space={4} mt={4}>
-          <VStack h={24} borderWidth={0.8} rounded="lg" px={2}>
-            <Text fontSize="3xl" color="success.500"> 49 </Text>
-            <Text w={16} fontSize="xs">Alunos novos</Text>
-          </VStack>
-          <VStack h={24} borderWidth={0.8} rounded="lg" px={2}>
-            <Text fontSize="3xl" color="danger.500"> 8 </Text>
-            <Text maxW={20} fontSize="xs">Alunos cancelados</Text>
-          </VStack>
-          <VStack h={24} borderWidth={0.8} rounded="lg" px={2}>
-            <Text fontSize="3xl" color="brand.600"> 3489 </Text>
-            <Text maxW={20} fontSize="xs">Aulas concluídas</Text>
-          </VStack>
-        </HStack>
+    <View flex={1}>
+      <PageHeader title="Turma" />
+      <ScrollContainer>
+        <SimpleGrid mt={4} columns={3}>
+          <ClassInfoItem title="ALUNOS" info="18" />
+          <ClassInfoItem title="PROFESSORES" info="7" />
+          <ClassInfoItem title="AULAS CONCLUÍDAS" info="749" />
+          <ClassInfoItem title="AULAS PENDENTES" info="10" />
+          <ClassInfoItem title="AULAS CANCLEDAS" info="4" />
+        </SimpleGrid>
         <VStack mt={8} space={4} pb={20}>
           <MenuItem.Root>
             <MenuItem.Icon icon={GraduationCap} />
@@ -92,7 +74,7 @@ export function ClassInfo() {
           </MenuItem.Root>
 
         </VStack>
-      </VStack>
-    </ScrollContainer >
+      </ScrollContainer>
+    </View>
   )
 }
