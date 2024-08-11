@@ -29,7 +29,7 @@ export function StudentsList() {
             name: "Básico"
           },
           status: 1,
-          payments: [
+          invoices: [
             {
               status: 1
             }
@@ -65,7 +65,7 @@ export function StudentsList() {
 
                     <VStack>
                       <Text fontSize="sm" color="coolGray.800">{transformSubscriptionStatus(student.subscriptions[0].status)}</Text>
-                      <Text fontSize="sm" color="coolGray.800">{transformInvoiceStatus(student.subscriptions[0].payments[0].status)}</Text>
+                      <Text fontSize="sm" color="coolGray.800">{transformInvoiceStatus(student.subscriptions[0].invoices[0].status)}</Text>
                     </VStack>
                   </HStack>
                 )
