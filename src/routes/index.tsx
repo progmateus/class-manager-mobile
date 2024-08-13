@@ -7,7 +7,7 @@ import { User } from "phosphor-react-native";
 
 export function Routes() {
   const { colors } = useTheme();
-  const token = "123456";
+  const token = null;
 
   const theme = DefaultTheme;
   theme.colors.background = colors.white
@@ -15,7 +15,7 @@ export function Routes() {
     <Box flex={1} bg="white">
       <NavigationContainer>
         {
-          token ? <TenantRoutes /> : <GuestRoutes />
+          token ? <TenantRoutes /> : <UserRoutes />
         }
       </NavigationContainer>
     </Box>

@@ -18,6 +18,7 @@ import { ClassDayInfo } from "@screens/UserRoutes/Classes/ClassDayInfo";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/Classes/UpdateClassDayStatus";
 import { UpdateUser } from "@screens/UserRoutes/User/UpdateUser";
 import { UpdatePassword } from "@screens/UserRoutes/User/UpdatePassword";
+import { Buildings, Calendar, CurrencyCircleDollar, CurrencyDollar, MagnifyingGlass, Money, User, UserCircle } from "phosphor-react-native";
 
 
 type UserRoutes = {
@@ -57,7 +58,7 @@ export function UserRoutes() {
         component={ClassDayInfo}
         options={{
           tabBarIcon: ({ color }) => (
-            <TenantSVG fill={color} width={iconSize} height={iconSize} />
+            <Buildings color={color} size={iconSize} />
           )
         }}
       />
@@ -67,7 +68,7 @@ export function UserRoutes() {
         component={Search}
         options={{
           tabBarIcon: ({ color }) => (
-            <SearchSVG fill={color} width={iconSize} height={iconSize} />
+            <MagnifyingGlass color={color} size={iconSize} />
           )
         }}
       />
@@ -78,7 +79,7 @@ export function UserRoutes() {
         component={Classes}
         options={{
           tabBarIcon: ({ color }) => (
-            <CalendarSVG fill={color} width={iconSize} height={iconSize} />
+            <Calendar color={color} size={iconSize} />
           )
         }}
       />
@@ -88,7 +89,7 @@ export function UserRoutes() {
         component={Bills}
         options={{
           tabBarIcon: ({ color }) => (
-            <MoneySVG fill={color} width={iconSize} height={iconSize} />
+            <CurrencyDollar color={color} size={iconSize} />
           )
         }}
       />
@@ -98,7 +99,7 @@ export function UserRoutes() {
         component={Profile}
         options={{
           tabBarIcon: ({ color }) => (
-            <ProfileSVG fill={color} width={iconSize} height={iconSize} />
+            <UserCircle color={color} size={iconSize} />
           )
         }}
       />

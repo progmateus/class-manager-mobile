@@ -1,22 +1,23 @@
-import { Platform } from "react-native"
+import { Platform, TouchableOpacity } from "react-native"
 import {
   BottomTabNavigationProp,
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
 import { useTheme } from "native-base";
-import HomeSVG from "@assets/home-outline.svg"
-import { ClassDayInfo } from "@screens/UserRoutes/Classes/ClassDayInfo";
 import { ClassInfo } from "@screens/TenantRoutes/Classes/ClassInfo";
 import { StudentInfo } from "@screens/TenantRoutes/Students/StudentInfo";
 import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/SubscriptionsList";
 import { ClassesList } from "@screens/TenantRoutes/Classes/ClassesList";
+import { Dashboard } from "@screens/TenantRoutes/Dashboard";
+import { BookBookmark, GraduationCap, House } from "phosphor-react-native";
 
 
 type TenantRoutes = {
-  home: undefined;
   studentInfo: undefined;
   students: undefined;
   classes: undefined;
+  classInfo: undefined;
+  dashboard: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -40,11 +41,21 @@ export function TenantRoutes() {
       }}>
 
       <Screen
+        name="dashboard"
+        component={Dashboard}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <House color={color} size={iconSize} />
+          )
+        }}
+      />
+
+      <Screen
         name="students"
         component={SubscriptionsList}
         options={{
           tabBarIcon: ({ color }) => (
-            <HomeSVG fill={color} width={iconSize} height={iconSize} />
+            <GraduationCap color={color} size={iconSize} />
           )
         }}
       />
@@ -53,18 +64,14 @@ export function TenantRoutes() {
         name="studentInfo"
         component={StudentInfo}
         options={{
-          tabBarIcon: ({ color }) => (
-            <HomeSVG fill={color} width={iconSize} height={iconSize} />
-          )
+          tabBarButton: () => (null)
         }}
       />
       <Screen
-        name="home"
+        name="classInfo"
         component={ClassInfo}
         options={{
-          tabBarIcon: ({ color }) => (
-            <HomeSVG fill={color} width={iconSize} height={iconSize} />
-          )
+          tabBarButton: () => (null)
         }}
       />
 
@@ -73,7 +80,7 @@ export function TenantRoutes() {
         component={ClassesList}
         options={{
           tabBarIcon: ({ color }) => (
-            <HomeSVG fill={color} width={iconSize} height={iconSize} />
+            <BookBookmark color={color} size={iconSize} />
           )
         }}
       />
