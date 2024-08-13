@@ -1,6 +1,6 @@
 import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { SignIn } from "@screens/Guest/SignIn";
-import { SignUp } from "@screens/Guest/SignUp";
+import { SignIn } from "@screens/GuestRoutes/SignIn";
+import { SignUp } from "@screens/GuestRoutes/SignUp";
 
 type GuestRoutes = {
   signIn: undefined;

@@ -3,21 +3,21 @@ import {
   BottomTabNavigationProp,
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
-import { Profile } from "@screens/Auth/User/UserProfile";
-import { Search } from "@screens/Auth/Search";
+import { Profile } from "@screens/UserRoutes/User/UserProfile";
+import { Search } from "@screens/UserRoutes/Search";
 import { useTheme } from "native-base";
 import TenantSVG from "@assets/tenant.svg"
 import SearchSVG from "@assets/search.svg"
 import CalendarSVG from "@assets/calendar.svg"
 import ProfileSVG from "@assets/profile.svg"
 import MoneySVG from "@assets/money-outline.svg"
-import { Bills } from "@screens/Auth/Billing/Bills";
-import { Tenant } from "@screens/Auth/Tenants/TenantProfile";
-import { Classes } from "@screens/Auth/Classes/Classes";
-import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
-import { UpdateClassDayStatus } from "@screens/Auth/Classes/UpdateClassDayStatus";
-import { UpdateUser } from "@screens/Auth/User/UpdateUser";
-import { UpdatePassword } from "@screens/Auth/User/UpdatePassword";
+import { Bills } from "@screens/UserRoutes/Billing/Bills";
+import { Tenant } from "@screens/UserRoutes/Tenants/TenantProfile";
+import { Classes } from "@screens/UserRoutes/Classes/Classes";
+import { ClassDayInfo } from "@screens/UserRoutes/Classes/ClassDayInfo";
+import { UpdateClassDayStatus } from "@screens/UserRoutes/Classes/UpdateClassDayStatus";
+import { UpdateUser } from "@screens/UserRoutes/User/UpdateUser";
+import { UpdatePassword } from "@screens/UserRoutes/User/UpdatePassword";
 
 
 type UserRoutes = {

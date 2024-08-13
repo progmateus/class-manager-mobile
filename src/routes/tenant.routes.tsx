@@ -5,11 +5,11 @@ import {
 } from "@react-navigation/bottom-tabs";
 import { useTheme } from "native-base";
 import HomeSVG from "@assets/home-outline.svg"
-import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
-import { ClassInfo } from "@screens/Tenant/Class/ClassInfo";
-import { StudentInfo } from "@screens/Tenant/Student/StudentInfo";
-import { SubscriptionsList } from "@screens/Tenant/Subscriptions/SubscriptionsList";
-import { ClassesList } from "@screens/Tenant/Class/ClassesList";
+import { ClassDayInfo } from "@screens/UserRoutes/Classes/ClassDayInfo";
+import { ClassInfo } from "@screens/TenantRoutes/Classes/ClassInfo";
+import { StudentInfo } from "@screens/TenantRoutes/Students/StudentInfo";
+import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/SubscriptionsList";
+import { ClassesList } from "@screens/TenantRoutes/Classes/ClassesList";
 
 
 type TenantRoutes = {
