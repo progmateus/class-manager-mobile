@@ -7,7 +7,7 @@ import { User } from "phosphor-react-native";
 
 export function Routes() {
   const { colors } = useTheme();
-  const token = null;
+  const token = "1234";
 
   const theme = DefaultTheme;
   theme.colors.background = colors.white

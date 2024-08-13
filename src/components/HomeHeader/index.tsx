@@ -18,7 +18,7 @@ export function HomeHeader() {
   const statusBarHeight = Constants.statusBarHeight;
 
   return (
-    <HStack mt={statusBarHeight} py={6} px={4} alignItems="center" borderColor="gray.300" borderBottomWidth={0.5}>
+    <HStack mt={statusBarHeight} pb={4} pt={6} px={4} alignItems="center" borderColor="gray.300" borderBottomWidth={0.5}>
       <Image
         rounded="full"
         w={10}
