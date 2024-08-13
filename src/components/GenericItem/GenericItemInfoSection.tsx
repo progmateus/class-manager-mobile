@@ -6,9 +6,9 @@ type IProps = {
   children: ReactNode
 }
 
-export function GenericItemRightContainer({ children }: IProps) {
+export function GenericItemInfoSection({ children }: IProps) {
   return (
-    <VStack alignItems="center">
+    <VStack alignItems="center" space={1}>
       {children}
     </VStack>
   )

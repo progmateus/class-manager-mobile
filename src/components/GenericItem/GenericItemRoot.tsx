@@ -9,7 +9,7 @@ type IProps = {
 export function GenericItemRoot({ children }: IProps) {
   return (
     <TouchableOpacity>
-      <HStack py={3} alignItems="center" rounded="md">
+      <HStack w="full" rounded="lg" alignItems="center" borderWidth={0.5} px={4} py={4}>
         {children}
       </HStack>
     </TouchableOpacity>

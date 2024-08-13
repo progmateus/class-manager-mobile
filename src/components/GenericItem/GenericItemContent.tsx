@@ -5,9 +5,9 @@ type IProps = {
 }
 export function GenericItemContent({ title, caption }: IProps) {
   return (
-    <VStack flex={1}>
-      <Heading numberOfLines={1} fontFamily="heading" fontSize="sm"> {title} </Heading>
-      <Text numberOfLines={1} color="gray.400" fontSize="xs"> {caption}</Text>
+    <VStack flex={1} space={1}>
+      <Text fontSize="md" color="coolGray.900"> {title}</Text>
+      <Text fontSize="xs" color="coolGray.500"> {caption}</Text>
     </VStack>
   )
 }

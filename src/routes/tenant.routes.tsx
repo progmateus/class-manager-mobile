@@ -9,12 +9,14 @@ import { ClassDayInfo } from "@screens/Auth/Classes/ClassDayInfo";
 import { ClassInfo } from "@screens/Tenant/Class/ClassInfo";
 import { StudentInfo } from "@screens/Tenant/Student/StudentInfo";
 import { SubscriptionsList } from "@screens/Tenant/Subscriptions/SubscriptionsList";
+import { ClassesList } from "@screens/Tenant/Class/ClassesList";
 
 
 type TenantRoutes = {
   home: undefined;
   studentInfo: undefined;
   students: undefined;
+  classes: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -59,6 +61,16 @@ export function TenantRoutes() {
       <Screen
         name="home"
         component={ClassInfo}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <HomeSVG fill={color} width={iconSize} height={iconSize} />
+          )
+        }}
+      />
+
+      <Screen
+        name="classes"
+        component={ClassesList}
         options={{
           tabBarIcon: ({ color }) => (
             <HomeSVG fill={color} width={iconSize} height={iconSize} />
