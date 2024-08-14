@@ -12,12 +12,13 @@ import { Dashboard } from "@screens/TenantRoutes/Dashboard";
 import { BookBookmark, GraduationCap, House } from "phosphor-react-native";
 
 
-type TenantRoutes = {
+export type TenantRoutes = {
   studentInfo: undefined;
   students: undefined;
   classes: undefined;
   classInfo: undefined;
   dashboard: undefined;
+  classHoursList: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -61,6 +62,16 @@ export function TenantRoutes() {
       />
 
       <Screen
+        name="classes"
+        component={ClassesList}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <BookBookmark color={color} size={iconSize} />
+          )
+        }}
+      />
+
+      <Screen
         name="studentInfo"
         component={StudentInfo}
         options={{
@@ -76,12 +87,10 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="classes"
-        component={ClassesList}
+        name="classHoursList"
+        component={ClassInfo}
         options={{
-          tabBarIcon: ({ color }) => (
-            <BookBookmark color={color} size={iconSize} />
-          )
+          tabBarButton: () => (null)
         }}
       />
     </Navigator>
