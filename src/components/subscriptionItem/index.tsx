@@ -33,11 +33,12 @@ function SubscriptionItem({ subscription }: IProps) {
           <VStack>
             <HStack alignItems="center" space={2} justifyContent="flex-end">
               <Text textAlign="right" fontSize="xs" color={transformSubscriptionColor(subscription.subscriptions[0].status)}>{transformSubscriptionStatus(subscription.subscriptions[0].status)}</Text>
-              <Money color={transformSubscriptionColor(subscription.subscriptions[0].status)} size={16} />
+              <SimCard color={transformSubscriptionColor(subscription.subscriptions[0].invoices[0].status)} size={16} />
             </HStack>
+
             <HStack alignItems="center" space={2} justifyContent="flex-end">
               <Text textAlign="right" fontSize="xs" color={transformInvoiceColor(subscription.subscriptions[0].invoices[0].status)}>{transformInvoiceStatus(subscription.subscriptions[0].invoices[0].status)}</Text>
-              <SimCard color={transformInvoiceColor(subscription.subscriptions[0].invoices[0].status)} size={16} />
+              <Money color={transformSubscriptionColor(subscription.subscriptions[0].status)} size={16} />
             </HStack>
           </VStack>
         </VStack>
