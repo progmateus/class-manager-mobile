@@ -2,6 +2,7 @@ import { transformInvoiceColor, transformSubscriptionColor } from "@utils/Transf
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus";
 import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus";
 import { HStack, Image, Text, VStack } from "native-base";
+import { Money, SimCard } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 
 interface IProps {
@@ -27,10 +28,18 @@ function SubscriptionItem({ subscription }: IProps) {
           <Text fontSize="sm" color="coolGray.500" fontWeight="semibold">{subscription.subscriptions[0].plan.name}</Text>
         </VStack>
 
-        <VStack textAlign="right">
+        <VStack textAlign="right" space={1}>
           <Text fontSize="sm" color="coolGray.800">{subscription.subscriptions[0].createdAt}</Text>
-          <Text textAlign="right" fontSize="sm" color={transformSubscriptionColor(subscription.subscriptions[0].status)}>{transformSubscriptionStatus(subscription.subscriptions[0].status)}</Text>
-          <Text textAlign="right" fontSize="sm" color={transformInvoiceColor(subscription.subscriptions[0].invoices[0].status)}>{transformInvoiceStatus(subscription.subscriptions[0].invoices[0].status)}</Text>
+          <VStack>
+            <HStack alignItems="center" space={2} justifyContent="flex-end">
+              <Text textAlign="right" fontSize="xs" color={transformSubscriptionColor(subscription.subscriptions[0].status)}>{transformSubscriptionStatus(subscription.subscriptions[0].status)}</Text>
+              <Money color={transformSubscriptionColor(subscription.subscriptions[0].status)} size={16} />
+            </HStack>
+            <HStack alignItems="center" space={2} justifyContent="flex-end">
+              <Text textAlign="right" fontSize="xs" color={transformInvoiceColor(subscription.subscriptions[0].invoices[0].status)}>{transformInvoiceStatus(subscription.subscriptions[0].invoices[0].status)}</Text>
+              <SimCard color={transformInvoiceColor(subscription.subscriptions[0].invoices[0].status)} size={16} />
+            </HStack>
+          </VStack>
         </VStack>
       </HStack>
     </TouchableOpacity>
