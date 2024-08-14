@@ -10,6 +10,7 @@ import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/Subscript
 import { ClassesList } from "@screens/TenantRoutes/Classes/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
 import { BookBookmark, GraduationCap, House } from "phosphor-react-native";
+import { ClassHoursList } from "@screens/TenantRoutes/classHours/ClassHoursList";
 
 
 export type TenantRoutes = {
@@ -88,7 +89,7 @@ export function TenantRoutes() {
 
       <Screen
         name="classHoursList"
-        component={ClassInfo}
+        component={ClassHoursList}
         options={{
           tabBarButton: () => (null)
         }}
