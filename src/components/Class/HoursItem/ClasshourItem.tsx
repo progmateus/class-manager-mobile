@@ -35,9 +35,9 @@ export function ClassHourItem({ item: { dayOfWeek, hours } }: IProps) {
 
   return (
     <VStack space={4}>
-      <VStack borderWidth={0.5} borderColor="coolGray.400" borderRadius={7} p={6}>
+      <VStack borderWidth={0.5} borderColor="coolGray.400" borderRadius={7} >
         <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
-          <HStack justifyContent="space-between" alignItems="center">
+          <HStack justifyContent="space-between" alignItems="center" p={6}>
             <Text>{transforWeekDay(dayOfWeek)}</Text>
             <CaretDown color={THEME.colors.coolGray[400]} />
           </HStack>
@@ -53,7 +53,7 @@ export function ClassHourItem({ item: { dayOfWeek, hours } }: IProps) {
                 duration: 100
               }
             }}>
-              <VStack px={8} space={4} mt={6}>
+              <VStack px={8} space={4} my={6}>
                 {
                   hours && hours.length && (
                     hours.map((hour) => {
