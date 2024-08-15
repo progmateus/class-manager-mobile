@@ -29,7 +29,7 @@ function SubscriptionItem({ subscription }: IProps) {
         </VStack>
 
         <VStack textAlign="right" space={1}>
-          <Text fontSize="sm" color="coolGray.800">{subscription.subscriptions[0].createdAt}</Text>
+          <Text fontSize="sm" color="coolGray.500">{subscription.subscriptions[0].createdAt}</Text>
           <VStack>
             <HStack alignItems="center" space={2} justifyContent="flex-end">
               <Text textAlign="right" fontSize="xs" color={transformSubscriptionColor(subscription.subscriptions[0].status)}>{transformSubscriptionStatus(subscription.subscriptions[0].status)}</Text>
