@@ -4,7 +4,7 @@ import { ScrollContainer } from "@components/ScrollContainer"
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
 import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
 import { Center, HStack, Icon, Image, Link, Text, View, VStack } from "native-base"
-import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, IdentificationCard, ArrowsLeftRight, CurrencyDollar, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar, Target, Check, CheckCircle, LockKey, Money } from "phosphor-react-native"
+import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, IdentificationCard, ArrowsLeftRight, CurrencyDollar, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar, Target, Check, CheckCircle, LockKey, Money, ClockCounterClockwise } from "phosphor-react-native"
 import { TouchableOpacity } from "react-native"
 
 export function StudentInfo() {
@@ -129,6 +129,14 @@ export function StudentInfo() {
             <MenuItem.Root>
               <MenuItem.Icon icon={BookBookmark} />
               <MenuItem.Content title="Definir turma" description="Altere a turma do aluno" />
+              <MenuItem.Actions>
+                <MenuItem.Action icon={ArrowRight} />
+              </MenuItem.Actions>
+            </MenuItem.Root>
+
+            <MenuItem.Root>
+              <MenuItem.Icon icon={ClockCounterClockwise} />
+              <MenuItem.Content title="Ver aulas" description="Visualize o histŕocio de aulas do aluno" />
               <MenuItem.Actions>
                 <MenuItem.Action icon={ArrowRight} />
               </MenuItem.Actions>
