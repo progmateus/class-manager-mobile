@@ -53,13 +53,13 @@ export function StudentInfo() {
               </HStack>
 
               <HStack alignItems="center" space={1}>
-                <Icon as={MapPin} />
-                <Text fontSize="sm"> {subscription.user.address.street}, {subscription.user.address.number} </Text>
+                <Icon as={Phone} />
+                <Text fontSize="sm"> {subscription.user.phone} </Text>
               </HStack>
 
               <HStack alignItems="center" space={1}>
-                <Icon as={Phone} />
-                <Text fontSize="sm"> {subscription.user.phone} </Text>
+                <Icon as={MapPin} />
+                <Text fontSize="sm"> {subscription.user.address.street}, {subscription.user.address.number} </Text>
               </HStack>
             </VStack>
             <VStack>
