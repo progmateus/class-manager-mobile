@@ -11,40 +11,40 @@ export function ClassHoursList() {
       id: 1,
       dayOfWeek: '1',
       hours: [
-        { start: '7:00', end: '8:00' },
-        { start: '8:00', end: '9:00' },
-        { start: '9:00', end: '10:00' },
-        { start: '10:00', end: '11:00' }
+        { id: 1, start: '7:00', end: '8:00' },
+        { id: 1, start: '8:00', end: '9:00' },
+        { id: 1, start: '9:00', end: '10:00' },
+        { id: 1, start: '10:00', end: '11:00' }
       ]
     },
     {
       id: 2,
       dayOfWeek: '2',
       hours: [
-        { start: '7:00', end: '8:00' },
-        { start: '8:00', end: '9:00' },
-        { start: '9:00', end: '10:00' },
-        { start: '10:00', end: '11:00' }
+        { id: 1, start: '7:00', end: '8:00' },
+        { id: 1, start: '8:00', end: '9:00' },
+        { id: 1, start: '9:00', end: '10:00' },
+        { id: 1, start: '10:00', end: '11:00' }
       ]
     },
     {
       id: 3,
       dayOfWeek: '3',
       hours: [
-        { start: '7:00', end: '8:00' },
-        { start: '8:00', end: '9:00' },
-        { start: '9:00', end: '10:00' },
-        { start: '10:00', end: '11:00' }
+        { id: 1, start: '7:00', end: '8:00' },
+        { id: 1, start: '8:00', end: '9:00' },
+        { id: 1, start: '9:00', end: '10:00' },
+        { id: 1, start: '10:00', end: '11:00' }
       ]
     },
     {
       id: 4,
       dayOfWeek: '4',
       hours: [
-        { start: '7:00', end: '8:00' },
-        { start: '8:00', end: '9:00' },
-        { start: '9:00', end: '10:00' },
-        { start: '10:00', end: '11:00' }
+        { id: 1, start: '7:00', end: '8:00' },
+        { id: 1, start: '8:00', end: '9:00' },
+        { id: 1, start: '9:00', end: '10:00' },
+        { id: 1, start: '10:00', end: '11:00' }
       ]
     }
   ]

@@ -13,6 +13,7 @@ interface IProps {
 }
 
 interface IHour {
+  id: number;
   start: string;
   end: string
 }
@@ -31,6 +32,10 @@ export function ClassHourItem({ item: { dayOfWeek, hours } }: IProps) {
     }
 
     return objTransform[String(dayOfWeek)]
+  }
+
+  const handleDeletehour = (hourId: number) => {
+    console.log(hourId)
   }
 
   return (
@@ -58,10 +63,12 @@ export function ClassHourItem({ item: { dayOfWeek, hours } }: IProps) {
                   hours && hours.length && (
                     hours.map((hour) => {
                       return (
-                        <HStack key={hour.start} alignItems="center" justifyContent="space-evenly">
-                          <Text fontSize="lg">{`${hour.start} - ${hour.end}`}</Text>
-                          <TrashSimple size={24} />
-                        </HStack>
+                        <TouchableOpacity onPress={() => handleDeletehour(hour.id)}>
+                          <HStack key={hour.start} alignItems="center" justifyContent="space-evenly">
+                            <Text fontSize="lg">{`${hour.start} - ${hour.end}`}</Text>
+                            <TrashSimple size={24} />
+                          </HStack>
+                        </TouchableOpacity>
                       )
                     })
                   )
