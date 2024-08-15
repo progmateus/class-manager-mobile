@@ -4,13 +4,13 @@ import {
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
 import { useTheme } from "native-base";
-import { ClassInfo } from "@screens/TenantRoutes/Classes/ClassInfo";
-import { StudentInfo } from "@screens/TenantRoutes/Students/StudentInfo";
-import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/SubscriptionsList";
-import { ClassesList } from "@screens/TenantRoutes/Classes/ClassesList";
+import { ClassInfo } from "@screens/TenantRoutes/Classes/[id]/ClassInfo";
+import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/SubscriptionsList";
+import { ClassesList } from "@screens/TenantRoutes/Classes/list/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
 import { BookBookmark, GraduationCap, House } from "phosphor-react-native";
-import { ClassHoursList } from "@screens/TenantRoutes/classHours/ClassHoursList";
+import { StudentInfo } from "@screens/TenantRoutes/Students/[id]/StudentInfo";
+import { ClassHoursList } from "@screens/TenantRoutes/classHours/list/ClassHoursList";
 
 
 export type TenantRoutes = {

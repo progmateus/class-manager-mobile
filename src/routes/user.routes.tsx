@@ -3,22 +3,17 @@ import {
   BottomTabNavigationProp,
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
-import { Profile } from "@screens/UserRoutes/User/UserProfile";
 import { Search } from "@screens/UserRoutes/Search";
 import { useTheme } from "native-base";
-import TenantSVG from "@assets/tenant.svg"
-import SearchSVG from "@assets/search.svg"
-import CalendarSVG from "@assets/calendar.svg"
-import ProfileSVG from "@assets/profile.svg"
-import MoneySVG from "@assets/money-outline.svg"
 import { Bills } from "@screens/UserRoutes/Billing/Bills";
-import { Tenant } from "@screens/UserRoutes/Tenants/TenantProfile";
-import { Classes } from "@screens/UserRoutes/Classes/Classes";
-import { ClassDayInfo } from "@screens/UserRoutes/Classes/ClassDayInfo";
-import { UpdateClassDayStatus } from "@screens/UserRoutes/Classes/UpdateClassDayStatus";
-import { UpdateUser } from "@screens/UserRoutes/User/UpdateUser";
-import { UpdatePassword } from "@screens/UserRoutes/User/UpdatePassword";
-import { Buildings, Calendar, CurrencyCircleDollar, CurrencyDollar, MagnifyingGlass, Money, User, UserCircle } from "phosphor-react-native";
+import { Tenant } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
+import { Classes } from "@screens/UserRoutes/Classes/list/Classes";
+import { ClassDayInfo } from "@screens/UserRoutes/Classes/[id]/ClassDayInfo";
+import { UpdateClassDayStatus } from "@screens/UserRoutes/Classes/[id]/UpdateClassDayStatus";
+import { UpdateUser } from "@screens/UserRoutes/User/[id]/UpdateUser";
+import { Buildings, Calendar, CurrencyDollar, MagnifyingGlass, UserCircle } from "phosphor-react-native";
+import { Profile } from "@screens/UserRoutes/User/profile/UserProfile";
+import { UpdatePassword } from "@screens/UserRoutes/User/[id]/UpdatePassword";
 
 
 type UserRoutes = {
