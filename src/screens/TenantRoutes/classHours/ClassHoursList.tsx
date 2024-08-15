@@ -2,7 +2,7 @@ import { ClassHourItem } from "@components/Class/HoursItem/ClasshourItem";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { HStack, Text, View, VStack } from "native-base";
-import { Info } from "phosphor-react-native";
+import { Check, Info } from "phosphor-react-native";
 import { THEME } from "src/theme";
 
 export function ClassHoursList() {
@@ -48,9 +48,13 @@ export function ClassHoursList() {
       ]
     }
   ]
+
+  const handleSave = () => {
+    alert('save')
+  }
   return (
     <View flex={1}>
-      <PageHeader title="Jornadas" />
+      <PageHeader title="Jornadas" rightIcon={Check} rightAction={() => handleSave} />
       <ScrollContainer>
         {
           items && items.length && (

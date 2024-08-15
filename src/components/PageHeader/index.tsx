@@ -1,12 +1,13 @@
 import { HStack, Heading, Icon } from "native-base";
-import { TouchableOpacity } from "react-native";
 import { ArrowLeft } from "phosphor-react-native"
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
+import { ElementType, ReactElement } from "react";
 
 type Props = {
   title: string;
-  rightIcon?: any;
+  rightIcon?: ElementType;
   rightAction?: () => {};
   rightIconColor?: string;
 }
