@@ -34,7 +34,7 @@ export function ClassHourItem({ item: { dayOfWeek, hours } }: IProps) {
   }
 
   return (
-    <VStack space={4}>
+    <VStack space={4} mb={4}>
       <VStack borderWidth={0.5} borderColor="coolGray.400" borderRadius={7} >
         <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
           <HStack justifyContent="space-between" alignItems="center" p={6}>

@@ -1,7 +1,9 @@
 import { ClassHourItem } from "@components/Class/HoursItem/ClasshourItem";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
-import { View, VStack } from "native-base";
+import { HStack, Text, View, VStack } from "native-base";
+import { Info } from "phosphor-react-native";
+import { THEME } from "src/theme";
 
 export function ClassHoursList() {
   const items = [
@@ -50,18 +52,19 @@ export function ClassHoursList() {
     <View flex={1}>
       <PageHeader title="Jornadas" />
       <ScrollContainer>
-        <VStack space={4}>
-          {
-            items && items.length && (
-              items.map((item) => {
-                return (
-                  <ClassHourItem key={item.id} item={item} />
-                )
-              })
-            )
-          }
-        </VStack>
-
+        {
+          items && items.length && (
+            items.map((item) => {
+              return (
+                <ClassHourItem key={item.id} item={item} />
+              )
+            })
+          )
+        }
+        <HStack mt={2} alignItems="center" space={2} mb={20}>
+          <Info size={18} color={THEME.colors.danger['500']} />
+          <Text flex={1} color="danger.500" fontSize="xs"> As alterações afetarão todas as turmas que utilizam esta jornada de horários </Text>
+        </HStack>
       </ScrollContainer>
     </View >
   )

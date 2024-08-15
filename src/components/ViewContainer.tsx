@@ -7,8 +7,8 @@ interface IProps {
 
 export function Viewcontainer({ children }: IProps) {
   return (
-    <ScrollView flex={1} px={4} py={8}>
+    <View flex={1} px={4} py={8}>
       {children}
-    </ScrollView>
+    </View>
   );
 }
