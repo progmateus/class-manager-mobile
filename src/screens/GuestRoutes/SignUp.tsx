@@ -7,26 +7,66 @@ import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigation } from "@react-navigation/native";
 import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
+import { useState } from "react";
+import { CreateUserService } from "src/services/usersService";
+import { isValidCPF } from "@utils/isValidCPF";
+import { AxiosError } from "axios";
+import { IApiResponse } from "@dtos/IApiResponse";
+import { Alert } from 'react-native';
+
 
 
 const signUpSchema = z.object({
-  name: z.string().min(3).max(80),
-  lastname: z.string().min(3).max(80),
-  email: z.string().email(),
+  firstname: z.string().min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
+  lastname: z.string().min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
+  email: z.string().email("E-mail inválido"),
   password: z.string(),
+  document: z.string().transform((val) => val.replaceAll('.', '').replaceAll('-', ''))
 });
 
 type signUpProps = z.infer<typeof signUpSchema>
 
 export function SignUp() {
-  const { control, handleSubmit, formState: { errors } } = useForm<signUpProps>({
+  const { control, handleSubmit, formState: { errors }, setError } = useForm<signUpProps>({
     resolver: zodResolver(signUpSchema)
   });
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigation = useNavigation<GuestNavigatorRoutesProps>();
 
   function handleClicksignIn() {
     navigation.navigate('signIn');
+  }
+
+  const handleSignUp = ({ firstname, lastname, document, email, password }: signUpProps) => {
+    if (!isValidCPF(document)) {
+      setError('document', { message: "CPF inválido" })
+      return false
+    }
+
+    setIsLoading(true)
+
+    CreateUserService({ firstname, lastname, document, email, password }).then(({ data }) => {
+      Alert.alert(
+        'Usuário criado',
+        'Você será redirecionado para a aplicação',
+        [],
+        {},
+      );
+    }).catch((err) => {
+      const data: IApiResponse = err?.response?.data
+
+      if (data.errors.find((err) => err.property === "Email" && err.message === "ERR_EMAIL_ALREADY_EXISTS")) {
+        setError('email', { message: "Este E-mail já está em uso" })
+      }
+
+      if (data.errors.find((err) => err.property === "Document" && err.message === "ERR_DOCUEMNT_ALREADY_EXISTS")) {
+        setError('document', { message: "Este CPF já está sendo utilizado" })
+      }
+    }).finally(() => {
+      setIsLoading(false)
+    })
   }
 
   return (
@@ -45,10 +85,10 @@ export function SignUp() {
           <VStack space={6} w="full">
             <HStack space={4} w={'48%'}>
               <Controller
-                name="name"
+                name="firstname"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Input placeholder="Nome" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.name?.message} />
+                  <Input placeholder="Nome" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.firstname?.message} />
                 )}
               />
 
@@ -60,6 +100,14 @@ export function SignUp() {
                 )}
               />
             </HStack>
+
+            <Controller
+              name="document"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input placeholder="CPF" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.document?.message} />
+              )}
+            />
 
             <Controller
               name="email"
@@ -78,13 +126,13 @@ export function SignUp() {
             />
           </VStack>
 
-          <Button mt={8} title="CADASTRAR" />
+          <Button onPress={handleSubmit(handleSignUp)} mt={8} title="CADASTRAR" isLoading={isLoading} />
         </Center>
 
         <Center my={4}>
           <Text color="gray.500" fontSize="sm" mb={3} fontFamily="body"> Já possui uma conta?</Text>
         </Center>
-        <Button title="FAZER LOGIN" variant="outline" onPress={handleClicksignIn} />
+        <Button title="FAZER LOGIN" variant="outline" onPress={handleClicksignIn} isLoading={isLoading} />
       </VStack >
     </ScrollView >
   )
