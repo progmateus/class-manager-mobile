@@ -1,4 +1,4 @@
-import { Center, Heading, Text, VStack, ScrollView, Image, Icon, HStack } from "native-base";
+import { Center, Heading, Text, VStack, ScrollView, Image, Icon, HStack, Toast } from "native-base";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import LogoSVG from "@assets/logo.svg"
@@ -10,9 +10,10 @@ import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
 import { useState } from "react";
 import { CreateUserService } from "src/services/usersService";
 import { isValidCPF } from "@utils/isValidCPF";
-import { AxiosError } from "axios";
 import { IApiResponse } from "@dtos/IApiResponse";
-import { Alert } from 'react-native';
+import { fireSuccesToast } from "@utils/HelperNotifications";
+import { useAuth } from "@hooks/useAuth";
+import { UserNavigatorRoutesProps } from "@routes/user.routes";
 
 
 
@@ -24,6 +25,9 @@ const signUpSchema = z.object({
   document: z.string().transform((val) => val.replaceAll('.', '').replaceAll('-', ''))
 });
 
+
+type ITeste = GuestNavigatorRoutesProps & UserNavigatorRoutesProps;
+
 type signUpProps = z.infer<typeof signUpSchema>
 
 export function SignUp() {
@@ -32,6 +36,7 @@ export function SignUp() {
   });
 
   const [isLoading, setIsLoading] = useState(false)
+  const { singIn } = useAuth()
 
   const navigation = useNavigation<GuestNavigatorRoutesProps>();
 
@@ -48,20 +53,17 @@ export function SignUp() {
     setIsLoading(true)
 
     CreateUserService({ firstname, lastname, document, email, password }).then(({ data }) => {
-      Alert.alert(
-        'Usuário criado',
-        'Você será redirecionado para a aplicação',
-        [],
-        {},
-      );
-    }).catch((err) => {
-      const data: IApiResponse = err?.response?.data
+      fireSuccesToast("Usuário criado")
+      singIn(email, password)
 
-      if (data.errors.find((err) => err.property === "Email" && err.message === "ERR_EMAIL_ALREADY_EXISTS")) {
+    }).catch((err) => {
+      console.log(err)
+      const data: IApiResponse = err?.response?.data
+      if (data?.errors.find((err) => err.property === "Email" && err.message === "ERR_EMAIL_ALREADY_EXISTS")) {
         setError('email', { message: "Este E-mail já está em uso" })
       }
 
-      if (data.errors.find((err) => err.property === "Document" && err.message === "ERR_DOCUEMNT_ALREADY_EXISTS")) {
+      if (data?.errors.find((err) => err.property === "Document" && err.message === "ERR_DOCUMENT_ALREADY_EXISTS")) {
         setError('document', { message: "Este CPF já está sendo utilizado" })
       }
     }).finally(() => {
