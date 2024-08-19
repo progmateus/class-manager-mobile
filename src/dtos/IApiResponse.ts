@@ -10,4 +10,4 @@ interface IError {
   message: string;
 }
 
-export { IApiResponse }
+export { IApiResponse, IError }

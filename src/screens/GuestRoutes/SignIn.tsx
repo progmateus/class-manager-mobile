@@ -2,14 +2,51 @@ import { Center, Heading, Text, VStack, ScrollView, Image, Icon } from "native-b
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import LogoSVG from "@assets/logo.svg"
-import { useNavigation } from "@react-navigation/native";
+import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
 import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
+import { z } from "zod";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@hooks/useAuth";
+import { useState } from "react";
+import { UserNavigatorRoutesProps } from "@routes/user.routes";
+
+
+const signInSchema = z.object({
+  email: z.string().email("E-mail inválido"),
+  password: z.string(),
+});
+
+type signInProps = z.infer<typeof signInSchema>
+
 
 export function SignIn() {
-  const navigation = useNavigation<GuestNavigatorRoutesProps>();
+  const navigation = useNavigation<CompositeNavigationProp<UserNavigatorRoutesProps, GuestNavigatorRoutesProps>>();
+
+  const { control, handleSubmit, formState: { errors }, setError } = useForm<signInProps>({
+    resolver: zodResolver(signInSchema)
+  });
+
+  const [isLoading, setIsLoading] = useState(false)
+  const { singIn } = useAuth()
 
   function handleClickSignUp() {
     navigation.navigate('signUp');
+  }
+
+
+  async function handleSignIn({ email, password }: signInProps) {
+    if (isLoading) return
+
+    setIsLoading(true)
+    try {
+      await singIn(email, password)
+      navigation.navigate('search');
+    } catch (err) {
+      console.log('err: ', err)
+    } finally {
+      setIsLoading(false)
+    }
   }
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
@@ -25,13 +62,26 @@ export function SignIn() {
           </Heading>
 
           <VStack space={6} w="full">
-            <Input placeholder="E-mail" keyboardType="email-address" autoCapitalize="none" />
 
-            <Input placeholder="Senha" secureTextEntry />
+            <Controller
+              name="email"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input placeholder="E-mail" keyboardType="email-address" autoCapitalize="none" onChangeText={onChange} value={value} />
+              )}
+            />
+
+            <Controller
+              name="password"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input placeholder="Senha" secureTextEntry onChangeText={onChange} value={value} />
+              )}
+            />
 
           </VStack>
 
-          <Button mt={8} title="ENTRAR" />
+          <Button mt={8} title="ENTRAR" onPress={handleSubmit(handleSignIn)} isLoading={isLoading} />
         </Center>
 
         <Center my={4}>

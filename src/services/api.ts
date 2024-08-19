@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance } from "axios";
 
 import { storageAuthTokenGet, storageAuthTokenSave } from "@storage/storageAuthToken";
 import { AppError } from "@utils/errors/AppError";
+import { ValidationError } from "@utils/errors/ValidationError";
 
 type SignOut = () => void;
 
@@ -15,7 +16,7 @@ type APIInstanceProps = AxiosInstance & {
 }
 
 const api = axios.create({
-  baseURL: 'http://192.168.15.10:5062',
+  baseURL: 'http://192.168.0.82:5062',
 }) as APIInstanceProps;
 
 let failedQueued: Array<PromiseType> = [];
@@ -84,8 +85,9 @@ api.registerInterceptTokenManager = singOut => {
 
       singOut();
     }
-
-    if (requestError.response && requestError.response.data) {
+    if (requestError.response && requestError.response.data.errors) {
+      return Promise.reject(new ValidationError(requestError.response.data.errors))
+    } else if (requestError.response && requestError.response.data) {
       return Promise.reject(new AppError(requestError.response.data.message))
     } else {
       return Promise.reject(requestError)

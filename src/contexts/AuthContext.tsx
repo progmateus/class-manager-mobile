@@ -30,6 +30,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
   const navigation = useContext(NavigationContext);
 
+  useEffect(() => {
+    console.log('USER: ', user)
+  }, [])
+
 
   async function userAndTokenUpdate(userData: IUserDTO, token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -63,12 +67,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
             avatar,
             roles
           }
+          console.log('TESTE: ', user)
           await storageUserAndTokenSave(user, token, refresh_token);
-          userAndTokenUpdate(user, token);
-          navigation?.navigate('search');
+          await userAndTokenUpdate(user, token);
         }
       }).catch((err) => {
-        throw err
+        return err
       }).finally(() => {
         setIsLoadingUserStorageData(false);
       })

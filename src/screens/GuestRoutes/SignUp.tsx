@@ -5,7 +5,7 @@ import LogoSVG from "@assets/logo.svg"
 import { Controller, useForm } from "react-hook-form"
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useNavigation } from "@react-navigation/native";
+import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
 import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
 import { useState } from "react";
 import { CreateUserService } from "src/services/usersService";
@@ -26,8 +26,6 @@ const signUpSchema = z.object({
 });
 
 
-type ITeste = GuestNavigatorRoutesProps & UserNavigatorRoutesProps;
-
 type signUpProps = z.infer<typeof signUpSchema>
 
 export function SignUp() {
@@ -38,13 +36,15 @@ export function SignUp() {
   const [isLoading, setIsLoading] = useState(false)
   const { singIn } = useAuth()
 
-  const navigation = useNavigation<GuestNavigatorRoutesProps>();
+  const navigation = useNavigation<CompositeNavigationProp<UserNavigatorRoutesProps, GuestNavigatorRoutesProps>>();
 
   function handleClicksignIn() {
     navigation.navigate('signIn');
   }
 
   const handleSignUp = ({ firstname, lastname, document, email, password }: signUpProps) => {
+    if (isLoading) return
+
     if (!isValidCPF(document)) {
       setError('document', { message: "CPF inválido" })
       return false
@@ -55,9 +55,9 @@ export function SignUp() {
     CreateUserService({ firstname, lastname, document, email, password }).then(({ data }) => {
       fireSuccesToast("Usuário criado")
       singIn(email, password)
-
+      navigation.navigate('signIn');
     }).catch((err) => {
-      console.log(err)
+      console.log('SUPER ERRO: ', err)
       const data: IApiResponse = err?.response?.data
       if (data?.errors.find((err) => err.property === "Email" && err.message === "ERR_EMAIL_ALREADY_EXISTS")) {
         setError('email', { message: "Este E-mail já está em uso" })
