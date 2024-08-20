@@ -5,7 +5,7 @@ import {
 } from "@react-navigation/bottom-tabs";
 import { useTheme } from "native-base";
 import { Bills } from "@screens/UserRoutes/Billing/Bills";
-import { Tenant } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
+import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
 import { Classes } from "@screens/UserRoutes/Classes/list/Classes";
 import { ClassDayInfo } from "@screens/UserRoutes/Classes/[id]/ClassDayInfo";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/Classes/[id]/UpdateClassDayStatus";
@@ -17,11 +17,10 @@ import { TenantsList } from "@screens/UserRoutes/Tenants/list/TenantsList";
 
 
 type UserRoutes = {
-  tenants: undefined;
   search: undefined;
   profile: undefined;
   bills: undefined;
-  tenant: undefined;
+  tenantProfile: { tenantId: string };
   classes: undefined;
   classDayInfo: undefined;
   updateClassDayStatus: undefined;
@@ -48,15 +47,6 @@ export function UserRoutes() {
           paddingTop: sizes[6]
         }
       }}>
-      <Screen
-        name="tenants"
-        component={ClassDayInfo}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <Buildings color={color} size={iconSize} />
-          )
-        }}
-      />
 
       <Screen
         name="search"
@@ -100,8 +90,8 @@ export function UserRoutes() {
       />
 
       <Screen
-        name="tenant"
-        component={Tenant}
+        name="tenantProfile"
+        component={TenantProfile}
         options={{ tabBarButton: () => (null) }}
       />
 

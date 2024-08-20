@@ -157,6 +157,12 @@ export function TenantsList() {
     })
   }
 
+  function handleSelectTenant() {
+    navigation.navigate('tenant', {
+      id: "dsadsadsadsad"
+    });
+  }
+
   return (
     <VStack flex={1} mt={statusBarHeight + 18}>
       <View px={4}>
@@ -175,7 +181,7 @@ export function TenantsList() {
           data={tenants}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <TenantItem onPress={handleClickTenant} username={item.username} name={item.name} />
+            <TenantItem onPress={handleClickTenant} username={item.username} name={item.name} onPress={ } />
           )}>
         </FlatList>
       </View>
