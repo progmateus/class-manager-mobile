@@ -9,6 +9,7 @@ import { TouchableOpacity } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { GetTenantProfileService } from "src/services/tenantsService";
+import { Loading } from "@components/Loading";
 
 
 type RouteParamsProps = {
@@ -39,14 +40,17 @@ export function TenantProfile() {
 
   const { tenantId } = route.params as RouteParamsProps;
   const [tenant, setTenant] = useState<ITenant>({} as ITenant)
+  const [isLoading, setIsLoading] = useState(false)
 
 
   useEffect(() => {
+    setIsLoading(true)
     GetTenantProfileService(tenantId).then(({ data }) => {
-      console.log('data: ', data)
       setTenant(data.data)
     }).catch((err) => {
       console.log('err: ', err.response)
+    }).finally(() => {
+      setIsLoading(false)
     })
   }, [tenantId])
 
@@ -54,64 +58,74 @@ export function TenantProfile() {
     <View flex={1}>
       <PageHeader title="Perfil" />
       <ScrollView>
-        <VStack>
-          <Center mt={8}>
-            <Image
-              rounded="full"
-              w={24}
-              h={24}
-              alt="image profile"
-              source={{
-                uri: tenant.avatar,
-              }}
-              defaultSource={{ uri: tenant.avatar }}
-            />
+        {
+          isLoading
+            ?
+            (
+              <Loading />
+            )
+            :
+            (
+              <VStack>
+                <Center mt={8}>
+                  <Image
+                    rounded="full"
+                    w={24}
+                    h={24}
+                    alt="image profile"
+                    source={{
+                      uri: tenant.avatar,
+                    }}
+                    defaultSource={{ uri: tenant.avatar }}
+                  />
 
-            <Heading mt={4} fontSize="xl"> {tenant.name}</Heading>
-            <Text fontSize="sm"> {tenant.username} </Text>
-            <Button title="INSCREVA-SE" mt={6} w="1/2" h={10} fontSize="xs" />
-            <HStack mt={6} space={2}>
-              <TouchableOpacity>
-                <FacebookSVG width={36} height={36} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <InstagramSVG width={36} height={36} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <WhatsappSVG width={36} height={36} />
-              </TouchableOpacity>
-            </HStack>
-          </Center>
-          <View px={4}>
-            <Text color="coolGray.500" fontSize="md" mb={2}> Bio </Text>
-            <Text> {tenant.description}</Text>
-          </View>
-          <View mt={2} py={4} borderBottomWidth={0.5} borderBottomColor="coolGray.400">
-            <Center>
-              <ImageSVG />
-            </Center>
-          </View>
-          <View flex={1} justifyContent="space-between" display="flex" flexDirection="row" flexWrap="wrap">
-            {images && images.length > 0 && (
-              images.map((image) => {
-                return (
-                  <TouchableOpacity key={image.url}>
-                    <Image
-                      w={32}
-                      h={32}
-                      alt="image profile"
-                      source={{
-                        uri: image.url,
-                      }}
-                      defaultSource={{ uri: image.url }}
-                    />
-                  </TouchableOpacity>
+                  <Heading mt={4} fontSize="xl">{tenant.name}</Heading>
+                  <Text fontSize="sm">@{tenant.username}</Text>
+                  <Button title="INSCREVA-SE" mt={6} w="1/2" h={10} fontSize="xs" />
+                  <HStack mt={6} space={2}>
+                    <TouchableOpacity>
+                      <FacebookSVG width={36} height={36} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <InstagramSVG width={36} height={36} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <WhatsappSVG width={36} height={36} />
+                    </TouchableOpacity>
+                  </HStack>
+                </Center>
+                <View px={4}>
+                  <Text color="coolGray.500" fontSize="md" mb={2}> Bio </Text>
+                  <Text>{tenant.description}</Text>
+                </View>
+                <View mt={2} py={4} borderBottomWidth={0.5} borderBottomColor="coolGray.400">
+                  <Center>
+                    <ImageSVG />
+                  </Center>
+                </View>
+                <View flex={1} justifyContent="space-between" display="flex" flexDirection="row" flexWrap="wrap">
+                  {images && images.length > 0 && (
+                    images.map((image) => {
+                      return (
+                        <TouchableOpacity key={image.url}>
+                          <Image
+                            w={32}
+                            h={32}
+                            alt="image profile"
+                            source={{
+                              uri: image.url,
+                            }}
+                            defaultSource={{ uri: image.url }}
+                          />
+                        </TouchableOpacity>
 
-                )
-              })
-            )}
-          </View>
-        </VStack>
+                      )
+                    })
+                  )}
+                </View>
+              </VStack>
+            )
+        }
       </ScrollView>
     </View >
   );
