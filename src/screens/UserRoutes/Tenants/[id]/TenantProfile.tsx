@@ -6,7 +6,21 @@ import InstagramSVG from "@assets/instagram-outline.svg"
 import WhatsappSVG from "@assets/whatsapp-outline.svg"
 import ImageSVG from "@assets/image-outline.svg"
 import { TouchableOpacity } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { GetTenantProfileService } from "src/services/tenantsService";
 
+
+type RouteParamsProps = {
+  tenantId: string;
+}
+
+interface ITenant {
+  name: string;
+  username: string;
+  description: string;
+  avatar: string;
+}
 
 export function TenantProfile() {
   const images = [
@@ -20,6 +34,22 @@ export function TenantProfile() {
     { url: "https://img.freepik.com/fotos-premium/estilo-de-vida-de-volei-de-praia-garota-atletica-em-acao-na-areia_148840-108748.jpg?ga=GA1.1.1603704743.1686338071&semt=ais_user" },
     { url: "https://img.freepik.com/fotos-gratis/duas-jogadoras-de-volei-cumprimentando-cada-uma-na-frente-da-rede_23-2148662702.jpg?ga=GA1.1.1603704743.1686338071&semt=ais_user" }
   ]
+
+  const route = useRoute()
+
+  const { tenantId } = route.params as RouteParamsProps;
+  const [tenant, setTenant] = useState<ITenant>({} as ITenant)
+
+
+  useEffect(() => {
+    GetTenantProfileService(tenantId).then(({ data }) => {
+      console.log('data: ', data)
+      setTenant(data.data)
+    }).catch((err) => {
+      console.log('err: ', err.response)
+    })
+  }, [tenantId])
+
   return (
     <View flex={1}>
       <PageHeader title="Perfil" />
@@ -32,13 +62,13 @@ export function TenantProfile() {
               h={24}
               alt="image profile"
               source={{
-                uri: 'https://img.freepik.com/vetores-gratis/silhueta-de-volei-desenhada-de-mao_23-2149399510.jpg?t=st=1720572316~exp=1720575916~hmac=26363405889cb81a340f09d38a956c628c43ede7d071865047cc5d86bbc2e6e8&w=826',
+                uri: tenant.avatar,
               }}
-              defaultSource={{ uri: 'https://img.freepik.com/vetores-gratis/silhueta-de-volei-desenhada-de-mao_23-2149399510.jpg?t=st=1720572316~exp=1720575916~hmac=26363405889cb81a340f09d38a956c628c43ede7d071865047cc5d86bbc2e6e8&w=826' }}
+              defaultSource={{ uri: tenant.avatar }}
             />
 
-            <Heading mt={4} fontSize="xl"> Vôlei Na Ilha</Heading>
-            <Text fontSize="sm"> @voleinaliha </Text>
+            <Heading mt={4} fontSize="xl"> {tenant.name}</Heading>
+            <Text fontSize="sm"> {tenant.username} </Text>
             <Button title="INSCREVA-SE" mt={6} w="1/2" h={10} fontSize="xs" />
             <HStack mt={6} space={2}>
               <TouchableOpacity>
@@ -54,7 +84,7 @@ export function TenantProfile() {
           </Center>
           <View px={4}>
             <Text color="coolGray.500" fontSize="md" mb={2}> Bio </Text>
-            <Text> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survsdsd</Text>
+            <Text> {tenant.description}</Text>
           </View>
           <View mt={2} py={4} borderBottomWidth={0.5} borderBottomColor="coolGray.400">
             <Center>
