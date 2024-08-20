@@ -3,7 +3,6 @@ import {
   BottomTabNavigationProp,
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
-import { Search } from "@screens/UserRoutes/Search";
 import { useTheme } from "native-base";
 import { Bills } from "@screens/UserRoutes/Billing/Bills";
 import { Tenant } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
@@ -14,6 +13,7 @@ import { UpdateUser } from "@screens/UserRoutes/User/[id]/UpdateUser";
 import { Buildings, Calendar, CurrencyDollar, MagnifyingGlass, UserCircle } from "phosphor-react-native";
 import { Profile } from "@screens/UserRoutes/User/profile/UserProfile";
 import { UpdatePassword } from "@screens/UserRoutes/User/[id]/UpdatePassword";
+import { TenantsList } from "@screens/UserRoutes/Tenants/list/TenantsList";
 
 
 type UserRoutes = {
@@ -60,7 +60,7 @@ export function UserRoutes() {
 
       <Screen
         name="search"
-        component={Search}
+        component={TenantsList}
         options={{
           tabBarIcon: ({ color }) => (
             <MagnifyingGlass color={color} size={iconSize} />

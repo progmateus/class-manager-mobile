@@ -5,10 +5,26 @@ import { TenantItem } from "@components/TenantItem";
 import { MagnifyingGlass } from "phosphor-react-native"
 import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { useCallback, useEffect, useState } from "react";
+import { ListTenantsService } from "src/services/tenantsService";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { debounce } from "lodash";
+import { useForm } from "react-hook-form";
 
 const statusBarHeight = Constants.statusBarHeight;
 
-export function Search() {
+interface ITenant {
+  id: string,
+  name: string,
+  username: string,
+  avatar: string
+}
+
+type serahcProps = {
+  search: string
+}
+
+export function TenantsList() {
   const items = [
     {
       id: '1',
@@ -118,16 +134,35 @@ export function Search() {
     }
   ]
 
+  const [tenants, setTenants] = useState<ITenant[]>([])
+  const [search, setSearch] = useState("")
+
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   function handleClickTenant() {
     navigation.navigate('tenant');
   }
 
+  function handleSearch(e: string) {
+    setSearch(e)
+    listTenants();
+  }
+
+
+  function listTenants() {
+    ListTenantsService(search).then(({ data }) => {
+      setTenants(data.data)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
   return (
     <VStack flex={1} mt={statusBarHeight + 18}>
       <View px={4}>
         <Input
+          value={search}
+          onChangeText={(e) => handleSearch(e)}
           placeholder="Buscar"
           InputLeftElement={<Icon as={MagnifyingGlass} style={{ marginLeft: 8 }} color="coolGray.400" />}
         />
@@ -137,10 +172,10 @@ export function Search() {
         <Heading mt={8} mx={4} fontFamily="heading" fontSize="sm"> Resultados </Heading>
         <FlatList
           px={6}
-          data={items}
+          data={tenants}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <TenantItem onPress={handleClickTenant} image={item.image} username={item.username} name={item.name} description={item.description} categories={item.categories} />
+            <TenantItem onPress={handleClickTenant} username={item.username} name={item.name} />
           )}>
         </FlatList>
       </View>
