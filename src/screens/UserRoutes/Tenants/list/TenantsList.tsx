@@ -139,10 +139,6 @@ export function TenantsList() {
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
-  function handleClickTenant() {
-    navigation.navigate('tenant');
-  }
-
   function handleSearch(e: string) {
     setSearch(e)
     listTenants();
@@ -157,9 +153,9 @@ export function TenantsList() {
     })
   }
 
-  function handleSelectTenant() {
-    navigation.navigate('tenant', {
-      id: "dsadsadsadsad"
+  function handleSelectTenant(tenantId: string) {
+    navigation.navigate('tenantProfile', {
+      tenantId
     });
   }
 
@@ -181,7 +177,7 @@ export function TenantsList() {
           data={tenants}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <TenantItem onPress={handleClickTenant} username={item.username} name={item.name} onPress={ } />
+            <TenantItem username={item.username} name={item.name} onPress={() => handleSelectTenant(item.id)} />
           )}>
         </FlatList>
       </View>
