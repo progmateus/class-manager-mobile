@@ -94,7 +94,10 @@ export function ClassDayInfo() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   function handleClickUpdateStatus() {
-    navigation.navigate('updateClassDayStatus');
+    navigation.navigate('updateClassDayStatus', {
+      tenantId,
+      classDayId
+    });
   }
 
   function handleParticipate() {

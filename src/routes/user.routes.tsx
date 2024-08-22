@@ -8,7 +8,7 @@ import { Bills } from "@screens/UserRoutes/Billing/Bills";
 import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
 import { Classes } from "@screens/UserRoutes/Classes/list/Classes";
 import { ClassDayInfo } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayInfo";
-import { UpdateClassDayStatus } from "@screens/UserRoutes/Classes/[id]/UpdateClassDayStatus";
+import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
 import { UpdateUser } from "@screens/UserRoutes/User/[id]/UpdateUser";
 import { Buildings, Calendar, CurrencyDollar, MagnifyingGlass, UserCircle } from "phosphor-react-native";
 import { Profile } from "@screens/UserRoutes/User/profile/UserProfile";
@@ -23,7 +23,7 @@ type UserRoutes = {
   tenantProfile: { tenantId: string };
   classes: undefined;
   classDayInfo: { tenantId: string, classDayId: string };
-  updateClassDayStatus: undefined;
+  updateClassDayStatus: { tenantId: string, classDayId: string };
   updateUser: undefined;
   updatePassword: undefined;
 }
