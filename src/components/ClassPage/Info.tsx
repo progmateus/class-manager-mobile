@@ -4,20 +4,24 @@ import ClockSVG from "@assets/clock-outline.svg"
 import MapSVG from "@assets/map-marker-outline.svg"
 import PersonSVG from "@assets/person-outline.svg"
 import { TouchableOpacity } from "react-native";
+import dayjs from "dayjs"
 
 interface IProps {
   infos: {
-    date: Date;
-    start: string;
-    end: string;
-    address: string;
-    teacher: {
-      name: string;
-    }
+    date: Date,
+    hourStart: string,
+    hourEnd: string,
+    address: string,
+    teachers: ITeacher[]
   }
 }
 
+interface ITeacher {
+  name: string
+}
+
 export function Info({ infos }: IProps) {
+  console.log("INFOS? ", infos)
 
   const getDate = (date: Date) => {
     return new Intl.DateTimeFormat('pt-BR', {
@@ -26,7 +30,7 @@ export function Info({ infos }: IProps) {
       month: 'long',
       year: 'numeric',
       timeZone: 'America/Sao_Paulo',
-    }).format(date)
+    }).format(dayjs(date, 'YYYY-MM-DD:hh:mm').toDate())
   };
 
   return (
@@ -38,9 +42,9 @@ export function Info({ infos }: IProps) {
 
       <HStack alignItems="center" space={1}>
         <ClockSVG width={24} height={24} />
-        <Text fontSize="sm" > {infos.start} </Text>
+        <Text fontSize="sm" > {infos.hourStart} </Text>
         <Text fontSize="sm"> - </Text>
-        <Text fontSize="sm"> {infos.end} </Text>
+        <Text fontSize="sm"> {infos.hourEnd} </Text>
       </HStack>
 
       <HStack alignItems="center" space={1}>
@@ -48,10 +52,14 @@ export function Info({ infos }: IProps) {
         <Text fontSize="sm"> {infos.address} </Text>
       </HStack>
 
-      <HStack alignItems="center" space={1}>
-        <PersonSVG width={24} height={24} />
-        <Text fontSize="sm"> {infos.teacher.name} </Text>
-      </HStack>
+      {
+        infos.teachers && infos.teachers.length > 0 && (
+          <HStack alignItems="center" space={1}>
+            <PersonSVG width={24} height={24} />
+            <Text fontSize="sm"> {infos.teachers[0].name} </Text>
+          </HStack>
+        )
+      }
     </VStack>
   )
 }

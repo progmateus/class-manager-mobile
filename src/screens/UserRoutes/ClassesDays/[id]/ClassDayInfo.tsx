@@ -4,8 +4,29 @@ import { Button } from "@components/Button";
 import { StudentItem } from "@components/StudentItem";
 import { Info } from "@components/ClassPage/Info";
 import { GetRole } from "@utils/GetRole";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { useEffect, useState } from "react";
+import { GetClassDayService } from "src/services/classDaysService";
+import { Loading } from "@components/Loading";
+
+
+type RouteParamsProps = {
+  classDayId: string;
+  tenantId: string;
+}
+
+interface IClassDay {
+  date: Date,
+  hourStart: string,
+  hourEnd: string,
+  address: string,
+  teachers: ITeacher[]
+}
+
+interface ITeacher {
+  name: string
+}
 
 export function ClassDayInfo() {
   const roles = [
@@ -19,6 +40,33 @@ export function ClassDayInfo() {
   ]
 
   const isTeacher = GetRole(roles, "123", "teacher")
+
+  const route = useRoute()
+
+  const { classDayId, tenantId } = route.params as RouteParamsProps;
+  const [classDay, setClassDay] = useState<IClassDay>({} as IClassDay)
+  const [isLoading, setIsLoading] = useState(false)
+
+
+  useEffect(() => {
+    setIsLoading(true)
+    GetClassDayService(tenantId, classDayId).then(({ data }) => {
+      console.log('data: ', data)
+      setClassDay({
+        ...data.data,
+        address: 'Praia da Bica, 255',
+        teachers: [
+          {
+            name: 'Anderson Souza'
+          }
+        ]
+      })
+    }).catch((err) => {
+      console.log('err: ', err.response)
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  }, [classDayId])
 
   const students = [
     { avatar: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
@@ -38,15 +86,6 @@ export function ClassDayInfo() {
     { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
     { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
   ]
-  const classItem = {
-    date: new Date(2024, 7, 9),
-    start: '18:00',
-    end: '19:00',
-    address: 'Praia da Bica, 255',
-    teacher: {
-      name: 'Anderson Souza'
-    }
-  }
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
@@ -58,32 +97,42 @@ export function ClassDayInfo() {
   return (
     <View flex={1}>
       <PageHeader title="Detalhes da aula" />
-      <ScrollView pb={20} px={2}>
-        <Info infos={classItem} />
-        <Heading px={4} fontFamily="heading" fontSize="md" mt={8}> Lista de presença</Heading>
-        <VStack px={4} mt={2}>
-          {
-            students && students.length > 0 && (
-              students.map((student, index) => {
-                return (
-                  <StudentItem key={index} student={student} />
-                )
-              })
-            )
-          }
-          <VStack space={4} my={8}>
-            <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md"></Button>
-            {
-              isTeacher && (
-                <>
-                  <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
-                </>
-              )
-            }
-          </VStack>
+      {
+        isLoading ?
+          (
+            <Loading />
+          )
+          :
+          (
+            <ScrollView pb={20} px={2}>
+              <Info infos={classDay} />
+              <Heading px={4} fontFamily="heading" fontSize="md" mt={8}> Lista de presença</Heading>
+              <VStack px={4} mt={2}>
+                {
+                  students && students.length > 0 && (
+                    students.map((student, index) => {
+                      return (
+                        <StudentItem key={index} student={student} />
+                      )
+                    })
+                  )
+                }
+                <VStack space={4} my={8}>
+                  <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md"></Button>
+                  {
+                    isTeacher && (
+                      <>
+                        <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
+                      </>
+                    )
+                  }
+                </VStack>
 
-        </VStack>
-      </ScrollView>
+              </VStack>
+            </ScrollView>
+          )
+      }
+
     </View>
   )
 }

@@ -96,7 +96,10 @@ export function Classes() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   function handleClickClassDay() {
-    navigation.navigate('classDayInfo');
+    navigation.navigate('classDayInfo', {
+      tenantId: 'b1e4cc1f-8cda-47b6-b531-8587fc114ebd',
+      classDayId: '24f072e1-703e-4c52-bfa5-3afa9deba9f1'
+    });
   }
 
   const getDay = (date: Date) => {
