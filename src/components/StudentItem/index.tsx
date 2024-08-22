@@ -17,7 +17,6 @@ interface IProps {
 }
 
 export function StudentItem({ student }: IProps) {
-  console.log('student: ', student)
   return (
     <TouchableOpacity key={student.avatar}>
       <HStack py={3} alignItems="center" rounded="md">

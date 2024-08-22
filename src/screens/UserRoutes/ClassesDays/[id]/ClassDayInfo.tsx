@@ -9,6 +9,8 @@ import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useEffect, useState } from "react";
 import { GetClassDayService } from "src/services/classDaysService";
 import { Loading } from "@components/Loading";
+import { CreatebookingService } from "src/services/bookingsService";
+import { useAuth } from "@hooks/useAuth";
 
 
 type RouteParamsProps = {
@@ -47,6 +49,8 @@ export function ClassDayInfo() {
   const { classDayId, tenantId } = route.params as RouteParamsProps;
   const [classDay, setClassDay] = useState<IClassDay>({} as IClassDay)
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingAction, setIsLoadingAction] = useState(false)
+  const { user: { id: userId } } = useAuth()
 
 
   useEffect(() => {
@@ -93,6 +97,29 @@ export function ClassDayInfo() {
     navigation.navigate('updateClassDayStatus');
   }
 
+  function handleParticipate() {
+    setIsLoading(true)
+
+    CreatebookingService(tenantId, classDayId, userId).then(({ data }) => {
+      const bookings = [...classDay.bookings, data.data]
+      setClassDay({
+        ...classDay,
+        bookings
+      })
+      console.log("==========================================")
+      console.log("BOOKING", classDay.bookings)
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  }
+
+  function handleCancelbooking() {
+    CreatebookingService(tenantId, classDayId, userId).then(({ data }) => {
+      console.log("BOOKING", data)
+    })
+  }
+
+
 
   return (
     <View flex={1}>
@@ -118,7 +145,13 @@ export function ClassDayInfo() {
                   )
                 }
                 <VStack space={4} my={8}>
-                  <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md"></Button>
+                  {
+                    classDay.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === userId) ? (
+                      <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={handleCancelbooking} variant="outline" color="brand.600" />
+                    ) : (
+                      <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={handleParticipate} />
+                    )
+                  }
                   {
                     isTeacher && (
                       <>
