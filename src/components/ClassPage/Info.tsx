@@ -21,8 +21,6 @@ interface ITeacher {
 }
 
 export function Info({ infos }: IProps) {
-  console.log("INFOS? ", infos)
-
   const getDate = (date: Date) => {
     return new Intl.DateTimeFormat('pt-BR', {
       weekday: 'long',

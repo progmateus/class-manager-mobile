@@ -22,6 +22,7 @@ interface IClassDay {
   hourEnd: string,
   address: string,
   teachers: ITeacher[]
+  bookings: any[]
 }
 
 interface ITeacher {
@@ -51,7 +52,6 @@ export function ClassDayInfo() {
   useEffect(() => {
     setIsLoading(true)
     GetClassDayService(tenantId, classDayId).then(({ data }) => {
-      console.log('data: ', data)
       setClassDay({
         ...data.data,
         address: 'Praia da Bica, 255',
@@ -109,10 +109,10 @@ export function ClassDayInfo() {
               <Heading px={4} fontFamily="heading" fontSize="md" mt={8}> Lista de presença</Heading>
               <VStack px={4} mt={2}>
                 {
-                  students && students.length > 0 && (
-                    students.map((student, index) => {
+                  classDay.bookings && classDay.bookings.length > 0 && (
+                    classDay.bookings.map((booking, index) => {
                       return (
-                        <StudentItem key={index} student={student} />
+                        <StudentItem key={index} student={booking.user} />
                       )
                     })
                   )
