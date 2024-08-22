@@ -23,7 +23,7 @@ export function StudentItem({ student }: IProps) {
       <HStack py={3} alignItems="center" rounded="md">
         {
           !student.avatar ? (
-            <UserCircle size={48} />
+            <UserCircle size={48} weight="light" />
           ) :
             (
               <Image
