@@ -28,11 +28,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const [user, setUser] = useState<IUserDTO>({} as IUserDTO);
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
-  const navigation = useContext(NavigationContext);
-
-  useEffect(() => {
-    console.log('USER: ', user)
-  }, [])
 
 
   async function userAndTokenUpdate(userData: IUserDTO, token: string) {
@@ -67,7 +62,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
             avatar,
             roles
           }
-          console.log('TESTE: ', user)
           await storageUserAndTokenSave(user, token, refresh_token);
           await userAndTokenUpdate(user, token);
         }

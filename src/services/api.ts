@@ -86,7 +86,7 @@ api.registerInterceptTokenManager = singOut => {
       singOut();
     }
     if (requestError.response && requestError.response.data.errors) {
-      return Promise.reject(new ValidationError(requestError.response.data.errors))
+      return Promise.reject(new ValidationError(requestError.response.data.message, requestError.response.data.errors))
     } else if (requestError.response && requestError.response.data) {
       return Promise.reject(new AppError(requestError.response.data.message))
     } else {

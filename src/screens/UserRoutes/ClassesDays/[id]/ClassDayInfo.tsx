@@ -9,7 +9,7 @@ import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useEffect, useState } from "react";
 import { GetClassDayService } from "src/services/classDaysService";
 import { Loading } from "@components/Loading";
-import { CreatebookingService } from "src/services/bookingsService";
+import { CreatebookingService, DeleteBookingService } from "src/services/bookingsService";
 import { useAuth } from "@hooks/useAuth";
 
 
@@ -98,7 +98,7 @@ export function ClassDayInfo() {
   }
 
   function handleParticipate() {
-    setIsLoading(true)
+    setIsLoadingAction(true)
 
     CreatebookingService(tenantId, classDayId, userId).then(({ data }) => {
       const bookings = [...classDay.bookings, data.data]
@@ -106,17 +106,29 @@ export function ClassDayInfo() {
         ...classDay,
         bookings
       })
-      console.log("==========================================")
-      console.log("BOOKING", classDay.bookings)
     }).finally(() => {
-      setIsLoading(false)
+      setIsLoadingAction(false)
     })
   }
 
   function handleCancelbooking() {
-    CreatebookingService(tenantId, classDayId, userId).then(({ data }) => {
-      console.log("BOOKING", data)
+    setIsLoadingAction(true)
+    const bookings = [...classDay.bookings]
+    const index = bookings.findIndex((b) => b.userId === userId)
+    DeleteBookingService(tenantId, bookings[index].id, classDayId, userId).then(({ data }) => {
+      if (index !== -1) {
+        bookings.splice(index, 1)
+      }
+      setClassDay({
+        ...classDay,
+        bookings
+      })
+    }).catch((err) => {
+      console.log("ERRO: ", err)
     })
+      .finally(() => {
+        setIsLoadingAction(false)
+      })
   }
 
 
