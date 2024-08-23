@@ -8,7 +8,7 @@ import { ElementType, ReactElement } from "react";
 type Props = {
   title: string;
   rightIcon?: ElementType;
-  rightAction?: () => {};
+  rightAction?: () => void;
   rightIconColor?: string;
 }
 

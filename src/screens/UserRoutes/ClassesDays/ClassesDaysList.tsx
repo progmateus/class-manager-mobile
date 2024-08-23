@@ -4,8 +4,9 @@ import { TouchableOpacity } from "react-native";
 import { PageHeader } from "@components/PageHeader";
 import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { Plus } from "phosphor-react-native";
 
-export function Classes() {
+export function ClassesDaysList() {
   const dates = [
     new Date(2024, 7, 9),
     new Date(2024, 7, 10),
@@ -124,9 +125,13 @@ export function Classes() {
     }).format(date)
   };
 
+  const createClassDay = () => {
+    navigation.navigate('createClassDay')
+  }
+
   return (
     <View flex={1}>
-      <PageHeader title="Aulas" />
+      <PageHeader title="Aulas" rightIcon={Plus} rightIconColor="brand.500" rightAction={() => createClassDay()} />
       <ScrollView flex={1}>
         <View pb={20}>
           <HStack>

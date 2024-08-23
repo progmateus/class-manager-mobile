@@ -6,14 +6,15 @@ import {
 import { useTheme } from "native-base";
 import { Bills } from "@screens/UserRoutes/Billing/Bills";
 import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
-import { Classes } from "@screens/UserRoutes/Classes/list/Classes";
 import { ClassDayInfo } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayInfo";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
 import { UpdateUser } from "@screens/UserRoutes/User/[id]/UpdateUser";
-import { Buildings, Calendar, CurrencyDollar, MagnifyingGlass, UserCircle } from "phosphor-react-native";
+import { Calendar, CurrencyDollar, MagnifyingGlass, UserCircle } from "phosphor-react-native";
 import { Profile } from "@screens/UserRoutes/User/profile/UserProfile";
 import { UpdatePassword } from "@screens/UserRoutes/User/[id]/UpdatePassword";
 import { TenantsList } from "@screens/UserRoutes/Tenants/list/TenantsList";
+import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
+import { CreateClassDay } from "@screens/UserRoutes/ClassesDays/CreateClassDay";
 
 
 type UserRoutes = {
@@ -21,11 +22,12 @@ type UserRoutes = {
   profile: undefined;
   bills: undefined;
   tenantProfile: { tenantId: string };
-  classes: undefined;
+  classesDays: undefined;
   classDayInfo: { tenantId: string, classDayId: string };
   updateClassDayStatus: { tenantId: string, classDayId: string };
   updateUser: undefined;
   updatePassword: undefined;
+  createClassDay: undefined;
 }
 export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;
 
@@ -60,8 +62,8 @@ export function UserRoutes() {
 
 
       <Screen
-        name="classes"
-        component={Classes}
+        name="classesDays"
+        component={ClassesDaysList}
         options={{
           tabBarIcon: ({ color }) => (
             <Calendar color={color} size={iconSize} />
@@ -116,6 +118,12 @@ export function UserRoutes() {
       <Screen
         name="updatePassword"
         component={UpdatePassword}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="createClassDay"
+        component={CreateClassDay}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>
