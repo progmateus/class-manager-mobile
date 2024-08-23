@@ -1,12 +1,41 @@
 import { GenericItem } from "@components/GenericItem"
+import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/ITenantPlanDTO"
+import { useRoute } from "@react-navigation/native"
 import { View, VStack } from "native-base"
-import { Barbell, BookBookmark, Coin, GraduationCap, IdentificationBadge, Plus } from "phosphor-react-native"
+import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
+import { useEffect, useState } from "react"
+import { ListTenantPlansService } from "src/services/tenantPlansservice"
+
+
+type RouteParamsProps = {
+  tenantId: string;
+}
 
 export function TenantPlansList() {
-  const plans: ITenantPlanDTO[] = []
+  const [plans, setPlans] = useState([])
+  const route = useRoute()
+  const { tenantId } = route.params as RouteParamsProps;
+
+  useEffect(() => {
+    ListTenantPlansService(tenantId).then(({ data }) => {
+      setPlans(data.data)
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+
+    })
+  }, [tenantId])
+
+  const priceFormatted = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2
+    }).format(price)
+  }
 
   const handleClickPlus = () => {
 
@@ -17,11 +46,11 @@ export function TenantPlansList() {
       <Viewcontainer>
         <VStack space={8}>
           {
-            plans && plans.length && (
+            plans && plans.length ? (
               plans.map((plan: ITenantPlanDTO) => {
                 return (
-                  <GenericItem.Root>
-                    <GenericItem.Icon icon={BookBookmark} />
+                  <GenericItem.Root key={plan.id}>
+                    <GenericItem.Icon icon={SimCard} />
                     <GenericItem.Content title={plan.name} caption={plan.description} />
                     <GenericItem.InfoSection>
                       <GenericItem.InfoContainer >
@@ -29,14 +58,17 @@ export function TenantPlansList() {
                         <GenericItem.InfoValue text="7" />
                       </GenericItem.InfoContainer>
                       <GenericItem.InfoContainer >
-                        <Coin size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text="128" />
+                        <Money size={18} color="#6b7280" />
+                        <GenericItem.InfoValue text={priceFormatted(plan.price).replace('R$', '')} />
                       </GenericItem.InfoContainer>
                     </GenericItem.InfoSection>
                   </GenericItem.Root>
                 )
               })
             )
+              : (
+                <Loading />
+              )
           }
         </VStack>
       </Viewcontainer>

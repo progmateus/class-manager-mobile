@@ -8,7 +8,7 @@ import { SimpleGrid, View } from "native-base";
 import { BookBookmark, Clock, GraduationCap, IdentificationBadge, Receipt, SimCard } from "phosphor-react-native";
 
 export function Dashboard() {
-  const tenantId = "B1E4CC1F-8CDA-47B6-B531-8587FC114EBD;"
+  const tenantId = "B1E4CC1F-8CDA-47B6-B531-8587FC114EBD"
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const size = 18
   const color = "white"

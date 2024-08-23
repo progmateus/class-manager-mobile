@@ -41,7 +41,7 @@ export function SignIn() {
     setIsLoading(true)
     try {
       await singIn(email, password)
-      navigation.navigate('search');
+      navigation.navigate('tenantsList');
     } catch (err) {
       console.log('err: ', err)
     } finally {

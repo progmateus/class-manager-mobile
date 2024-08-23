@@ -18,7 +18,7 @@ import { CreateClassDay } from "@screens/UserRoutes/ClassesDays/CreateClassDay";
 
 
 type UserRoutes = {
-  search: undefined;
+  tenantsList: undefined;
   profile: undefined;
   bills: undefined;
   tenantProfile: { tenantId: string };
@@ -33,7 +33,7 @@ export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;
 
 export function UserRoutes() {
   const { sizes, colors } = useTheme();
-  const { Navigator, Screen, Group } = createBottomTabNavigator<UserRoutes>();
+  const { Navigator, Screen } = createBottomTabNavigator<UserRoutes>();
 
   const iconSize = sizes[6]
   return (
@@ -51,7 +51,7 @@ export function UserRoutes() {
       }}>
 
       <Screen
-        name="search"
+        name="tenantsList"
         component={TenantsList}
         options={{
           tabBarIcon: ({ color }) => (

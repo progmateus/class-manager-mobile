@@ -66,6 +66,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
           await userAndTokenUpdate(user, token);
         }
       }).catch((err) => {
+        console.log('err: ', err)
         return err
       }).finally(() => {
         setIsLoadingUserStorageData(false);
