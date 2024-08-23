@@ -11,9 +11,16 @@ import { Check } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
+import { CreateClassDayService } from "src/services/classDaysService";
 import { ListClassesService } from "src/services/classesService";
 import { THEME } from "src/theme";
 import { z } from "zod";
+import dayjs from "dayjs"
+import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
+
+
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
 
 type RouteParamsProps = {
   tenantId: string;
@@ -29,16 +36,17 @@ const createClassDaySchema = z.object({
 type createclassDayProps = z.infer<typeof createClassDaySchema>
 
 export function CreateClassDay() {
+  const [classes, setClasses] = useState([])
+  const [isLoading, setIsLoadig] = useState(false)
+  const { sizes, colors } = useTheme();
+  const route = useRoute()
+
+  const { tenantId } = route.params as RouteParamsProps;
 
   const { control, handleSubmit, formState: { errors } } = useForm<createclassDayProps>({
     resolver: zodResolver(createClassDaySchema)
   });
 
-  const route = useRoute()
-  const { tenantId } = route.params as RouteParamsProps;
-
-  const { sizes, colors } = useTheme();
-  const [classes, setClasses] = useState([])
 
   useEffect(() => {
     ListClassesService(tenantId).then(({ data }) => {
@@ -49,7 +57,23 @@ export function CreateClassDay() {
   }, [tenantId])
 
   const handleCreateClassDay = (data: createclassDayProps) => {
-    console.log('tenantId: ', tenantId)
+    setIsLoadig(false)
+
+
+    if (isLoading) return;
+    setIsLoadig(true)
+    const { hourStart, hourEnd, date, classId } = data
+
+    const fullDate = dayjs(`${date} ${hourStart}`, "DD/MM/YYYY HH:mm").toISOString();
+
+    CreateClassDayService(tenantId, hourStart, hourEnd, fullDate, classId).then(() => {
+      fireSuccesToast('Aula criada')
+    }).catch((err) => {
+      console.log(err)
+      fireErrorToast('Ocorreu um erro')
+    }).finally(() => {
+      setIsLoadig(false)
+    })
   }
 
   return (

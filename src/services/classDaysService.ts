@@ -19,9 +19,9 @@ export function UpdateClassDayStatusService(tenantId: string, classDayId: string
   })
 }
 
-export function CreateClassDayService(tenantId: string, hourStart: string, hourEnd: EClassDayStatus, date: Date, classId: string) {
+export function CreateClassDayService(tenantId: string, hourStart: string, hourEnd: string, date: string, classId: string) {
   return api({
-    url: `${tenantId}/classes/`,
+    url: `${tenantId}/class-days/`,
     method: 'post',
     data: {
       hourStart,
