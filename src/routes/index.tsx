@@ -4,6 +4,7 @@ import { Box, useTheme } from "native-base";
 import { UserRoutes } from "./user.routes";
 import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
+import { TenantRoutes } from "./tenant.routes";
 
 export function Routes() {
   const { colors } = useTheme();
@@ -20,7 +21,7 @@ export function Routes() {
     <Box flex={1} bg="white">
       <NavigationContainer>
         {
-          user.id ? <UserRoutes /> : <GuestRoutes />
+          user.id ? <TenantRoutes /> : <GuestRoutes />
         }
       </NavigationContainer>
     </Box>

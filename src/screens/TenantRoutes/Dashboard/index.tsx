@@ -8,6 +8,7 @@ import { SimpleGrid, View } from "native-base";
 import { BookBookmark, Clock, GraduationCap, IdentificationBadge, Receipt, SimCard } from "phosphor-react-native";
 
 export function Dashboard() {
+  const tenantId = "B1E4CC1F-8CDA-47B6-B531-8587FC114EBD;"
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const size = 18
   const color = "white"
@@ -21,7 +22,7 @@ export function Dashboard() {
           <DashboardOption text="Turmas" icon={<BookBookmark size={size} color={color} />} onPress={() => navigation.navigate('classes')} />
           <DashboardOption text="Professores" icon={<IdentificationBadge size={size} color={color} />} onPress={() => navigation.navigate('students')} />
           <DashboardOption text="Inscrições" icon={<Receipt size={size} color={color} />} onPress={() => navigation.navigate('studentInfo')} />
-          <DashboardOption text="Planos" icon={<SimCard size={size} color={color} />} onPress={() => navigation.navigate('students')} />
+          <DashboardOption text="Planos" icon={<SimCard size={size} color={color} />} onPress={() => navigation.navigate('tenantPlansList', { tenantId })} />
           <DashboardOption text="Jornadas" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('classHoursList')} />
         </SimpleGrid>
       </Viewcontainer>
