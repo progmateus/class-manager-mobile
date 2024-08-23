@@ -141,7 +141,7 @@ export function ClassesDaysList() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Aulas" rightIcon={Plus} rightIconColor="brand.500" rightAction={() => createClassDay()} />
+      <PageHeader title="Aulas" rightIcon={params?.tenantId ? Plus : null} rightIconColor="brand.500" rightAction={() => createClassDay()} />
       <ScrollView flex={1}>
         <View pb={20}>
           <HStack>
