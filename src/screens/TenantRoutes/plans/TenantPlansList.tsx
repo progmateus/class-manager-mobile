@@ -3,7 +3,8 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/ITenantPlanDTO"
-import { useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { View, VStack } from "native-base"
 import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
 import { useEffect, useState } from "react"
@@ -18,6 +19,8 @@ export function TenantPlansList() {
   const [plans, setPlans] = useState([])
   const route = useRoute()
   const { tenantId } = route.params as RouteParamsProps;
+  const navigation = useNavigation<TenantNavigatorRoutesProps>();
+
 
   useEffect(() => {
     ListTenantPlansService(tenantId).then(({ data }) => {
@@ -38,7 +41,9 @@ export function TenantPlansList() {
   }
 
   const handleClickPlus = () => {
-
+    navigation.navigate('createTenantPlan', {
+      tenantId
+    })
   }
   return (
     <View flex={1}>
