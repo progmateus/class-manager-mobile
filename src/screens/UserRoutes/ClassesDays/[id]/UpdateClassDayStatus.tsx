@@ -2,10 +2,11 @@ import { PageHeader } from "@components/PageHeader";
 import { Text, TextArea, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { useState } from "react";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { UpdateClassDayStatusService } from "src/services/classDaysService";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
+import { UserNavigatorRoutesProps } from "@routes/user.routes";
 
 
 type RouteParamsProps = {
@@ -17,6 +18,7 @@ export function UpdateClassDayStatus() {
   const route = useRoute()
   const [observation, setObservation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const { classDayId, tenantId } = route.params as RouteParamsProps;
 
@@ -25,6 +27,10 @@ export function UpdateClassDayStatus() {
     setIsLoading(true)
     UpdateClassDayStatusService(tenantId, classDayId, EClassDayStatus.CANCELED, observation).then(({ data }) => {
       fireSuccesToast('Aula cancelada')
+      navigation.navigate('classDayInfo', {
+        classDayId,
+        tenantId
+      })
     }).catch((err) => {
       console.log(err.response)
     }).finally(() => {
@@ -36,6 +42,10 @@ export function UpdateClassDayStatus() {
     setIsLoading(true)
     UpdateClassDayStatusService(tenantId, classDayId, EClassDayStatus.CONCLUDED, observation).then(({ data }) => {
       fireSuccesToast('Aula confirmada')
+      navigation.navigate('classDayInfo', {
+        classDayId,
+        tenantId
+      })
     }).catch((err) => {
       console.log(err.response)
     }).finally(() => {

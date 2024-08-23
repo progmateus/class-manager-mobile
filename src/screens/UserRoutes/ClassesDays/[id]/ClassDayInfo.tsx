@@ -51,6 +51,8 @@ export function ClassDayInfo() {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
   const { user: { id: userId } } = useAuth()
+  const navigation = useNavigation<UserNavigatorRoutesProps>();
+
 
 
   useEffect(() => {
@@ -90,8 +92,6 @@ export function ClassDayInfo() {
     { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
     { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
   ]
-
-  const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   function handleClickUpdateStatus() {
     navigation.navigate('updateClassDayStatus', {
