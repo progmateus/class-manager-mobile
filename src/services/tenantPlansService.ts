@@ -8,7 +8,7 @@ export function ListTenantPlansService(tenantId: string) {
 }
 
 
-export function CreatetenantPlan(tenantId: string, name: string, description: string, timesOfweek: number, price: string) {
+export function CreateTenantPlanService(tenantId: string, name: string, description: string, timesOfweek: number, price: string) {
   return api({
     url: `${tenantId}/tenant-plans/`,
     method: 'get'

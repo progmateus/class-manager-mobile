@@ -8,7 +8,7 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { View, VStack } from "native-base"
 import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
 import { useEffect, useState } from "react"
-import { ListTenantPlansService } from "src/services/tenantPlansservice"
+import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
 type RouteParamsProps = {

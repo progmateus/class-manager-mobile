@@ -8,11 +8,11 @@ import { Check } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
-import { CreateClassDayService } from "src/services/classDaysService";
 import { ListClassesService } from "src/services/classesService";
 import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
+import { CreateTenantPlanService } from "src/services/tenantPlansService";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -22,14 +22,14 @@ type RouteParamsProps = {
   tenantId: string;
 }
 
-const createClassDaySchema = z.object({
+const createTenantPlanSchema = z.object({
   name: z.string(),
   description: z.string(),
   timesOfweek: z.string().regex(/\d+/g, "Apenas números"),
   price: z.string()
 });
 
-type createclassDayProps = z.infer<typeof createClassDaySchema>
+type CreateTenantplanProps = z.infer<typeof createTenantPlanSchema>
 
 export function CreateTenantPlan() {
   const [classes, setClasses] = useState([])
@@ -39,8 +39,8 @@ export function CreateTenantPlan() {
 
   const { tenantId } = route.params as RouteParamsProps;
 
-  const { control, handleSubmit, formState: { errors } } = useForm<createclassDayProps>({
-    resolver: zodResolver(createClassDaySchema)
+  const { control, handleSubmit, formState: { errors } } = useForm<CreateTenantplanProps>({
+    resolver: zodResolver(createTenantPlanSchema)
   });
 
 
@@ -52,14 +52,14 @@ export function CreateTenantPlan() {
     })
   }, [tenantId])
 
-  const handleCreateClassDay = (data: createclassDayProps) => {
+  const handleCreateTenantPlan = (data: CreateTenantplanProps) => {
     if (isLoading) return;
     setIsLoadig(true)
 
     const { name, description, price, timesOfweek } = data;
 
-    CreateClassDayService(tenantId, name, description, timesOfweek, price).then(() => {
-      fireSuccesToast('Aula criada')
+    CreateTenantPlanService(tenantId, name, description, Number(timesOfweek), price).then(() => {
+      fireSuccesToast('Plano criado')
     }).catch((err) => {
       console.log(err)
       fireErrorToast('Ocorreu um erro')
@@ -70,7 +70,7 @@ export function CreateTenantPlan() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Criar aula" rightIcon={Check} rightAction={handleSubmit(handleCreateClassDay)} />
+      <PageHeader title="Criar aula" rightIcon={Check} rightAction={handleSubmit(handleCreateTenantPlan)} />
       <ScrollContainer>
         <VStack space={6} mt={2}>
 
@@ -78,7 +78,7 @@ export function CreateTenantPlan() {
             name="name"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Input label="Nome" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} />
+              <Input label="Nome" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.name?.message} />
             )}
           />
 
@@ -87,7 +87,7 @@ export function CreateTenantPlan() {
             name="description"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Input label="Descrição" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} />
+              <Input label="Descrição" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.description?.message} />
             )}
           />
 
@@ -96,7 +96,7 @@ export function CreateTenantPlan() {
             name="timesOfweek"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Input label="Vezes por semana" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} />
+              <Input label="Vezes por semana" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.timesOfweek?.message} />
             )}
           />
 
