@@ -42,7 +42,7 @@ export function TenantPlansList() {
   }
   return (
     <View flex={1}>
-      <PageHeader title="Planos" rightIcon={Plus} rightAction={handleClickPlus} />
+      <PageHeader title="Planos" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
       <Viewcontainer>
         <VStack space={8}>
           {
