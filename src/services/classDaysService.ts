@@ -18,3 +18,16 @@ export function UpdateClassDayStatusService(tenantId: string, classDayId: string
     }
   })
 }
+
+export function CreateClassDayService(tenantId: string, hourStart: string, hourEnd: EClassDayStatus, date: Date, classId: string) {
+  return api({
+    url: `${tenantId}/classes/`,
+    method: 'post',
+    data: {
+      hourStart,
+      hourEnd,
+      date,
+      classId
+    }
+  })
+}
