@@ -27,7 +27,7 @@ type UserRoutes = {
   updateClassDayStatus: { tenantId: string, classDayId: string };
   updateUser: undefined;
   updatePassword: undefined;
-  createClassDay: undefined;
+  createClassDay: { tenantId?: string };
 }
 export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;
 

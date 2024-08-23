@@ -1,16 +1,23 @@
 import { Input } from "@components/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
+import { IClassDTO } from "@dtos/IClass";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRoute } from "@react-navigation/native";
 import { size } from "lodash";
 import { AddIcon, HStack, Select, Text, useTheme, View, VStack } from "native-base";
 import { background, border, color } from "native-base/lib/typescript/theme/styled-system";
 import { Check } from "phosphor-react-native";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
+import { ListClassesService } from "src/services/classesService";
 import { THEME } from "src/theme";
 import { z } from "zod";
 
+type RouteParamsProps = {
+  tenantId: string;
+}
 
 const createClassDaySchema = z.object({
   date: z.string(),
@@ -27,10 +34,22 @@ export function CreateClassDay() {
     resolver: zodResolver(createClassDaySchema)
   });
 
+  const route = useRoute()
+  const { tenantId } = route.params as RouteParamsProps;
+
   const { sizes, colors } = useTheme();
+  const [classes, setClasses] = useState([])
+
+  useEffect(() => {
+    ListClassesService(tenantId).then(({ data }) => {
+      setClasses(data.data)
+    }).catch((err) => {
+      console.log('err: ', err)
+    })
+  }, [tenantId])
 
   const handleCreateClassDay = (data: createclassDayProps) => {
-    console.log('ok: ', data)
+    console.log('tenantId: ', tenantId)
   }
 
   return (
@@ -123,11 +142,15 @@ export function CreateClassDay() {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select accessibilityLabel="Selecione a turma" selectedValue={value} variant="outline" mt={-2} onValueChange={onChange}>
-                <Select.Item label="UX Research" value="ux" />
-                <Select.Item label="Web Development" value="web" />
-                <Select.Item label="Cross Platform Development" value="cross" />
-                <Select.Item label="UI Designing" value="ui" />
-                <Select.Item label="Backend Development" value="backend" />
+                {
+                  classes && classes.length > 0 && (
+                    classes.map((c: IClassDTO) => {
+                      return (
+                        <Select.Item key={c.id} label={c.name} value={c.id} />
+                      )
+                    })
+                  )
+                }
               </Select>
             )}
           />

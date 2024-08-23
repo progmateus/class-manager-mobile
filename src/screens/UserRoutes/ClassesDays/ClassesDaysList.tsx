@@ -2,9 +2,13 @@ import ClockSVG from "@assets/clock-outline.svg"
 import { Center, HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { PageHeader } from "@components/PageHeader";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { Plus } from "phosphor-react-native";
+
+type RouteParamsProps = {
+  tenantId?: string;
+}
 
 export function ClassesDaysList() {
   const dates = [
@@ -96,9 +100,13 @@ export function ClassesDaysList() {
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
+  const route = useRoute()
+  const params = route.params as RouteParamsProps;
+
   function handleClickClassDay() {
+    if (!params.tenantId) return
     navigation.navigate('classDayInfo', {
-      tenantId: 'b1e4cc1f-8cda-47b6-b531-8587fc114ebd',
+      tenantId: params.tenantId,
       classDayId: '24f072e1-703e-4c52-bfa5-3afa9deba9f1'
     });
   }
@@ -126,7 +134,9 @@ export function ClassesDaysList() {
   };
 
   const createClassDay = () => {
-    navigation.navigate('createClassDay')
+    navigation.navigate('createClassDay', {
+      tenantId: "B1E4CC1F-8CDA-47B6-B531-8587FC114EBD"
+    })
   }
 
   return (

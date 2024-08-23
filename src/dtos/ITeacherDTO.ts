@@ -1,0 +1,3 @@
+interface ITeacherDTO {
+  name: string
+}
