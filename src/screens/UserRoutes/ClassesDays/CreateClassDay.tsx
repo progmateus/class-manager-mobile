@@ -57,9 +57,6 @@ export function CreateClassDay() {
   }, [tenantId])
 
   const handleCreateClassDay = (data: createclassDayProps) => {
-    setIsLoadig(false)
-
-
     if (isLoading) return;
     setIsLoadig(true)
     const { hourStart, hourEnd, date, classId } = data
