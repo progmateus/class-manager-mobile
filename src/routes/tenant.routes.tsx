@@ -19,13 +19,13 @@ import { CreateClass } from "@screens/TenantRoutes/Classes/CreateClass";
 export type TenantRoutes = {
   studentInfo: undefined;
   students: undefined;
-  classes: undefined;
+  classes: { tenantId: string; };
   classInfo: undefined;
   dashboard: undefined;
   classHoursList: undefined;
   tenantPlansList: { tenantId: string; }
   createTenantPlan: { tenantId: string; }
-  createclass: { tenantId: string; }
+  createClass: { tenantId: string; }
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -118,7 +118,7 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="createclass"
+        name="createClass"
         component={CreateClass}
         options={{
           tabBarButton: () => (null)

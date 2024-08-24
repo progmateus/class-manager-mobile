@@ -1,52 +1,79 @@
 import { GenericItem } from "@components/GenericItem"
+import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
+import { IClassDTO } from "@dtos/IClass"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { View, VStack } from "native-base"
-import { BookBookmark, GraduationCap, IdentificationBadge } from "phosphor-react-native"
+import { Center, Text, View, VStack } from "native-base"
+import { BookBookmark, GraduationCap, IdentificationBadge, Plus } from "phosphor-react-native"
+import { useEffect, useState } from "react"
+import { ListClassesService } from "src/services/classesService"
 
 type RouteParamsProps = {
-  tenantId?: string;
+  tenantId: string;
 }
 export function ClassesList() {
+  const [classes, setClasses] = useState([])
+  const [isLoading, setIsLoadig] = useState(false)
   const route = useRoute()
   const { tenantId } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
-  const classes = [
-    {
-      name: "Turma avançada",
-      businnesHour: "Seg, Ter, Qua"
-    }
-  ]
+
+
+  const handleClickCreate = () => {
+    navigation.navigate('createClass', {
+      tenantId
+    })
+  }
+
+  useEffect(() => {
+    setIsLoadig(true)
+    ListClassesService(tenantId).then(({ data }) => {
+      setClasses(data.data)
+    }).catch((err) => {
+      console.log('err: ', err)
+    }).finally(() => {
+      setIsLoadig(false)
+    })
+  }, [])
   return (
     <View flex={1}>
-      <PageHeader title="Turmas" />
+      <PageHeader title="Turmas" rightIcon={Plus} rightAction={handleClickCreate} />
       <Viewcontainer>
-        <VStack space={8}>
-          {
-            classes && classes.length && (
-              classes.map((classInfo) => {
-                return (
-                  <GenericItem.Root>
-                    <GenericItem.Icon icon={BookBookmark} />
-                    <GenericItem.Content title={classInfo.name} caption={classInfo.businnesHour} />
-                    <GenericItem.InfoSection>
-                      <GenericItem.InfoContainer >
-                        <IdentificationBadge size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text="7" />
-                      </GenericItem.InfoContainer>
-                      <GenericItem.InfoContainer >
-                        <GraduationCap size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text="128" />
-                      </GenericItem.InfoContainer>
-                    </GenericItem.InfoSection>
-                  </GenericItem.Root>
-                )
-              })
+        {
+          isLoading ? (<Loading />)
+            : (
+              <VStack space={4}>
+                {
+                  classes && classes.length ? (
+                    classes.map((classInfo: IClassDTO) => {
+                      return (
+                        <GenericItem.Root>
+                          <GenericItem.Icon icon={BookBookmark} />
+                          <GenericItem.Content title={classInfo.name} caption={classInfo.businessHour} />
+                          <GenericItem.InfoSection>
+                            <GenericItem.InfoContainer >
+                              <GraduationCap size={18} color="#6b7280" />
+                              <GenericItem.InfoValue text="128" />
+                            </GenericItem.InfoContainer>
+                            <GenericItem.InfoContainer >
+                              <IdentificationBadge size={18} color="#6b7280" />
+                              <GenericItem.InfoValue text="7" />
+                            </GenericItem.InfoContainer>
+                          </GenericItem.InfoSection>
+                        </GenericItem.Root>
+                      )
+                    })
+                  ) : (
+                    <Center>
+                      <Text fontFamily="body" color="coolGray.700"> Nenhum resultado encontrado</Text>
+                    </Center>
+                  )
+                }
+              </VStack>
             )
-          }
-        </VStack>
+        }
       </Viewcontainer>
     </View>
   )
