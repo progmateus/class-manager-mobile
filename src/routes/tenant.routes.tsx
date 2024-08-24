@@ -13,7 +13,7 @@ import { StudentInfo } from "@screens/TenantRoutes/Students/[id]/StudentInfo";
 import { ClassHoursList } from "@screens/TenantRoutes/classHours/list/ClassHoursList";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
-import { CreateClass } from "@screens/UserRoutes/Classes/CreateClass";
+import { CreateClass } from "@screens/TenantRoutes/Classes/CreateClass";
 
 
 export type TenantRoutes = {

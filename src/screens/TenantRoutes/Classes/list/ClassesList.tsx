@@ -1,10 +1,18 @@
 import { GenericItem } from "@components/GenericItem"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
+import { useNavigation, useRoute } from "@react-navigation/native"
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { View, VStack } from "native-base"
 import { BookBookmark, GraduationCap, IdentificationBadge } from "phosphor-react-native"
 
+type RouteParamsProps = {
+  tenantId?: string;
+}
 export function ClassesList() {
+  const route = useRoute()
+  const { tenantId } = route.params as RouteParamsProps;
+  const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const classes = [
     {
       name: "Turma avançada",
