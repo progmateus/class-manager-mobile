@@ -8,7 +8,7 @@ import { Check } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
-import { ListClassesService } from "src/services/classesService";
+import { CreateClassService, ListClassesService } from "src/services/classesService";
 import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
@@ -23,8 +23,9 @@ type RouteParamsProps = {
 }
 
 const createClassSchema = z.object({
-  name: z.string(),
-  description: z.string()
+  name: z.string().min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres'),
+  description: z.string(),
+  businessHour: z.string()
 });
 
 type CreateClassProps = z.infer<typeof createClassSchema>
@@ -50,18 +51,22 @@ export function CreateClass() {
     })
   }, [tenantId])
 
-  const handleCreateTenantPlan = (data: CreateClassProps) => {
+  const handleCreateClass = (data: CreateClassProps) => {
     if (isLoading) return;
     setIsLoadig(true)
 
-    const { name, description, } = data;
-
-    fireSuccesToast('Plano criado')
+    CreateClassService(tenantId, data.name, data.description, data.businessHour).then(() => {
+      fireSuccesToast('Turma criada')
+    }).catch(() => {
+      fireErrorToast('Ocorreu um erro')
+    }).finally(() => {
+      setIsLoadig(false)
+    })
   }
 
   return (
     <View flex={1}>
-      <PageHeader title="Criar aula" rightIcon={Check} rightAction={handleSubmit(handleCreateTenantPlan)} />
+      <PageHeader title="Criar Turma" rightIcon={Check} rightAction={handleSubmit(handleCreateClass)} />
       <ScrollContainer>
         <VStack space={6} mt={2}>
 
@@ -79,6 +84,14 @@ export function CreateClass() {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Input label="Descrição" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.description?.message} />
+            )}
+          />
+
+          <Controller
+            name="businessHour"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Input label="Horário" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.businessHour?.message} />
             )}
           />
         </VStack>
