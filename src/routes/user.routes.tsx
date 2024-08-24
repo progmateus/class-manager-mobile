@@ -15,6 +15,7 @@ import { UpdatePassword } from "@screens/UserRoutes/User/[id]/UpdatePassword";
 import { TenantsList } from "@screens/UserRoutes/Tenants/list/TenantsList";
 import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
 import { CreateClassDay } from "@screens/UserRoutes/ClassesDays/CreateClassDay";
+import { CreateSubscription } from "@screens/UserRoutes/Subscriptions/CreateSubscription";
 
 
 type UserRoutes = {
@@ -28,6 +29,7 @@ type UserRoutes = {
   updateUser: undefined;
   updatePassword: undefined;
   createClassDay: { tenantId?: string };
+  createSubscription: { tenantId?: string };
 }
 export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;
 
@@ -124,6 +126,12 @@ export function UserRoutes() {
       <Screen
         name="createClassDay"
         component={CreateClassDay}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="createSubscription"
+        component={CreateSubscription}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>
