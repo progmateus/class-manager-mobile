@@ -12,8 +12,8 @@ import { BookBookmark, GraduationCap, House } from "phosphor-react-native";
 import { StudentInfo } from "@screens/TenantRoutes/Students/[id]/StudentInfo";
 import { ClassHoursList } from "@screens/TenantRoutes/classHours/list/ClassHoursList";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
-import { CreatetenantPlan } from "src/services/tenantPlansservice";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
+import { CreateClass } from "@screens/UserRoutes/Classes/CreateClass";
 
 
 export type TenantRoutes = {
@@ -25,6 +25,7 @@ export type TenantRoutes = {
   classHoursList: undefined;
   tenantPlansList: { tenantId: string; }
   createTenantPlan: { tenantId: string; }
+  createclass: { tenantId: string; }
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -111,6 +112,14 @@ export function TenantRoutes() {
       <Screen
         name="createTenantPlan"
         component={CreateTenantPlan}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="createclass"
+        component={CreateClass}
         options={{
           tabBarButton: () => (null)
         }}
