@@ -7,3 +7,10 @@ export function CreateUserService(data: any) {
     data
   })
 }
+
+export function GetUserProfileService() {
+  return api({
+    url: '/users/profile',
+    method: 'get'
+  })
+}

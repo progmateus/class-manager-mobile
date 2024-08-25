@@ -7,5 +7,6 @@ interface IUserDTO {
   email?: string
   password?: string;
   roles?: []
+  subscriptions?: [];
 }
 export { IUserDTO }

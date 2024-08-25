@@ -8,6 +8,7 @@ import { SignInService } from "src/services/authService";
 import { CompositeNavigationProp, NavigationContext, useNavigation } from "@react-navigation/native";
 import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { GetUserProfileService } from "src/services/usersService";
 
 
 export type AuthContextDataProps = {
@@ -73,6 +74,21 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       })
   }
 
+  async function getUserProfile() {
+    setIsLoadingUserStorageData(true);
+    const { token } = await storageAuthTokenGet();
+    GetUserProfileService().then(({ data }) => {
+      if (data.data && token) {
+        userAndTokenUpdate(data.data, token);
+      }
+    }).catch((err) => {
+      console.log('err: ', err)
+    }).finally(() => {
+      setIsLoadingUserStorageData(false);
+    })
+  }
+
+
   async function signOut() {
     try {
       setIsLoadingUserStorageData(true);
@@ -113,7 +129,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   useEffect(() => {
-    loadUserData()
+    getUserProfile()
   }, [])
 
   useEffect(() => {
