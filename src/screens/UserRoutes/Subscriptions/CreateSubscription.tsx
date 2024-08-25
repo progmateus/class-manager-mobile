@@ -15,6 +15,8 @@ import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { CreateTenantPlanService, ListTenantPlansService } from "src/services/tenantPlansService";
 import { IClassDTO } from "@dtos/IClass";
 import { CreateSubscriptionService } from "src/services/subscriptionService";
+import { useAuth } from "@hooks/useAuth";
+import { ISubscriptionDTO } from "@dtos/ISubscriptionDTO";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -37,6 +39,7 @@ export function CreateSubscription() {
   const [isLoading, setIsLoadig] = useState(false)
   const { sizes, colors } = useTheme();
   const route = useRoute()
+  const { user, updateUserProfile } = useAuth()
 
   const { tenantId } = route.params as RouteParamsProps;
 
@@ -74,6 +77,11 @@ export function CreateSubscription() {
     setIsLoadig(true)
     const { planId, classId } = data
     CreateSubscriptionService(tenantId, planId, classId).then(({ data }) => {
+      if (!user.subscriptions) user.subscriptions = []
+      updateUserProfile({
+        ...user,
+        subscriptions: [...user.subscriptions, data.data]
+      })
       fireSuccesToast('Inscrição realizada com sucesso!')
     }).catch((err) => {
       console.log('err: ', err)
@@ -86,7 +94,7 @@ export function CreateSubscription() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Assinar" rightIcon={Check} rightAction={handleSubmit(handeCreateSubscription)} />
+      <PageHeader title="Realizar inscrição" rightIcon={Check} rightAction={handleSubmit(handeCreateSubscription)} />
       <ScrollContainer>
         <VStack space={6} mt={2}>
 
