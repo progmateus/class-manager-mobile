@@ -14,5 +14,4 @@ export interface ISubscriptionDTO {
   expiresDate: Date;
   createdAt: Date;
   updatedAt: Date;
-
 }

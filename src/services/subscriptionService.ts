@@ -11,3 +11,11 @@ export function CreateSubscriptionService(tenantId: string, tenantPlanId: string
     }
   })
 }
+
+
+export function DeleteSubscriptionService(tenantId: string, subscriptionId: string) {
+  return api({
+    url: `${tenantId}/subscriptions/${subscriptionId}`,
+    method: 'delete'
+  })
+}
