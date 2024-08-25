@@ -12,8 +12,9 @@ import { CreateClassService, ListClassesService } from "src/services/classesServ
 import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
-import { CreateTenantPlanService } from "src/services/tenantPlansService";
+import { CreateTenantPlanService, ListTenantPlansService } from "src/services/tenantPlansService";
 import { IClassDTO } from "@dtos/IClass";
+import { CreateSubscriptionService } from "src/services/subscriptionService";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -53,8 +54,8 @@ export function CreateSubscription() {
 
 
   const listTenantplans = () => {
-    ListClassesService(tenantId).then(({ data }) => {
-      setClasses(data.data)
+    ListTenantPlansService(tenantId).then(({ data }) => {
+      setPlans(data.data)
     }).catch((err) => {
       console.log('err: ', err)
     })
@@ -63,21 +64,29 @@ export function CreateSubscription() {
 
   const listClasses = () => {
     ListClassesService(tenantId).then(({ data }) => {
-      setPlans(data.data)
+      setClasses(data.data)
     }).catch((err) => {
       console.log('err: ', err)
     })
   }
 
-  const handleCreateClass = (data: CreateSubscriptionProps) => {
-    console.log(data)
-
+  const handeCreateSubscription = (data: CreateSubscriptionProps) => {
+    setIsLoadig(true)
+    const { planId, classId } = data
+    CreateSubscriptionService(tenantId, planId, classId).then(({ data }) => {
+      fireSuccesToast('Inscrição realizada com sucesso!')
+    }).catch((err) => {
+      console.log('err: ', err)
+      fireErrorToast('Ocorreu um erro')
+    }).finally(() => {
+      setIsLoadig(false)
+    })
 
   }
 
   return (
     <View flex={1}>
-      <PageHeader title="Assinar" rightIcon={Check} rightAction={handleSubmit(handleCreateClass)} />
+      <PageHeader title="Assinar" rightIcon={Check} rightAction={handleSubmit(handeCreateSubscription)} />
       <ScrollContainer>
         <VStack space={6} mt={2}>
 
