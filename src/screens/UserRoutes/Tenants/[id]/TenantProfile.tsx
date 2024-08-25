@@ -11,6 +11,9 @@ import { useEffect, useState } from "react";
 import { GetTenantProfileService } from "src/services/tenantsService";
 import { Loading } from "@components/Loading";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { useAuth } from "@hooks/useAuth";
+import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
+import { ISubscriptionDTO } from "@dtos/ISubscriptionDTO";
 
 
 type RouteParamsProps = {
@@ -43,6 +46,8 @@ export function TenantProfile() {
   const [tenant, setTenant] = useState<ITenant>({} as ITenant)
   const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
+
+  const { user } = useAuth()
 
   const handleSubscribe = () => {
     navigation.navigate('createSubscription', {
@@ -88,7 +93,17 @@ export function TenantProfile() {
 
                   <Heading mt={4} fontSize="xl">{tenant.name}</Heading>
                   <Text fontSize="sm">@{tenant.username}</Text>
-                  <Button title="INSCREVA-SE" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleSubscribe} />
+                  {
+                    user.subscriptions && user.subscriptions.length > 0 && user.subscriptions.find((s: ISubscriptionDTO) => s.tenantId === tenantId && s.status === ESubscriptionStatus.ACTIVE) ?
+                      (
+                        <Button title="CANCELAR INSCRIÇÃO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleSubscribe} />
+
+                      ) :
+                      (
+                        <Button title="INSCREVA-SE" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleSubscribe} />
+
+                      )
+                  }
                   <HStack mt={6} space={2}>
                     <TouchableOpacity>
                       <FacebookSVG width={36} height={36} />
