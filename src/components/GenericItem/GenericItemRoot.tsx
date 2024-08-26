@@ -3,12 +3,13 @@ import { ReactNode } from "react";
 import { TouchableOpacity } from "react-native";
 
 type IProps = {
-  children: ReactNode
+  children: ReactNode;
+  onPress?: () => void;
 }
 
-export function GenericItemRoot({ children }: IProps) {
+export function GenericItemRoot({ children, onPress }: IProps) {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <HStack w="full" rounded="lg" alignItems="center" borderWidth={0.5} px={4} py={4}>
         {children}
       </HStack>

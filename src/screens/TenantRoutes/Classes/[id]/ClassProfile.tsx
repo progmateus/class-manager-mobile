@@ -2,20 +2,60 @@ import { ClassInfoItem } from "@components/Class/InfoItem"
 import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
+import { IClassDTO } from "@dtos/IClass"
+import { useFocusEffect, useRoute } from "@react-navigation/native"
+import { fireErrorToast } from "@utils/HelperNotifications"
 import { SimpleGrid, Text, View, VStack } from "native-base"
 import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Calendar, CalendarBlank, ArrowsLeftRight } from "phosphor-react-native"
+import { useEffect, useState } from "react"
+import { EClassDayStatus } from "src/enums/EClassDayStatus"
+import { GetClassProfileService, GetClassService } from "src/services/classesService"
 
-export function ClassInfo() {
+type RouteParamsProps = {
+  classId: string;
+  tenantId: string;
+}
+
+
+type infoProfile = {
+  classFound: IClassDTO;
+  teachersCount: number;
+  studentscount: number;
+  classesDaysOfTheMonth: any[];
+}
+
+export function ClassProfile() {
+
+  const [infoProfile, setInfoProfile] = useState<infoProfile>()
+  const route = useRoute()
+
+  const { classId, tenantId } = route.params as RouteParamsProps;
+
+  useEffect(() => {
+    GetClassProfileService(tenantId, classId).then(({ data }) => {
+      setInfoProfile(data.data)
+      groupByClasses()
+    }).catch((err) => {
+      console.log('opa err: ', err)
+      fireErrorToast('Ocorreu um erro!')
+    })
+  }, [])
+
+
+  const groupByClasses = () => {
+    console.log('Opa: ', infoProfile?.classesDaysOfTheMonth)
+  }
+
   return (
     <View flex={1}>
-      <PageHeader title="Turma" />
+      <PageHeader title={`Turma ${infoProfile?.classFound.name}`} />
       <ScrollContainer>
         <SimpleGrid mt={4} columns={3} justifyContent="space-between">
-          <ClassInfoItem title="ALUNOS" info="18" />
-          <ClassInfoItem title="PROFESSORES" info="7" />
-          <ClassInfoItem title="AULAS CONCLUÍDAS" info="749" />
-          <ClassInfoItem title="AULAS PENDENTES" info="10" />
-          <ClassInfoItem title="AULAS CANCLEDAS" info="4" />
+          <ClassInfoItem title="ALUNOS" info={infoProfile?.studentscount || 0} />
+          <ClassInfoItem title="PROFESSORES" info={infoProfile?.teachersCount || 0} />
+          <ClassInfoItem title="AULAS CONCLUÍDAS" info={infoProfile?.classesDaysOfTheMonth.filter((cd) => cd.status === EClassDayStatus.CONCLUDED).length || 0} />
+          <ClassInfoItem title="AULAS PENDENTES" info={infoProfile?.classesDaysOfTheMonth.filter((cd) => cd.status === EClassDayStatus.PENDING).length || 0} />
+          <ClassInfoItem title="AULAS CANCLEDAS" info={infoProfile?.classesDaysOfTheMonth.filter((cd) => cd.status === EClassDayStatus.CANCELED).length || 0} />
         </SimpleGrid>
         <VStack space={4} pb={20}>
           <Text color="coolGray.400" fontSize="md" mb={-2}> Ações</Text>

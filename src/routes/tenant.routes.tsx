@@ -4,7 +4,6 @@ import {
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
 import { useTheme } from "native-base";
-import { ClassInfo } from "@screens/TenantRoutes/Classes/[id]/ClassInfo";
 import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/SubscriptionsList";
 import { ClassesList } from "@screens/TenantRoutes/Classes/list/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
@@ -14,13 +13,14 @@ import { ClassHoursList } from "@screens/TenantRoutes/classHours/list/ClassHours
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
 import { CreateClass } from "@screens/TenantRoutes/Classes/CreateClass";
+import { ClassProfile } from "@screens/TenantRoutes/Classes/[id]/ClassProfile";
 
 
 export type TenantRoutes = {
   studentInfo: undefined;
   students: undefined;
   classes: { tenantId: string; };
-  classInfo: undefined;
+  classProfile: { classId: string, tenantId: string };
   dashboard: undefined;
   classHoursList: undefined;
   tenantPlansList: { tenantId: string; }
@@ -86,8 +86,8 @@ export function TenantRoutes() {
         }}
       />
       <Screen
-        name="classInfo"
-        component={ClassInfo}
+        name="classProfile"
+        component={ClassProfile}
         options={{
           tabBarButton: () => (null)
         }}

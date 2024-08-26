@@ -27,6 +27,13 @@ export function ClassesList() {
     })
   }
 
+  const handleSelectClass = (classId: string) => {
+    navigation.navigate('classProfile', {
+      tenantId,
+      classId
+    })
+  }
+
   useEffect(() => {
     setIsLoadig(true)
     ListClassesService(tenantId).then(({ data }) => {
@@ -49,7 +56,7 @@ export function ClassesList() {
                   classes && classes.length ? (
                     classes.map((classInfo: IClassDTO) => {
                       return (
-                        <GenericItem.Root>
+                        <GenericItem.Root key={classInfo.id} onPress={() => handleSelectClass(classInfo.id)}>
                           <GenericItem.Icon icon={BookBookmark} />
                           <GenericItem.Content title={classInfo.name} caption={classInfo.businessHour} />
                           <GenericItem.InfoSection>

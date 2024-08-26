@@ -2,7 +2,7 @@ import { Text, VStack } from "native-base";
 
 type IProps = {
   title: string;
-  info: string;
+  info: string | number;
 }
 
 export function ClassInfoItem({ title, info }: IProps) {

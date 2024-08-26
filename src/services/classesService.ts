@@ -18,3 +18,17 @@ export function CreateClassService(tenantId: string, name: string, description: 
     }
   })
 }
+
+export function GetClassService(tenantId: string, classId: string,) {
+  return api({
+    url: `${tenantId}/classes/${classId}`,
+    method: 'get'
+  })
+}
+
+export function GetClassProfileService(tenantId: string, classId: string,) {
+  return api({
+    url: `${tenantId}/classes/${classId}/profile`,
+    method: 'get'
+  })
+}
