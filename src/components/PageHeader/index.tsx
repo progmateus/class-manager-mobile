@@ -3,7 +3,7 @@ import { ArrowLeft } from "phosphor-react-native"
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
-import { ElementType, ReactElement } from "react";
+import { ElementType } from "react";
 
 type Props = {
   title: string;

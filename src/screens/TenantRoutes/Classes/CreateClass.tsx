@@ -2,7 +2,7 @@ import { Input } from "@components/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Text, useTheme, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { CreateTenantPlanService } from "src/services/tenantPlansService";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -42,6 +43,8 @@ export function CreateClass() {
     resolver: zodResolver(createClassSchema)
   });
 
+  const navigation = useNavigation<TenantNavigatorRoutesProps>();
+
 
   useEffect(() => {
     ListClassesService(tenantId).then(({ data }) => {
@@ -55,8 +58,12 @@ export function CreateClass() {
     if (isLoading) return;
     setIsLoadig(true)
 
-    CreateClassService(tenantId, data.name, data.description, data.businessHour).then(() => {
+    CreateClassService(tenantId, data.name, data.description, data.businessHour).then(({ data }) => {
       fireSuccesToast('Turma criada')
+      navigation.navigate('classProfile', {
+        tenantId,
+        classId: data.data.id
+      })
     }).catch(() => {
       fireErrorToast('Ocorreu um erro')
     }).finally(() => {

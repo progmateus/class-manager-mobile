@@ -3,11 +3,11 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/IClass"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { Center, Text, View, VStack } from "native-base"
 import { BookBookmark, GraduationCap, IdentificationBadge, Plus } from "phosphor-react-native"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { ListClassesService } from "src/services/classesService"
 
 type RouteParamsProps = {
@@ -34,7 +34,7 @@ export function ClassesList() {
     })
   }
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     setIsLoadig(true)
     ListClassesService(tenantId).then(({ data }) => {
       setClasses(data.data)
@@ -43,7 +43,7 @@ export function ClassesList() {
     }).finally(() => {
       setIsLoadig(false)
     })
-  }, [])
+  }, []))
   return (
     <View flex={1}>
       <PageHeader title="Turmas" rightIcon={Plus} rightAction={handleClickCreate} />

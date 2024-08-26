@@ -34,17 +34,10 @@ export function ClassProfile() {
   useEffect(() => {
     GetClassProfileService(tenantId, classId).then(({ data }) => {
       setInfoProfile(data.data)
-      groupByClasses()
     }).catch((err) => {
-      console.log('opa err: ', err)
       fireErrorToast('Ocorreu um erro!')
     })
-  }, [])
-
-
-  const groupByClasses = () => {
-    console.log('Opa: ', infoProfile?.classesDaysOfTheMonth)
-  }
+  }, [classId])
 
   return (
     <View flex={1}>
