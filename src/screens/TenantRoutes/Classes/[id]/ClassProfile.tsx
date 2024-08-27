@@ -63,7 +63,7 @@ export function ClassProfile() {
           </MenuItem.Root>
 
 
-          <MenuItem.Root>
+          <MenuItem.Root onPress={() => navigation.navigate('listTeachersClass', { tenantId, classId })}>
             <MenuItem.Icon icon={IdentificationBadge} />
             <MenuItem.Content title="Gerenciar professores" description="Gerencie os professores manualmente" />
             <MenuItem.Actions>
