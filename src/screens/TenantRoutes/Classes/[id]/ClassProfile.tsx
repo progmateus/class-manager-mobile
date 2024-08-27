@@ -3,7 +3,8 @@ import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { IClassDTO } from "@dtos/IClass"
-import { useFocusEffect, useRoute } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireErrorToast } from "@utils/HelperNotifications"
 import { SimpleGrid, Text, View, VStack } from "native-base"
 import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Calendar, CalendarBlank, ArrowsLeftRight } from "phosphor-react-native"
@@ -27,6 +28,7 @@ type infoProfile = {
 export function ClassProfile() {
 
   const [infoProfile, setInfoProfile] = useState<infoProfile>()
+  const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const route = useRoute()
 
   const { classId, tenantId } = route.params as RouteParamsProps;
@@ -52,7 +54,7 @@ export function ClassProfile() {
         </SimpleGrid>
         <VStack space={4} pb={20}>
           <Text color="coolGray.400" fontSize="md" mb={-2}> Ações</Text>
-          <MenuItem.Root>
+          <MenuItem.Root onPress={() => navigation.navigate('listStudentsClass', { tenantId, classId })} >
             <MenuItem.Icon icon={GraduationCap} />
             <MenuItem.Content title="Gerenciar alunos" description="Gerencie os alunos manualmente" />
             <MenuItem.Actions>
