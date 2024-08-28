@@ -16,6 +16,7 @@ import { CreateClass } from "@screens/TenantRoutes/Classes/CreateClass";
 import { ClassProfile } from "@screens/TenantRoutes/Classes/[id]/ClassProfile";
 import { StudentsClassList } from "@screens/TenantRoutes/Students/StudentsClassList";
 import { TeachersClassList } from "@screens/TenantRoutes/Teachers/TeachersClassList";
+import { AddUserToClass } from "@screens/TenantRoutes/Classes/AddUserToClass";
 
 
 export type TenantRoutes = {
@@ -30,6 +31,7 @@ export type TenantRoutes = {
   createClass: { tenantId: string; }
   listStudentsClass: { tenantId: string; classId: string; }
   listTeachersClass: { tenantId: string; classId: string; }
+  addUserToClass: { tenantId: string; classId: string; roleName: string; }
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -140,6 +142,14 @@ export function TenantRoutes() {
       <Screen
         name="listTeachersClass"
         component={TeachersClassList}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="addUserToClass"
+        component={AddUserToClass}
         options={{
           tabBarButton: () => (null)
         }}

@@ -46,3 +46,36 @@ export function ListTeachersByClassHandler(tenantId: string, classId: string,) {
     method: 'get'
   })
 }
+
+
+export function ListUsersByRoleNameService(tenantId: string, roleName: "student" | "teacher") {
+  return api({
+    url: `${tenantId}/users-roles/users`,
+    method: 'get',
+    params: {
+      roleName
+    }
+  })
+}
+
+export function AddStudentToClassService(tenantId: string, userId: string, classId: string) {
+  return api({
+    url: `${tenantId}/classes/${classId}`,
+    method: 'post',
+    data: {
+      userId,
+      classId
+    }
+  })
+}
+
+
+export function AddTeacherToClassService(tenantId: string, userId: string, classId: string) {
+  return api({
+    url: `${tenantId}/classes/${classId}`,
+    method: 'post',
+    data: {
+      userId
+    }
+  })
+}

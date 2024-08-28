@@ -3,51 +3,52 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/ITenantPlanDTO"
+import { IUserCompletedDTO } from "@dtos/IUserCompletedDTO"
 import { IUserDTO } from "@dtos/IUserDTO"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { Text, View, VStack } from "native-base"
 import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
 import { useEffect, useState } from "react"
-import { ListStudentsByClassHandler } from "src/services/classesService"
+import { ListStudentsByClassHandler, ListUsersByRoleNameService } from "src/services/classesService"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
 type RouteParamsProps = {
   tenantId: string;
   classId: string;
+  roleName: "student" | "teacher";
 }
 
-export function StudentsClassList() {
-  const [students, setStudents] = useState([])
+export function AddUserToClass() {
+  const [users, setUsers] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const route = useRoute()
-  const { tenantId, classId } = route.params as RouteParamsProps;
+  const { tenantId, classId, roleName } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
   useEffect(() => {
     setIsLoading(true)
-    ListStudentsByClassHandler(tenantId, classId).then(({ data }) => {
-      console.log(data.data)
-      setStudents(data.data)
+    ListUsersByRoleNameService(tenantId, roleName).then(({ data }) => {
+      console.log("dataaa: ", data.data)
+      setUsers(data.data)
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [tenantId])
+  }, [classId])
 
   const handleClickPlus = () => {
-    navigation.navigate('addUserToClass', {
-      tenantId,
-      classId,
-      roleName: "student"
-    })
+    console.log('opa eai ok')
+    /* navigation.navigate('createTenantPlan', {
+      tenantId
+    }) */
   }
   return (
     <View flex={1}>
-      <PageHeader title="Gerenciar alunos" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
+      <PageHeader title="Adicionar alunos" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
       <Viewcontainer>
 
         {
@@ -57,12 +58,12 @@ export function StudentsClassList() {
             : (
               <VStack space={8}>
                 {
-                  students && students.length ? (
-                    students.map((student: any) => {
+                  users && users.length ? (
+                    users.map((user: IUserCompletedDTO) => {
                       return (
-                        <GenericItem.Root key={student.user.id}>
-                          <GenericItem.Avatar url={student.user.avatar} alt={student.user.avatar} />
-                          <GenericItem.Content title={`${student.user.name.firstName} ${student.user.name.lastName}`} caption="" />
+                        <GenericItem.Root key={user.id}>
+                          <GenericItem.Avatar url={user.avatar} alt="Foto de perfil" />
+                          <GenericItem.Content title={`${user.name.firstName} ${user.name.lastName}`} caption="" />
                         </GenericItem.Root>
                       )
                     })
