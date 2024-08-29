@@ -63,7 +63,7 @@ export function AddUserToClass() {
                       return (
                         <GenericItem.Root key={user.id}>
                           <GenericItem.Avatar url={user.avatar} alt="Foto de perfil" />
-                          <GenericItem.Content title={`${user.name.firstName} ${user.name.lastName}`} caption="" />
+                          <GenericItem.Content title={`${user.name.firstName} ${user.name.lastName}`} caption="@username" />
                         </GenericItem.Root>
                       )
                     })
