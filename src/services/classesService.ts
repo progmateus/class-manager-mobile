@@ -60,7 +60,7 @@ export function ListUsersByRoleNameService(tenantId: string, roleName: "student"
 
 export function AddStudentToClassService(tenantId: string, userId: string, classId: string) {
   return api({
-    url: `${tenantId}/classes/${classId}`,
+    url: `${tenantId}/students`,
     method: 'post',
     data: {
       userId,
@@ -72,10 +72,11 @@ export function AddStudentToClassService(tenantId: string, userId: string, class
 
 export function AddTeacherToClassService(tenantId: string, userId: string, classId: string) {
   return api({
-    url: `${tenantId}/classes/${classId}`,
+    url: `${tenantId}/teachers`,
     method: 'post',
     data: {
-      userId
+      userId,
+      classId
     }
   })
 }
