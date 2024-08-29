@@ -2,16 +2,15 @@ import { GenericItem } from "@components/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
-import { ITenantPlanDTO } from "@dtos/ITenantPlanDTO"
-import { IUserDTO } from "@dtos/IUserDTO"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { IUserClassDTO } from "@dtos/IUserClassDTO"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { Text, View, VStack } from "native-base"
-import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
-import { useEffect, useState } from "react"
-import { ListStudentsByClassHandler, ListTeachersByClassHandler } from "src/services/classesService"
-import { ListTenantPlansService } from "src/services/tenantPlansService"
-
+import { fireSuccesToast } from "@utils/HelperNotifications"
+import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
+import { Plus, TrashSimple } from "phosphor-react-native"
+import { useCallback, useEffect, useState } from "react"
+import { Vibration } from "react-native"
+import { ListTeachersByClassService, RemoveTeacherFromClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
   tenantId: string;
@@ -19,32 +18,55 @@ type RouteParamsProps = {
 }
 
 export function TeachersClassList() {
-  const [teachers, setTeachers] = useState([])
+  const [teachersClass, setTeachersClass] = useState<IUserClassDTO[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedTeacherClass, setSelectedTeacherClass] = useState<any>(null)
   const route = useRoute()
   const { tenantId, classId } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     setIsLoading(true)
-    ListTeachersByClassHandler(tenantId, classId).then(({ data }) => {
-      setTeachers(data.data)
+    ListTeachersByClassService(tenantId, classId).then(({ data }) => {
+      setTeachersClass(data.data)
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [tenantId])
+  }, [tenantId, classId]))
 
   const handleClickPlus = () => {
-    navigation.navigate('createTenantPlan', {
-      tenantId
+    navigation.navigate('addUserToClass', {
+      tenantId,
+      classId,
+      roleName: "teacher"
     })
+  }
+
+  const handleRemove = () => {
+    if (!selectedTeacherClass) {
+      return
+    }
+
+    RemoveTeacherFromClassService(tenantId, selectedTeacherClass.id, classId).then(() => {
+      fireSuccesToast('Professor removido com sucesso!')
+      setTeachersClass(list => list.filter(item => item.id !== selectedTeacherClass.id))
+      setIsOpen(false)
+    })
+  }
+
+
+  const handleSelectTeacher = (teacherClass: IUserClassDTO) => {
+    Vibration.vibrate(100)
+    setSelectedTeacherClass(teacherClass)
+    setIsOpen(true)
   }
   return (
     <View flex={1}>
-      <PageHeader title="Professores" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
+      <PageHeader title="Gerenciar professores" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
       <Viewcontainer>
 
         {
@@ -54,12 +76,12 @@ export function TeachersClassList() {
             : (
               <VStack space={8}>
                 {
-                  teachers && teachers.length ? (
-                    teachers.map((teacher: IUserDTO) => {
+                  teachersClass && teachersClass.length ? (
+                    teachersClass.map((teacher: any) => {
                       return (
-                        <GenericItem.Root key={teacher.id}>
-                          <GenericItem.Icon icon={SimCard} />
-                          <GenericItem.Content title={teacher.name ?? ""} caption="" />
+                        <GenericItem.Root key={teacher.user.id} onLongPress={() => handleSelectTeacher(teacher)}>
+                          <GenericItem.Avatar url={teacher.user.avatar} alt={teacher.user.avatar} />
+                          <GenericItem.Content title={`${teacher.user.name.firstName} ${teacher.user.name.lastName}`} caption="@username" />
                         </GenericItem.Root>
                       )
                     })
@@ -68,6 +90,19 @@ export function TeachersClassList() {
                       <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                     )
                 }
+
+                <Actionsheet isOpen={isOpen} size="full">
+                  <Actionsheet.Content>
+                    <Box w="100%" h={60} px={4} justifyContent="center">
+                      <Heading fontSize="16" color="coolGray.700" textAlign="center">
+                        {`${selectedTeacherClass?.user?.name.firstName} ${selectedTeacherClass?.user?.name.lastName}`}
+                      </Heading>
+                    </Box>
+                    <Actionsheet.Item onPress={handleRemove} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
+                      Remover
+                    </Actionsheet.Item>
+                  </Actionsheet.Content>
+                </Actionsheet>
               </VStack>
             )
         }

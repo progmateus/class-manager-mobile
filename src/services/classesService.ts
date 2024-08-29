@@ -33,14 +33,14 @@ export function GetClassProfileService(tenantId: string, classId: string,) {
   })
 }
 
-export function ListStudentsByClassHandler(tenantId: string, classId: string,) {
+export function ListStudentsByClassService(tenantId: string, classId: string,) {
   return api({
     url: `${tenantId}/classes/${classId}/students`,
     method: 'get'
   })
 }
 
-export function ListTeachersByClassHandler(tenantId: string, classId: string,) {
+export function ListTeachersByClassService(tenantId: string, classId: string,) {
   return api({
     url: `${tenantId}/classes/${classId}/teachers`,
     method: 'get'

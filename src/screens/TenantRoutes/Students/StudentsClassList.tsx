@@ -2,17 +2,14 @@ import { GenericItem } from "@components/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
-import { ITenantPlanDTO } from "@dtos/ITenantPlanDTO"
-import { IUserCompletedDTO } from "@dtos/IUserCompletedDTO"
-import { IUserDTO } from "@dtos/IUserDTO"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { Vibration } from "react-native"
-import { ListStudentsByClassHandler, RemoveStudentFromClassService } from "src/services/classesService"
+import { ListStudentsByClassService, RemoveStudentFromClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
   tenantId: string;
@@ -31,7 +28,7 @@ export function StudentsClassList() {
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
-    ListStudentsByClassHandler(tenantId, classId).then(({ data }) => {
+    ListStudentsByClassService(tenantId, classId).then(({ data }) => {
       setStudents(data.data)
     }).catch((err) => {
       console.log(err)

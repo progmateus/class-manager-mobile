@@ -13,7 +13,7 @@ import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base
 import { Barbell, Coin, Money, Plus, SimCard, TrashSimple } from "phosphor-react-native"
 import { useEffect, useState } from "react"
 import { Path } from "react-native-svg"
-import { AddStudentToClassService, AddTeacherToClassService, ListStudentsByClassHandler, ListUsersByRoleNameService } from "src/services/classesService"
+import { AddStudentToClassService, AddTeacherToClassService, ListUsersByRoleNameService } from "src/services/classesService"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 import { Platform, Vibration } from "react-native"
 import { fireSuccesToast } from "@utils/HelperNotifications"
@@ -81,7 +81,7 @@ export function AddUserToClass() {
   }
   return (
     <View flex={1}>
-      <PageHeader title="Adicionar alunos" />
+      <PageHeader title={`Adicionar ${roleName === 'student' ? 'alunos' : 'professores'}`} />
       <Viewcontainer>
 
         {
