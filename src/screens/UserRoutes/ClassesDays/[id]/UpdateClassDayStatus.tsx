@@ -32,7 +32,7 @@ export function UpdateClassDayStatus() {
         tenantId
       })
     }).catch((err) => {
-      console.log(err.response)
+      console.log(err)
     }).finally(() => {
       setIsLoading(false)
     })
@@ -47,7 +47,7 @@ export function UpdateClassDayStatus() {
         tenantId
       })
     }).catch((err) => {
-      console.log(err.response)
+      console.log(err)
     }).finally(() => {
       setIsLoading(false)
     })

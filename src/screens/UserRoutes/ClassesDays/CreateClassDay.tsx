@@ -52,7 +52,7 @@ export function CreateClassDay() {
     ListClassesService(tenantId).then(({ data }) => {
       setClasses(data.data)
     }).catch((err) => {
-      console.log('err: ', err)
+      console.log(err)
     })
   }, [tenantId])
 

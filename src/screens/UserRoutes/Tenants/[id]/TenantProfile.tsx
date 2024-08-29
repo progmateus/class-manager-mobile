@@ -87,7 +87,7 @@ export function TenantProfile() {
       updateUserProfile(newUser)
       fireSuccesToast('Inscrição cancelada com sucesso!')
     }).catch((err) => {
-      console.log('err: ', err)
+      console.log(err)
       fireErrorToast('Ocorreu um erro!')
     }).finally(() => {
       setIsActionLoading(false)
@@ -99,7 +99,7 @@ export function TenantProfile() {
     GetTenantProfileService(tenantId).then(({ data }) => {
       setTenant(data.data)
     }).catch((err) => {
-      console.log('err: ', err)
+      console.log(err)
     }).finally(() => {
       setIsLoading(false)
     })

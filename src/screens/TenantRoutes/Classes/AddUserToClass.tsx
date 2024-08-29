@@ -32,10 +32,6 @@ export function AddUserToClass() {
   const [selectedUser, setSelectedUser] = useState<IUserCompletedDTO | null>(null)
   const route = useRoute()
   const { tenantId, classId, roleName } = route.params as RouteParamsProps;
-  const navigation = useNavigation<TenantNavigatorRoutesProps>();
-
-  const ONE_SECOND_IN_MS = 1000;
-
 
   useEffect(() => {
     setIsLoading(true)
@@ -63,6 +59,7 @@ export function AddUserToClass() {
 
     AddStudentToClassService(tenantId, selectedUser.id, classId).then(() => {
       fireSuccesToast('Aluno adicionado com sucesso!')
+      setIsOpen(false)
     })
   }
 
@@ -72,6 +69,7 @@ export function AddUserToClass() {
     }
     AddTeacherToClassService(tenantId, selectedUser.id, classId).then(() => {
       fireSuccesToast('Professor adicionado com sucesso!')
+      setIsOpen(false)
     })
   }
 

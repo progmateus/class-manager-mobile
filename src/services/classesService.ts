@@ -80,3 +80,19 @@ export function AddTeacherToClassService(tenantId: string, userId: string, class
     }
   })
 }
+
+
+export function RemoveStudentFromClassService(tenantId: string, studentClassId: string, classId: string) {
+  return api({
+    url: `${tenantId}/students/${studentClassId}`,
+    method: 'delete'
+  })
+}
+
+
+export function RemoveTeacherFromClassService(tenantId: string, teacherClassId: string, classId: string) {
+  return api({
+    url: `${tenantId}/teachers/${teacherClassId}`,
+    method: 'delete'
+  })
+}

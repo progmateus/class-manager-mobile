@@ -60,7 +60,7 @@ export function CreateSubscription() {
     ListTenantPlansService(tenantId).then(({ data }) => {
       setPlans(data.data)
     }).catch((err) => {
-      console.log('err: ', err)
+      console.log(err)
     })
   }
 
@@ -69,7 +69,7 @@ export function CreateSubscription() {
     ListClassesService(tenantId).then(({ data }) => {
       setClasses(data.data)
     }).catch((err) => {
-      console.log('err: ', err)
+      console.log(err)
     })
   }
 
@@ -84,7 +84,7 @@ export function CreateSubscription() {
       })
       fireSuccesToast('Inscrição realizada com sucesso!')
     }).catch((err) => {
-      console.log('err: ', err)
+      console.log(err)
       fireErrorToast('Ocorreu um erro')
     }).finally(() => {
       setIsLoadig(false)

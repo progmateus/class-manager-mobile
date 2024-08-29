@@ -34,10 +34,6 @@ export function ClassHourItem({ item: { dayOfWeek, hours } }: IProps) {
     return objTransform[String(dayOfWeek)]
   }
 
-  const handleDeletehour = (hourId: number) => {
-    console.log(hourId)
-  }
-
   return (
     <VStack space={4} mb={4}>
       <VStack borderWidth={0.5} borderColor="coolGray.400" borderRadius={7} >
@@ -63,7 +59,7 @@ export function ClassHourItem({ item: { dayOfWeek, hours } }: IProps) {
                   hours && hours.length && (
                     hours.map((hour) => {
                       return (
-                        <TouchableOpacity onPress={() => handleDeletehour(hour.id)}>
+                        <TouchableOpacity>
                           <HStack key={hour.start} alignItems="center" justifyContent="space-evenly">
                             <Text fontSize="lg">{`${hour.start} - ${hour.end}`}</Text>
                             <TrashSimple size={24} />

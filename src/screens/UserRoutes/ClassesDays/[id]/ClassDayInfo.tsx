@@ -68,7 +68,7 @@ export function ClassDayInfo() {
         ]
       })
     }).catch((err) => {
-      console.log('err: ', err.response)
+      console.log(err)
     }).finally(() => {
       setIsLoading(false)
     })
@@ -127,7 +127,7 @@ export function ClassDayInfo() {
         bookings
       })
     }).catch((err) => {
-      console.log("ERRO: ", err)
+      console.log(err)
     })
       .finally(() => {
         setIsLoadingAction(false)

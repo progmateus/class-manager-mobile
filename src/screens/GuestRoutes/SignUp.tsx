@@ -57,7 +57,7 @@ export function SignUp() {
       singIn(email, password)
       navigation.navigate('signIn');
     }).catch((err) => {
-      console.log('SUPER ERRO: ', err)
+      console.log(err)
       const data: IApiResponse = err?.response?.data
       if (data?.errors.find((err) => err.property === "Email" && err.message === "ERR_EMAIL_ALREADY_EXISTS")) {
         setError('email', { message: "Este E-mail já está em uso" })
