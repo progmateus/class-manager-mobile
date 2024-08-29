@@ -5,12 +5,12 @@ import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/ITenantPlanDTO"
 import { IUserCompletedDTO } from "@dtos/IUserCompletedDTO"
 import { IUserDTO } from "@dtos/IUserDTO"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Vibration } from "react-native"
 import { ListStudentsByClassHandler, RemoveStudentFromClassService } from "src/services/classesService"
 
@@ -20,7 +20,7 @@ type RouteParamsProps = {
 }
 
 export function StudentsClassList() {
-  const [students, setStudents] = useState([])
+  const [students, setStudents] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedStudent, setselectedStudent] = useState<any>(null)
@@ -29,7 +29,7 @@ export function StudentsClassList() {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     setIsLoading(true)
     ListStudentsByClassHandler(tenantId, classId).then(({ data }) => {
       setStudents(data.data)
@@ -38,7 +38,7 @@ export function StudentsClassList() {
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [tenantId])
+  }, [tenantId, classId]))
 
   const handleClickPlus = () => {
     navigation.navigate('addUserToClass', {
@@ -55,6 +55,7 @@ export function StudentsClassList() {
 
     RemoveStudentFromClassService(tenantId, selectedStudent.id, classId).then(() => {
       fireSuccesToast('Aluno removido com sucesso!')
+      setStudents(list => list.filter(item => item.id !== selectedStudent.id))
       setIsOpen(false)
     })
   }
