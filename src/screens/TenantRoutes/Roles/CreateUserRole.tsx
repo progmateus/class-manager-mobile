@@ -4,7 +4,7 @@ import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications"
+import { fireErrorToast, fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
@@ -36,7 +36,7 @@ export function CreateUserRole() {
     if (isLoadingAction) return
     setIsLoadingAction(true)
     DeleteUserRoleService(tenantId, selectedUserRole.id).then(() => {
-      fireSuccesToast('Professor removido com sucesso')
+      fireInfoToast('Professor removido com sucesso')
     }).catch((err) => {
       console.log('err: ', err)
       fireErrorToast('Ocorreu um erro!')
@@ -49,7 +49,7 @@ export function CreateUserRole() {
 
   return (
     <View flex={1}>
-      <PageHeader title="cadastrar professor" />
+      <PageHeader title="Cadastrar professor" />
       <Viewcontainer>
 
         {

@@ -26,3 +26,12 @@ export function fireWarningToast(message: string) {
     bg: "yellow.500"
   })
 }
+
+export function fireInfoToast(message: string) {
+  return Toast.show({
+    title: message,
+    placement: "top",
+    color: "coolGray.100",
+    bg: "blue.500"
+  })
+}

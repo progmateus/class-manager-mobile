@@ -4,7 +4,7 @@ import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { fireSuccesToast } from "@utils/HelperNotifications"
+import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
@@ -51,7 +51,7 @@ export function StudentsClassList() {
     }
 
     RemoveStudentFromClassService(tenantId, selectedStudent.id, classId).then(() => {
-      fireSuccesToast('Aluno removido com sucesso!')
+      fireInfoToast('Aluno removido com sucesso!')
       setStudents(list => list.filter(item => item.id !== selectedStudent.id))
       setIsOpen(false)
     })

@@ -8,7 +8,7 @@ import { IUserCompletedDTO } from "@dtos/IUserCompletedDTO"
 import { IUserDTO } from "@dtos/IUserDTO"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { fireErrorToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
+import { fireErrorToast, fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Heading, Icon, Image, Modal, Text, View, VStack } from "native-base"
 import { MagnifyingGlass, Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
@@ -60,7 +60,7 @@ export function UsersRoloesList() {
     if (isLoadingAction) return
     setIsLoadingAction(true)
     DeleteUserRoleService(tenantId, selectedUserRole.id).then(() => {
-      fireSuccesToast('Professor removido com sucesso')
+      fireInfoToast('Professor removido com sucesso')
       setUsersRoles(list => list.filter(item => item.id !== selectedUserRole.id))
     }).catch((err) => {
       console.log('err: ', err)
@@ -156,7 +156,7 @@ export function UsersRoloesList() {
                   <Actionsheet.Content>
                     <Box w="100%" p={4} justifyContent="center">
                       <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                        Adicionar
+                        Cadastrar
                       </Heading>
                     </Box>
                     <Actionsheet.Item alignItems="center" justifyContent="center">
