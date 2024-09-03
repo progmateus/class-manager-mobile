@@ -4,6 +4,7 @@ interface IUserCompletedDTO {
     firstName: string;
     lastName?: string;
   };
+  username: string;
   email: {
     address: string;
   };

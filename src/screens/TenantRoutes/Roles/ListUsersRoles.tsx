@@ -4,15 +4,18 @@ import { Input } from "@components/Input"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
+import { IUserCompletedDTO } from "@dtos/IUserCompletedDTO"
+import { IUserDTO } from "@dtos/IUserDTO"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications"
+import { fireErrorToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Heading, Icon, Image, Modal, Text, View, VStack } from "native-base"
 import { MagnifyingGlass, Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { Vibration } from "react-native"
 import { ListStudentsByClassService, RemoveStudentFromClassService } from "src/services/classesService"
 import { DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
+import { GetUserByUsernameService } from "src/services/usersService"
 
 type RouteParamsProps = {
   tenantId: string;
@@ -23,6 +26,9 @@ export function UsersRoloesList() {
   const [usersRoles, setUsersRoles] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
+  const [userFound, setUserFound] = useState<IUserCompletedDTO | null>(null)
+  const [username, setUsername] = useState("")
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isOpenAdd, setIsOpenAdd] = useState(false)
@@ -61,6 +67,27 @@ export function UsersRoloesList() {
     }).finally(() => {
       setIsLoadingAction(false)
       setIsOpen(false)
+    })
+  }
+
+
+  const handleSearchUser = async () => {
+    console.log('CHAMOUU')
+    if (!username) return
+    setIsSearching(true)
+    console.log('vai buscar: ', username)
+
+    GetUserByUsernameService(username).then(({ data }) => {
+      if (!data.data) {
+        fireWarningToast('Nenhum usuário encontrado!')
+        return
+      }
+      setIsModalOpen(true)
+      setUserFound(data.data)
+    }).catch((err) => {
+      console.log('err: ', err)
+    }).finally(() => {
+      setIsSearching(false)
     })
   }
 
@@ -120,13 +147,14 @@ export function UsersRoloesList() {
                     <Actionsheet.Item alignItems="center" justifyContent="center">
                       <Input
                         w="72"
-                        value=""
+                        value={username}
+                        onChangeText={(text) => setUsername(text)}
                         placeholder="Nome de usuário"
                         InputLeftElement={<Icon as={MagnifyingGlass} style={{ marginLeft: 8 }} color="coolGray.400" />}
                       />
                     </Actionsheet.Item>
                     <Actionsheet.Item alignItems="center" justifyContent="center">
-                      <Button title="Buscar" onPress={() => setIsModalOpen(true)} />
+                      <Button title="Buscar" onPress={handleSearchUser} />
                     </Actionsheet.Item>
                   </Actionsheet.Content>
                 </Actionsheet>
@@ -149,14 +177,14 @@ export function UsersRoloesList() {
                         />
 
                         <VStack alignItems="center" justifyContent="center">
-                          <Heading fontFamily="heading" fontSize="2xl" color="coolGray.700">John Doe</Heading>
-                          <Text fontFamily="body" color="coolGray.600"> @johndoe</Text>
+                          <Heading fontFamily="heading" fontSize="2xl" color="coolGray.700">{`${userFound?.name.firstName} ${userFound?.name.lastName}`}</Heading>
+                          <Text fontFamily="body" color="coolGray.600"> {userFound?.username}</Text>
                         </VStack>
                       </View>
                     </Modal.Body>
                     <Modal.Footer>
                       <VStack space={2} flex={1}>
-                        <Button title="Cadastrar" />
+                        <Button title="Cadastrar" isLoading={isSearching} />
                         <Button title="Cancelar" variant="outline" />
                       </VStack>
                     </Modal.Footer>

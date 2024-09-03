@@ -14,3 +14,13 @@ export function GetUserProfileService() {
     method: 'get'
   })
 }
+
+export function GetUserByUsernameService(username: string) {
+  return api({
+    url: '/users/username',
+    method: 'get',
+    params: {
+      username
+    }
+  })
+}

@@ -1,4 +1,4 @@
-import { Button as NativeBaseButton, IButtonProps, Text } from "native-base";
+import { Button as NativeBaseButton, IButtonProps, Text, Spinner } from "native-base";
 
 type Props = IButtonProps & {
   title: string;
@@ -11,6 +11,7 @@ export function Button({ title, variant = "solid", fontSize = "sm", ...rest }: P
   const useBgProp = bg || bgColor || backgroundColor || background;
   const definedColor = color ? color : variant === "outline" ? "brand.600" : "white";
   const definedBg = useBgProp ? useBgProp : variant === "outline" ? "transparent" : "brand.600";
+  const { isLoading } = rest
   return (
     <NativeBaseButton
       w="full"
@@ -24,13 +25,17 @@ export function Button({ title, variant = "solid", fontSize = "sm", ...rest }: P
       }}
       {...rest}
     >
-      <Text
-        color={definedColor}
-        fontFamily="heading"
-        fontSize={fontSize}
-      >
-        {title}
-      </Text>
+      {
+        isLoading ? (<Spinner />) : (
+          <Text
+            color={definedColor}
+            fontFamily="heading"
+            fontSize={fontSize}
+          >
+            {title}
+          </Text>
+        )}
+
 
     </NativeBaseButton>
   );
