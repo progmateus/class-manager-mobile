@@ -14,7 +14,7 @@ import { MagnifyingGlass, Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { Vibration } from "react-native"
 import { ListStudentsByClassService, RemoveStudentFromClassService } from "src/services/classesService"
-import { DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
+import { CreateUserRoleService, DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 import { GetUserByUsernameService } from "src/services/usersService"
 
 type RouteParamsProps = {
@@ -61,6 +61,7 @@ export function UsersRoloesList() {
     setIsLoadingAction(true)
     DeleteUserRoleService(tenantId, selectedUserRole.id).then(() => {
       fireSuccesToast('Professor removido com sucesso')
+      setUsersRoles(list => list.filter(item => item.id !== selectedUserRole.id))
     }).catch((err) => {
       console.log('err: ', err)
       fireErrorToast('Ocorreu um erro!')
@@ -72,10 +73,8 @@ export function UsersRoloesList() {
 
 
   const handleSearchUser = async () => {
-    console.log('CHAMOUU')
     if (!username) return
     setIsSearching(true)
-    console.log('vai buscar: ', username)
 
     GetUserByUsernameService(username).then(({ data }) => {
       if (!data.data) {
@@ -88,6 +87,22 @@ export function UsersRoloesList() {
       console.log('err: ', err)
     }).finally(() => {
       setIsSearching(false)
+    })
+  }
+
+
+  const handleCreateTeacherRole = () => {
+    if (!userFound) {
+      return
+    }
+    CreateUserRoleService(tenantId, userFound.id, "teacher").then(({ data }) => {
+      setUsersRoles([...usersRoles, data.data])
+      fireSuccesToast('Professor cadastrado com sucesso!')
+      setIsModalOpen(false)
+      setIsOpenAdd(false)
+      setIsOpen(false)
+    }).catch((err) => {
+      console.log('err: ', err)
     })
   }
 
@@ -184,7 +199,7 @@ export function UsersRoloesList() {
                     </Modal.Body>
                     <Modal.Footer>
                       <VStack space={2} flex={1}>
-                        <Button title="Cadastrar" isLoading={isSearching} />
+                        <Button title="Cadastrar" isLoading={isSearching} onPress={handleCreateTeacherRole} />
                         <Button title="Cancelar" variant="outline" />
                       </VStack>
                     </Modal.Footer>

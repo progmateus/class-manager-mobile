@@ -16,3 +16,14 @@ export function DeleteUserRoleService(tenantId: string, userRoleId: string) {
     method: 'delete'
   })
 }
+
+export function CreateUserRoleService(tenantId: string, userId: string, roleName: string) {
+  return api({
+    url: `${tenantId}/users-roles/`,
+    method: 'post',
+    data: {
+      userId,
+      roleName
+    }
+  })
+}
