@@ -18,6 +18,7 @@ import { StudentsClassList } from "@screens/TenantRoutes/Students/StudentsClassL
 import { TeachersClassList } from "@screens/TenantRoutes/Teachers/TeachersClassList";
 import { AddUserToClass } from "@screens/TenantRoutes/Classes/AddUserToClass";
 import { UsersRoloesList } from "@screens/TenantRoutes/Roles/ListUsersRoles";
+import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 
 
 export type TenantRoutes = {
@@ -34,6 +35,7 @@ export type TenantRoutes = {
   listTeachersClass: { tenantId: string; classId: string; }
   addUserToClass: { tenantId: string; classId: string; roleName: string; }
   usersRolesList: { tenantId: string; roleName: string; }
+  createUserRole: { tenantId: string }
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -160,6 +162,14 @@ export function TenantRoutes() {
       <Screen
         name="usersRolesList"
         component={UsersRoloesList}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="createUserRole"
+        component={CreateUserRole}
         options={{
           tabBarButton: () => (null)
         }}
