@@ -8,7 +8,7 @@ import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/Subs
 import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
 import { BookBookmark, GraduationCap, House } from "phosphor-react-native";
-import { StudentInfo } from "@screens/TenantRoutes/Classes/students/[id]/StudentInfo";
+import { SubscriptionProfile } from "@screens/TenantRoutes/Classes/students/[id]/StudentInfo";
 import { ClassHoursList } from "@screens/TenantRoutes/classHours/list/ClassHoursList";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
@@ -22,7 +22,7 @@ import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 
 
 export type TenantRoutes = {
-  studentInfo: undefined;
+  subscriptionProfile: { tenantId: string, subscriptionId: string };
   students: { tenantId: string };
   classes: { tenantId: string; };
   classProfile: { classId: string, tenantId: string };
@@ -89,8 +89,8 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="studentInfo"
-        component={StudentInfo}
+        name="subscriptionProfile"
+        component={SubscriptionProfile}
         options={{
           tabBarButton: () => (null)
         }}

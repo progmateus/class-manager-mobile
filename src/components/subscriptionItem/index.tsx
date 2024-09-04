@@ -6,13 +6,22 @@ import { Money, SimCard } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 import dayjs from "dayjs"
 import { ISubscriptionDTO } from "@dtos/ISubscriptionDTO";
+import { useNavigation } from "@react-navigation/native";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 
 interface IProps {
   subscription: ISubscriptionDTO
 }
 function SubscriptionItem({ subscription }: IProps) {
-  console.log('sub: ', subscription.tenantPlan)
+  const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
+
+  const handlePress = () => {
+    navigation.navigate('subscriptionProfile', {
+      tenantId: subscription.tenantId,
+      subscriptionId: subscription.id
+    })
+  }
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('pt-BR', {
@@ -24,7 +33,7 @@ function SubscriptionItem({ subscription }: IProps) {
   }
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={handlePress}>
       <HStack space={4} alignItems="center">
         <Image
           rounded="full"
