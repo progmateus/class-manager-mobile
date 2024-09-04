@@ -81,6 +81,7 @@ export function UsersRoloesList() {
         fireWarningToast('Nenhum usuário encontrado!')
         return
       }
+      setIsOpenAdd(false)
       setIsModalOpen(true)
       setUserFound(data.data)
     }).catch((err) => {
@@ -103,12 +104,6 @@ export function UsersRoloesList() {
       setIsOpen(false)
     }).catch((err) => {
       console.log('err: ', err)
-    })
-  }
-
-  const handleClickPlus = () => {
-    navigation.navigate('createUserRole', {
-      tenantId
     })
   }
 
@@ -176,7 +171,7 @@ export function UsersRoloesList() {
 
                 <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} safeAreaTop={true}>
                   <Modal.Content maxWidth="350">
-                    <Modal.CloseButton />
+                    {/* <Modal.CloseButton /> */}
                     <Modal.Header>Cadastrar professor</Modal.Header>
                     <Modal.Body justifyContent="center">
                       <View alignItems="center" justifyContent="center" py={4}>
@@ -200,7 +195,7 @@ export function UsersRoloesList() {
                     <Modal.Footer>
                       <VStack space={2} flex={1}>
                         <Button title="Cadastrar" isLoading={isSearching} onPress={handleCreateTeacherRole} />
-                        <Button title="Cancelar" variant="outline" />
+                        <Button title="Cancelar" variant="outline" onPress={() => setIsModalOpen(false)} />
                       </VStack>
                     </Modal.Footer>
                   </Modal.Content>
