@@ -23,7 +23,7 @@ import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 
 export type TenantRoutes = {
   studentInfo: undefined;
-  students: undefined;
+  students: { tenantId: string };
   classes: { tenantId: string; };
   classProfile: { classId: string, tenantId: string };
   dashboard: undefined;

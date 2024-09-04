@@ -8,6 +8,7 @@ interface IUserDTO {
   document?: string;
   email?: string
   password?: string;
+  avatar: string;
   roles?: []
   subscriptions?: ISubscriptionDTO[];
 }

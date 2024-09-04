@@ -19,3 +19,10 @@ export function DeleteSubscriptionService(tenantId: string, subscriptionId: stri
     method: 'delete'
   })
 }
+
+export function ListSubscriptionsService(tenantId: string) {
+  return api({
+    url: `${tenantId}/subscriptions/`,
+    method: 'get'
+  })
+}

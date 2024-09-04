@@ -1,6 +1,7 @@
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { IUserDTO } from "./IUserDTO";
 import { ITenantPlanDTO } from "./ITenantPlanDTO";
+import { IUserCompletedDTO } from "./IUserCompletedDTO";
 
 export interface ISubscriptionDTO {
   id: string;
@@ -8,9 +9,9 @@ export interface ISubscriptionDTO {
   tenantPlanId: string;
   tenantId: string;
   status: ESubscriptionStatus;
-  user?: IUserDTO;
-  tenantPlan?: ITenantPlanDTO;
-  tenant?: any;
+  user: IUserCompletedDTO;
+  tenantPlan: ITenantPlanDTO;
+  tenant: any;
   expiresDate: Date;
   createdAt: Date;
   updatedAt: Date;
