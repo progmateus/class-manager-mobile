@@ -16,7 +16,7 @@ function SubscriptionItem({ subscription }: IProps) {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
-  const handlePress = () => {
+  const handleNavigateToProfile = () => {
     navigation.navigate('subscriptionProfile', {
       tenantId: subscription.tenantId,
       subscriptionId: subscription.id
@@ -33,7 +33,7 @@ function SubscriptionItem({ subscription }: IProps) {
   }
 
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity onPress={handleNavigateToProfile}>
       <HStack space={4} alignItems="center">
         <Image
           rounded="full"
