@@ -1,13 +1,7 @@
-import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
-import { ScrollContainer } from "@components/ScrollContainer"
 import { SubscriptionItem } from "@components/subscriptionItem"
 import { Viewcontainer } from "@components/ViewContainer"
-import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
-import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
-import { Center, HStack, Icon, Image, Link, Text, View, VStack } from "native-base"
-import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Info, IdentificationCard, ArrowsLeftRight, CurrencyDollar, BookBookmark, MapPin, Phone, Article, Command, CurrencyCircleDollar, Target, Check, CheckCircle, LockKey, Money } from "phosphor-react-native"
-import { TouchableOpacity } from "react-native"
+import { View, VStack } from "native-base"
 
 export function SubscriptionsList() {
   const students = [

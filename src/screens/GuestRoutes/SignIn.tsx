@@ -40,8 +40,9 @@ export function SignIn() {
 
     setIsLoading(true)
     try {
-      await singIn(email, password)
-      navigation.navigate('tenantsList');
+      await singIn(email, password).then(() => {
+        navigation.navigate('tenantsList');
+      })
     } catch (err) {
       console.log('err: ', err)
     } finally {
