@@ -8,7 +8,7 @@ import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/Subs
 import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
 import { BookBookmark, GraduationCap, House } from "phosphor-react-native";
-import { SubscriptionProfile } from "@screens/TenantRoutes/Classes/students/[id]/StudentInfo";
+import { SubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/SubscriptionProfile";
 import { ClassHoursList } from "@screens/TenantRoutes/classHours/list/ClassHoursList";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";

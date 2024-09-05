@@ -1,3 +1,6 @@
+import { IClassDTO } from "./IClass";
+import { IUserClassDTO } from "./IUserClassDTO";
+
 interface IUserCompletedDTO {
   id: string;
   name: {
@@ -8,6 +11,10 @@ interface IUserCompletedDTO {
   email: {
     address: string;
   };
+  document: {
+    number: string;
+  }
   avatar: string;
+  studentsClasses: IUserClassDTO[];
 }
 export { IUserCompletedDTO }

@@ -12,7 +12,6 @@ export function CreateSubscriptionService(tenantId: string, tenantPlanId: string
   })
 }
 
-
 export function DeleteSubscriptionService(tenantId: string, subscriptionId: string) {
   return api({
     url: `${tenantId}/subscriptions/${subscriptionId}`,
@@ -23,6 +22,14 @@ export function DeleteSubscriptionService(tenantId: string, subscriptionId: stri
 export function ListSubscriptionsService(tenantId: string) {
   return api({
     url: `${tenantId}/subscriptions/`,
+    method: 'get'
+  })
+}
+
+
+export function GetSubscriptionProfileService(tenantId: string, subscriptionId: string) {
+  return api({
+    url: `${tenantId}/subscriptions/${subscriptionId}`,
     method: 'get'
   })
 }
