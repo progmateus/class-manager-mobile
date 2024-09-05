@@ -8,7 +8,7 @@ interface IUserClassDTO {
   userId?: string;
   teacherId?: string;
   user?: IUserCompletedDTO;
-  class?: IClassDTO;
+  class: IClassDTO;
 }
 
 export { IUserClassDTO }

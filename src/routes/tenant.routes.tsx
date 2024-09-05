@@ -37,7 +37,7 @@ export type TenantRoutes = {
   addUserToClass: { tenantId: string; classId: string; roleName: string; }
   usersRolesList: { tenantId: string; roleName: string; }
   createUserRole: { tenantId: string }
-  updateStudentclass: { tenantId: string; userId: string; }
+  updateStudentclass: { tenantId: string; userId: string; classIdExists: string; subscriptionId?: string; }
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 

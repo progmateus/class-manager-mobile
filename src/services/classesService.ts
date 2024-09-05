@@ -61,7 +61,7 @@ export function ListUsersByRoleNameService(tenantId: string, roleName: "student"
 export function UpdateStudentClassService(tenantId: string, userId: string, classId: string) {
   return api({
     url: `${tenantId}/students`,
-    method: 'post',
+    method: 'put',
     data: {
       userId,
       classId
@@ -73,7 +73,7 @@ export function UpdateStudentClassService(tenantId: string, userId: string, clas
 export function UpdateTeacherClassService(tenantId: string, userId: string, classId: string) {
   return api({
     url: `${tenantId}/teachers`,
-    method: 'post',
+    method: 'put',
     data: {
       userId,
       classId

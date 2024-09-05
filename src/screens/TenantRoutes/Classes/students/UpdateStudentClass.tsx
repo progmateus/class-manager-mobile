@@ -14,22 +14,24 @@ import { ListClassesService, ListStudentsByClassService, RemoveStudentFromClassS
 
 type RouteParamsProps = {
   tenantId: string;
-  classId: string;
+  classIdExists: string;
   userId: string;
+  subscriptionId?: string;
 }
 
 export function UpdateStudentClass() {
   const [classes, setClasses] = useState<IClassDTO[]>([])
-  const [selectedClassId, setSelectedClassId] = useState<any>(null)
+  const [selectedClassId, setSelectedClassId] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const route = useRoute()
-  const { tenantId, userId, classId } = route.params as RouteParamsProps;
+  const { tenantId, userId, classIdExists, subscriptionId } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
     ListClassesService(tenantId).then(({ data }) => {
+      setSelectedClassId(classIdExists)
       setClasses(data.data)
     }).catch((err) => {
       console.log(err)
@@ -44,12 +46,17 @@ export function UpdateStudentClass() {
   }
 
   const handleSave = () => {
-    if (!selectedClassId) {
+    console.log({
+      selectedClassId,
+      subscriptionId
+    })
+    if (!selectedClassId || !subscriptionId) {
       return
     }
 
     UpdateStudentClassService(tenantId, userId, selectedClassId).then(() => {
-      fireSuccesToast('Turma alterada com sucesso')
+      fireSuccesToast('Turma alterada com sucesso!')
+      navigation.navigate('subscriptionProfile', { subscriptionId, tenantId })
     }).catch((err) => {
       console.log(err)
     })
