@@ -13,7 +13,7 @@ import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base
 import { Barbell, Coin, Money, Plus, SimCard, TrashSimple } from "phosphor-react-native"
 import { useEffect, useState } from "react"
 import { Path } from "react-native-svg"
-import { AddStudentToClassService, AddTeacherToClassService, ListUsersByRoleNameService } from "src/services/classesService"
+import { UpdateStudentClassService, UpdateTeacherClassService, ListUsersByRoleNameService } from "src/services/classesService"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 import { Platform, Vibration } from "react-native"
 import { fireSuccesToast } from "@utils/HelperNotifications"
@@ -57,7 +57,7 @@ export function AddUserToClass() {
       return
     }
 
-    AddStudentToClassService(tenantId, selectedUser.id, classId).then(() => {
+    UpdateStudentClassService(tenantId, selectedUser.id, classId).then(() => {
       fireSuccesToast('Aluno adicionado com sucesso!')
       setIsOpen(false)
     })
@@ -67,7 +67,7 @@ export function AddUserToClass() {
     if (!selectedUser) {
       return
     }
-    AddTeacherToClassService(tenantId, selectedUser.id, classId).then(() => {
+    UpdateTeacherClassService(tenantId, selectedUser.id, classId).then(() => {
       fireSuccesToast('Professor adicionado com sucesso!')
       setIsOpen(false)
     })
