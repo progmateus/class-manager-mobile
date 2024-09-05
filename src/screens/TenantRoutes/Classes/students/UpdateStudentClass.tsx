@@ -6,7 +6,7 @@ import { IClassDTO } from "@dtos/IClass"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, Checkbox, Heading, Icon, Text, View, VStack } from "native-base"
+import { Actionsheet, Box, Checkbox, Heading, Icon, Radio, Text, View, VStack } from "native-base"
 import { BookBookmark, Check, Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { Vibration } from "react-native"
@@ -23,7 +23,7 @@ export function UpdateStudentClass() {
   const [selectedClassId, setSelectedClassId] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
   const route = useRoute()
-  const { tenantId, userId } = route.params as RouteParamsProps;
+  const { tenantId, userId, classId } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
@@ -57,7 +57,7 @@ export function UpdateStudentClass() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Gerenciar alunos" rightIcon={Check} rightAction={handleSave} />
+      <PageHeader title="Alterar turma" rightIcon={Check} rightAction={handleSave} />
       <Viewcontainer>
 
         {
@@ -65,17 +65,19 @@ export function UpdateStudentClass() {
             <Loading />
           )
             : (
-              <VStack space={8}>
+              <VStack space={4}>
                 {
                   classes && classes.length ? (
                     classes.map((classEntity: IClassDTO) => {
                       return (
-                        <GenericItem.Root key={classEntity.id} onPress={() => handleSelectClass(classEntity.id)}>
-                          <GenericItem.Icon icon={BookBookmark} />
-                          <GenericItem.Content title={`${classEntity.name} ${classEntity.description}`} caption="@username" />
-                          <GenericItem.InfoSection>
-                            <View></View>
-                          </GenericItem.InfoSection>
+                        <GenericItem.Root
+                          key={classEntity.id}
+                          onPress={() => handleSelectClass(classEntity.id)}
+                          borderColor={classEntity.id === selectedClassId ? 'brand.500' : 'coolGray.400'}
+                          borderWidth={classEntity.id === selectedClassId ? 2 : 0.5}
+                        >
+                          <GenericItem.Icon icon={BookBookmark} color={classEntity.id === selectedClassId ? 'brand.500' : 'coolGray.700'} />
+                          <GenericItem.Content title={classEntity.name} caption={classEntity.description} />
                         </GenericItem.Root>
                       )
                     })
