@@ -16,5 +16,7 @@ interface IUserCompletedDTO {
   }
   avatar: string;
   studentsClasses: IUserClassDTO[];
+  address: IAddressDTO;
+  phone: string;
 }
 export { IUserCompletedDTO }
