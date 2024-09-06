@@ -7,10 +7,11 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
 import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
-import { Center, HStack, Icon, Image, Text, View, VStack } from "native-base"
-import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise } from "phosphor-react-native"
+import { Actionsheet, Box, Center, Heading, HStack, Icon, Image, Text, View, VStack } from "native-base"
+import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, TrashSimple, Lock, Check, X } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
+import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
 import { GetSubscriptionProfileService, ListSubscriptionsService } from "src/services/subscriptionService"
 
 
@@ -21,6 +22,7 @@ type RouteParamsProps = {
 
 export function SubscriptionProfile() {
   const [isLoading, setIsLoadig] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [subscription, setSubscription] = useState<ISubscriptionDTO>({} as ISubscriptionDTO)
   const route = useRoute()
   const { tenantId, subscriptionId } = route.params as RouteParamsProps;
@@ -38,41 +40,17 @@ export function SubscriptionProfile() {
     })
   }, [tenantId, subscriptionId]))
 
-  const subscriptionaaa = {
-    user: {
-      name: {
-        firstName: "Jane",
-        lastName: "Doe"
-      },
-      username: "@johndoe",
-      document: {
-        number: "759.785.860-47"
-      },
-      phone: "(21) 94002-8922",
-      avatar: "https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph",
-      address: {
-        street: "Estrada da bica",
-        number: "241"
-      },
-      classes: [{ name: "Intermediário" }]
-    },
-    tenantPlan: {
-      name: "Básico"
-    },
-    status: 1,
-    payments: [
-      {
-        status: 1
-      }
-    ]
-  }
-
 
   const payments = [
     {
       status: 1
     }
   ]
+
+
+  const handleUpdateSubscription = (status: ESubscriptionStatus) => {
+
+  }
   return (
     <View flex={1}>
       {
@@ -164,9 +142,9 @@ export function SubscriptionProfile() {
 
                   <VStack space={4} pb={20}>
                     <Text color="coolGray.400" fontSize="md" mb={-2}> Ações</Text>
-                    <MenuItem.Root>
+                    <MenuItem.Root onPress={() => setIsOpen(true)}>
                       <MenuItem.Icon icon={LockKey} />
-                      <MenuItem.Content title="Gerenciar assinatura" description="Gerencie os alunos manualmente" />
+                      <MenuItem.Content title="Gerenciar assinatura" description="Gerencie a assinatura manualmente" />
                       <MenuItem.Actions>
                         <MenuItem.Action icon={ArrowRight} />
                       </MenuItem.Actions>
@@ -189,6 +167,26 @@ export function SubscriptionProfile() {
                     </MenuItem.Root>
                   </VStack>
                 </VStack>
+
+                <Actionsheet isOpen={isOpen} size="full" onClose={() => setIsOpen(false)}>
+                  <Actionsheet.Content>
+                    <Box w="100%" h={60} px={4} justifyContent="center">
+                      <Heading fontSize="16" color="coolGray.600" textAlign="center">
+                        Gerenciar assinatura
+                      </Heading>
+                    </Box>
+                    <Actionsheet.Item onPress={() => handleUpdateSubscription(ESubscriptionStatus.INACTIVE)} startIcon={<Icon as={Check} size="6" name="start" />}>
+                      <Text fontSize="16"> Ativar assinatura</Text>
+                    </Actionsheet.Item>
+                    <Actionsheet.Item onPress={() => handleUpdateSubscription(ESubscriptionStatus.INACTIVE)} startIcon={<Icon as={Lock} size="6" name="pause" />}>
+                      <Text fontSize="16"> Pausar assinatura</Text>
+                    </Actionsheet.Item>
+                    <Actionsheet.Item onPress={() => handleUpdateSubscription(ESubscriptionStatus.CANCELED)} startIcon={<Icon as={X} size="6" name="cancel" color="red.600" />}>
+                      <Text fontSize="16" color="red.600"> Cancelar assinatura</Text>
+                    </Actionsheet.Item>
+
+                  </Actionsheet.Content>
+                </Actionsheet>
               </ScrollContainer>
             </>
           )
