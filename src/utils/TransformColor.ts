@@ -23,3 +23,15 @@ export const transformInvoiceColor = (status: number) => {
   }
   return situations[status];
 }
+
+
+export const transFormClassDayColor = (status: number) => {
+  const { sizes, colors } = useTheme();
+
+  const situations: any = {
+    1: colors.yellow['500'],
+    2: colors.red['500'],
+    3: colors.green['500']
+  }
+  return situations[status];
+}

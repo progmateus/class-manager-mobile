@@ -7,13 +7,15 @@ import { IClassDTO } from "@dtos/IClass"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { Center, Icon, Text, View, VStack } from "native-base"
-import { BookBookmark, Clock, GraduationCap, IdentificationBadge, Plus, TrashSimple } from "phosphor-react-native"
+import { BookBookmark, CheckCircle, Clock, ClockClockwise, GraduationCap, IdentificationBadge, Plus, TrashSimple, XCircle } from "phosphor-react-native"
 import { useCallback, useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { DeleteBookingService, ListBookingsService } from "src/services/bookingsService"
 import { ListClassesService } from "src/services/classesService"
 import dayjs from "dayjs"
 import { fireInfoToast } from "@utils/HelperNotifications"
+import { EClassDayStatus } from "src/enums/EClassDayStatus"
+import { transFormClassDayColor } from "@utils/TransformColor"
 
 type RouteParamsProps = {
   tenantId: string;
@@ -63,6 +65,22 @@ export function BookingsHistory() {
     }).format(dayjs(date, 'YYYY-MM-DD:hh:mm').toDate())
   }
 
+  const getIconStatus = (status: EClassDayStatus) => {
+    if (status == EClassDayStatus.CONCLUDED) {
+      return (
+        CheckCircle
+      )
+    } else if (status == EClassDayStatus.PENDING) {
+      return (
+        ClockClockwise
+      )
+    } else {
+      return (
+        XCircle
+      )
+    }
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Histórico de aulas" />
@@ -82,9 +100,7 @@ export function BookingsHistory() {
                           </GenericItem.InfoSection>
                           <GenericItem.Content title={formatDate(booking.classDay.date)} caption={booking.classDay.class.name} />
                           <GenericItem.InfoSection>
-                            <TouchableOpacity onPress={() => handleDeleteBooking(booking)}>
-                              <Icon as={TrashSimple} color="red.600" />
-                            </TouchableOpacity>
+                            <Icon as={getIconStatus(booking.classDay.status)} color={transFormClassDayColor(booking.classDay.status)} />
                           </GenericItem.InfoSection>
                         </GenericItem.Root>
                       )
