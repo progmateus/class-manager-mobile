@@ -8,6 +8,7 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { View, VStack } from "native-base"
 import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
 import { useEffect, useState } from "react"
+import { TouchableOpacity } from "react-native"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
@@ -54,20 +55,22 @@ export function TenantPlansList() {
             plans && plans.length ? (
               plans.map((plan: ITenantPlanDTO) => {
                 return (
-                  <GenericItem.Root key={plan.id}>
-                    <GenericItem.Icon icon={SimCard} />
-                    <GenericItem.Content title={plan.name} caption={plan.description} />
-                    <GenericItem.InfoSection>
-                      <GenericItem.InfoContainer >
-                        <Barbell size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text="7" />
-                      </GenericItem.InfoContainer>
-                      <GenericItem.InfoContainer >
-                        <Money size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text={priceFormatted(plan.price).replace('R$', '')} />
-                      </GenericItem.InfoContainer>
-                    </GenericItem.InfoSection>
-                  </GenericItem.Root>
+                  <TouchableOpacity key={plan.id}>
+                    <GenericItem.Root>
+                      <GenericItem.Icon icon={SimCard} />
+                      <GenericItem.Content title={plan.name} caption={plan.description} />
+                      <GenericItem.InfoSection>
+                        <GenericItem.InfoContainer >
+                          <Barbell size={18} color="#6b7280" />
+                          <GenericItem.InfoValue text="7" />
+                        </GenericItem.InfoContainer>
+                        <GenericItem.InfoContainer >
+                          <Money size={18} color="#6b7280" />
+                          <GenericItem.InfoValue text={priceFormatted(plan.price).replace('R$', '')} />
+                        </GenericItem.InfoContainer>
+                      </GenericItem.InfoSection>
+                    </GenericItem.Root>
+                  </TouchableOpacity>
                 )
               })
             )

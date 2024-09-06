@@ -8,7 +8,7 @@ import { fireErrorToast, fireInfoToast, fireSuccesToast } from "@utils/HelperNot
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
-import { Vibration } from "react-native"
+import { TouchableOpacity, Vibration } from "react-native"
 import { DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 
 type RouteParamsProps = {
@@ -62,10 +62,12 @@ export function CreateUserRole() {
                   usersRoles && usersRoles.length ? (
                     usersRoles.map((userRole: any) => {
                       return (
-                        <GenericItem.Root key={userRole.user.id} onLongPress={() => handleSelectUserRole(userRole)}>
-                          <GenericItem.Avatar url={userRole.user.avatar} alt={userRole.user.avatar} />
-                          <GenericItem.Content title={`${userRole.user.name.firstName} ${userRole.user.name.lastName}`} caption="@username" />
-                        </GenericItem.Root>
+                        <TouchableOpacity key={userRole.user.id} onLongPress={() => handleSelectUserRole(userRole)}>
+                          <GenericItem.Root>
+                            <GenericItem.Avatar url={userRole.user.avatar} alt={userRole.user.avatar} />
+                            <GenericItem.Content title={`${userRole.user.name.firstName} ${userRole.user.name.lastName}`} caption="@username" />
+                          </GenericItem.Root>
+                        </TouchableOpacity>
                       )
                     })
                   )

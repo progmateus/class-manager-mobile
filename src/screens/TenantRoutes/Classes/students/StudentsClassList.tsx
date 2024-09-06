@@ -8,7 +8,7 @@ import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
-import { Vibration } from "react-native"
+import { TouchableOpacity, Vibration } from "react-native"
 import { ListStudentsByClassService, RemoveStudentFromClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
@@ -78,10 +78,13 @@ export function StudentsClassList() {
                   students && students.length ? (
                     students.map((student: any) => {
                       return (
-                        <GenericItem.Root key={student.user.id} onLongPress={() => handleSelectStudent(student)}>
-                          <GenericItem.Avatar url={student.user.avatar} alt={student.user.avatar} />
-                          <GenericItem.Content title={`${student.user.name.firstName} ${student.user.name.lastName}`} caption="@username" />
-                        </GenericItem.Root>
+                        <TouchableOpacity key={student.user.id} onLongPress={() => handleSelectStudent(student)}>
+                          <GenericItem.Root>
+                            <GenericItem.Avatar url={student.user.avatar} alt={student.user.avatar} />
+                            <GenericItem.Content title={`${student.user.name.firstName} ${student.user.name.lastName}`} caption="@username" />
+                          </GenericItem.Root>
+                        </TouchableOpacity>
+
                       )
                     })
                   )

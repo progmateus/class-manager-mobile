@@ -9,7 +9,7 @@ import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Checkbox, Heading, Icon, Radio, Text, View, VStack } from "native-base"
 import { BookBookmark, Check, Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
-import { Vibration } from "react-native"
+import { TouchableOpacity, Vibration } from "react-native"
 import { ListClassesService, ListStudentsByClassService, RemoveStudentFromClassService, UpdateStudentClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
@@ -73,15 +73,19 @@ export function UpdateStudentClass() {
                   classes && classes.length ? (
                     classes.map((classEntity: IClassDTO) => {
                       return (
-                        <GenericItem.Root
+                        <TouchableOpacity
                           key={classEntity.id}
                           onPress={() => handleSelectClass(classEntity.id)}
-                          borderColor={classEntity.id === selectedClassId ? 'brand.500' : 'coolGray.400'}
-                          borderWidth={classEntity.id === selectedClassId ? 2 : 0.5}
                         >
-                          <GenericItem.Icon icon={BookBookmark} color={classEntity.id === selectedClassId ? 'brand.500' : 'coolGray.700'} />
-                          <GenericItem.Content title={classEntity.name} caption={classEntity.description} />
-                        </GenericItem.Root>
+                          <GenericItem.Root
+                            borderColor={classEntity.id === selectedClassId ? 'brand.500' : 'coolGray.400'}
+                            borderWidth={classEntity.id === selectedClassId ? 2 : 0.5}
+                          >
+                            <GenericItem.Icon icon={BookBookmark} color={classEntity.id === selectedClassId ? 'brand.500' : 'coolGray.700'} />
+                            <GenericItem.Content title={classEntity.name} caption={classEntity.description} />
+                          </GenericItem.Root>
+                        </TouchableOpacity>
+
                       )
                     })
                   )

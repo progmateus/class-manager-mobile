@@ -93,7 +93,7 @@ export function BookingsHistory() {
                   bookings && bookings.length ? (
                     bookings.map((booking: IBookingDTO) => {
                       return (
-                        <GenericItem.Root touchable={false} key={booking.id}>
+                        <GenericItem.Root key={booking.id}>
                           <GenericItem.InfoSection>
                             <Icon as={Clock} mr={4} />
                             <Text mr={4}>{booking.classDay.hourStart}</Text>

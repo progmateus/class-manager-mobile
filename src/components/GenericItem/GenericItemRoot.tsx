@@ -6,28 +6,13 @@ import { TouchableOpacity } from "react-native";
 
 type IProps = InterfaceHStackProps & {
   children: ReactNode;
-  onPress?: () => void;
-  onLongPress?: () => void;
-  touchable?: boolean;
 }
 
-export function GenericItemRoot({ children, onPress, onLongPress, touchable = true, ...rest }: IProps) {
+export function GenericItemRoot({ children, ...rest }: IProps) {
 
   return (
-    <>
-      {
-        touchable ? (
-          <TouchableOpacity onPress={onPress} onLongPress={onLongPress} >
-            <HStack w="full" rounded="md" alignItems="center" borderWidth={0.5} px={4} py={4} {...rest}>
-              {children}
-            </HStack>
-          </TouchableOpacity>
-        ) : (
-          <HStack w="full" rounded="md" alignItems="center" borderWidth={0.5} px={4} py={4} {...rest}>
-            {children}
-          </HStack >
-        )
-      }
-    </>
+    <HStack w="full" rounded="md" alignItems="center" borderWidth={0.5} px={4} py={4} {...rest}>
+      {children}
+    </HStack>
   )
 }

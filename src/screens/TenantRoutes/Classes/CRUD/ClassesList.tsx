@@ -8,6 +8,7 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { Center, Text, View, VStack } from "native-base"
 import { BookBookmark, GraduationCap, IdentificationBadge, Plus } from "phosphor-react-native"
 import { useCallback, useEffect, useState } from "react"
+import { TouchableOpacity } from "react-native"
 import { ListClassesService } from "src/services/classesService"
 
 type RouteParamsProps = {
@@ -56,20 +57,22 @@ export function ClassesList() {
                   classes && classes.length ? (
                     classes.map((classInfo: IClassDTO) => {
                       return (
-                        <GenericItem.Root key={classInfo.id} onPress={() => handleSelectClass(classInfo.id)}>
-                          <GenericItem.Icon icon={BookBookmark} />
-                          <GenericItem.Content title={classInfo.name} caption={classInfo.businessHour} />
-                          <GenericItem.InfoSection>
-                            <GenericItem.InfoContainer >
-                              <GraduationCap size={18} color="#6b7280" />
-                              <GenericItem.InfoValue text="128" />
-                            </GenericItem.InfoContainer>
-                            <GenericItem.InfoContainer >
-                              <IdentificationBadge size={18} color="#6b7280" />
-                              <GenericItem.InfoValue text="7" />
-                            </GenericItem.InfoContainer>
-                          </GenericItem.InfoSection>
-                        </GenericItem.Root>
+                        <TouchableOpacity key={classInfo.id} onPress={() => handleSelectClass(classInfo.id)}>
+                          <GenericItem.Root>
+                            <GenericItem.Icon icon={BookBookmark} />
+                            <GenericItem.Content title={classInfo.name} caption={classInfo.businessHour} />
+                            <GenericItem.InfoSection>
+                              <GenericItem.InfoContainer >
+                                <GraduationCap size={18} color="#6b7280" />
+                                <GenericItem.InfoValue text="128" />
+                              </GenericItem.InfoContainer>
+                              <GenericItem.InfoContainer >
+                                <IdentificationBadge size={18} color="#6b7280" />
+                                <GenericItem.InfoValue text="7" />
+                              </GenericItem.InfoContainer>
+                            </GenericItem.InfoSection>
+                          </GenericItem.Root>
+                        </TouchableOpacity>
                       )
                     })
                   ) : (

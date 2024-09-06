@@ -9,7 +9,7 @@ import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useEffect, useState } from "react"
-import { Vibration } from "react-native"
+import { TouchableOpacity, Vibration } from "react-native"
 import { ListTeachersByClassService, RemoveTeacherFromClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
@@ -79,10 +79,12 @@ export function TeachersClassList() {
                   teachersClass && teachersClass.length ? (
                     teachersClass.map((teacher: any) => {
                       return (
-                        <GenericItem.Root key={teacher.user.id} onLongPress={() => handleSelectTeacher(teacher)}>
-                          <GenericItem.Avatar url={teacher.user.avatar} alt={teacher.user.avatar} />
-                          <GenericItem.Content title={`${teacher.user.name.firstName} ${teacher.user.name.lastName}`} caption="@username" />
-                        </GenericItem.Root>
+                        <TouchableOpacity key={teacher.user.id} onLongPress={() => handleSelectTeacher(teacher)}>
+                          <GenericItem.Root>
+                            <GenericItem.Avatar url={teacher.user.avatar} alt={teacher.user.avatar} />
+                            <GenericItem.Content title={`${teacher.user.name.firstName} ${teacher.user.name.lastName}`} caption="@username" />
+                          </GenericItem.Root>
+                        </TouchableOpacity>
                       )
                     })
                   )
