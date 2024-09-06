@@ -1,3 +1,4 @@
+import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { api } from "./api";
 
 export function CreateSubscriptionService(tenantId: string, tenantPlanId: string, classId: string) {
@@ -31,5 +32,15 @@ export function GetSubscriptionProfileService(tenantId: string, subscriptionId: 
   return api({
     url: `${tenantId}/subscriptions/${subscriptionId}`,
     method: 'get'
+  })
+}
+
+export function UpdateSubscriptionService(tenantId: string, subscriptionId: string, status: ESubscriptionStatus) {
+  return api({
+    url: `${tenantId}/subscriptions/${subscriptionId}`,
+    method: 'put',
+    data: {
+      status
+    }
   })
 }
