@@ -46,10 +46,6 @@ export function UpdateStudentClass() {
   }
 
   const handleSave = () => {
-    console.log({
-      selectedClassId,
-      subscriptionId
-    })
     if (!selectedClassId || !subscriptionId) {
       return
     }

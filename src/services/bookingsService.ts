@@ -22,3 +22,14 @@ export function DeleteBookingService(tenantId: string, bookingId: string, classD
     }
   })
 }
+
+
+export function ListBookingsService(tenantId: string, userId: string) {
+  return api({
+    url: `${tenantId}/bookings`,
+    method: 'get',
+    params: {
+      userId
+    }
+  })
+}
