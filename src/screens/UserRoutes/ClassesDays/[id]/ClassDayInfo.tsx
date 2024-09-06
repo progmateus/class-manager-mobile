@@ -118,7 +118,7 @@ export function ClassDayInfo() {
     setIsLoadingAction(true)
     const bookings = [...classDay.bookings]
     const index = bookings.findIndex((b) => b.userId === userId)
-    DeleteBookingService(tenantId, bookings[index].id, classDayId, userId).then(({ data }) => {
+    DeleteBookingService(tenantId, bookings[index].id, userId).then(({ data }) => {
       if (index !== -1) {
         bookings.splice(index, 1)
       }

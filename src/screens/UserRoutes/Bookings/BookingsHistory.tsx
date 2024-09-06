@@ -10,24 +10,35 @@ import { Center, Icon, Text, View, VStack } from "native-base"
 import { BookBookmark, Clock, GraduationCap, IdentificationBadge, Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
-import { ListBookingsService } from "src/services/bookingsService"
+import { DeleteBookingService, ListBookingsService } from "src/services/bookingsService"
 import { ListClassesService } from "src/services/classesService"
 import dayjs from "dayjs"
+import { fireInfoToast } from "@utils/HelperNotifications"
 
 type RouteParamsProps = {
   tenantId: string;
   userId: string;
 }
 export function BookingsHistory() {
-  const [bookings, setBookings] = useState([])
+  const [bookings, setBookings] = useState<IBookingDTO[]>([])
   const [isLoading, setIsLoadig] = useState(false)
+  const [isActing, setIsActing] = useState(false)
   const route = useRoute()
   const { tenantId, userId } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
-  const handleDeleteBooking = (bookingsId: string) => {
-    console.log('delete')
+  const handleDeleteBooking = (booking: IBookingDTO) => {
+    if (isActing) return
+    setIsActing(true)
+    DeleteBookingService(tenantId, booking.id, booking.userId).then(({ data }) => {
+      setBookings(list => list.filter(item => item.id !== booking.id))
+      fireInfoToast('Agendamento deletado com sucesso!')
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      setIsActing(false)
+    })
   }
 
   useFocusEffect(useCallback(() => {
@@ -35,7 +46,7 @@ export function BookingsHistory() {
     ListBookingsService(tenantId, userId).then(({ data }) => {
       setBookings(data.data)
     }).catch((err) => {
-      console.log('err: ', err)
+      console.log(err)
     }).finally(() => {
       setIsLoadig(false)
     })
@@ -71,7 +82,7 @@ export function BookingsHistory() {
                           </GenericItem.InfoSection>
                           <GenericItem.Content title={formatDate(booking.classDay.date)} caption={booking.classDay.class.name} />
                           <GenericItem.InfoSection>
-                            <TouchableOpacity onPress={() => handleDeleteBooking("opa")}>
+                            <TouchableOpacity onPress={() => handleDeleteBooking(booking)}>
                               <Icon as={TrashSimple} color="red.600" />
                             </TouchableOpacity>
                           </GenericItem.InfoSection>
