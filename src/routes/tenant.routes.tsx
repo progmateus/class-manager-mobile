@@ -21,6 +21,7 @@ import { UsersRoloesList } from "@screens/TenantRoutes/Roles/ListUsersRoles";
 import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
+import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
 
 
 export type TenantRoutes = {
@@ -196,7 +197,7 @@ export function TenantRoutes() {
 
       <Screen
         name="updateSubscriptionPlan"
-        component={BookingsHistory}
+        component={UpdateSubscriptionPlan}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

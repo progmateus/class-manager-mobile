@@ -20,6 +20,17 @@ export function DeleteSubscriptionService(tenantId: string, subscriptionId: stri
   })
 }
 
+export function UpdateSubscriptionService(tenantId: string, subscriptionId: string, status?: ESubscriptionStatus | null, tenantPlanId?: string) {
+  return api({
+    url: `${tenantId}/subscriptions/${subscriptionId}`,
+    method: 'put',
+    data: {
+      status,
+      tenantPlanId
+    }
+  })
+}
+
 export function ListSubscriptionsService(tenantId: string) {
   return api({
     url: `${tenantId}/subscriptions/`,
@@ -32,15 +43,5 @@ export function GetSubscriptionProfileService(tenantId: string, subscriptionId: 
   return api({
     url: `${tenantId}/subscriptions/${subscriptionId}`,
     method: 'get'
-  })
-}
-
-export function UpdateSubscriptionService(tenantId: string, subscriptionId: string, status: ESubscriptionStatus) {
-  return api({
-    url: `${tenantId}/subscriptions/${subscriptionId}`,
-    method: 'put',
-    data: {
-      status
-    }
   })
 }
