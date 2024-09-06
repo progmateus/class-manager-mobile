@@ -20,6 +20,7 @@ import { AddUserToClass } from "@screens/TenantRoutes/Classes/AddUserToClass";
 import { UsersRoloesList } from "@screens/TenantRoutes/Roles/ListUsersRoles";
 import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
+import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 
 
 export type TenantRoutes = {
@@ -38,6 +39,7 @@ export type TenantRoutes = {
   usersRolesList: { tenantId: string; roleName: string; }
   createUserRole: { tenantId: string }
   updateStudentclass: { tenantId: string; userId: string; classIdExists: string; subscriptionId?: string; }
+  bookingsHistory: { tenantId?: string; userId?: string; };
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -183,6 +185,12 @@ export function TenantRoutes() {
         options={{
           tabBarButton: () => (null)
         }}
+      />
+
+      <Screen
+        name="bookingsHistory"
+        component={BookingsHistory}
+        options={{ tabBarButton: () => (null) }}
       />
     </Navigator>
   )

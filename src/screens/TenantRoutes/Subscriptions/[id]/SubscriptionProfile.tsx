@@ -171,7 +171,7 @@ export function SubscriptionProfile() {
                       </MenuItem.Actions>
                     </MenuItem.Root>
 
-                    <MenuItem.Root>
+                    <MenuItem.Root onPress={() => navigation.navigate('bookingsHistory', { tenantId, userId: subscription.userId })}>
                       <MenuItem.Icon icon={ClockCounterClockwise} />
                       <MenuItem.Content title="Ver aulas" description="Visualize o histŕocio de aulas do aluno" />
                       <MenuItem.Actions>

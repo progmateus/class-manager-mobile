@@ -5,9 +5,10 @@ import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/IClass"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { Center, Text, View, VStack } from "native-base"
-import { BookBookmark, GraduationCap, IdentificationBadge, Plus } from "phosphor-react-native"
+import { Center, Icon, Text, View, VStack } from "native-base"
+import { BookBookmark, Clock, GraduationCap, IdentificationBadge, Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useEffect, useState } from "react"
+import { TouchableOpacity } from "react-native"
 import { ListClassesService } from "src/services/classesService"
 
 type RouteParamsProps = {
@@ -46,7 +47,7 @@ export function BookingsHistory() {
   }, []))
   return (
     <View flex={1}>
-      <PageHeader title="Turmas" rightIcon={Plus} rightAction={handleClickCreate} />
+      <PageHeader title="Histórico de aulas" rightIcon={Plus} rightAction={handleClickCreate} />
       <Viewcontainer>
         {
           isLoading ? (<Loading />)
@@ -56,18 +57,16 @@ export function BookingsHistory() {
                   classes && classes.length ? (
                     classes.map((classInfo: IClassDTO) => {
                       return (
-                        <GenericItem.Root key={classInfo.id} onPress={() => handleSelectClass(classInfo.id)}>
-                          <GenericItem.Icon icon={BookBookmark} />
-                          <GenericItem.Content title={classInfo.name} caption={classInfo.businessHour} />
+                        <GenericItem.Root touchable={false} key={classInfo.id} onPress={() => handleSelectClass(classInfo.id)}>
                           <GenericItem.InfoSection>
-                            <GenericItem.InfoContainer >
-                              <GraduationCap size={18} color="#6b7280" />
-                              <GenericItem.InfoValue text="128" />
-                            </GenericItem.InfoContainer>
-                            <GenericItem.InfoContainer >
-                              <IdentificationBadge size={18} color="#6b7280" />
-                              <GenericItem.InfoValue text="7" />
-                            </GenericItem.InfoContainer>
+                            <Icon as={Clock} mr={4} />
+                            <Text mr={4}>16:00</Text>
+                          </GenericItem.InfoSection>
+                          <GenericItem.Content title="QUA, 16/04/2022" caption="Dupla" />
+                          <GenericItem.InfoSection>
+                            <TouchableOpacity>
+                              <Icon as={TrashSimple} color="red.600" />
+                            </TouchableOpacity>
                           </GenericItem.InfoSection>
                         </GenericItem.Root>
                       )
