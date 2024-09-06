@@ -40,6 +40,7 @@ export type TenantRoutes = {
   createUserRole: { tenantId: string }
   updateStudentclass: { tenantId: string; userId: string; classIdExists: string; subscriptionId?: string; }
   bookingsHistory: { tenantId?: string; userId?: string; };
+  updateSubscriptionPlan: { tenantId: string; planIdExists: string; subscriptionId?: string; }
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -189,6 +190,12 @@ export function TenantRoutes() {
 
       <Screen
         name="bookingsHistory"
+        component={BookingsHistory}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="updateSubscriptionPlan"
         component={BookingsHistory}
         options={{ tabBarButton: () => (null) }}
       />

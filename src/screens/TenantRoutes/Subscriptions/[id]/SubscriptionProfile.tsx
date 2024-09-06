@@ -9,7 +9,7 @@ import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
 import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
 import { Actionsheet, Box, Center, Heading, HStack, Icon, Image, Text, View, VStack } from "native-base"
-import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, TrashSimple, Lock, Check, X } from "phosphor-react-native"
+import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, TrashSimple, Lock, Check, X, SimCard } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
@@ -166,6 +166,14 @@ export function SubscriptionProfile() {
                     <MenuItem.Root onPress={() => navigation.navigate('updateStudentclass', { tenantId, userId: subscription.userId, classIdExists: subscription.user.studentsClasses[0].class.id, subscriptionId })}>
                       <MenuItem.Icon icon={BookBookmark} />
                       <MenuItem.Content title="Alterar turma" description="Altere a turma do aluno" />
+                      <MenuItem.Actions>
+                        <MenuItem.Action icon={ArrowRight} />
+                      </MenuItem.Actions>
+                    </MenuItem.Root>
+
+                    <MenuItem.Root onPress={() => navigation.navigate('updateStudentclass', { tenantId, userId: subscription.userId, classIdExists: subscription.user.studentsClasses[0].class.id, subscriptionId })}>
+                      <MenuItem.Icon icon={SimCard} />
+                      <MenuItem.Content title="Alterar plano" description="Altere o plano do aluno" />
                       <MenuItem.Actions>
                         <MenuItem.Action icon={ArrowRight} />
                       </MenuItem.Actions>
