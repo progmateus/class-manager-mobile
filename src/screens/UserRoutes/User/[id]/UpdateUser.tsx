@@ -6,13 +6,17 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Check } from "phosphor-react-native"
 import { ScrollContainer } from "@components/ScrollContainer";
+import { useAuth } from "@hooks/useAuth";
+import { UpdateUserService } from "src/services/usersService";
+import { useState } from "react";
+import { fireSuccesToast } from "@utils/HelperNotifications";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
 
 const updateUserSchema = z.object({
-  name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
-  lastname: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
+  firstName: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
+  lastName: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
   email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
   document: z.string().regex(CPFRegex, "CPF Inválido").trim().optional(),
   phone: z.string().trim().optional(),
@@ -21,21 +25,31 @@ const updateUserSchema = z.object({
 type updateUserProps = z.infer<typeof updateUserSchema>
 
 export function UpdateUser() {
+  const [isLoading, setIsLoading] = useState(false)
+  const { user, isLoadingUserStorageData } = useAuth();
+  console.log('user: ', user)
+
   const { control, handleSubmit, formState: { errors } } = useForm<updateUserProps>({
+    defaultValues: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: '2140028922',
+      document: user.document
+    },
     resolver: zodResolver(updateUserSchema)
   });
 
-  const handleUpdate = (data: updateUserProps) => {
-    alert(data)
+  const handleUpdate = ({ firstName, lastName, email, document, phone }: updateUserProps) => {
+    if (!user.id || isLoading) return
+    setIsLoading(true)
+    UpdateUserService({ firstName, lastName, email, document, phone }).then(() => {
+      fireSuccesToast('Infirmações atualizadas com sucesso!')
+    }).finally(() => {
+      setIsLoading(false)
+    })
   }
 
-  const user = {
-    name: "John",
-    lastname: "Doe",
-    email: "johndoe@gmail.com",
-    avatar: "https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph",
-    document: "066.339.390-60"
-  }
   return (
     <View flex={1}>
       <PageHeader title="Dados Pessoais" rightIcon={Check} rightAction={handleSubmit(handleUpdate)} />
@@ -58,17 +72,17 @@ export function UpdateUser() {
           <VStack space={6} mt={12}>
             <HStack space={4} w={'48%'}>
               <Controller
-                name="name"
+                name="firstName"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Input label="Nome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.name?.message} />
+                  <Input label="Nome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.firstName?.message} />
                 )}
               />
               <Controller
-                name="lastname"
+                name="lastName"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Input label="Sobrenome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.lastname?.message} />
+                  <Input label="Sobrenome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.lastName?.message} />
                 )}
               />
 

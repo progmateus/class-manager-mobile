@@ -22,7 +22,7 @@ export function Routes() {
     <Box flex={1} bg="white">
       <NavigationContainer>
         {
-          user.id ? <TenantRoutes /> : <GuestRoutes />
+          user.id ? <UserRoutes /> : <GuestRoutes />
         }
       </NavigationContainer>
     </Box>

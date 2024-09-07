@@ -1,3 +1,4 @@
+import { IUserDTO } from "@dtos/IUserDTO";
 import { api } from "./api";
 
 export function CreateUserService(data: any) {
@@ -21,6 +22,20 @@ export function GetUserByUsernameService(username: string) {
     method: 'get',
     params: {
       username
+    }
+  })
+}
+
+export function UpdateUserService({ firstName, lastName, email, document, phone }: IUserDTO) {
+  return api({
+    url: '/users',
+    method: 'put',
+    data: {
+      firstName,
+      lastName,
+      email,
+      document,
+      phone
     }
   })
 }

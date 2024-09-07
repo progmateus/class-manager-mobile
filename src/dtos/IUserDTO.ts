@@ -1,14 +1,15 @@
 import { ISubscriptionDTO } from "./ISubscriptionDTO";
 
 interface IUserDTO {
-  id: string;
+  id?: string;
   name?: string;
-  firstname?: string;
+  firstName?: string;
   lastName?: string;
   document?: string;
   email?: string
+  phone?: string;
   password?: string;
-  avatar: string;
+  avatar?: string;
   roles?: []
   subscriptions?: ISubscriptionDTO[];
 }
