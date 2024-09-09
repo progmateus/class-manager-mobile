@@ -17,6 +17,7 @@ import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList
 import { CreateClassDay } from "@screens/UserRoutes/ClassesDays/CreateClassDay";
 import { CreateSubscription } from "@screens/UserRoutes/Subscriptions/CreateSubscription";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
+import { CreateTenant } from "@screens/UserRoutes/Tenants/CreateTenant";
 
 
 type UserRoutes = {
@@ -32,6 +33,7 @@ type UserRoutes = {
   createClassDay: { tenantId?: string };
   createSubscription: { tenantId?: string };
   bookingsHistory: { tenantId?: string; userId?: string; };
+  createTenant: undefined
 }
 export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;
 
@@ -141,6 +143,12 @@ export function UserRoutes() {
       <Screen
         name="bookingsHistory"
         component={BookingsHistory}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="createTenant"
+        component={CreateTenant}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

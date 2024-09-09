@@ -146,7 +146,7 @@ export function Profile() {
                 </Text>
               </HStack>
             </Actionsheet.Item>
-            <Actionsheet.Item>
+            <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
               <HStack alignItems="center" justifyContent="center" space={4}>
                 <View p={3.5} bgColor="gray.100" rounded="full">
                   <Icon as={Plus} color="gray.500" rounded="full" />
