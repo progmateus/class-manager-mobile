@@ -1,4 +1,6 @@
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { api } from "./api";
+import { ICreatetenantDTO } from "@dtos/tenants/ICreateTenantDTO";
 
 export function ListTenantPlansService(tenantId: string) {
   return api({

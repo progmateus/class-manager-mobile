@@ -1,43 +1,37 @@
 import { Input } from "@components/Input";
 import { PageHeader } from "@components/PageHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Center, HStack, Image, Text, VStack, View } from "native-base";
+import { Center, Image, Text, VStack, View } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Check } from "phosphor-react-native"
 import { ScrollContainer } from "@components/ScrollContainer";
-import { useAuth } from "@hooks/useAuth";
-import { UpdateUserService } from "src/services/usersService";
 import { useState } from "react";
 import { fireSuccesToast } from "@utils/HelperNotifications";
+import { CreateTenantservice } from "src/services/tenantsService";
 
 const documentRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}|([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const usernameRegex = /^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{0,29}$/
 
 const createTenantSchema = z.object({
   name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
-  lastName: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
-  email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
   document: z.string().regex(documentRegex, "Documento inválido").trim(),
   username: z.string().regex(usernameRegex, "Nome de usuário inválido").trim(),
-  phone: z.string().trim().optional(),
 });
 
 type CreateTenantProps = z.infer<typeof createTenantSchema>
 
 export function CreateTenant() {
   const [isLoading, setIsLoading] = useState(false)
-  const { user, isLoadingUserStorageData } = useAuth();
-  console.log('user: ', user)
 
   const { control, handleSubmit, formState: { errors } } = useForm<CreateTenantProps>({
     resolver: zodResolver(createTenantSchema)
   });
 
-  const handleUpdate = ({ name, lastName, email, document, phone }: CreateTenantProps) => {
-    if (!user.id || isLoading) return
+  const handleCreate = ({ name, document, username }: CreateTenantProps) => {
+    if (isLoading) return
     setIsLoading(true)
-    UpdateUserService({ firstName: name, lastName, email, document, phone }).then(() => {
+    CreateTenantservice({ name, document, username }).then(() => {
       fireSuccesToast('Infirmações atualizadas com sucesso!')
     }).finally(() => {
       setIsLoading(false)
@@ -46,7 +40,7 @@ export function CreateTenant() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Criar Empresa" rightIcon={Check} rightAction={handleSubmit(handleUpdate)} />
+      <PageHeader title="Criar Empresa" rightIcon={Check} rightAction={handleSubmit(handleCreate)} />
       <ScrollContainer>
         <VStack pb={20}>
           <Center>
@@ -80,26 +74,10 @@ export function CreateTenant() {
             />
 
             <Controller
-              name="email"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Input label="E-mail" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.email?.message} />
-              )}
-            />
-
-            <Controller
               name="document"
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Input label="CPF / CNPJ" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.document?.message} />
-              )}
-            />
-
-            <Controller
-              name="phone"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Input label="Telefone" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.phone?.message} />
               )}
             />
           </VStack>
