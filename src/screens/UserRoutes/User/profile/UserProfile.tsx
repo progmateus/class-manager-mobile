@@ -1,5 +1,5 @@
 import { PageHeader } from "@components/PageHeader";
-import { Center, HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
+import { Actionsheet, Avatar, Box, Center, HStack, Heading, Icon, Image, ScrollView, Text, VStack, View } from "native-base";
 import SettingsSVG from "@assets/settings-outline.svg";
 import CardSVG from "@assets/card-outline.svg";
 import MoneySVG from "@assets/money-outline.svg";
@@ -11,10 +11,12 @@ import { MenuOption } from "@components/MenuOption/Index";
 import { SubscriptionOption } from "@components/SubscriptionOption";
 import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { ArrowsLeftRight, Plus } from "phosphor-react-native";
+import { useState } from "react";
 
 
 export function Profile() {
-
+  const [isOpen, setIsOpen] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const subscriptions = [
@@ -118,8 +120,44 @@ export function Profile() {
           <MenuOption icon={<MoneySVG width={22} height={22} />} title="Cobranças" onPress={() => navigation.navigate('updateUser')} />
           <MenuOption icon={<HistorySVG width={22} height={22} />} title="Histórico de Aulas" onPress={() => navigation.navigate('updateUser')} />
           <MenuOption icon={<SubscriptionsSVG width={22} height={22} />} title="Gerenciar Inscrições" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<ArrowsLeftRight />} title="Alterar conta" onPress={() => setIsOpen(true)} />
           <MenuOption icon={<LogoutSVG width={22} height={22} />} title="Sair" onPress={() => navigation.navigate('updateUser')} />
         </View>
+
+        <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
+          <Actionsheet.Content>
+            <Box w="100%" h={60} px={4} justifyContent="center">
+              <Text fontSize="16" color="gray.300">
+                Empresas
+              </Text>
+            </Box>
+            <Actionsheet.Item>
+              <HStack alignItems="center" justifyContent="center" space={4}>
+                <Avatar
+                  size="md"
+                  bg="green.500"
+                  source={{
+                    uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                  }}>
+                  AJ
+                </Avatar>
+                <Text fontSize="16" color="gray.700">
+                  Vôlei na Ilha
+                </Text>
+              </HStack>
+            </Actionsheet.Item>
+            <Actionsheet.Item>
+              <HStack alignItems="center" justifyContent="center" space={4}>
+                <View p={3.5} bgColor="gray.100" rounded="full">
+                  <Icon as={Plus} color="gray.500" rounded="full" />
+                </View>
+                <Text fontSize="16" color="gray.700">
+                  Adicionar
+                </Text>
+              </HStack>
+            </Actionsheet.Item>
+          </Actionsheet.Content>
+        </Actionsheet>
       </ScrollView>
     </View>
 
