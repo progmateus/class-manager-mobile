@@ -7,7 +7,7 @@ import { z } from "zod";
 import { CaretLeft, CaretRight, Check, Plus, PlusCircle } from "phosphor-react-native"
 import { ScrollContainer } from "@components/ScrollContainer";
 import { useCallback, useState } from "react";
-import { fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
+import { fireErrorToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
 import { CreateTenantservice } from "src/services/tenantsService";
 import { GetUserByUsernameService } from "src/services/usersService";
 import { isValidCPF } from "@utils/isValidCPF";
@@ -76,6 +76,8 @@ export function CreateTenant() {
       const { errors } = err;
       if (errors && errors.length) {
         checkErrors(errors)
+      } else {
+        fireErrorToast('Ocorreu um erro')
       }
     }).finally(() => {
       setIsSubmiting(false)
@@ -162,13 +164,27 @@ export function CreateTenant() {
       setTab(1)
     }
 
+    if (errors.find((e) => e.message == "E-mail already exists")) {
+      setError("email", {
+        message: "Este E-mail já esta sendo utilizado"
+      })
+      setTab(1)
+    }
+
     if (errors.find((e) => e.message == "Username already exists")) {
       setError("username", {
         message: "Este nome de usuário já esta sendo utilizado"
       })
       setTab(0)
     }
+
+
   }
+
+  // tab 0 = username
+  // tab 1 = data info
+  // tab 2 = description
+  // tab 3 = plan
 
   return (
     <View flex={1}>
@@ -238,7 +254,7 @@ export function CreateTenant() {
             )
               : (
                 plans && plans.length ? (
-                  <VStack space={8} mb={20}>
+                  <VStack space={8}>
                     {
                       plans.map((plan) => {
                         return (
@@ -271,7 +287,7 @@ export function CreateTenant() {
                             </View>
                             <Heading fontSize="xl" textAlign="center" my={8} color="brand.800">  {priceFormatted(plan.price)}/mês</Heading>
                             <View alignItems="center" justifyContent="center">
-                              <Button w="48" bgColor="brand.500" rounded="lg" onPress={() => handleCreate(plan.id)}>Escolher plano</Button>
+                              <Button w="48" bgColor="brand.500" rounded="lg" isLoading={isSubimiting} onPress={() => handleCreate(plan.id)}>Escolher plano</Button>
                             </View>
                           </VStack>
                         )
@@ -285,7 +301,7 @@ export function CreateTenant() {
                 )
               )
         }
-        <HStack justifyContent={tab !== 0 ? "space-between" : "flex-end"}>
+        <HStack justifyContent={tab !== 0 ? "space-between" : "flex-end"} pb={20} pt={4}>
           {
             tab != 0 && (
               <Button size="md" variant="ghost" onPress={() => setTab(tab - 1)} startIcon={<Icon as={CaretLeft} name="cloud-download-outline" size="sm" />}> Voltar </Button>
