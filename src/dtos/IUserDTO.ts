@@ -5,6 +5,7 @@ interface IUserDTO {
   name?: string;
   firstName?: string;
   lastName?: string;
+  username: string;
   document?: string;
   email?: string
   phone?: string;

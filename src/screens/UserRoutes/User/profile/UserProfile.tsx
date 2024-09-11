@@ -13,11 +13,15 @@ import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { ArrowsLeftRight, Plus } from "phosphor-react-native";
 import { useState } from "react";
+import { useAuth } from "@hooks/useAuth";
 
 
 export function Profile() {
   const [isOpen, setIsOpen] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
+  const { user } = useAuth()
+
+  console.log(user)
 
   const subscriptions = [
     {
@@ -71,12 +75,6 @@ export function Profile() {
     }
   ]
 
-  const user = {
-    name: "John",
-    lastname: "Doe",
-    username: "johndoe",
-    avatar: "https://img.freepik.com/fotos-gratis/cintura-para-cima-retrato-de-bonito-homem-serio-com-barba-por-fazer-mantem-as-maos-juntas-vestido-com-camisa-azul-escura-tem-conversa-com-o-interlocutor-fica-contra-a-parede-branca-freelancer-homem-autoconfiante_273609-16320.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
-  }
   return (
     <View>
       <PageHeader title="Informações" />
@@ -93,7 +91,7 @@ export function Profile() {
             defaultSource={{ uri: user.avatar }}
           />
           <VStack alignItems="left" justifyContent="center">
-            <Heading fontFamily="heading"> {user.name} {user.lastname}</Heading>
+            <Heading fontFamily="heading"> {user.firstName} {user.lastName} </Heading>
             <Text fontFamily="body"> @{user.username}</Text>
           </VStack>
         </HStack>
@@ -118,7 +116,7 @@ export function Profile() {
           <MenuOption icon={<CardSVG width={22} height={22} />} title="Dados Pessoais" onPress={() => navigation.navigate('updateUser')} />
           <MenuOption icon={<ShieldSVG width={22} height={22} />} title="Alterar Senha" onPress={() => navigation.navigate('updatePassword')} />
           <MenuOption icon={<MoneySVG width={22} height={22} />} title="Cobranças" onPress={() => navigation.navigate('updateUser')} />
-          <MenuOption icon={<HistorySVG width={22} height={22} />} title="Histórico de Aulas" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<HistorySVG width={22} height={22} />} title="Histórico de Aulas" onPress={() => navigation.navigate('bookingsHistory', { userId: user.id })} />
           <MenuOption icon={<SubscriptionsSVG width={22} height={22} />} title="Gerenciar Inscrições" onPress={() => navigation.navigate('updateUser')} />
           <MenuOption icon={<ArrowsLeftRight />} title="Alterar conta" onPress={() => setIsOpen(true)} />
           <MenuOption icon={<LogoutSVG width={22} height={22} />} title="Sair" onPress={() => navigation.navigate('updateUser')} />

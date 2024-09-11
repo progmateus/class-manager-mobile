@@ -33,7 +33,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function userAndTokenUpdate(userData: IUserDTO, token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
     setUser(userData);
   }
 
@@ -55,11 +54,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     SignInService(email, password)
       .then(async ({ data: { data } }) => {
         if (data.id) {
-          const { id, name, email, document, avatar, roles, token, refresh_token } = data
+          const { id, name, email, document, avatar, roles, token, refresh_token, username } = data
           const user = {
             id,
             firstName: name.split(' ')[0],
             lastName: name.split(' ')[1],
+            username,
             document,
             email,
             avatar,

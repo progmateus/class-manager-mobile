@@ -2,15 +2,6 @@ import { ICreatetenantDTO } from "@dtos/tenants/ICreateTenantDTO";
 import { api } from "./api";
 
 export function CreateTenantservice({ name, username, document, email, number, planId, description }: ICreatetenantDTO) {
-  console.log({
-    name,
-    username,
-    document,
-    email,
-    number,
-    planId,
-    description
-  })
   return api({
     url: 'tenants',
     method: 'post',
