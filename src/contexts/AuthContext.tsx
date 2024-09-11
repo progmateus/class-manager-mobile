@@ -92,16 +92,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
 
   async function signOut() {
-    try {
-      setIsLoadingUserStorageData(true);
-      setUser({} as IUserDTO);
-      await storageUserRemove();
-      await storageAuthTokenRemove();
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsLoadingUserStorageData(false);
-    }
+    setIsLoadingUserStorageData(true);
+    await signOut()
+    setUser({} as IUserDTO);
+    setIsLoadingUserStorageData(false)
   }
 
   async function updateUserProfile(userUpdated: IUserDTO) {
@@ -132,14 +126,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   useEffect(() => {
     getUserProfile()
-  }, [])
-
-  useEffect(() => {
-    const subscribe = api.registerInterceptTokenManager(signOut);
-
-    return () => {
-      subscribe();
-    }
   }, [])
 
   return (

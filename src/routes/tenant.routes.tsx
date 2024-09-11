@@ -7,7 +7,7 @@ import { useTheme } from "native-base";
 import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/SubscriptionsList";
 import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
-import { BookBookmark, GraduationCap, House } from "phosphor-react-native";
+import { BookBookmark, GraduationCap, House, UserCircle } from "phosphor-react-native";
 import { SubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/SubscriptionProfile";
 import { ClassHoursList } from "@screens/TenantRoutes/classHours/list/ClassHoursList";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
@@ -22,6 +22,7 @@ import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
+import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
 
 
 export type TenantRoutes = {
@@ -29,6 +30,7 @@ export type TenantRoutes = {
   students: { tenantId: string };
   classes: { tenantId: string; };
   classProfile: { classId: string, tenantId: string };
+  tenantProfile: { tenantId: string };
   dashboard: undefined;
   classHoursList: undefined;
   tenantPlansList: { tenantId: string; }
@@ -92,6 +94,17 @@ export function TenantRoutes() {
             <BookBookmark color={color} size={iconSize} />
           )
         }}
+      />
+
+      <Screen
+        name="tenantProfile"
+        component={TenantProfile}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <UserCircle color={color} size={iconSize} />
+          )
+        }}
+        initialParams={{ tenantId: "b1e4cc1f-8cda-47b6-b531-8587fc114ebd" }}
       />
 
       <Screen
