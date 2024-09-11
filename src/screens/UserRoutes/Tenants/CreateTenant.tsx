@@ -285,7 +285,7 @@ export function CreateTenant() {
         }
         <HStack justifyContent={tab !== 0 ? "space-between" : "flex-end"}>
           {
-            tab != 0 && (
+            tab != 0 && tab != 3 && (
               <Button size="md" variant="ghost" onPress={() => setTab(tab - 1)} startIcon={<Icon as={CaretLeft} name="cloud-download-outline" size="sm" />}> Voltar </Button>
             )
           }
@@ -293,12 +293,6 @@ export function CreateTenant() {
           {
             tab != 3 && (
               <Button size="md" variant="ghost" onPress={handleContinue} endIcon={<Icon as={CaretRight} name="cloud-download-outline" size="sm" />}> Continuar </Button>
-            )
-          }
-
-          {
-            tab == 3 && (
-              <Button size="md" variant="ghost" endIcon={<Icon as={CaretRight} name="cloud-download-outline" size="sm" />}> Concluir </Button>
             )
           }
         </HStack>
