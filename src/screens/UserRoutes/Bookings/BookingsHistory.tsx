@@ -6,7 +6,7 @@ import { IBookingDTO } from "@dtos/IBookingDTO"
 import { IClassDTO } from "@dtos/IClass"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { Center, Icon, Text, View, VStack } from "native-base"
+import { Center, FlatList, Icon, Text, View, VStack } from "native-base"
 import { BookBookmark, CheckCircle, Clock, ClockClockwise, GraduationCap, IdentificationBadge, Plus, TrashSimple, XCircle } from "phosphor-react-native"
 import { useCallback, useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
@@ -16,10 +16,11 @@ import dayjs from "dayjs"
 import { fireInfoToast } from "@utils/HelperNotifications"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
 import { transFormClassDayColor } from "@utils/TransformColor"
+import { ListUserBookingsService } from "src/services/usersService"
 
 type RouteParamsProps = {
-  tenantId: string;
-  userId: string;
+  tenantId?: string;
+  userId?: string;
 }
 export function BookingsHistory() {
   const [bookings, setBookings] = useState<IBookingDTO[]>([])
@@ -27,11 +28,9 @@ export function BookingsHistory() {
   const [isActing, setIsActing] = useState(false)
   const route = useRoute()
   const { tenantId, userId } = route.params as RouteParamsProps;
-  const navigation = useNavigation<TenantNavigatorRoutesProps>();
-
 
   const handleDeleteBooking = (booking: IBookingDTO) => {
-    if (isActing) return
+    if (isActing || !tenantId) return
     setIsActing(true)
     DeleteBookingService(tenantId, booking.id, booking.userId).then(({ data }) => {
       setBookings(list => list.filter(item => item.id !== booking.id))
@@ -43,7 +42,8 @@ export function BookingsHistory() {
     })
   }
 
-  useFocusEffect(useCallback(() => {
+  const loadTenantBookings = () => {
+    if (!tenantId || !userId) return
     setIsLoadig(true)
     ListBookingsService(tenantId, userId).then(({ data }) => {
       setBookings(data.data)
@@ -52,6 +52,25 @@ export function BookingsHistory() {
     }).finally(() => {
       setIsLoadig(false)
     })
+  }
+
+  const loadUserBookings = () => {
+    setIsLoadig(true)
+    ListUserBookingsService().then(({ data }) => {
+      setBookings(data.data)
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      setIsLoadig(false)
+    })
+  }
+
+  useFocusEffect(useCallback(() => {
+    if (tenantId) {
+      loadTenantBookings()
+    } else {
+      loadUserBookings()
+    }
   }, []))
 
 
@@ -88,30 +107,24 @@ export function BookingsHistory() {
         {
           isLoading ? (<Loading />)
             : (
-              <VStack space={4}>
-                {
-                  bookings && bookings.length ? (
-                    bookings.map((booking: IBookingDTO) => {
-                      return (
-                        <GenericItem.Root key={booking.id}>
-                          <GenericItem.InfoSection>
-                            <Icon as={Clock} mr={4} />
-                            <Text mr={4}>{booking.classDay.hourStart}</Text>
-                          </GenericItem.InfoSection>
-                          <GenericItem.Content title={formatDate(booking.classDay.date)} caption={booking.classDay.class.name} />
-                          <GenericItem.InfoSection>
-                            <Icon as={getIconStatus(booking.classDay.status)} color={transFormClassDayColor(booking.classDay.status)} />
-                          </GenericItem.InfoSection>
-                        </GenericItem.Root>
-                      )
-                    })
-                  ) : (
-                    <Center>
-                      <Text fontFamily="body" color="coolGray.700"> Nenhum resultado encontrado</Text>
-                    </Center>
-                  )
-                }
-              </VStack>
+              <FlatList
+                data={bookings}
+                pb={20}
+                keyExtractor={booking => booking.id}
+                renderItem={({ item }) => (
+                  <GenericItem.Root key={item.id}>
+                    <GenericItem.InfoSection>
+                      <Icon as={Clock} mr={4} />
+                      <Text mr={4}>{item.classDay.hourStart}</Text>
+                    </GenericItem.InfoSection>
+                    <GenericItem.Content title={formatDate(item.classDay.date)} caption={item.classDay.class.name} />
+                    <GenericItem.InfoSection>
+                      <Icon as={getIconStatus(item.classDay.status)} color={transFormClassDayColor(item.classDay.status)} />
+                    </GenericItem.InfoSection>
+                  </GenericItem.Root>
+                )}
+                ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+              ></FlatList>
             )
         }
       </Viewcontainer>

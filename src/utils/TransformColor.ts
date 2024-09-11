@@ -2,7 +2,7 @@ import { useTheme } from "native-base";
 import { THEME } from "src/theme";
 
 export const transformSubscriptionColor = (status: number) => {
-  const { sizes, colors } = useTheme();
+  const { sizes, colors } = THEME;
 
   const situations: any = {
     1: THEME.colors.brand['600'],
@@ -14,7 +14,7 @@ export const transformSubscriptionColor = (status: number) => {
 }
 
 export const transformInvoiceColor = (status: number) => {
-  const { sizes, colors } = useTheme();
+  const { sizes, colors } = THEME;
 
   const situations: any = {
     1: colors.green['500'],
@@ -26,7 +26,7 @@ export const transformInvoiceColor = (status: number) => {
 
 
 export const transFormClassDayColor = (status: number) => {
-  const { sizes, colors } = useTheme();
+  const { sizes, colors } = THEME;
 
   const situations: any = {
     1: colors.yellow['500'],

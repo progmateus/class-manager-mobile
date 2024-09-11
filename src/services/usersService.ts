@@ -39,3 +39,10 @@ export function UpdateUserService({ firstName, lastName, email, document, phone 
     }
   })
 }
+
+export function ListUserBookingsService() {
+  return api({
+    url: '/users/bookings',
+    method: 'get'
+  })
+}
