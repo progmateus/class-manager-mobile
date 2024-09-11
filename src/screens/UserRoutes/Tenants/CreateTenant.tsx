@@ -26,7 +26,7 @@ const createTenantSchema = z.object({
   number: z.string({ required_error: "Campo obrigatório", }).regex(phoneRegex, "Telefone inválido").trim(),
   email: z.string({ required_error: "Campo obrigatório", }).email().trim(),
   document: z.string({ required_error: "Campo obrigatório", }).regex(documentRegex, "Documento inválido").trim(),
-  username: z.string().regex(usernameRegex, "Nome de usuário inválido").trim(),
+  username: z.string({ required_error: "Campo obrigatório", }).regex(usernameRegex, "Nome de usuário inválido").trim(),
   description: z.string().optional()
 });
 
@@ -132,13 +132,13 @@ export function CreateTenant() {
     if (isSubimiting) return
     setIsSubmiting(true)
     if (tab === 0) {
-      if (!verifyUsernameTab()) {
+      if (!await verifyUsernameTab()) {
         setIsSubmiting(false)
         return
       }
     }
     if (tab === 1) {
-      if (!verifyDataTab()) {
+      if (! await verifyDataTab()) {
         setIsSubmiting(false)
         return
       }
@@ -287,7 +287,7 @@ export function CreateTenant() {
         }
         <HStack justifyContent={tab !== 0 ? "space-between" : "flex-end"}>
           {
-            tab != 0 && tab != 3 && (
+            tab != 0 && (
               <Button size="md" variant="ghost" onPress={() => setTab(tab - 1)} startIcon={<Icon as={CaretLeft} name="cloud-download-outline" size="sm" />}> Voltar </Button>
             )
           }
