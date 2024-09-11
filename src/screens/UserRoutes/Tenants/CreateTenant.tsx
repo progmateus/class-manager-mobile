@@ -74,7 +74,9 @@ export function CreateTenant() {
       navigation.navigate('tenantProfile', { tenantId: data.data.id })
     }).catch((err) => {
       const { errors } = err;
-      checkErrors(errors)
+      if (errors && errors.length) {
+        checkErrors(errors)
+      }
     }).finally(() => {
       setIsSubmiting(false)
     })
