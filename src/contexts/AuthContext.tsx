@@ -109,11 +109,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function loadUserData() {
     try {
       setIsLoadingUserStorageData(true);
-
       const { token } = await storageAuthTokenGet();
-
+      console.log('loadUserData: ', token)
       if (token) {
-        tokenUpdate(token);
         await getUserProfile()
       }
     } catch (error) {
@@ -123,16 +121,39 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  async function loadTokenData() {
+    console.log('loadTokenData: ')
+    try {
+      setIsLoadingUserStorageData(true);
+
+      const { token } = await storageAuthTokenGet();
+
+      if (token) {
+        tokenUpdate(token);
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoadingUserStorageData(false);
+    }
+  }
+
   useEffect(() => {
-    loadUserData()
+    loadTokenData()
   }, [])
 
   useEffect(() => {
     const subscribe = api.registerInterceptTokenManager(signOut);
 
     return () => {
+      console.log('subscribe: ')
       subscribe();
     }
+  }, [])
+
+
+  useEffect(() => {
+    loadUserData()
   }, [])
 
   return (
