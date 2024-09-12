@@ -1,4 +1,4 @@
-import { IUserDTO } from "@dtos/IUserDTO";
+import { IUserDTO } from "@dtos/users/IUserDTO";
 import { api } from "./api";
 
 export function CreateUserService(data: any) {

@@ -1,7 +1,8 @@
-import { ISubscriptionDTO } from "./ISubscriptionDTO";
+import { ISubscriptionDTO } from "../subscriptions/ISubscriptionDTO";
+import { IUsersRolesDTO } from "../roles/IUSersRolesDTO";
 
 interface IUserDTO {
-  id?: string;
+  id: string;
   name?: string;
   firstName?: string;
   lastName?: string;
@@ -13,5 +14,6 @@ interface IUserDTO {
   avatar?: string;
   roles?: []
   subscriptions?: ISubscriptionDTO[];
+  usersRoles?: IUsersRolesDTO[];
 }
 export { IUserDTO }

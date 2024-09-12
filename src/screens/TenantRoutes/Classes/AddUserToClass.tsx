@@ -3,20 +3,16 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { UserItem } from "@components/Users/UserItem"
 import { Viewcontainer } from "@components/ViewContainer"
-import { ITenantPlanDTO } from "@dtos/ITenantPlanDTO"
-import { IUserCompletedDTO } from "@dtos/IUserCompletedDTO"
-import { IUserDTO } from "@dtos/IUserDTO"
-import { IUserRoleDTO } from "@dtos/IUSerRoleDTO"
-import { useNavigation, useRoute } from "@react-navigation/native"
-import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { useRoute } from "@react-navigation/native"
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
-import { Barbell, Coin, Money, Plus, SimCard, TrashSimple } from "phosphor-react-native"
+import { Plus } from "phosphor-react-native"
 import { useEffect, useState } from "react"
-import { Path } from "react-native-svg"
 import { UpdateStudentClassService, UpdateTeacherClassService, ListUsersByRoleNameService } from "src/services/classesService"
-import { ListTenantPlansService } from "src/services/tenantPlansService"
-import { Platform, Vibration } from "react-native"
+import { Vibration } from "react-native"
 import { fireSuccesToast } from "@utils/HelperNotifications"
+import { IUserCompletedDTO } from "@dtos/users/IUserCompletedDTO"
+import { IUsersRolesDTO } from "@dtos/roles/IUSersRolesDTO"
+import { IUserDTO } from "@dtos/users/IUserDTO"
 
 
 type RouteParamsProps = {
@@ -92,9 +88,9 @@ export function AddUserToClass() {
               <VStack space={8}>
                 {
                   usersRoles && usersRoles.length ? (
-                    usersRoles.map((userRole: IUserRoleDTO) => {
+                    usersRoles.map((userRole: IUsersRolesDTO) => {
                       return (
-                        <UserItem.Root key={userRole.user.id} onLongPress={() => handleSelectUser(userRole.user)}>
+                        <UserItem.Root key={userRole.user?.id} onLongPress={() => handleSelectUser(userRole.user)}>
                           <UserItem.Avatar url={userRole.user.avatar} alt="Foto de perfil" />
                           <UserItem.Section>
                             <UserItem.Content>

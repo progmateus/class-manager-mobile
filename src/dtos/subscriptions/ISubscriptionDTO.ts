@@ -1,7 +1,7 @@
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
-import { IUserDTO } from "./IUserDTO";
-import { ITenantPlanDTO } from "./ITenantPlanDTO";
-import { IUserCompletedDTO } from "./IUserCompletedDTO";
+import { IUserDTO } from "../users/IUserDTO";
+import { ITenantPlanDTO } from "../tenants/ITenantPlanDTO";
+import { IUserCompletedDTO } from "../users/IUserCompletedDTO";
 
 export interface ISubscriptionDTO {
   id: string;

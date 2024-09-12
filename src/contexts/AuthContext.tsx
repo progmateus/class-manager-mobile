@@ -1,14 +1,11 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
-import { IUserDTO } from "@dtos/IUserDTO";
 import { api } from "src/services/api";
-import { storageUserGet, storageUserRemove, storageUserSave } from "@storage/storageUser";
-import { storageAuthTokenGet, storageAuthTokenRemove, storageAuthTokenSave } from "@storage/storageAuthToken";
+import { storageUserSave } from "@storage/storageUser";
+import { storageAuthTokenGet, storageAuthTokenSave } from "@storage/storageAuthToken";
 import { SignInService } from "src/services/authService";
-import { CompositeNavigationProp, NavigationContext, useNavigation } from "@react-navigation/native";
-import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
-import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { GetUserProfileService } from "src/services/usersService";
+import { IUserDTO } from "@dtos/users/IUserDTO";
 
 
 export type AuthContextDataProps = {
@@ -30,9 +27,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<IUserDTO>({} as IUserDTO);
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
 
-
-  async function userAndTokenUpdate(userData: IUserDTO, token: string) {
+  function tokenUpdate(token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+
+  function userUpdate(userData: IUserDTO) {
     setUser(userData);
   }
 
@@ -66,7 +65,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
             roles
           }
           await storageUserAndTokenSave(user, token, refresh_token);
-          await userAndTokenUpdate(user, token);
+          tokenUpdate(token);
+          userUpdate(user);
         }
       }).catch((err) => {
         console.log('err: ', err)
@@ -78,10 +78,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function getUserProfile() {
     setIsLoadingUserStorageData(true);
-    const { token } = await storageAuthTokenGet();
     GetUserProfileService().then(({ data }) => {
-      if (data.data && token) {
-        userAndTokenUpdate(data.data, token);
+      if (data.data) {
+        userUpdate(data.data)
       }
     }).catch((err) => {
       console.log('err: ', err)
@@ -111,11 +110,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     try {
       setIsLoadingUserStorageData(true);
 
-      const userLogged = await storageUserGet();
       const { token } = await storageAuthTokenGet();
 
-      if (token && userLogged) {
-        userAndTokenUpdate(userLogged, token);
+      if (token) {
+        tokenUpdate(token);
+        await getUserProfile()
       }
     } catch (error) {
       throw error
@@ -125,7 +124,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   useEffect(() => {
-    getUserProfile()
+    loadUserData()
+  }, [])
+
+  useEffect(() => {
+    const subscribe = api.registerInterceptTokenManager(signOut);
+
+    return () => {
+      subscribe();
+    }
   }, [])
 
   return (

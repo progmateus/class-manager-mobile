@@ -7,16 +7,14 @@ import { Select, Text, useTheme, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { TextInputMask } from "react-native-masked-text";
-import { CreateClassService, ListClassesService } from "src/services/classesService";
+import { ListClassesService } from "src/services/classesService";
 import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
-import { CreateTenantPlanService, ListTenantPlansService } from "src/services/tenantPlansService";
-import { IClassDTO } from "@dtos/IClass";
+import { ListTenantPlansService } from "src/services/tenantPlansService";
+import { IClassDTO } from "@dtos/classes/IClass";
 import { CreateSubscriptionService } from "src/services/subscriptionService";
 import { useAuth } from "@hooks/useAuth";
-import { ISubscriptionDTO } from "@dtos/ISubscriptionDTO";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");

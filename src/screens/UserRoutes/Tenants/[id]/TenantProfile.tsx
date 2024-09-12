@@ -13,9 +13,9 @@ import { Loading } from "@components/Loading";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useAuth } from "@hooks/useAuth";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
-import { ISubscriptionDTO } from "@dtos/ISubscriptionDTO";
 import { DeleteSubscriptionService } from "src/services/subscriptionService";
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
+import { ISubscriptionDTO } from "@dtos/subscriptions/ISubscriptionDTO";
 
 
 type RouteParamsProps = {

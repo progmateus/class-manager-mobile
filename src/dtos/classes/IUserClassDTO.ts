@@ -1,5 +1,5 @@
 import { IClassDTO } from "./IClass";
-import { IUserCompletedDTO } from "./IUserCompletedDTO";
+import { IUserCompletedDTO } from "../users/IUserCompletedDTO";
 
 interface IUserClassDTO {
   id: string;
