@@ -21,8 +21,6 @@ export function Profile() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
   const { user } = useAuth()
 
-  console.log(user)
-
   const subscriptions = [
     {
       id: '1',
