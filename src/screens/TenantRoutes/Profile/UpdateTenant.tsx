@@ -12,6 +12,7 @@ import { useState } from "react";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { useTenant } from "@hooks/useTenant";
 import { TextArea } from "@components/form/TextArea";
+import { UpdateTenantSertvice } from "src/services/tenantsService";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -20,7 +21,7 @@ const updateTenantSchema = z.object({
   name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
   description: z.string().max(200, "Max 80 caracteres").trim().optional(),
   email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
-  document: z.string().regex(CPFRegex, "CPF Inválido").trim().optional(),
+  document: z.string().regex(CPFRegex, "CPF Inválido").trim(),
   phone: z.string().trim().optional(),
 });
 
@@ -41,10 +42,13 @@ export function UpdateTenant() {
     resolver: zodResolver(updateTenantSchema)
   });
 
-  const handleUpdate = ({ name, email, document, phone }: UpdateTenantProps) => {
+  const handleUpdate = ({ name, description, email, document }: UpdateTenantProps) => {
     if (!tenant.id || isLoading) return
-    console.log({
-      name, email, document, phone
+    setIsLoading(true)
+    UpdateTenantSertvice({ name, description, email, document }, tenant.id).then(() => {
+      fireSuccesToast("Empresa atualizada!")
+    }).finally(() => {
+      setIsLoading(false)
     })
   }
 
