@@ -110,8 +110,8 @@ export function Profile() {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <HStack space={4} px={4} >
             {
-              subscriptions && subscriptions.length > 0 && (
-                subscriptions.map((subscription) => {
+              user.subscriptions && user.subscriptions.length > 0 && (
+                user.subscriptions.map((subscription) => {
                   return (
                     <SubscriptionOption key={subscription.id} subscription={subscription} />
                   )
@@ -139,28 +139,28 @@ export function Profile() {
               </Text>
             </Box>
             {
-              user.usersRoles?.filter((ur) => ur.role.name === "admin").map((ur) => {
-                return (
-                  <Actionsheet.Item key={ur.id}>
-                    <HStack alignItems="center" justifyContent="center" space={4}>
-                      <Avatar
-                        size="md"
-                        bg="green.500"
-                        source={{
-                          uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-                        }}>
-                        AJ
-                      </Avatar>
-                      <Text fontSize="16" color="gray.700">
-                        {ur.tenant?.name}
-                      </Text>
-                    </HStack>
-                  </Actionsheet.Item>
-                )
-              })
+              user.usersRoles && user.usersRoles.length > 0 && (
+                user.usersRoles.filter((ur) => ur.role.name === "admin").map((ur) => {
+                  return (
+                    <Actionsheet.Item key={ur.id}>
+                      <HStack alignItems="center" justifyContent="center" space={4}>
+                        <Avatar
+                          size="md"
+                          bg="green.500"
+                          source={{
+                            uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                          }}>
+                          AJ
+                        </Avatar>
+                        <Text fontSize="16" color="gray.700">
+                          {ur.tenant?.name}
+                        </Text>
+                      </HStack>
+                    </Actionsheet.Item>
+                  )
+                })
+              )
             }
-
-
             <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
               <HStack alignItems="center" justifyContent="center" space={4}>
                 <View p={3.5} bgColor="gray.100" rounded="full">
