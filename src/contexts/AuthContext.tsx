@@ -32,7 +32,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   function userUpdate(userData: IUserDTO) {
-    setUser(userData);
+    setUser(prevState => { return { ...prevState, ...userData } });
   }
 
   async function storageUserAndTokenSave(userData: IUserDTO, token: string, refresh_token: string) {
