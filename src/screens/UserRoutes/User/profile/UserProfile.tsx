@@ -15,6 +15,7 @@ import { ArrowsLeftRight, Plus } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
+import { useTenant } from "@hooks/useTenant";
 
 
 export function Profile() {
@@ -22,6 +23,7 @@ export function Profile() {
   /* const [tenantsOwners, setTenantsOwners] = useState<IUsersRolesDTO[]>([]) */
   const navigation = useNavigation<UserNavigatorRoutesProps>();
   const { user } = useAuth()
+  const { authenticateTenant } = useTenant()
 
 
   function getUserTenantOwners(): IUsersRolesDTO[] {
@@ -142,7 +144,7 @@ export function Profile() {
               user.usersRoles && user.usersRoles.length > 0 && (
                 user.usersRoles.filter((ur) => ur.role.name === "admin").map((ur) => {
                   return (
-                    <Actionsheet.Item key={ur.id}>
+                    <Actionsheet.Item key={ur.id} onPress={() => authenticateTenant(ur.tenant.id)}>
                       <HStack alignItems="center" justifyContent="center" space={4}>
                         <Avatar
                           size="md"
