@@ -23,6 +23,7 @@ import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/Updat
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
 import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
+import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
 
 
 export type TenantRoutes = {
@@ -44,6 +45,7 @@ export type TenantRoutes = {
   updateStudentclass: { tenantId: string; userId: string; classIdExists: string; subscriptionId?: string; }
   bookingsHistory: { tenantId?: string; userId?: string; };
   updateSubscriptionPlan: { tenantId: string; planIdExists: string; subscriptionId?: string; }
+  updateTenant: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -211,6 +213,12 @@ export function TenantRoutes() {
       <Screen
         name="updateSubscriptionPlan"
         component={UpdateSubscriptionPlan}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="updateTenant"
+        component={UpdateTenant}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

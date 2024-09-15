@@ -9,6 +9,7 @@ interface ITenantDTO {
   status: ETenantStatus;
   email: string;
   username: string;
+  avatar: string;
   description: string;
   createdAt?: string;
   updatedAt?: string;

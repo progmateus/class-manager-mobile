@@ -1,6 +1,6 @@
 import { Button } from "@components/Button"
 import { GenericItem } from "@components/GenericItem"
-import { Input } from "@components/Input"
+import { Input } from "@components/form/Input"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"

@@ -1,4 +1,4 @@
-import { Input } from "@components/Input";
+import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Center, HStack, Image, Text, VStack, View } from "native-base";

@@ -24,7 +24,7 @@ export function Dashboard() {
           {/* <DashboardOption text="Inscrições" icon={<Receipt size={size} color={color} />} onPress={() => navigation.navigate('subscriptionProfile')} /> */}
           <DashboardOption text="Planos" icon={<SimCard size={size} color={color} />} onPress={() => navigation.navigate('tenantPlansList', { tenantId })} />
           <DashboardOption text="Jornadas" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('classHoursList')} />
-          <DashboardOption text="Editar" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('classHoursList')} />
+          <DashboardOption text="Editar" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('updateTenant')} />
         </SimpleGrid>
       </Viewcontainer>
     </View >

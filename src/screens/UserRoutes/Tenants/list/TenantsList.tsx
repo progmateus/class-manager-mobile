@@ -1,6 +1,6 @@
 import { Box, Center, FlatList, Heading, Icon, Text, VStack, View } from "native-base";
 import Constants from "expo-constants";
-import { Input } from "@components/Input";
+import { Input } from "@components/form/Input";
 import { TenantItem } from "@components/TenantItem";
 import { MagnifyingGlass } from "phosphor-react-native"
 import { useNavigation } from "@react-navigation/native";

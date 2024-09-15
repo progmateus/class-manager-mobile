@@ -1,5 +1,5 @@
 import { Center, Heading, Text, VStack, ScrollView, Image, Icon, HStack, Toast } from "native-base";
-import { Input } from "@components/Input";
+import { Input } from "@components/form/Input";
 import { Button } from "@components/Button";
 import LogoSVG from "@assets/logo.svg"
 import { Controller, useForm } from "react-hook-form"
