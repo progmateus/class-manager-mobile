@@ -53,20 +53,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     SignInService(email, password)
       .then(async ({ data: { data } }) => {
         if (data.id) {
-          const { id, name, email, document, avatar, roles, token, refresh_token, username } = data
-          const user = {
-            id,
-            firstName: name.split(' ')[0],
-            lastName: name.split(' ')[1],
-            username,
-            document,
-            email,
-            avatar,
-            roles
-          }
-          await storageUserAndTokenSave(user, token, refresh_token);
+          const { user: userResponse, token, refresh_token } = data
+          await storageUserAndTokenSave(userResponse, token, refresh_token);
           tokenUpdate(token);
-          userUpdate(user);
+          userUpdate(userResponse);
         }
       }).catch((err) => {
         console.log('err: ', err)

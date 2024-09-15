@@ -1,5 +1,5 @@
 import { ISubscriptionDTO } from "../subscriptions/ISubscriptionDTO";
-import { IUsersRolesDTO } from "../roles/IUSersRolesDTO";
+import { IUsersRolesDTO } from "../roles/IUsersRolesDTO";
 
 interface IUserDTO {
   id: string;

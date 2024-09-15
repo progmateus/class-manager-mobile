@@ -1,4 +1,4 @@
-import { IUserCompletedDTO } from "./IUserCompletedDTO";
+import { IUserCompletedDTO } from "@dtos/users/IUserCompletedDTO";
 
 export type IBookingDTO = {
   id: string;

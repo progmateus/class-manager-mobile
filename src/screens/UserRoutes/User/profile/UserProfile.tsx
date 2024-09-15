@@ -12,14 +12,25 @@ import { SubscriptionOption } from "@components/SubscriptionOption";
 import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { ArrowsLeftRight, Plus } from "phosphor-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
+import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
 
 
 export function Profile() {
   const [isOpen, setIsOpen] = useState(false)
+  /* const [tenantsOwners, setTenantsOwners] = useState<IUsersRolesDTO[]>([]) */
   const navigation = useNavigation<UserNavigatorRoutesProps>();
   const { user } = useAuth()
+
+
+  function getUserTenantOwners(): IUsersRolesDTO[] {
+    if (user.usersRoles && user.usersRoles.length > 0) {
+      return user.usersRoles.filter((ur) => ur.role.name === "admin")
+    }
+    return []
+  }
+
 
   const subscriptions = [
     {
@@ -127,21 +138,29 @@ export function Profile() {
                 Empresas
               </Text>
             </Box>
-            <Actionsheet.Item>
-              <HStack alignItems="center" justifyContent="center" space={4}>
-                <Avatar
-                  size="md"
-                  bg="green.500"
-                  source={{
-                    uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-                  }}>
-                  AJ
-                </Avatar>
-                <Text fontSize="16" color="gray.700">
-                  Vôlei na Ilha
-                </Text>
-              </HStack>
-            </Actionsheet.Item>
+            {
+              user.usersRoles?.filter((ur) => ur.role.name === "admin").map((ur) => {
+                return (
+                  <Actionsheet.Item key={ur.id}>
+                    <HStack alignItems="center" justifyContent="center" space={4}>
+                      <Avatar
+                        size="md"
+                        bg="green.500"
+                        source={{
+                          uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                        }}>
+                        AJ
+                      </Avatar>
+                      <Text fontSize="16" color="gray.700">
+                        {ur.tenant?.name}
+                      </Text>
+                    </HStack>
+                  </Actionsheet.Item>
+                )
+              })
+            }
+
+
             <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
               <HStack alignItems="center" justifyContent="center" space={4}>
                 <View p={3.5} bgColor="gray.100" rounded="full">
