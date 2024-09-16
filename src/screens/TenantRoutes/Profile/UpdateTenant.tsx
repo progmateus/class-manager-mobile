@@ -48,6 +48,7 @@ export function UpdateTenant() {
     UpdateTenantSertvice({ name, description, email, document }, tenant.id).then(() => {
       fireSuccesToast("Empresa atualizada!")
     }).catch((err) => {
+      console.log("errrrr: ", err)
       if (err.message && err.message === "ERR_VALIDATION") {
         checkErrors(err.errors)
       }

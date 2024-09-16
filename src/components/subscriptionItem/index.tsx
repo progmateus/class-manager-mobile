@@ -5,9 +5,9 @@ import { HStack, Image, Text, VStack } from "native-base";
 import { Money, SimCard } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 import dayjs from "dayjs"
-import { ISubscriptionDTO } from "@dtos/ISubscriptionDTO";
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { ISubscriptionDTO } from "@dtos/subscriptions/ISubscriptionDTO";
 
 interface IProps {
   subscription: ISubscriptionDTO
@@ -15,7 +15,8 @@ interface IProps {
 function SubscriptionItem({ subscription }: IProps) {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
-
+  console.log("===========================================")
+  console.log(subscription)
   const handleNavigateToProfile = () => {
     navigation.navigate('subscriptionProfile', {
       tenantId: subscription.tenantId,
@@ -46,7 +47,7 @@ function SubscriptionItem({ subscription }: IProps) {
           defaultSource={{ uri: subscription.user.avatar }}
         />
         <VStack flex={1}>
-          <Text fontSize="sm" color="coolGray.900" fontWeight="bold">{`${subscription.user.name.firstName} ${subscription.user.name.lastName}`}</Text>
+          <Text fontSize="sm" color="coolGray.900" fontWeight="bold">{`${subscription.user.firstName} ${subscription.user.lastName}`}</Text>
           {/* <Text fontSize="sm" color="coolGray.500">{subscription.classes[0].name}</Text> */}
           <Text fontSize="sm" color="coolGray.500" fontWeight="semibold">{subscription.tenantPlan.name}</Text>
         </VStack>

@@ -56,6 +56,7 @@ export function TenantRoutes() {
   const iconSize = sizes[6]
   return (
     <Navigator
+      backBehavior="history"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,

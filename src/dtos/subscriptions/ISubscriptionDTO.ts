@@ -9,7 +9,7 @@ export interface ISubscriptionDTO {
   tenantPlanId: string;
   tenantId: string;
   status: ESubscriptionStatus;
-  user: IUserCompletedDTO;
+  user: IUserDTO;
   tenantPlan: ITenantPlanDTO;
   tenant: any;
   expiresDate: Date;
