@@ -4,7 +4,6 @@ import { Input } from "@components/form/Input"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
-import { IUserCompletedDTO } from "@dtos/users/IUserCompletedDTO"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireErrorToast, fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
@@ -14,6 +13,7 @@ import { useCallback, useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
 import { CreateUserRoleService, DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 import { GetUserByUsernameService } from "src/services/usersService"
+import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
 
 type RouteParamsProps = {
   tenantId: string;
@@ -25,7 +25,7 @@ export function UsersRoloesList() {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
-  const [userFound, setUserFound] = useState<IUserCompletedDTO | null>(null)
+  const [userFound, setUserFound] = useState<IUserPreviewDTO | null>(null)
   const [username, setUsername] = useState("")
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -187,7 +187,7 @@ export function UsersRoloesList() {
                         />
 
                         <VStack alignItems="center" justifyContent="center">
-                          <Heading fontFamily="heading" fontSize="2xl" color="coolGray.700">{`${userFound?.name.firstName} ${userFound?.name.lastName}`}</Heading>
+                          <Heading fontFamily="heading" fontSize="2xl" color="coolGray.700">{`${userFound?.firstName} ${userFound?.lastName}`}</Heading>
                           <Text fontFamily="body" color="coolGray.600"> {userFound?.username}</Text>
                         </VStack>
                       </View>

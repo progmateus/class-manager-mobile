@@ -1,9 +1,9 @@
-import { IUserCompletedDTO } from "@dtos/users/IUserCompletedDTO";
+import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
 
 export type IBookingDTO = {
   id: string;
   userId: string;
   classDayId: string;
-  user: IUserCompletedDTO;
+  user: IUserPreviewDTO;
   classDay: any;
 }

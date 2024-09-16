@@ -1,12 +1,12 @@
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { IRoleDTO } from "./IRoleDTO";
-import { IUserCompletedDTO } from "@dtos/users/IUserCompletedDTO";
+import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
 
 interface IUsersRolesDTO {
   id: string;
   userId: string;
   roleId: string;
-  user: IUserCompletedDTO;
+  user: IUserPreviewDTO;
   role: IRoleDTO;
   tenant: ITenantDTO;
 }

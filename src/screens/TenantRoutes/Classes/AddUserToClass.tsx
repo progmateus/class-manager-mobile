@@ -10,9 +10,8 @@ import { useEffect, useState } from "react"
 import { UpdateStudentClassService, UpdateTeacherClassService, ListUsersByRoleNameService } from "src/services/classesService"
 import { Vibration } from "react-native"
 import { fireSuccesToast } from "@utils/HelperNotifications"
-import { IUserCompletedDTO } from "@dtos/users/IUserCompletedDTO"
-import { IUsersRolesDTO } from "@dtos/roles/IUSersRolesDTO"
-import { IUserDTO } from "@dtos/users/IUserDTO"
+import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
+import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
 
 
 type RouteParamsProps = {
@@ -22,10 +21,10 @@ type RouteParamsProps = {
 }
 
 export function AddUserToClass() {
-  const [usersRoles, setUsersRoles] = useState([])
+  const [usersRoles, setUsersRoles] = useState<IUsersRolesDTO[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<IUserCompletedDTO | null>(null)
+  const [selectedUser, setSelectedUser] = useState<IUserPreviewDTO | null>(null)
   const route = useRoute()
   const { tenantId, classId, roleName } = route.params as RouteParamsProps;
 
@@ -70,7 +69,7 @@ export function AddUserToClass() {
   }
 
 
-  const handleSelectUser = (user: IUserCompletedDTO) => {
+  const handleSelectUser = (user: IUserPreviewDTO) => {
     Vibration.vibrate(100)
     setSelectedUser(user)
     setIsOpen(true)
@@ -88,13 +87,13 @@ export function AddUserToClass() {
               <VStack space={8}>
                 {
                   usersRoles && usersRoles.length ? (
-                    usersRoles.map((userRole: IUsersRolesDTO) => {
+                    usersRoles.map((userRole) => {
                       return (
                         <UserItem.Root key={userRole.user?.id} onLongPress={() => handleSelectUser(userRole.user)}>
-                          <UserItem.Avatar url={userRole.user.avatar} alt="Foto de perfil" />
+                          <UserItem.Avatar url={userRole.user.avatar ?? ""} alt="Foto de perfil" />
                           <UserItem.Section>
                             <UserItem.Content>
-                              <UserItem.Title title={`${userRole.user.name.firstName} ${userRole.user.name.lastName}`} />
+                              <UserItem.Title title={`${userRole.user.firstName} ${userRole.user.lastName}`} />
                               <UserItem.Caption caption="@username" />
                             </UserItem.Content>
                           </UserItem.Section>
@@ -111,7 +110,7 @@ export function AddUserToClass() {
                   <Actionsheet.Content>
                     <Box w="100%" h={60} px={4} justifyContent="center">
                       <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                        {`${selectedUser?.name.firstName} ${selectedUser?.name.lastName}`}
+                        {`${selectedUser?.firstName} ${selectedUser?.lastName}`}
                       </Heading>
                     </Box>
                     <Actionsheet.Item onPress={handleAddUser} startIcon={<Icon as={Plus} size="6" name="delete" />}>
