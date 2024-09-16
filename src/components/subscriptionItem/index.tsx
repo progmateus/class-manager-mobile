@@ -15,8 +15,6 @@ interface IProps {
 function SubscriptionItem({ subscription }: IProps) {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
-  console.log("===========================================")
-  console.log(subscription)
   const handleNavigateToProfile = () => {
     navigation.navigate('subscriptionProfile', {
       tenantId: subscription.tenantId,
