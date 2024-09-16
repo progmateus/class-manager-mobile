@@ -2,7 +2,7 @@ import { Loading } from "@components/Loading"
 import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
-import { ISubscriptionDTO } from "@dtos/ISubscriptionDTO"
+import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfileDTO"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
@@ -25,7 +25,7 @@ export function SubscriptionProfile() {
   const [isLoading, setIsLoadig] = useState(false)
   const [isActing, setIsActing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [subscription, setSubscription] = useState<ISubscriptionDTO>({} as ISubscriptionDTO)
+  const [subscription, setSubscription] = useState<ISubscriptionProfileDTO>({} as ISubscriptionProfileDTO)
   const route = useRoute()
   const { tenantId, subscriptionId } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
@@ -70,7 +70,7 @@ export function SubscriptionProfile() {
         isLoading || !subscription.id ? (<Loading />)
           : (
             <>
-              <PageHeader title={`${subscription.user.name.firstName} ${subscription.user.name.lastName}`} />
+              <PageHeader title={`${subscription.user.firstName} ${subscription.user.lastName}`} />
               <ScrollContainer>
                 <VStack space={8}>
                   <HStack justifyContent="space-between">
@@ -81,12 +81,12 @@ export function SubscriptionProfile() {
                       </HStack>
                       <HStack alignItems="center" space={1}>
                         <Icon as={BookBookmark} />
-                        <Text fontSize="sm" textTransform="capitalize"> {subscription.user.studentsClasses[0].class?.name} </Text>
+                        <Text fontSize="sm" textTransform="capitalize"> {subscription.user?.studentsClasses[0]?.class?.name} </Text>
                       </HStack>
 
                       <HStack alignItems="center" space={1}>
                         <Icon as={IdentificationCard} />
-                        <Text fontSize="sm" > {subscription.user.document.number} </Text>
+                        <Text fontSize="sm" > {subscription.user.document} </Text>
                       </HStack>
 
                       <HStack alignItems="center" space={1}>
@@ -96,7 +96,7 @@ export function SubscriptionProfile() {
 
                       <HStack alignItems="center" space={1}>
                         <Icon as={MapPin} />
-                        <Text fontSize="sm"> {`${subscription.user.address?.street || 'Não infomado'}, ${subscription.user.address?.number ?? ''}`} </Text>
+                        <Text fontSize="sm"> Não informado </Text>
                       </HStack>
                     </VStack>
                     <VStack>
@@ -163,7 +163,7 @@ export function SubscriptionProfile() {
                       </MenuItem.Actions>
                     </MenuItem.Root>
 
-                    <MenuItem.Root onPress={() => navigation.navigate('updateStudentclass', { tenantId, userId: subscription.userId, classIdExists: subscription.user.studentsClasses[0].class.id, subscriptionId })}>
+                    <MenuItem.Root onPress={() => navigation.navigate('updateStudentclass', { tenantId, userId: subscription.userId, classIdExists: subscription.user?.studentsClasses[0].class?.id as string, subscriptionId })}>
                       <MenuItem.Icon icon={BookBookmark} />
                       <MenuItem.Content title="Alterar turma" description="Altere a turma do aluno" />
                       <MenuItem.Actions>

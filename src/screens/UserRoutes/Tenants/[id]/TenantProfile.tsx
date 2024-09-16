@@ -15,7 +15,7 @@ import { useAuth } from "@hooks/useAuth";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { DeleteSubscriptionService } from "src/services/subscriptionService";
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
-import { ISubscriptionDTO } from "@dtos/subscriptions/ISubscriptionDTO";
+import { ISubscriptionDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 
 
 type RouteParamsProps = {

@@ -1,6 +1,4 @@
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
-import { ISubscriptionDTO } from "../subscriptions/ISubscriptionDTO";
-import { IUserDTO } from "../users/IUserDTO";
 import { IRoleDTO } from "./IRoleDTO";
 import { IUserCompletedDTO } from "@dtos/users/IUserCompletedDTO";
 
