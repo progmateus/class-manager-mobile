@@ -38,7 +38,7 @@ export function SubscriptionsList() {
               subscriptions && subscriptions.length > 0 && (
                 <VStack space={4}>
                   {
-                    subscriptions.map(({ subscription }, index) => {
+                    subscriptions.map((subscription, index) => {
                       return (
                         <SubscriptionItem key={index} subscription={subscription} />
                       )
