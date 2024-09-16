@@ -21,7 +21,7 @@ const updateTenantSchema = z.object({
   name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
   description: z.string().max(200, "Max 80 caracteres").trim().optional(),
   email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
-  document: z.string().regex(CPFRegex, "CPF Inválido").trim(),
+  document: z.string().regex(CPFRegex, "CPF Inválido").trim().transform((val) => val.replaceAll('.', '').replaceAll('-', '')),
   phone: z.string().trim().optional(),
 });
 
@@ -31,7 +31,7 @@ export function UpdateTenant() {
   const [isLoading, setIsLoading] = useState(false)
   const { tenant } = useTenant();
 
-  const { control, handleSubmit, formState: { errors } } = useForm<UpdateTenantProps>({
+  const { control, handleSubmit, formState: { errors }, setError } = useForm<UpdateTenantProps>({
     defaultValues: {
       name: tenant.name,
       email: tenant.email,
@@ -47,9 +47,33 @@ export function UpdateTenant() {
     setIsLoading(true)
     UpdateTenantSertvice({ name, description, email, document }, tenant.id).then(() => {
       fireSuccesToast("Empresa atualizada!")
+    }).catch((err) => {
+      if (err.message && err.message === "ERR_VALIDATION") {
+        checkErrors(err.errors)
+      }
     }).finally(() => {
       setIsLoading(false)
     })
+  }
+
+  const checkErrors = (errors: any[]) => {
+    if (errors.find((e) => e.property == "Document.Number")) {
+      setError("document", {
+        message: "Documeno inválido"
+      })
+    }
+
+    if (errors.find((e) => e.message == "Document already exists")) {
+      setError("document", {
+        message: "Este documento já está sendo utilizado"
+      })
+    }
+
+    if (errors.find((e) => e.message == "E-mail already exists")) {
+      setError("email", {
+        message: "Este E-mail já esta sendo utilizado"
+      })
+    }
   }
 
   return (

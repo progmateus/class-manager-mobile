@@ -37,7 +37,7 @@ export function GetTenantProfileService(tenantId: string) {
 export function UpdateTenantSertvice({ name, description, email, document }: Omit<ICreatetenantDTO, "username" | "planId" | "number">, tenantId: string) {
   return api({
     url: `/tenants/${tenantId}`,
-    method: 'post',
+    method: 'put',
     data: {
       name,
       description,
