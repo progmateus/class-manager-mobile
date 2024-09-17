@@ -2,9 +2,10 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { SubscriptionItem } from "@components/subscriptionItem"
 import { Viewcontainer } from "@components/ViewContainer"
+import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useRoute } from "@react-navigation/native"
-import { Text, View, VStack } from "native-base"
+import { FlatList, Text, View, VStack } from "native-base"
 import { useCallback, useState } from "react"
 import { ListSubscriptionsService } from "src/services/subscriptionService"
 
@@ -13,7 +14,7 @@ type RouteParamsProps = {
 }
 
 export function SubscriptionsList() {
-  const [subscriptions, setSubscriptions] = useState([])
+  const [subscriptions, setSubscriptions] = useState<ISubscriptionPreviewDTO[]>([])
   const [isLoading, setIsLoadig] = useState(false)
   const route = useRoute()
   const { tenantIdParams } = route.params as RouteParamsProps;
@@ -38,23 +39,19 @@ export function SubscriptionsList() {
         {
           isLoading ? (<Loading />)
             : (
-              subscriptions && subscriptions.length > 0 ? (
-                <VStack space={4}>
-                  {
-                    subscriptions.map((subscription, index) => {
-                      return (
-                        <SubscriptionItem key={index} subscription={subscription} />
-                      )
-                    })
-                  }
-                </VStack>
-
-              ) : (
-                <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
-              )
+              <FlatList
+                data={subscriptions}
+                pb={20}
+                keyExtractor={subscription => subscription.id}
+                renderItem={({ item }) => (
+                  <SubscriptionItem subscription={item} />
+                )}
+                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+              >
+              </FlatList>
             )
         }
-
       </Viewcontainer>
     </View>
 
