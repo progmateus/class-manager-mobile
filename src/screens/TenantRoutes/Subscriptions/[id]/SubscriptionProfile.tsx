@@ -3,6 +3,7 @@ import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfileDTO"
+import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
@@ -17,7 +18,7 @@ import { GetSubscriptionProfileService, ListSubscriptionsService, UpdateSubscrip
 
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
   subscriptionId: string;
 }
 
@@ -27,7 +28,9 @@ export function SubscriptionProfile() {
   const [isOpen, setIsOpen] = useState(false)
   const [subscription, setSubscription] = useState<ISubscriptionProfileDTO>({} as ISubscriptionProfileDTO)
   const route = useRoute()
-  const { tenantId, subscriptionId } = route.params as RouteParamsProps;
+  const { tenantIdParams, subscriptionId } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
 
@@ -163,7 +166,7 @@ export function SubscriptionProfile() {
                       </MenuItem.Actions>
                     </MenuItem.Root>
 
-                    <MenuItem.Root onPress={() => navigation.navigate('updateStudentclass', { tenantId, userId: subscription.userId, classIdExists: subscription.user?.studentsClasses[0].class?.id as string, subscriptionId })}>
+                    <MenuItem.Root onPress={() => navigation.navigate('updateStudentclass', { tenantIdParams: tenantId, userId: subscription.userId, classIdExists: subscription.user?.studentsClasses[0].class?.id as string, subscriptionId })}>
                       <MenuItem.Icon icon={BookBookmark} />
                       <MenuItem.Content title="Alterar turma" description="Altere a turma do aluno" />
                       <MenuItem.Actions>
@@ -171,7 +174,7 @@ export function SubscriptionProfile() {
                       </MenuItem.Actions>
                     </MenuItem.Root>
 
-                    <MenuItem.Root onPress={() => navigation.navigate('updateSubscriptionPlan', { tenantId, planIdExists: subscription.tenantPlanId, subscriptionId })}>
+                    <MenuItem.Root onPress={() => navigation.navigate('updateSubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.tenantPlanId, subscriptionId })}>
                       <MenuItem.Icon icon={SimCard} />
                       <MenuItem.Content title="Alterar plano" description="Altere o plano do aluno" />
                       <MenuItem.Actions>
@@ -179,7 +182,7 @@ export function SubscriptionProfile() {
                       </MenuItem.Actions>
                     </MenuItem.Root>
 
-                    <MenuItem.Root onPress={() => navigation.navigate('bookingsHistory', { tenantId, userId: subscription.userId })}>
+                    <MenuItem.Root onPress={() => navigation.navigate('bookingsHistory', { tenantIdParams: tenantId, userId: subscription.userId })}>
                       <MenuItem.Icon icon={ClockCounterClockwise} />
                       <MenuItem.Content title="Ver aulas" description="Visualize o histŕocio de aulas do aluno" />
                       <MenuItem.Actions>

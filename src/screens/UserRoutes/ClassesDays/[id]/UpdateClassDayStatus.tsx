@@ -7,11 +7,12 @@ import { UpdateClassDayStatusService } from "src/services/classDaysService";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { useAuth } from "@hooks/useAuth";
 
 
 type RouteParamsProps = {
   classDayId: string;
-  tenantId: string;
+  tenantIdParams: string;
 }
 
 export function UpdateClassDayStatus() {
@@ -20,7 +21,9 @@ export function UpdateClassDayStatus() {
   const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
-  const { classDayId, tenantId } = route.params as RouteParamsProps;
+  const { classDayId, tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
 
   const handleCancelClassDay = () => {
@@ -29,7 +32,7 @@ export function UpdateClassDayStatus() {
       fireSuccesToast('Aula cancelada')
       navigation.navigate('classDayInfo', {
         classDayId,
-        tenantId
+        tenantIdParams: tenantId
       })
     }).catch((err) => {
       console.log(err)
@@ -44,7 +47,7 @@ export function UpdateClassDayStatus() {
       fireSuccesToast('Aula confirmada')
       navigation.navigate('classDayInfo', {
         classDayId,
-        tenantId
+        tenantIdParams: tenantId
       })
     }).catch((err) => {
       console.log(err)

@@ -14,9 +14,10 @@ import { TouchableOpacity, Vibration } from "react-native"
 import { CreateUserRoleService, DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 import { GetUserByUsernameService } from "src/services/usersService"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
+import { useAuth } from "@hooks/useAuth"
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
   roleName: "teacher" | "student"
 }
 
@@ -32,7 +33,9 @@ export function UsersRoloesList() {
   const [isOpenAdd, setIsOpenAdd] = useState(false)
   const [selectedUserRole, setSelectedUserRole] = useState<any>(null)
   const route = useRoute()
-  const { tenantId, roleName } = route.params as RouteParamsProps;
+  const { tenantIdParams, roleName } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 

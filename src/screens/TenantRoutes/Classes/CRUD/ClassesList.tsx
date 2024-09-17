@@ -3,6 +3,7 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/classes/IClass"
+import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { Center, Text, View, VStack } from "native-base"
@@ -12,25 +13,27 @@ import { TouchableOpacity } from "react-native"
 import { ListClassesService } from "src/services/classesService"
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
 }
 export function ClassesList() {
   const [classes, setClasses] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
   const route = useRoute()
-  const { tenantId } = route.params as RouteParamsProps;
+  const { tenantIdParams } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
 
   const handleClickCreate = () => {
     navigation.navigate('createClass', {
-      tenantId
+      tenantIdParams: tenantId
     })
   }
 
   const handleSelectClass = (classId: string) => {
     navigation.navigate('classProfile', {
-      tenantId,
+      tenantIdParams: tenantId,
       classId
     })
   }

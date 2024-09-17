@@ -13,9 +13,10 @@ import { EClassDayStatus } from "src/enums/EClassDayStatus"
 import { transFormClassDayColor } from "@utils/TransformColor"
 import { ListUserBookingsService } from "src/services/usersService"
 import { IBookingDTO } from "@dtos/bookings/IBookingDTO"
+import { useAuth } from "@hooks/useAuth"
 
 type RouteParamsProps = {
-  tenantId?: string;
+  tenantIdParams?: string;
   userId?: string;
 }
 export function BookingsHistory() {
@@ -23,7 +24,9 @@ export function BookingsHistory() {
   const [isLoading, setIsLoadig] = useState(false)
   const [isActing, setIsActing] = useState(false)
   const route = useRoute()
-  const { tenantId, userId } = route.params as RouteParamsProps;
+  const { tenantIdParams, userId } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
   const handleDeleteBooking = (booking: IBookingDTO) => {
     if (isActing || !tenantId) return

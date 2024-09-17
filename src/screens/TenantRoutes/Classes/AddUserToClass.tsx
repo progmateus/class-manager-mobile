@@ -12,10 +12,11 @@ import { Vibration } from "react-native"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
+import { useAuth } from "@hooks/useAuth"
 
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
   classId: string;
   roleName: "student" | "teacher";
 }
@@ -26,7 +27,9 @@ export function AddUserToClass() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<IUserPreviewDTO | null>(null)
   const route = useRoute()
-  const { tenantId, classId, roleName } = route.params as RouteParamsProps;
+  const { tenantIdParams, classId, roleName } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
   useEffect(() => {
     setIsLoading(true)

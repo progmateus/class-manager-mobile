@@ -3,6 +3,7 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/classes/IClass"
+import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
@@ -13,7 +14,7 @@ import { TouchableOpacity, Vibration } from "react-native"
 import { ListClassesService, ListStudentsByClassService, RemoveStudentFromClassService, UpdateStudentClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
   classIdExists: string;
   userId: string;
   subscriptionId?: string;
@@ -24,7 +25,9 @@ export function UpdateStudentClass() {
   const [selectedClassId, setSelectedClassId] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const route = useRoute()
-  const { tenantId, userId, classIdExists, subscriptionId } = route.params as RouteParamsProps;
+  const { tenantIdParams, userId, classIdExists, subscriptionId } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
@@ -52,7 +55,7 @@ export function UpdateStudentClass() {
 
     UpdateStudentClassService(tenantId, userId, selectedClassId).then(() => {
       fireSuccesToast('Turma alterada com sucesso!')
-      navigation.navigate('subscriptionProfile', { subscriptionId, tenantId })
+      navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
     }).catch((err) => {
       console.log(err)
     })

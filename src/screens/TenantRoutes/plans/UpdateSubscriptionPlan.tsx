@@ -2,7 +2,8 @@ import { GenericItem } from "@components/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
-import { ITenantPlanDTO } from "@dtos/roles/ITenantPlanDTO"
+import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
+import { useAuth } from "@hooks/useAuth"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireSuccesToast } from "@utils/HelperNotifications"
@@ -15,7 +16,7 @@ import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
   subscriptionId: string;
   planIdExists: string;
 }
@@ -25,7 +26,9 @@ export function UpdateSubscriptionPlan() {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const route = useRoute()
-  const { tenantId, planIdExists, subscriptionId } = route.params as RouteParamsProps;
+  const { tenantIdParams, planIdExists, subscriptionId } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
@@ -59,7 +62,7 @@ export function UpdateSubscriptionPlan() {
     setIsLoading(true)
     UpdateSubscriptionService(tenantId, subscriptionId, null, selectedPlanId).then(() => {
       fireSuccesToast('Plano alterado com sucesso!')
-      navigation.navigate('subscriptionProfile', { subscriptionId, tenantId })
+      navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
     }).finally(() => {
       setIsLoading(false)
     })

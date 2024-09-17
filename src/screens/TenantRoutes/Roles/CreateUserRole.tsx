@@ -2,6 +2,7 @@ import { GenericItem } from "@components/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
+import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireErrorToast, fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
@@ -12,7 +13,7 @@ import { TouchableOpacity, Vibration } from "react-native"
 import { DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 
 type RouteParamsProps = {
-  tenantId: string
+  tenantIdParams: string
 }
 
 export function CreateUserRole() {
@@ -22,7 +23,9 @@ export function CreateUserRole() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedUserRole, setSelectedUserRole] = useState<any>(null)
   const route = useRoute()
-  const { tenantId } = route.params as RouteParamsProps;
+  const { tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 

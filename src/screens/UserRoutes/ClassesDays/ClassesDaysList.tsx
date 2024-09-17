@@ -5,9 +5,10 @@ import { PageHeader } from "@components/PageHeader";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { Plus } from "phosphor-react-native";
+import { useAuth } from "@hooks/useAuth";
 
 type RouteParamsProps = {
-  tenantId?: string;
+  tenantIdParams?: string;
 }
 
 export function ClassesDaysList() {
@@ -101,12 +102,14 @@ export function ClassesDaysList() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const route = useRoute()
-  const params = route.params as RouteParamsProps;
+  const { tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
   function handleClickClassDay() {
-    if (!params.tenantId) return
+    if (!tenantId) return
     navigation.navigate('classDayInfo', {
-      tenantId: params.tenantId,
+      tenantIdParams: tenantId,
       classDayId: '24f072e1-703e-4c52-bfa5-3afa9deba9f1'
     });
   }
@@ -135,13 +138,13 @@ export function ClassesDaysList() {
 
   const createClassDay = () => {
     navigation.navigate('createClassDay', {
-      tenantId: "B1E4CC1F-8CDA-47B6-B531-8587FC114EBD"
+      tenantIdParams: tenantId
     })
   }
 
   return (
     <View flex={1}>
-      <PageHeader title="Aulas" rightIcon={params?.tenantId ? Plus : null} rightIconColor="brand.500" rightAction={() => createClassDay()} />
+      <PageHeader title="Aulas" rightIcon={tenantId ? Plus : null} rightIconColor="brand.500" rightAction={() => createClassDay()} />
       <ScrollView flex={1}>
         <View pb={20}>
           <HStack>

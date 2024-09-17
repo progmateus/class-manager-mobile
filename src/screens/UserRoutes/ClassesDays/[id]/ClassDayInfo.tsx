@@ -15,7 +15,7 @@ import { useAuth } from "@hooks/useAuth";
 
 type RouteParamsProps = {
   classDayId: string;
-  tenantId: string;
+  tenantIdParams: string;
 }
 
 interface IClassDay {
@@ -46,7 +46,9 @@ export function ClassDayInfo() {
 
   const route = useRoute()
 
-  const { classDayId, tenantId } = route.params as RouteParamsProps;
+  const { classDayId, tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
   const [classDay, setClassDay] = useState<IClassDay>({} as IClassDay)
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
@@ -95,7 +97,7 @@ export function ClassDayInfo() {
 
   function handleClickUpdateStatus() {
     navigation.navigate('updateClassDayStatus', {
-      tenantId,
+      tenantIdParams: tenantId,
       classDayId
     });
   }

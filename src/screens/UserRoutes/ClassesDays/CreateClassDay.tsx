@@ -17,13 +17,14 @@ import { THEME } from "src/theme";
 import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
+import { useAuth } from "@hooks/useAuth";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
 }
 
 const createClassDaySchema = z.object({
@@ -41,7 +42,9 @@ export function CreateClassDay() {
   const { sizes, colors } = useTheme();
   const route = useRoute()
 
-  const { tenantId } = route.params as RouteParamsProps;
+  const { tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
   const { control, handleSubmit, formState: { errors } } = useForm<createclassDayProps>({
     resolver: zodResolver(createClassDaySchema)

@@ -3,6 +3,7 @@ import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { IClassDTO } from "@dtos/classes/IClass"
+import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireErrorToast } from "@utils/HelperNotifications"
@@ -14,7 +15,7 @@ import { GetClassProfileService, GetClassService } from "src/services/classesSer
 
 type RouteParamsProps = {
   classId: string;
-  tenantId: string;
+  tenantIdParams: string;
 }
 
 
@@ -31,7 +32,10 @@ export function ClassProfile() {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const route = useRoute()
 
-  const { classId, tenantId } = route.params as RouteParamsProps;
+
+  const { classId, tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
   useEffect(() => {
     GetClassProfileService(tenantId, classId).then(({ data }) => {
@@ -54,7 +58,7 @@ export function ClassProfile() {
         </SimpleGrid>
         <VStack space={4} pb={20}>
           <Text color="coolGray.400" fontSize="md" mb={-2}> Ações</Text>
-          <MenuItem.Root onPress={() => navigation.navigate('listStudentsClass', { tenantId, classId })} >
+          <MenuItem.Root onPress={() => navigation.navigate('listStudentsClass', { tenantIdParams: tenantId, classId })} >
             <MenuItem.Icon icon={GraduationCap} />
             <MenuItem.Content title="Gerenciar alunos" description="Gerencie os alunos manualmente" />
             <MenuItem.Actions>
@@ -63,7 +67,7 @@ export function ClassProfile() {
           </MenuItem.Root>
 
 
-          <MenuItem.Root onPress={() => navigation.navigate('listTeachersClass', { tenantId, classId })}>
+          <MenuItem.Root onPress={() => navigation.navigate('listTeachersClass', { tenantIdParams: tenantId, classId })}>
             <MenuItem.Icon icon={IdentificationBadge} />
             <MenuItem.Content title="Gerenciar professores" description="Gerencie os professores manualmente" />
             <MenuItem.Actions>

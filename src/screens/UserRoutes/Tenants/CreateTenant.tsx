@@ -71,7 +71,7 @@ export function CreateTenant() {
       planId
     }).then(({ data }) => {
       fireSuccesToast('Empresa criada com sucesso!')
-      navigation.navigate('tenantProfile', { tenantId: data.data.id })
+      navigation.navigate('tenantProfile', { tenantIdParams: data.data.id })
     }).catch((err) => {
       const { errors } = err;
       if (errors && errors.length) {

@@ -27,24 +27,24 @@ import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
 
 
 export type TenantRoutes = {
-  subscriptionProfile: { tenantId: string, subscriptionId: string };
-  students: { tenantId: string };
-  classes: { tenantId: string; };
-  classProfile: { classId: string, tenantId: string };
-  tenantProfile: { tenantId: string };
+  subscriptionProfile: { tenantIdParams: string, subscriptionId: string };
+  students: { tenantIdParams: string };
+  classes: { tenantIdParams: string; };
+  classProfile: { classId: string, tenantIdParams: string };
+  tenantProfile: { tenantIdParams: string };
   dashboard: undefined;
   classHoursList: undefined;
-  tenantPlansList: { tenantId: string; }
-  createTenantPlan: { tenantId: string; }
-  createClass: { tenantId: string; }
-  listStudentsClass: { tenantId: string; classId: string; }
-  listTeachersClass: { tenantId: string; classId: string; }
-  addUserToClass: { tenantId: string; classId: string; roleName: string; }
-  usersRolesList: { tenantId: string; roleName: string; }
-  createUserRole: { tenantId: string }
-  updateStudentclass: { tenantId: string; userId: string; classIdExists: string; subscriptionId?: string; }
-  bookingsHistory: { tenantId?: string; userId?: string; };
-  updateSubscriptionPlan: { tenantId: string; planIdExists: string; subscriptionId?: string; }
+  tenantPlansList: { tenantIdParams: string; }
+  createTenantPlan: { tenantIdParams: string; }
+  createClass: { tenantIdParams: string; }
+  listStudentsClass: { tenantIdParams: string; classId: string; }
+  listTeachersClass: { tenantIdParams: string; classId: string; }
+  addUserToClass: { tenantIdParams: string; classId: string; roleName: string; }
+  usersRolesList: { tenantIdParams: string; roleName: string; }
+  createUserRole: { tenantIdParams: string }
+  updateStudentclass: { tenantIdParams: string; userId: string; classIdExists: string; subscriptionId?: string; }
+  bookingsHistory: { tenantIdParams?: string; userId?: string; };
+  updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateTenant: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
@@ -107,7 +107,7 @@ export function TenantRoutes() {
             <UserCircle color={color} size={iconSize} />
           )
         }}
-        initialParams={{ tenantId: "b1e4cc1f-8cda-47b6-b531-8587fc114ebd" }}
+        initialParams={{ tenantIdParams: "b1e4cc1f-8cda-47b6-b531-8587fc114ebd" }}
       />
 
       <Screen

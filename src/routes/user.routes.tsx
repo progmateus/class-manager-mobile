@@ -24,15 +24,15 @@ type UserRoutes = {
   tenantsList: undefined;
   profile: undefined;
   bills: undefined;
-  tenantProfile: { tenantId: string };
+  tenantProfile: { tenantIdParams: string };
   classesDays: undefined;
-  classDayInfo: { tenantId: string, classDayId: string };
-  updateClassDayStatus: { tenantId: string, classDayId: string };
+  classDayInfo: { tenantIdParams: string, classDayId: string };
+  updateClassDayStatus: { tenantIdParams: string, classDayId: string };
   updateUser: undefined;
   updatePassword: undefined;
-  createClassDay: { tenantId?: string };
-  createSubscription: { tenantId?: string };
-  bookingsHistory: { tenantId?: string; userId?: string; };
+  createClassDay: { tenantIdParams?: string };
+  createSubscription: { tenantIdParams?: string };
+  bookingsHistory: { tenantIdParams?: string; userId?: string; };
   createTenant: undefined
 }
 export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;

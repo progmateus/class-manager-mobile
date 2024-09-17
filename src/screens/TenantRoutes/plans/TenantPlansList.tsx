@@ -3,6 +3,7 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
+import { useAuth } from "@hooks/useAuth"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { View, VStack } from "native-base"
@@ -12,13 +13,15 @@ import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
 }
 
 export function TenantPlansList() {
   const [plans, setPlans] = useState([])
   const route = useRoute()
-  const { tenantId } = route.params as RouteParamsProps;
+  const { tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
@@ -42,7 +45,7 @@ export function TenantPlansList() {
 
   const handleClickPlus = () => {
     navigation.navigate('createTenantPlan', {
-      tenantId
+      tenantIdParams: tenantId
     })
   }
   return (

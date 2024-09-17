@@ -2,20 +2,23 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { SubscriptionItem } from "@components/subscriptionItem"
 import { Viewcontainer } from "@components/ViewContainer"
+import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useRoute } from "@react-navigation/native"
 import { View, VStack } from "native-base"
 import { useCallback, useState } from "react"
 import { ListSubscriptionsService } from "src/services/subscriptionService"
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
 }
 
 export function SubscriptionsList() {
   const [subscriptions, setSubscriptions] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
   const route = useRoute()
-  const { tenantId } = route.params as RouteParamsProps;
+  const { tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
   useFocusEffect(useCallback(() => {
     setIsLoadig(true)

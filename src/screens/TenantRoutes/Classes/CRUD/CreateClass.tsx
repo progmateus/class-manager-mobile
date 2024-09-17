@@ -14,13 +14,14 @@ import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { CreateTenantPlanService } from "src/services/tenantPlansService";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { useAuth } from "@hooks/useAuth";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
 }
 
 const createClassSchema = z.object({
@@ -37,7 +38,9 @@ export function CreateClass() {
   const { sizes, colors } = useTheme();
   const route = useRoute()
 
-  const { tenantId } = route.params as RouteParamsProps;
+  const { tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
 
   const { control, handleSubmit, formState: { errors } } = useForm<CreateClassProps>({
     resolver: zodResolver(createClassSchema)
@@ -61,7 +64,7 @@ export function CreateClass() {
     CreateClassService(tenantId, data.name, data.description, data.businessHour).then(({ data }) => {
       fireSuccesToast('Turma criada')
       navigation.navigate('classProfile', {
-        tenantId,
+        tenantIdParams: tenantId,
         classId: data.data.id
       })
     }).catch(() => {

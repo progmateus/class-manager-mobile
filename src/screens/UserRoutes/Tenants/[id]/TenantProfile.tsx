@@ -15,11 +15,11 @@ import { useAuth } from "@hooks/useAuth";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { DeleteSubscriptionService } from "src/services/subscriptionService";
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
-import { ISubscriptionDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
+import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
 }
 
 interface ITenant {
@@ -45,17 +45,18 @@ export function TenantProfile() {
 
   const route = useRoute()
 
-  const { tenantId } = route.params as RouteParamsProps;
   const [tenant, setTenant] = useState<ITenant>({} as ITenant)
   const [isLoading, setIsLoading] = useState(false)
   const [isActionLoading, setIsActionLoading] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
-  const { user, updateUserProfile } = useAuth()
+  const { tenantIdParams } = route.params as RouteParamsProps;
+
+  const { user, userUpdate } = useAuth()
 
   const handleSubscribe = () => {
     navigation.navigate('createSubscription', {
-      tenantId
+      tenantIdParams
     })
   }
 
@@ -66,11 +67,11 @@ export function TenantProfile() {
     if (!user.subscriptions) {
       return
     }
-    const subscription = user.subscriptions.find((s: ISubscriptionDTO) => s.tenantId === tenantId && s.status === ESubscriptionStatus.ACTIVE)
+    const subscription = user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenantIdParams && s.status === ESubscriptionStatus.ACTIVE)
     if (!subscription) {
       return
     }
-    DeleteSubscriptionService(tenantId, subscription.id).then(() => {
+    DeleteSubscriptionService(tenantIdParams, subscription.id).then(() => {
       if (!user.subscriptions) {
         return
       }
@@ -84,7 +85,7 @@ export function TenantProfile() {
         ...user,
         subscriptions: subscriptions
       }
-      updateUserProfile(newUser)
+      userUpdate(newUser)
       fireSuccesToast('Inscrição cancelada com sucesso!')
     }).catch((err) => {
       console.log(err)
@@ -96,14 +97,14 @@ export function TenantProfile() {
 
   useEffect(() => {
     setIsLoading(true)
-    GetTenantProfileService(tenantId).then(({ data }) => {
+    GetTenantProfileService(tenantIdParams).then(({ data }) => {
       setTenant(data.data)
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [tenantId])
+  }, [tenantIdParams])
 
   return (
     <View flex={1}>
@@ -133,7 +134,7 @@ export function TenantProfile() {
                   <Heading mt={4} fontSize="xl">{tenant.name}</Heading>
                   <Text fontSize="sm">@{tenant.username}</Text>
                   {
-                    user?.subscriptions && user?.subscriptions?.length > 0 && user.subscriptions.find((s: ISubscriptionDTO) => s.tenantId === tenant.id && s.status === ESubscriptionStatus.ACTIVE) ?
+                    user?.subscriptions && user?.subscriptions?.length > 0 && user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenant.id && s.status === ESubscriptionStatus.ACTIVE) ?
                       (
                         <Button title="CANCELAR INSCRIÇÃO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleCancelSubscription} isLoading={isActionLoading} />
 

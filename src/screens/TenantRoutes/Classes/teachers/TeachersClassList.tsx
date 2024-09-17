@@ -3,6 +3,7 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { IUserClassDTO } from "@dtos/classes/IUserClassDTO"
+import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
@@ -13,7 +14,7 @@ import { TouchableOpacity, Vibration } from "react-native"
 import { ListTeachersByClassService, RemoveTeacherFromClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
-  tenantId: string;
+  tenantIdParams: string;
   classId: string;
 }
 
@@ -23,7 +24,9 @@ export function TeachersClassList() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedTeacherClass, setSelectedTeacherClass] = useState<any>(null)
   const route = useRoute()
-  const { tenantId, classId } = route.params as RouteParamsProps;
+  const { tenantIdParams, classId } = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
@@ -40,7 +43,7 @@ export function TeachersClassList() {
 
   const handleClickPlus = () => {
     navigation.navigate('addUserToClass', {
-      tenantId,
+      tenantIdParams: tenantId,
       classId,
       roleName: "teacher"
     })
