@@ -5,13 +5,13 @@ import { storageUserSave } from "@storage/storageUser";
 import { storageAuthTokenGet, storageAuthTokenSave } from "@storage/storageAuthToken";
 import { SignInService } from "src/services/authService";
 import { GetUserProfileService } from "src/services/usersService";
-import { IUserDTO } from "@dtos/users/IUserDTO";
+import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 
 
 export type AuthContextDataProps = {
-  user: IUserDTO;
+  user: IUserProfileDTO;
   singIn: (email: string, password: string) => Promise<void>;
-  updateUserProfile: (userUpdated: IUserDTO) => Promise<void>;
+  updateUserProfile: (userUpdated: IUserProfileDTO) => Promise<void>;
   signOut: () => Promise<void>;
   isLoadingUserStorageData: boolean;
 }
@@ -24,18 +24,18 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
-  const [user, setUser] = useState<IUserDTO>({} as IUserDTO);
+  const [user, setUser] = useState<IUserProfileDTO>({} as IUserProfileDTO);
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
 
   function tokenUpdate(token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
 
-  function userUpdate(userData: IUserDTO) {
+  function userUpdate(userData: IUserProfileDTO) {
     setUser(prevState => { return { ...prevState, ...userData } });
   }
 
-  async function storageUserAndTokenSave(userData: IUserDTO, token: string, refresh_token: string) {
+  async function storageUserAndTokenSave(userData: IUserProfileDTO, token: string, refresh_token: string) {
     try {
       setIsLoadingUserStorageData(true)
       await storageUserSave(userData);
@@ -83,11 +83,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function signOut() {
     setIsLoadingUserStorageData(true);
     await signOut()
-    setUser({} as IUserDTO);
+    setUser({} as IUserProfileDTO);
     setIsLoadingUserStorageData(false)
   }
 
-  async function updateUserProfile(userUpdated: IUserDTO) {
+  async function updateUserProfile(userUpdated: IUserProfileDTO) {
     try {
       setUser(userUpdated);
       await storageUserSave(userUpdated);
