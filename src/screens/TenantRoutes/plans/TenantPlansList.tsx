@@ -6,7 +6,7 @@ import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { View, VStack } from "native-base"
+import { Text, View, VStack } from "native-base"
 import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
 import { useEffect, useState } from "react"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
@@ -18,6 +18,7 @@ type RouteParamsProps = {
 
 export function TenantPlansList() {
   const [plans, setPlans] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const route = useRoute()
   const { tenantIdParams } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
@@ -26,12 +27,13 @@ export function TenantPlansList() {
 
 
   useEffect(() => {
+    setIsLoading(true)
     ListTenantPlansService(tenantId).then(({ data }) => {
       setPlans(data.data)
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
-
+      setIsLoading(false)
     })
   }, [tenantId])
 
@@ -52,33 +54,39 @@ export function TenantPlansList() {
     <View flex={1}>
       <PageHeader title="Planos" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
       <Viewcontainer>
-        <VStack space={8}>
-          {
+        {
+          isLoading ? (
+            <Loading />
+          ) : (
             plans && plans.length ? (
-              plans.map((plan: ITenantPlanDTO) => {
-                return (
-                  <GenericItem.Root key={plan.id}>
-                    <GenericItem.Icon icon={SimCard} />
-                    <GenericItem.Content title={plan.name} caption={plan.description} />
-                    <GenericItem.InfoSection>
-                      <GenericItem.InfoContainer >
-                        <Barbell size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text="7" />
-                      </GenericItem.InfoContainer>
-                      <GenericItem.InfoContainer >
-                        <Money size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text={priceFormatted(plan.price).replace('R$', '')} />
-                      </GenericItem.InfoContainer>
-                    </GenericItem.InfoSection>
-                  </GenericItem.Root>
-                )
-              })
+              <VStack space={8}>
+                {
+                  plans.map((plan: ITenantPlanDTO) => {
+                    return (
+                      <GenericItem.Root key={plan.id}>
+                        <GenericItem.Icon icon={SimCard} />
+                        <GenericItem.Content title={plan.name} caption={plan.description} />
+                        <GenericItem.InfoSection>
+                          <GenericItem.InfoContainer >
+                            <Barbell size={18} color="#6b7280" />
+                            <GenericItem.InfoValue text="7" />
+                          </GenericItem.InfoContainer>
+                          <GenericItem.InfoContainer >
+                            <Money size={18} color="#6b7280" />
+                            <GenericItem.InfoValue text={priceFormatted(plan.price).replace('R$', '')} />
+                          </GenericItem.InfoContainer>
+                        </GenericItem.InfoSection>
+                      </GenericItem.Root>
+                    )
+                  })
+                }
+              </VStack>
+            ) : (
+              <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
             )
-              : (
-                <Loading />
-              )
-          }
-        </VStack>
+          )
+        }
+
       </Viewcontainer>
     </View>
   )
