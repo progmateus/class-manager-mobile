@@ -73,7 +73,7 @@ export function CreateTenantPlan() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Criar aula" rightIcon={Check} rightAction={handleSubmit(handleCreateTenantPlan)} />
+      <PageHeader title="Criar plano" rightIcon={Check} rightAction={handleSubmit(handleCreateTenantPlan)} />
       <ScrollContainer>
         <VStack space={6} mt={2}>
 
