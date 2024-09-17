@@ -9,21 +9,13 @@ import { useAuth } from "@hooks/useAuth";
 import { useState } from "react";
 import { Loading } from "@components/Loading";
 import { Viewcontainer } from "@components/ViewContainer";
+import dayjs from "dayjs";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
 }
 
 export function ClassesDaysList() {
-  const dates = [
-    new Date(2024, 7, 9),
-    new Date(2024, 7, 10),
-    new Date(2024, 7, 11),
-    new Date(2024, 7, 12),
-    new Date(2024, 7, 13),
-    new Date(2024, 7, 14),
-    new Date(2024, 7, 15),
-  ];
 
   const students = [
     { avatar: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
@@ -102,6 +94,18 @@ export function ClassesDaysList() {
 
   ]
 
+
+
+  const weekDays = [
+    dayjs().day(0).toDate(),
+    dayjs().day(1).toDate(),
+    dayjs().day(2).toDate(),
+    dayjs().day(3).toDate(),
+    dayjs().day(5).toDate(),
+    dayjs().day(6).toDate(),
+    dayjs().day(7).toDate()
+  ]
+
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const route = useRoute()
@@ -154,8 +158,8 @@ export function ClassesDaysList() {
       <Viewcontainer>
         <View flex={1}>
           <HStack>
-            {dates && dates.length && (
-              dates.map((date, index) => {
+            {weekDays && weekDays.length && (
+              weekDays.map((date, index) => {
                 return (
                   <VStack key={index} flex={1} justifyContent="space-between" mt={4}>
                     <TouchableOpacity>
