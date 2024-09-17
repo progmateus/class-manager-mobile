@@ -4,18 +4,16 @@ import { Box, useTheme } from "native-base";
 import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
 import { TenantRoutes } from "./tenant.routes";
-import { useTenant } from "@hooks/useTenant";
 import { UserRoutes } from "./user.routes";
 
 export function Routes() {
   const { colors } = useTheme();
-  const { user, isLoadingUserStorageData } = useAuth();
-  const { tenant, isLoadingTenantData } = useTenant();
+  const { user, isLoadingData, tenant, authenticationType } = useAuth();
 
   const theme = DefaultTheme;
   theme.colors.background = colors.white
 
-  if (isLoadingUserStorageData || isLoadingTenantData) {
+  if (isLoadingData) {
     return <Loading />
   }
 
@@ -24,10 +22,10 @@ export function Routes() {
     <Box flex={1} bg="white">
       <NavigationContainer>
         {
-          tenant.id ? (
-            <TenantRoutes />
-          ) : user.id ? (
+          user.id && authenticationType === "user" ? (
             <UserRoutes />
+          ) : user.id && tenant.id && authenticationType === "tenant" ? (
+            <TenantRoutes />
           ) : (
             <GuestRoutes />
           )

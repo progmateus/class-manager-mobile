@@ -1,16 +1,16 @@
-import { IUserDTO } from "@dtos/IUserDTO";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { USER_STORAGE } from "./storageConfig";
+import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 
 
-export async function storageUserSave(user: IUserDTO) {
+export async function storageUserSave(user: IUserProfileDTO) {
   await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(user))
 }
 
 export async function storageUserGet() {
   const storage = await AsyncStorage.getItem(USER_STORAGE);
 
-  const user: IUserDTO = storage ? JSON.parse(storage) : {};
+  const user: IUserProfileDTO = storage ? JSON.parse(storage) : {};
 
   return user
 }

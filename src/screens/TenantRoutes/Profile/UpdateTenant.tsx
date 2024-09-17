@@ -10,7 +10,6 @@ import { useAuth } from "@hooks/useAuth";
 import { UpdateUserService } from "src/services/usersService";
 import { useState } from "react";
 import { fireSuccesToast } from "@utils/HelperNotifications";
-import { useTenant } from "@hooks/useTenant";
 import { TextArea } from "@components/form/TextArea";
 import { UpdateTenantSertvice } from "src/services/tenantsService";
 
@@ -29,7 +28,7 @@ type UpdateTenantProps = z.infer<typeof updateTenantSchema>
 
 export function UpdateTenant() {
   const [isLoading, setIsLoading] = useState(false)
-  const { tenant } = useTenant();
+  const { tenant } = useAuth();
 
   const { control, handleSubmit, formState: { errors }, setError } = useForm<UpdateTenantProps>({
     defaultValues: {

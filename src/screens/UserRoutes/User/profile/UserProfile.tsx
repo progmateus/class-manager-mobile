@@ -15,7 +15,6 @@ import { ArrowsLeftRight, Plus } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
-import { useTenant } from "@hooks/useTenant";
 
 
 export function Profile() {
@@ -23,7 +22,7 @@ export function Profile() {
   /* const [tenantsOwners, setTenantsOwners] = useState<IUsersRolesDTO[]>([]) */
   const navigation = useNavigation<UserNavigatorRoutesProps>();
   const { user } = useAuth()
-  const { authenticateTenant } = useTenant()
+  const { authenticateTenant } = useAuth()
 
 
   function getUserTenantOwners(): IUsersRolesDTO[] {

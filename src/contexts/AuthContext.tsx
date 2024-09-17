@@ -1,19 +1,28 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 import { api } from "src/services/api";
-import { storageUserSave } from "@storage/storageUser";
-import { storageAuthTokenGet, storageAuthTokenSave } from "@storage/storageAuthToken";
+import { storageUserRemove, storageUserSave } from "@storage/storageUser";
+import { storageAuthTokenGet, storageAuthTokenRemove, storageAuthTokenSave } from "@storage/storageAuthToken";
 import { SignInService } from "src/services/authService";
 import { GetUserProfileService } from "src/services/usersService";
 import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
+import { GetTenantProfileService } from "src/services/tenantsService";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
+import { storageAuthenticationTypeGet, storageAuthenticationTypeRemove, storageAuthenticationTypeSave } from "@storage/storageAuthenticationType";
+import { storageTenantGet, storageTenantRemove, storageTenantSave } from "@storage/storageTenant";
 
 
 export type AuthContextDataProps = {
   user: IUserProfileDTO;
+  tenant: ITenantDTO;
+  authenticationType: "user" | "tenant";
+  isLoadingData: boolean;
   singIn: (email: string, password: string) => Promise<void>;
-  updateUserProfile: (userUpdated: IUserProfileDTO) => Promise<void>;
+  userUpdate: (userUpdated: IUserProfileDTO) => Promise<void>;
+  tenantUpdate: (tenantData: ITenantDTO) => Promise<void>;
   signOut: () => Promise<void>;
-  isLoadingUserStorageData: boolean;
+  authenticateTenant: (tenantId: string) => Promise<void>;
+  signOutTenant: () => Promise<void>
 }
 
 type AuthContextProviderProps = {
@@ -25,36 +34,36 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const [user, setUser] = useState<IUserProfileDTO>({} as IUserProfileDTO);
-  const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
+  const [tenant, setTenant] = useState<ITenantDTO>({} as ITenantDTO);
+  const [authenticationType, setAuthenticationType] = useState<"user" | "tenant">("user");
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
   function tokenUpdate(token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
 
-  function userUpdate(userData: IUserProfileDTO) {
+  async function userUpdate(userData: IUserProfileDTO) {
     setUser(prevState => { return { ...prevState, ...userData } });
+    await storageUserSave(userData);
   }
 
-  async function storageUserAndTokenSave(userData: IUserProfileDTO, token: string, refresh_token: string) {
-    try {
-      setIsLoadingUserStorageData(true)
-      await storageUserSave(userData);
-      await storageAuthTokenSave({ token, refresh_token });
+  async function tenantUpdate(tenantData: ITenantDTO) {
+    setTenant(prevState => { return { ...prevState, ...tenantData } });
+    await storageTenantSave(tenantData);
+  }
 
-    } catch (error) {
-      throw error
-    } finally {
-      setIsLoadingUserStorageData(false);
-    }
+  async function authenticationTypeUpdate(type: "tenant" | "user") {
+    setAuthenticationType(type)
+    await storageAuthenticationTypeSave(type);
   }
 
   async function singIn(email: string, password: string) {
-
+    setIsLoadingData(true);
     SignInService(email, password)
       .then(async ({ data: { data } }) => {
         if (data.id) {
           const { user: userResponse, token, refresh_token } = data
-          await storageUserAndTokenSave(userResponse, token, refresh_token);
+          await storageAuthTokenSave({ token, refresh_token });
           tokenUpdate(token);
           userUpdate(userResponse);
         }
@@ -62,43 +71,40 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         console.log('err: ', err)
         return err
       }).finally(() => {
-        setIsLoadingUserStorageData(false);
+        setIsLoadingData(false);
       })
   }
 
+  async function signOut() {
+    setIsLoadingData(true);
+    userUpdate({} as IUserProfileDTO);
+    await Promise.all([
+      storageUserRemove(),
+      storageAuthTokenRemove(),
+      authenticationTypeUpdate("user")
+    ])
+    setIsLoadingData(false)
+  }
+
   async function getUserProfile() {
-    setIsLoadingUserStorageData(true);
     GetUserProfileService().then(({ data }) => {
       if (data.data) {
         userUpdate(data.data)
       }
-    }).catch((err) => {
-      console.log('err: ', err)
-    }).finally(() => {
-      setIsLoadingUserStorageData(false);
     })
   }
 
-
-  async function signOut() {
-    setIsLoadingUserStorageData(true);
-    await signOut()
-    setUser({} as IUserProfileDTO);
-    setIsLoadingUserStorageData(false)
-  }
-
-  async function updateUserProfile(userUpdated: IUserProfileDTO) {
-    try {
-      setUser(userUpdated);
-      await storageUserSave(userUpdated);
-    } catch (error) {
-      throw error;
-    }
+  async function getTenantProfile(tenantId: string) {
+    GetTenantProfileService(tenantId).then(({ data }) => {
+      if (data.data) {
+        tenantUpdate(data.data);
+      }
+    })
   }
 
   async function loadUserData() {
     try {
-      setIsLoadingUserStorageData(true);
+      setIsLoadingData(true);
       const { token } = await storageAuthTokenGet();
       if (token) {
         await getUserProfile()
@@ -106,13 +112,27 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     } catch (error) {
       throw error
     } finally {
-      setIsLoadingUserStorageData(false);
+      setIsLoadingData(false);
+    }
+  }
+
+  async function loadTenantData() {
+    try {
+      setIsLoadingData(true);
+      const tenant = await storageTenantGet();
+      if (tenant) {
+        await getTenantProfile(tenant.id)
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoadingData(false);
     }
   }
 
   async function loadTokenData() {
     try {
-      setIsLoadingUserStorageData(true);
+      setIsLoadingData(true);
 
       const { token } = await storageAuthTokenGet();
 
@@ -122,7 +142,45 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     } catch (error) {
       throw error
     } finally {
-      setIsLoadingUserStorageData(false);
+      setIsLoadingData(false);
+    }
+  }
+
+  async function authenticateTenant(tenantId: string) {
+    setIsLoadingData(true);
+    GetTenantProfileService(tenantId)
+      .then(async ({ data: { data } }) => {
+        if (data.id) {
+          tenantUpdate(data)
+          authenticationTypeUpdate("tenant")
+        }
+      }).catch((err) => {
+        console.log('err: ', err)
+        return err
+      }).finally(() => {
+        setIsLoadingData(false);
+      })
+  }
+
+  async function signOutTenant() {
+    setIsLoadingData(true);
+    authenticationTypeUpdate("user")
+    tenantUpdate({} as ITenantDTO);
+    await storageTenantRemove()
+    setIsLoadingData(false)
+  }
+
+  async function verifyAuthenticationType() {
+    try {
+      const authentication_type = await storageAuthenticationTypeGet();
+      loadUserData();
+
+      if (authentication_type && authentication_type == "tenant") {
+        loadTenantData()
+        authenticationTypeUpdate(authentication_type)
+      }
+    } catch (error) {
+      throw error
     }
   }
 
@@ -140,16 +198,21 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
 
   useEffect(() => {
-    loadUserData()
+    verifyAuthenticationType()
   }, [])
 
   return (
     <AuthContext.Provider value={{
       user,
+      tenant,
+      authenticationType,
+      isLoadingData,
       singIn,
-      updateUserProfile,
       signOut,
-      isLoadingUserStorageData
+      authenticateTenant,
+      signOutTenant,
+      tenantUpdate,
+      userUpdate
     }
     }>
       {children}
