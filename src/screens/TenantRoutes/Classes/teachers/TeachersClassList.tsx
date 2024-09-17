@@ -7,7 +7,7 @@ import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
+import { Actionsheet, Box, FlatList, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useEffect, useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
@@ -71,47 +71,22 @@ export function TeachersClassList() {
     <View flex={1}>
       <PageHeader title="Gerenciar professores" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
       <Viewcontainer>
-
-        {
-          isLoading ? (
-            <Loading />
-          )
-            : (
-              <VStack space={8}>
-                {
-                  teachersClass && teachersClass.length ? (
-                    teachersClass.map((teacher: any) => {
-                      return (
-                        <TouchableOpacity key={teacher.user.id} onLongPress={() => handleSelectTeacher(teacher)}>
-                          <GenericItem.Root>
-                            <GenericItem.Avatar url={teacher.user.avatar} alt={teacher.user.avatar} />
-                            <GenericItem.Content title={`${teacher.user.name.firstName} ${teacher.user.name.lastName}`} caption="@username" />
-                          </GenericItem.Root>
-                        </TouchableOpacity>
-                      )
-                    })
-                  )
-                    : (
-                      <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
-                    )
-                }
-
-                <Actionsheet isOpen={isOpen} size="full">
-                  <Actionsheet.Content>
-                    <Box w="100%" h={60} px={4} justifyContent="center">
-                      <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                        {`${selectedTeacherClass?.user?.name.firstName} ${selectedTeacherClass?.user?.name.lastName}`}
-                      </Heading>
-                    </Box>
-                    <Actionsheet.Item onPress={handleRemove} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
-                      Remover
-                    </Actionsheet.Item>
-                  </Actionsheet.Content>
-                </Actionsheet>
-              </VStack>
-            )
-        }
-
+        <FlatList
+          data={teachersClass}
+          pb={20}
+          keyExtractor={teacherClass => teacherClass.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity key={item.user.id} onLongPress={() => handleSelectTeacher(item)}>
+              <GenericItem.Root>
+                <GenericItem.Avatar url={item.user.avatar} alt={item.user.avatar} />
+                <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption="@username" />
+              </GenericItem.Root>
+            </TouchableOpacity>
+          )}
+          ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+          ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+        >
+        </FlatList>
       </Viewcontainer>
     </View>
   )

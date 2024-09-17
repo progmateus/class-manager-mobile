@@ -2,8 +2,8 @@ import { Image } from "native-base";
 import { UserCircle } from "phosphor-react-native";
 
 type IProps = {
-  url: string;
-  alt: string;
+  url?: string;
+  alt?: string;
 }
 export function GenericItemAvatar({ url, alt = "Imagem" }: IProps) {
   return (

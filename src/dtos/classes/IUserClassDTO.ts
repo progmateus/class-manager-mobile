@@ -7,7 +7,7 @@ interface IUserClassDTO {
   classId: string;
   userId?: string;
   teacherId?: string;
-  user?: IUserPreviewDTO;
+  user: IUserPreviewDTO;
   class: IClassDTO;
 }
 
