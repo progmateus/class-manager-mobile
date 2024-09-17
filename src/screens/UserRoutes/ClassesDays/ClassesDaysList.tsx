@@ -17,6 +17,15 @@ type RouteParamsProps = {
 
 export function ClassesDaysList() {
 
+  const navigation = useNavigation<UserNavigatorRoutesProps>();
+
+  const route = useRoute()
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedWeekDay, setSelectedWeekDay] = useState(dayjs().toDate())
+  const params = route.params as RouteParamsProps;
+  const { tenant } = useAuth()
+  const tenantId = tenant?.id || params?.tenantIdParams || null
+
   const students = [
     { avatar: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
     { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
@@ -95,7 +104,6 @@ export function ClassesDaysList() {
   ]
 
 
-
   const weekDays = [
     dayjs().day(0).toDate(),
     dayjs().day(1).toDate(),
@@ -105,14 +113,6 @@ export function ClassesDaysList() {
     dayjs().day(6).toDate(),
     dayjs().day(7).toDate()
   ]
-
-  const navigation = useNavigation<UserNavigatorRoutesProps>();
-
-  const route = useRoute()
-  const [isLoading, setIsLoading] = useState(false)
-  const params = route.params as RouteParamsProps;
-  const { tenant } = useAuth()
-  const tenantId = tenant?.id || params?.tenantIdParams || null
 
   function handleClickClassDay() {
     if (!tenantId) return
@@ -162,7 +162,7 @@ export function ClassesDaysList() {
               weekDays.map((date, index) => {
                 return (
                   <VStack key={index} flex={1} justifyContent="space-between" mt={4}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setSelectedWeekDay(date)}>
                       <Center>
                         <Text textTransform="capitalize">
                           {getWeekDay(date).replace('.', '')}
@@ -170,7 +170,9 @@ export function ClassesDaysList() {
                         <Text fontFamily="heading" mt={2} fontSize="xl">
                           {getDay(date)}
                         </Text>
-                        <View mt={2} w="1/3" borderBottomColor="coolGray.300" borderBottomWidth={2}></View>
+                        <View mt={2} w="1/3" borderBottomColor={
+                          dayjs(selectedWeekDay).format('DD/MM/YYYY') === dayjs(date).format('DD/MM/YYYY') ? "brand.500" : "coolGray.300"
+                        } borderBottomWidth={2}></View>
                       </Center>
                     </TouchableOpacity>
                   </VStack>
