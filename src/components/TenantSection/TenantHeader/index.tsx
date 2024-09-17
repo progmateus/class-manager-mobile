@@ -2,6 +2,7 @@ import { Button, FlatList, HStack, Heading, Image, Text, VStack, useTheme } from
 import { SignOut } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
+import { useAuth } from "@hooks/useAuth";
 
 
 type Props = {
@@ -11,10 +12,11 @@ type Props = {
   categories: string[];
 }
 
-export function HomeHeader() {
+export function TenantHeader() {
   const avatar = "https://s2-ge.glbimg.com/uj06VOFGUq1wczFCBKVMFxpZaD8=/0x0:6153x4393/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2023/7/4/qg6uKLSNmF1GfrmPxTGg/42.jpg"
   const name = "John Doe"
   const { colors } = useTheme();
+  const { tenant, signOutTenant } = useAuth()
   const statusBarHeight = Constants.statusBarHeight;
 
   return (
@@ -26,15 +28,15 @@ export function HomeHeader() {
         mr={2}
         alt="teste"
         source={{
-          uri: avatar,
+          uri: tenant.avatar,
         }}
-        defaultSource={{ uri: avatar }}
+        defaultSource={{ uri: tenant.avatar }}
       />
       <HStack flex={1}>
         <Text>Olá,</Text>
-        <Heading fontFamily="heading" fontSize="md"> {name}</Heading>
+        <Heading fontFamily="heading" fontSize="md"> {tenant.name}</Heading>
       </HStack>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={signOutTenant}>
         <SignOut color={colors.coolGray['500']} />
       </TouchableOpacity>
     </HStack>
