@@ -155,7 +155,7 @@ export function TenantsList() {
 
   function handleSelectTenant(tenantId: string) {
     navigation.navigate('tenantProfile', {
-      tenantId
+      tenantIdParams: tenantId
     });
   }
 
