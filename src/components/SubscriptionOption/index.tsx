@@ -1,12 +1,8 @@
+import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { Image, Text, VStack } from "native-base";
 
 interface IProps {
-  subscription: {
-    tenant: {
-      avatar: string;
-      name: string
-    }
-  }
+  subscription: ISubscriptionPreviewDTO;
 }
 
 export function SubscriptionOption({ subscription }: IProps) {
