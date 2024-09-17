@@ -1,11 +1,14 @@
 import ClockSVG from "@assets/clock-outline.svg"
-import { Center, HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
+import { Center, FlatList, HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { PageHeader } from "@components/PageHeader";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { Plus } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
+import { useState } from "react";
+import { Loading } from "@components/Loading";
+import { Viewcontainer } from "@components/ViewContainer";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -88,7 +91,7 @@ export function ClassesDaysList() {
     { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
   ]
 
-  const classes = [
+  const classDays = [
     { id: "1", date: new Date(2024, 7, 9), tenantName: "Vôlei na ilha", className: "Iniciantes", local: "praia da bica, 255", students: students },
     { id: "2", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Dupla", local: "praia da bica, 255", students: students },
     { id: "3", date: new Date(2024, 7, 9), tenantName: "B4 Futvôlei", className: "Iniciantes", local: "praia da bica, 255", students: students },
@@ -102,9 +105,10 @@ export function ClassesDaysList() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const route = useRoute()
-  const { tenantIdParams } = route.params as RouteParamsProps;
+  const [isLoading, setIsLoading] = useState(false)
+  const params = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
+  const tenantId = tenant?.id || params?.tenantIdParams || null
 
   function handleClickClassDay() {
     if (!tenantId) return
@@ -137,6 +141,8 @@ export function ClassesDaysList() {
   };
 
   const createClassDay = () => {
+    if (!tenantId) return
+
     navigation.navigate('createClassDay', {
       tenantIdParams: tenantId
     })
@@ -145,8 +151,8 @@ export function ClassesDaysList() {
   return (
     <View flex={1}>
       <PageHeader title="Aulas" rightIcon={tenantId ? Plus : null} rightIconColor="brand.500" rightAction={() => createClassDay()} />
-      <ScrollView flex={1}>
-        <View pb={20}>
+      <Viewcontainer>
+        <View flex={1}>
           <HStack>
             {dates && dates.length && (
               dates.map((date, index) => {
@@ -169,66 +175,71 @@ export function ClassesDaysList() {
             )}
           </HStack>
 
-          <VStack flex={1} px={4} space={4} mt={12}>
+          <View flexGrow={1} px={4} mt={12}>
             {
-              classes && classes.length && (
-                classes.map((classItem) => {
-                  return (
-                    <TouchableOpacity key={classItem.id} onPress={handleClickClassDay}>
-                      <HStack p={4} space={4} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
-                        <VStack>
-                          <Center>
-                            <ClockSVG />
-                            <Text> {getHours(classItem.date)}</Text>
-                          </Center>
-                        </VStack>
-                        <VStack space={0.5} flex={1}>
-                          <Heading fontSize="sm">{classItem.tenantName}</Heading>
-                          <Text fontSize="xs">{classItem.className}</Text>
-                          <Text fontSize="xs">{classItem.local}</Text>
-                        </VStack>
-
-                        <HStack>
-                          {
-                            classItem.students && classItem.students.length > 0 && (
-                              classItem.students.map((student, index) => {
-                                return (
-                                  index < 3 && (
-                                    <Image
-                                      key={index}
-                                      rounded="md"
-                                      ml={-5}
-                                      w={9}
-                                      h={9}
-                                      alt="image profile"
-                                      source={{
-                                        uri: student.avatar,
-                                      }}
-                                      defaultSource={{ uri: student.avatar }}
-                                    />
+              isLoading ? (<Loading />)
+                : (
+                  <FlatList
+                    data={classDays}
+                    flex={1}
+                    pb={20}
+                    keyExtractor={classDay => classDay.id}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity key={item.id} onPress={handleClickClassDay}>
+                        <HStack p={4} space={4} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
+                          <VStack>
+                            <Center>
+                              <ClockSVG />
+                              <Text> {getHours(item.date)}</Text>
+                            </Center>
+                          </VStack>
+                          <VStack space={0.5} flex={1}>
+                            <Heading fontSize="sm">{item.tenantName}</Heading>
+                            <Text fontSize="xs">{item.className}</Text>
+                            <Text fontSize="xs">{item.local}</Text>
+                          </VStack>
+                          <HStack>
+                            {
+                              item.students && item.students.length > 0 && (
+                                item.students.map((student, index) => {
+                                  return (
+                                    index < 3 && (
+                                      <Image
+                                        key={index}
+                                        rounded="md"
+                                        ml={-5}
+                                        w={9}
+                                        h={9}
+                                        alt="image profile"
+                                        source={{
+                                          uri: student.avatar,
+                                        }}
+                                        defaultSource={{ uri: student.avatar }}
+                                      />
+                                    )
                                   )
-                                )
-                              })
-                            )
-                          }
-
-                          {
-                            classItem.students && classItem.students.length > 3 && (
-                              <View w={9} h={9} backgroundColor="brand.600" rounded="md" ml={-5} alignItems="center" justifyContent="center">
-                                <Text color="coolGray.100" fontSize="xs"> +{classItem.students.length - 3}</Text>
-                              </View>
-                            )
-                          }
+                                })
+                              )
+                            }
+                            {
+                              item.students && item.students.length > 3 && (
+                                <View w={9} h={9} backgroundColor="brand.600" rounded="md" ml={-5} alignItems="center" justifyContent="center">
+                                  <Text color="coolGray.100" fontSize="xs"> +{item.students.length - 3}</Text>
+                                </View>
+                              )
+                            }
+                          </HStack>
                         </HStack>
-
-                      </HStack>
-                    </TouchableOpacity>
-                  )
-                })
-              )}
-          </VStack>
+                      </TouchableOpacity>
+                    )}
+                    ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+                    ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                  ></FlatList>
+                )
+            }
+          </View>
         </View>
-      </ScrollView>
+      </Viewcontainer>
     </View>
   );
 }

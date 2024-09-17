@@ -123,6 +123,7 @@ export function BookingsHistory() {
                   </GenericItem.Root>
                 )}
                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+                ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
               ></FlatList>
             )
         }

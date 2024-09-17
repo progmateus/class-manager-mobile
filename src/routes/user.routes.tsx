@@ -25,7 +25,7 @@ type UserRoutes = {
   profile: undefined;
   bills: undefined;
   tenantProfile: { tenantIdParams: string };
-  classesDays: undefined;
+  classesDays: { tenantIdParams?: string };
   classDayInfo: { tenantIdParams: string, classDayId: string };
   updateClassDayStatus: { tenantIdParams: string, classDayId: string };
   updateUser: undefined;

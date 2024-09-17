@@ -1,7 +1,7 @@
 import { BillItem } from "@components/BillItem";
 import { PageHeader } from "@components/PageHeader";
 import { Viewcontainer } from "@components/ViewContainer";
-import { FlatList, View } from "native-base";
+import { FlatList, Text, View } from "native-base";
 
 export function Bills() {
   const bills = [
@@ -23,6 +23,7 @@ export function Bills() {
             <BillItem bill={item} />
           )}
           ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+          ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
         >
         </FlatList>
       </Viewcontainer>
