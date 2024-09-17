@@ -4,7 +4,7 @@ import { SubscriptionItem } from "@components/subscriptionItem"
 import { Viewcontainer } from "@components/ViewContainer"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useRoute } from "@react-navigation/native"
-import { View, VStack } from "native-base"
+import { Text, View, VStack } from "native-base"
 import { useCallback, useState } from "react"
 import { ListSubscriptionsService } from "src/services/subscriptionService"
 
@@ -38,7 +38,7 @@ export function SubscriptionsList() {
         {
           isLoading ? (<Loading />)
             : (
-              subscriptions && subscriptions.length > 0 && (
+              subscriptions && subscriptions.length > 0 ? (
                 <VStack space={4}>
                   {
                     subscriptions.map((subscription, index) => {
@@ -49,6 +49,8 @@ export function SubscriptionsList() {
                   }
                 </VStack>
 
+              ) : (
+                <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
               )
             )
         }
