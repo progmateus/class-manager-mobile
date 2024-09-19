@@ -31,6 +31,7 @@ export function ClassesDaysList() {
 
   const { data: classesDays, isLoading, refetch } = useQuery<ICLassDayDTO[]>({
     queryKey: ['get-class-days', String(selectedWeekDay)],
+    placeholderData: keepPreviousData,
     queryFn: () => {
       return ListClassDaysService(selectedWeekDay).then(({ data }) => {
         /* setClassesDays(data.data) */
