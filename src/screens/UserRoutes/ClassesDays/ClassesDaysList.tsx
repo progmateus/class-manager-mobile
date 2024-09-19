@@ -2,14 +2,17 @@ import ClockSVG from "@assets/clock-outline.svg"
 import { Center, FlatList, HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { PageHeader } from "@components/PageHeader";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { Plus } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Loading } from "@components/Loading";
 import { Viewcontainer } from "@components/ViewContainer";
 import dayjs from "dayjs";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { ListClassDaysService } from "src/services/classDaysService";
+import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -20,88 +23,25 @@ export function ClassesDaysList() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const route = useRoute()
-  const [isLoading, setIsLoading] = useState(false)
+  const [classesDays, setClassesDays] = useState<ICLassDayDTO[]>([])
   const [selectedWeekDay, setSelectedWeekDay] = useState(dayjs().toDate())
   const params = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id || params?.tenantIdParams || null
 
-  const students = [
-    { avatar: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/jovem-bonito-com-bracos-cruzados-em-fundo-branco_23-2148222620.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/bom-negocio-logo-depois-da-esquina-mulher-linda-afro-americana-confiante-agradavel-de-aparencia-amigavel-com-corte-de-cabelo-afro-pedindo-check-out-visite-a-pagina-da-loja-apontando-o-dedo-para-a-esquerda-e-sorrindo-olhando-a-camera_1258-85037.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/muito-bom-modelo-feminino-jovem-sorridente-com-maquiagem-natural-mostrando-sinal-de-ok-e-diga-sim-confirme-que-o-produto-esta-bem-aprovar-e-gostar-de-algo-em-pe-no-fundo-branco_176420-53322.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-premium/eu-amo-o-que-faco-retrato-recortado-de-uma-jovem-empresaria-atraente-trabalhando-em-seu-laptop-enquanto-esta-sentada-no-escritorio_590464-62606.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-    { avatar: 'https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' },
-  ]
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['get-class-days', String(selectedWeekDay)],
+    queryFn: () => {
+      ListClassDaysService(selectedWeekDay).then(({ data }) => {
+        setClassesDays(data.data)
+        return data.data
+      })
+    }
+  })
 
-  const classDays = [
-    { id: "1", date: new Date(2024, 7, 9), tenantName: "Vôlei na ilha", className: "Iniciantes", local: "praia da bica, 255", students: students },
-    { id: "2", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Dupla", local: "praia da bica, 255", students: students },
-    { id: "3", date: new Date(2024, 7, 9), tenantName: "B4 Futvôlei", className: "Iniciantes", local: "praia da bica, 255", students: students },
-    { id: "4", date: new Date(2024, 7, 9), tenantName: "Futvôlei AR", className: "Dupla", local: "praia da bica, 255", students: students },
-    { id: "5", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Intermediarios", local: "praia da bica, 255", students: students },
-    { id: "6", date: new Date(2024, 7, 9), tenantName: "B4 Futvôlei", className: "Avançados", local: "praia da bica, 255", students: students },
-    { id: "7", date: new Date(2024, 7, 9), tenantName: "Bica Beach", className: "Avançados", local: "praia da bica, 255", students: students }
-
-  ]
+  useFocusEffect(useCallback(() => {
+    refetch()
+  }, [selectedWeekDay]))
 
 
   const weekDays = [
@@ -109,6 +49,7 @@ export function ClassesDaysList() {
     dayjs().day(1).toDate(),
     dayjs().day(2).toDate(),
     dayjs().day(3).toDate(),
+    dayjs().day(4).toDate(),
     dayjs().day(5).toDate(),
     dayjs().day(6).toDate(),
     dayjs().day(7).toDate()
@@ -126,14 +67,14 @@ export function ClassesDaysList() {
     return new Intl.DateTimeFormat('pt-BR', {
       day: 'numeric',
       timeZone: 'America/Sao_Paulo',
-    }).format(date)
+    }).format(new Date(date))
   };
 
   const getWeekDay = (date: Date) => {
     return new Intl.DateTimeFormat('pt-BR', {
       weekday: 'short',
       timeZone: 'America/Sao_Paulo',
-    }).format(date)
+    }).format(new Date(date))
   };
 
   const getHours = (date: Date) => {
@@ -141,7 +82,7 @@ export function ClassesDaysList() {
       hour: '2-digit',
       minute: '2-digit',
       timeZone: 'America/Sao_Paulo',
-    }).format(date)
+    }).format(new Date(date))
   };
 
   const createClassDay = () => {
@@ -157,11 +98,11 @@ export function ClassesDaysList() {
       <PageHeader title="Aulas" rightIcon={tenantId ? Plus : null} rightIconColor="brand.500" rightAction={() => createClassDay()} />
       <Viewcontainer>
         <View flex={1}>
-          <HStack>
+          <HStack mt={4}>
             {weekDays && weekDays.length && (
               weekDays.map((date, index) => {
                 return (
-                  <VStack key={index} flex={1} justifyContent="space-between" mt={4}>
+                  <VStack key={index} flex={1} justifyContent="space-between">
                     <TouchableOpacity onPress={() => setSelectedWeekDay(date)}>
                       <Center>
                         <Text textTransform="capitalize">
@@ -181,12 +122,12 @@ export function ClassesDaysList() {
             )}
           </HStack>
 
-          <View flexGrow={1} px={4} mt={12}>
+          <View flexGrow={1} px={2} mt={12}>
             {
               isLoading ? (<Loading />)
                 : (
                   <FlatList
-                    data={classDays}
+                    data={classesDays}
                     flex={1}
                     pb={20}
                     keyExtractor={classDay => classDay.id}
@@ -200,27 +141,27 @@ export function ClassesDaysList() {
                             </Center>
                           </VStack>
                           <VStack space={0.5} flex={1}>
-                            <Heading fontSize="sm">{item.tenantName}</Heading>
-                            <Text fontSize="xs">{item.className}</Text>
-                            <Text fontSize="xs">{item.local}</Text>
+                            <Heading fontSize="sm">{item.class?.tenant?.name}</Heading>
+                            <Text fontSize="xs">{item.class.name}</Text>
+                            <Text fontSize="xs">Não informado</Text>
                           </VStack>
                           <HStack>
                             {
-                              item.students && item.students.length > 0 && (
-                                item.students.map((student, index) => {
+                              item.bookings && item.bookings.length > 0 && (
+                                item.bookings.map((booking, index) => {
                                   return (
                                     index < 3 && (
                                       <Image
                                         key={index}
                                         rounded="md"
                                         ml={-5}
-                                        w={9}
+                                        w={14}
                                         h={9}
                                         alt="image profile"
                                         source={{
-                                          uri: student.avatar,
+                                          uri: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph',
                                         }}
-                                        defaultSource={{ uri: student.avatar }}
+                                        defaultSource={{ uri: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' }}
                                       />
                                     )
                                   )
@@ -228,9 +169,9 @@ export function ClassesDaysList() {
                               )
                             }
                             {
-                              item.students && item.students.length > 3 && (
+                              item.bookings && item.bookings.length > 3 && (
                                 <View w={9} h={9} backgroundColor="brand.600" rounded="md" ml={-5} alignItems="center" justifyContent="center">
-                                  <Text color="coolGray.100" fontSize="xs"> +{item.students.length - 3}</Text>
+                                  <Text color="coolGray.100" fontSize="xs"> +{item.bookings.length - 3}</Text>
                                 </View>
                               )
                             }

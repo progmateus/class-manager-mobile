@@ -7,18 +7,21 @@ import { THEME } from 'src/theme';
 import { Routes } from '@routes/index';
 import { AuthContextProvider } from 'src/contexts/AuthContext';
 import { TenantContextProvider } from 'src/contexts/TenantContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+
+const queryClient = new QueryClient()
 
 export default function App() {
   const [fotnsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold })
   return (
     <NativeBaseProvider theme={THEME}>
       <StatusBar backgroundColor='transparent' translucent />
-      <AuthContextProvider>
-        <TenantContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContextProvider>
           {fotnsLoaded ? <Routes /> : <Loading />}
-        </TenantContextProvider>
-      </AuthContextProvider>
+        </AuthContextProvider>
+      </QueryClientProvider>
     </NativeBaseProvider >
   );
 }
