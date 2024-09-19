@@ -23,17 +23,17 @@ export function ClassesDaysList() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const route = useRoute()
-  const [classesDays, setClassesDays] = useState<ICLassDayDTO[]>([])
+  /* const [classesDays, setClassesDays] = useState<ICLassDayDTO[]>([]) */
   const [selectedWeekDay, setSelectedWeekDay] = useState(dayjs().toDate())
   const params = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id || params?.tenantIdParams || null
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data: classesDays, isLoading, refetch } = useQuery<ICLassDayDTO[]>({
     queryKey: ['get-class-days', String(selectedWeekDay)],
     queryFn: () => {
-      ListClassDaysService(selectedWeekDay).then(({ data }) => {
-        setClassesDays(data.data)
+      return ListClassDaysService(selectedWeekDay).then(({ data }) => {
+        /* setClassesDays(data.data) */
         return data.data
       })
     }
@@ -134,16 +134,14 @@ export function ClassesDaysList() {
                     renderItem={({ item }) => (
                       <TouchableOpacity key={item.id} onPress={handleClickClassDay}>
                         <HStack p={4} space={4} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
-                          <VStack>
-                            <Center>
-                              <ClockSVG />
-                              <Text> {getHours(item.date)}</Text>
-                            </Center>
+                          <VStack space={2} alignItems="center" justifyContent="center">
+                            <ClockSVG />
+                            <Text> {getHours(item.date)}</Text>
                           </VStack>
                           <VStack space={0.5} flex={1}>
                             <Heading fontSize="sm">{item.class?.tenant?.name}</Heading>
                             <Text fontSize="xs">{item.class.name}</Text>
-                            <Text fontSize="xs">Não informado</Text>
+                            <Text fontSize="xs" color="coolGray.500">Não informado</Text>
                           </VStack>
                           <HStack>
                             {
