@@ -43,7 +43,6 @@ export function TeachersClassList() {
 
   const handleClickPlus = () => {
     navigation.navigate('addUserToClass', {
-      tenantIdParams: tenantId,
       classId,
       roleName: "teacher"
     })

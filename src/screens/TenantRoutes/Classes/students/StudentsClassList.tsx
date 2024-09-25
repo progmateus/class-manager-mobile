@@ -42,7 +42,6 @@ export function StudentsClassList() {
 
   const handleClickPlus = () => {
     navigation.navigate('addUserToClass', {
-      tenantIdParams: tenantId,
       classId,
       roleName: "student"
     })

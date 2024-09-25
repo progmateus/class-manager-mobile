@@ -26,9 +26,7 @@ export function ClassesList() {
 
 
   const handleClickCreate = () => {
-    navigation.navigate('createClass', {
-      tenantIdParams: tenantId
-    })
+    navigation.navigate('createClass')
   }
 
   const handleSelectClass = (classId: string) => {

@@ -34,14 +34,14 @@ export type TenantRoutes = {
   tenantProfile: { tenantIdParams: string };
   dashboard: undefined;
   classHoursList: undefined;
-  tenantPlansList: { tenantIdParams: string; }
-  createTenantPlan: { tenantIdParams: string; }
-  createClass: { tenantIdParams: string; }
+  tenantPlansList: undefined;
+  createTenantPlan: undefined;
+  createClass: undefined;
   listStudentsClass: { tenantIdParams: string; classId: string; }
   listTeachersClass: { tenantIdParams: string; classId: string; }
-  addUserToClass: { tenantIdParams: string; classId: string; roleName: string; }
-  usersRolesList: { tenantIdParams: string; roleName: string; }
-  createUserRole: { tenantIdParams: string }
+  addUserToClass: { classId: string; roleName: string; }
+  usersRolesList: { roleName: string; }
+  createUserRole: undefined;
   updateStudentclass: { tenantIdParams: string; userId: string; classIdExists: string; subscriptionId?: string; }
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }

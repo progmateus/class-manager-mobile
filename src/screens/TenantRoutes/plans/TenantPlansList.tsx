@@ -12,17 +12,12 @@ import { useEffect, useState } from "react"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
-type RouteParamsProps = {
-  tenantIdParams: string;
-}
-
 export function TenantPlansList() {
   const [plans, setPlans] = useState<ITenantPlanDTO[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const route = useRoute()
-  const { tenantIdParams } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
+  const tenantId = tenant?.id
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
@@ -46,9 +41,7 @@ export function TenantPlansList() {
   }
 
   const handleClickPlus = () => {
-    navigation.navigate('createTenantPlan', {
-      tenantIdParams: tenantId
-    })
+    navigation.navigate('createTenantPlan')
   }
   return (
     <View flex={1}>
