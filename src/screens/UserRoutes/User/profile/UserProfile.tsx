@@ -96,9 +96,7 @@ export function Profile() {
             w={16}
             h={16}
             alt="user image"
-            source={{
-              uri: user.avatar,
-            }}
+            src={user.avatar}
           />
           <VStack alignItems="left" justifyContent="center">
             <Heading fontFamily="heading"> {user.firstName} {user.lastName} </Heading>
@@ -148,7 +146,7 @@ export function Profile() {
                         <Avatar
                           size="md"
                           bg="green.500"
-                          url="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                         />
                         <Text fontSize="16" color="gray.700">
                           {ur.tenant?.name}

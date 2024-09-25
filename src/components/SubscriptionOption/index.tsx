@@ -14,9 +14,7 @@ export function SubscriptionOption({ subscription }: IProps) {
         w={12}
         h={12}
         alt="user image"
-        source={{
-          uri: subscription.tenant?.avatar,
-        }}
+        src={subscription.tenant?.avatar}
       />
       <Text fontSize="xs"> {subscription.tenant?.name}</Text>
     </VStack>

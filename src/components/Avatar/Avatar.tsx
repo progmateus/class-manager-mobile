@@ -5,14 +5,15 @@ import { Image } from "react-native";
 
 
 type IProps = IAvatarProps & {
-  url?: string;
+  src?: string;
   alt?: string;
   type?: "user" | "tenant"
 }
 
 const DEFAULT_IMAGE = Image.resolveAssetSource(BlankProfileImage).uri;
 
-export function Avatar({ url, alt = "Imagem", type = "user", ...rest }: IProps) {
+export function Avatar({ src, alt = "Imagem", type = "user", ...rest }: IProps) {
+  console.log(src)
   return (
     <NativeBaseAvatar
       rounded="full"
@@ -22,7 +23,7 @@ export function Avatar({ url, alt = "Imagem", type = "user", ...rest }: IProps) 
       bgColor="brand.500"
       {...rest}
       source={{
-        uri: url ? url : DEFAULT_IMAGE,
+        uri: src ? src : DEFAULT_IMAGE,
       }}
     />
   )

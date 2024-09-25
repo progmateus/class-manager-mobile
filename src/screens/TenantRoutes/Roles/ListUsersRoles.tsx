@@ -184,9 +184,7 @@ export function UsersRoloesList() {
                           w={24}
                           h={24}
                           alt="Foto de perfil"
-                          source={{
-                            uri: "https://img.freepik.com/fotos-gratis/garoto-confiante-posando-contra-a-parede-branca_176420-32936.jpg?t=st=1725155362~exp=1725158962~hmac=9ea94ecc7a74f7955101241059030bb1c738b5484fc5d5ee15bc72ee74841784&w=1380",
-                          }}
+                          src={"https://img.freepik.com/fotos-gratis/garoto-confiante-posando-contra-a-parede-branca_176420-32936.jpg?t=st=1725155362~exp=1725158962~hmac=9ea94ecc7a74f7955101241059030bb1c738b5484fc5d5ee15bc72ee74841784&w=1380"}
                         />
 
                         <VStack alignItems="center" justifyContent="center">

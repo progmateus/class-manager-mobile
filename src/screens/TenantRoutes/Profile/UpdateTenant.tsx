@@ -89,9 +89,7 @@ export function UpdateTenant() {
               h={24}
               alt="Foto de perfil"
               mr={4}
-              source={{
-                uri: tenant.avatar,
-              }}
+              src={tenant.avatar}
             />
             < Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600" > Alterar foto de perfil </Text>
           </Center>

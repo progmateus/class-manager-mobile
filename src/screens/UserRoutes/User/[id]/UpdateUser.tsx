@@ -62,9 +62,7 @@ export function UpdateUser() {
               h={24}
               alt="Foto de perfil"
               mr={4}
-              source={{
-                uri: user.avatar,
-              }}
+              src={user.avatar}
             />
             <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
           </Center>

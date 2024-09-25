@@ -110,9 +110,7 @@ export function SubscriptionProfile() {
                           w={24}
                           h={24}
                           alt="Foto de perfil"
-                          source={{
-                            uri: subscription.user.avatar,
-                          }}
+                          src={subscription.user.avatar}
                         />
                         <Text fontSize="sm" mt={2} color="coolGray.400">{subscription.user.username}</Text>
                       </Center>

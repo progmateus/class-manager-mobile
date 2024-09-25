@@ -21,9 +21,7 @@ export function TenantItem({ image = "https://img.freepik.com/vetores-gratis/ilu
           h={12}
           alt="Imagem de perfil"
           mr={4}
-          source={{
-            uri: image,
-          }}
+          src={image}
         />
         <VStack flex={1}>
           <Heading numberOfLines={1} fontFamily="heading" fontSize="sm">{name} </Heading>

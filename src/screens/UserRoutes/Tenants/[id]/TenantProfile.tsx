@@ -17,6 +17,7 @@ import { DeleteSubscriptionService } from "src/services/subscriptionService";
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { Avatar } from "@components/Avatar/Avatar";
+import { useTenant } from "@hooks/useTenant";
 
 
 type RouteParamsProps = {
@@ -46,14 +47,27 @@ export function TenantProfile() {
 
   const route = useRoute()
 
-  const [tenant, setTenant] = useState<ITenant>({} as ITenant)
+  const [tenantInfo, setTenantInfo] = useState<ITenant>({} as ITenant)
   const [isLoading, setIsLoading] = useState(false)
   const [isActionLoading, setIsActionLoading] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const { tenantIdParams } = route.params as RouteParamsProps;
+  const { tenant } = useAuth();
+  const tenantId = tenant?.id ?? tenantIdParams;
 
   const { user, userUpdate } = useAuth()
+
+  useEffect(() => {
+    setIsLoading(true)
+    GetTenantProfileService(tenantId).then(({ data }) => {
+      setTenantInfo(data.data)
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  }, [tenantId])
 
   const handleSubscribe = () => {
     navigation.navigate('createSubscription', {
@@ -96,17 +110,6 @@ export function TenantProfile() {
     })
   }
 
-  useEffect(() => {
-    setIsLoading(true)
-    GetTenantProfileService(tenantIdParams).then(({ data }) => {
-      setTenant(data.data)
-    }).catch((err) => {
-      console.log(err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, [tenantIdParams])
-
   return (
     <View flex={1}>
       <PageHeader title="Perfil" />
@@ -126,15 +129,13 @@ export function TenantProfile() {
                     w={24}
                     h={24}
                     alt="image profile"
-                    source={{
-                      uri: tenant.avatar,
-                    }}
+                    src={tenantInfo.avatar}
                   />
 
-                  <Heading mt={4} fontSize="xl">{tenant.name}</Heading>
-                  <Text fontSize="sm">@{tenant.username}</Text>
+                  <Heading mt={4} fontSize="xl">{tenantInfo.name}</Heading>
+                  <Text fontSize="sm">@{tenantInfo.username}</Text>
                   {
-                    user?.subscriptions && user?.subscriptions?.length > 0 && user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenant.id && s.status === ESubscriptionStatus.ACTIVE) ?
+                    user?.subscriptions && user?.subscriptions?.length > 0 && user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenantInfo.id && s.status === ESubscriptionStatus.ACTIVE) ?
                       (
                         <Button title="CANCELAR INSCRIÇÃO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleCancelSubscription} isLoading={isActionLoading} />
 
@@ -158,7 +159,7 @@ export function TenantProfile() {
                 </Center>
                 <View px={4}>
                   <Text color="coolGray.500" fontSize="md" mb={2}> Bio </Text>
-                  <Text>{tenant.description}</Text>
+                  <Text>{tenantInfo.description}</Text>
                 </View>
                 <View mt={2} py={4} borderBottomWidth={0.5} borderBottomColor="coolGray.400">
                   <Center>
@@ -170,13 +171,14 @@ export function TenantProfile() {
                     images.map((image) => {
                       return (
                         <TouchableOpacity key={image.url}>
-                          <Avatar
+                          <Image
                             w={32}
                             h={32}
                             alt="image profile"
                             source={{
                               uri: image.url,
                             }}
+                            defaultSource={{ uri: image.url }}
                           />
                         </TouchableOpacity>
 
