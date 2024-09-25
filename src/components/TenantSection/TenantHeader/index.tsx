@@ -3,6 +3,7 @@ import { SignOut } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
 import { useAuth } from "@hooks/useAuth";
+import { Avatar } from "@components/Avatar/Avatar";
 
 
 type Props = {
@@ -19,17 +20,7 @@ export function TenantHeader() {
 
   return (
     <HStack mt={statusBarHeight} pb={4} pt={6} px={4} alignItems="center" borderColor="gray.300" borderBottomWidth={0.5}>
-      <Image
-        rounded="full"
-        w={10}
-        h={10}
-        mr={2}
-        alt="teste"
-        source={{
-          uri: tenant.avatar,
-        }}
-        defaultSource={{ uri: tenant.avatar }}
-      />
+      <Avatar url={tenant.avatar} alt="Foto de perfil da empresa" type="tenant" />
       <HStack flex={1}>
         <Text>Olá,</Text>
         <Heading fontFamily="heading" fontSize="md"> {tenant.name}</Heading>
