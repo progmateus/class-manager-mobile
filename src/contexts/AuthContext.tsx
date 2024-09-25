@@ -77,7 +77,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function signOut() {
     setIsLoadingData(true);
-    userUpdate({} as IUserProfileDTO);
+    setUser({} as IUserProfileDTO);
     await Promise.all([
       storageUserRemove(),
       storageAuthTokenRemove(),

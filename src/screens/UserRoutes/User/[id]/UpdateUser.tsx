@@ -26,8 +26,7 @@ type updateUserProps = z.infer<typeof updateUserSchema>
 
 export function UpdateUser() {
   const [isLoading, setIsLoading] = useState(false)
-  const { user, isLoadingUserStorageData } = useAuth();
-  console.log('user: ', user)
+  const { user } = useAuth();
 
   const { control, handleSubmit, formState: { errors } } = useForm<updateUserProps>({
     defaultValues: {
