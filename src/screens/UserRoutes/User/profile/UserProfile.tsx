@@ -1,5 +1,5 @@
 import { PageHeader } from "@components/PageHeader";
-import { Actionsheet, Avatar, Box, Center, HStack, Heading, Icon, Image, ScrollView, Text, VStack, View } from "native-base";
+import { Actionsheet, Box, Center, HStack, Heading, Icon, Image, ScrollView, Text, VStack, View } from "native-base";
 import SettingsSVG from "@assets/settings-outline.svg";
 import CardSVG from "@assets/card-outline.svg";
 import MoneySVG from "@assets/money-outline.svg";
@@ -15,6 +15,7 @@ import { ArrowsLeftRight, Plus } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
+import { Avatar } from "@components/Avatar/Avatar";
 
 
 export function Profile() {
@@ -90,7 +91,7 @@ export function Profile() {
       <PageHeader title="Informações" />
       <ScrollView>
         <HStack space={2} mt={8} px={4}>
-          <Image
+          <Avatar
             rounded="full"
             w={16}
             h={16}
@@ -98,7 +99,6 @@ export function Profile() {
             source={{
               uri: user.avatar,
             }}
-            defaultSource={{ uri: user.avatar }}
           />
           <VStack alignItems="left" justifyContent="center">
             <Heading fontFamily="heading"> {user.firstName} {user.lastName} </Heading>
@@ -148,11 +148,8 @@ export function Profile() {
                         <Avatar
                           size="md"
                           bg="green.500"
-                          source={{
-                            uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
-                          }}>
-                          AJ
-                        </Avatar>
+                          url="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                        />
                         <Text fontSize="16" color="gray.700">
                           {ur.tenant?.name}
                         </Text>

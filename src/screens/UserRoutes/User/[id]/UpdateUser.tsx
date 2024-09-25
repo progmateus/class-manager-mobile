@@ -10,6 +10,7 @@ import { useAuth } from "@hooks/useAuth";
 import { UpdateUserService } from "src/services/usersService";
 import { useState } from "react";
 import { fireSuccesToast } from "@utils/HelperNotifications";
+import { Avatar } from "@components/Avatar/Avatar";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -55,7 +56,7 @@ export function UpdateUser() {
       <ScrollContainer>
         <VStack pb={20}>
           <Center>
-            <Image
+            <Avatar
               rounded="full"
               w={24}
               h={24}
@@ -64,7 +65,6 @@ export function UpdateUser() {
               source={{
                 uri: user.avatar,
               }}
-              defaultSource={{ uri: user.avatar }}
             />
             <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
           </Center>

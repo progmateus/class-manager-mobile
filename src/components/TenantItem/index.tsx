@@ -1,3 +1,4 @@
+import { Avatar } from "@components/Avatar/Avatar";
 import { Box, Button, FlatList, HStack, Heading, Image, Text, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 
@@ -14,7 +15,7 @@ export function TenantItem({ image = "https://img.freepik.com/vetores-gratis/ilu
   return (
     <TouchableOpacity onPress={onPress}>
       <HStack px={2} py={3} alignItems="center" rounded="md">
-        <Image
+        <Avatar
           rounded="md"
           w={12}
           h={12}
@@ -23,7 +24,6 @@ export function TenantItem({ image = "https://img.freepik.com/vetores-gratis/ilu
           source={{
             uri: image,
           }}
-          defaultSource={{ uri: image }}
         />
         <VStack flex={1}>
           <Heading numberOfLines={1} fontFamily="heading" fontSize="sm">{name} </Heading>

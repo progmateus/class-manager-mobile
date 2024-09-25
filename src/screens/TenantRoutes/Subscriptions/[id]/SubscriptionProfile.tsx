@@ -1,3 +1,4 @@
+import { Avatar } from "@components/Avatar/Avatar"
 import { Loading } from "@components/Loading"
 import { MenuItem } from "@components/MenuItem"
 import { PageHeader } from "@components/PageHeader"
@@ -104,7 +105,7 @@ export function SubscriptionProfile() {
                     </VStack>
                     <VStack>
                       <Center>
-                        <Image
+                        <Avatar
                           rounded="full"
                           w={24}
                           h={24}
@@ -112,7 +113,6 @@ export function SubscriptionProfile() {
                           source={{
                             uri: subscription.user.avatar,
                           }}
-                          defaultSource={{ uri: subscription.user.avatar }}
                         />
                         <Text fontSize="sm" mt={2} color="coolGray.400">{subscription.user.username}</Text>
                       </Center>

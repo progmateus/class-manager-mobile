@@ -15,6 +15,7 @@ import { CreateUserRoleService, DeleteUserRoleService, ListUsersRolesService } f
 import { GetUserByUsernameService } from "src/services/usersService"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
+import { Avatar } from "@components/Avatar/Avatar"
 
 type RouteParamsProps = {
   tenantIdParams: string;
@@ -178,7 +179,7 @@ export function UsersRoloesList() {
                     <Modal.Header>Cadastrar professor</Modal.Header>
                     <Modal.Body justifyContent="center">
                       <View alignItems="center" justifyContent="center" py={4}>
-                        <Image
+                        <Avatar
                           rounded="full"
                           w={24}
                           h={24}
@@ -186,7 +187,6 @@ export function UsersRoloesList() {
                           source={{
                             uri: "https://img.freepik.com/fotos-gratis/garoto-confiante-posando-contra-a-parede-branca_176420-32936.jpg?t=st=1725155362~exp=1725158962~hmac=9ea94ecc7a74f7955101241059030bb1c738b5484fc5d5ee15bc72ee74841784&w=1380",
                           }}
-                          defaultSource={{ uri: "https://img.freepik.com/fotos-gratis/garoto-confiante-posando-contra-a-parede-branca_176420-32936.jpg?t=st=1725155362~exp=1725158962~hmac=9ea94ecc7a74f7955101241059030bb1c738b5484fc5d5ee15bc72ee74841784&w=1380" }}
                         />
 
                         <VStack alignItems="center" justifyContent="center">

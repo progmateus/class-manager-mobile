@@ -7,6 +7,7 @@ import dayjs from "dayjs"
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
+import { Avatar } from "@components/Avatar/Avatar";
 
 interface IProps {
   subscription: ISubscriptionPreviewDTO
@@ -16,7 +17,7 @@ function SubscriptionItem({ subscription }: IProps) {
 
   const handleNavigateToProfile = () => {
     navigation.navigate('subscriptionProfile', {
-      tenantId: subscription.tenantId,
+      tenantIdParams: subscription.tenantId,
       subscriptionId: subscription.id
     })
   }
@@ -33,7 +34,7 @@ function SubscriptionItem({ subscription }: IProps) {
   return (
     <TouchableOpacity onPress={handleNavigateToProfile}>
       <HStack space={4} alignItems="center">
-        <Image
+        <Avatar
           rounded="full"
           w={12}
           h={12}
@@ -41,7 +42,6 @@ function SubscriptionItem({ subscription }: IProps) {
           source={{
             uri: subscription.user?.avatar,
           }}
-          defaultSource={{ uri: subscription.user?.avatar }}
         />
         <VStack flex={1}>
           <Text fontSize="sm" color="coolGray.900" fontWeight="bold">{`${subscription.user?.firstName} ${subscription.user?.lastName}`}</Text>

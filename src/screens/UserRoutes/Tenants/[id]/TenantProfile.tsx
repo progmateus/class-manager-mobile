@@ -16,6 +16,7 @@ import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { DeleteSubscriptionService } from "src/services/subscriptionService";
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
+import { Avatar } from "@components/Avatar/Avatar";
 
 
 type RouteParamsProps = {
@@ -120,7 +121,7 @@ export function TenantProfile() {
             (
               <VStack>
                 <Center mt={8}>
-                  <Image
+                  <Avatar
                     rounded="full"
                     w={24}
                     h={24}
@@ -128,7 +129,6 @@ export function TenantProfile() {
                     source={{
                       uri: tenant.avatar,
                     }}
-                    defaultSource={{ uri: tenant.avatar }}
                   />
 
                   <Heading mt={4} fontSize="xl">{tenant.name}</Heading>
@@ -170,14 +170,13 @@ export function TenantProfile() {
                     images.map((image) => {
                       return (
                         <TouchableOpacity key={image.url}>
-                          <Image
+                          <Avatar
                             w={32}
                             h={32}
                             alt="image profile"
                             source={{
                               uri: image.url,
                             }}
-                            defaultSource={{ uri: image.url }}
                           />
                         </TouchableOpacity>
 

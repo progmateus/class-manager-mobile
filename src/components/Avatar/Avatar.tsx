@@ -19,6 +19,7 @@ export function Avatar({ url, alt = "Imagem", type = "user", ...rest }: IProps) 
       w={10}
       h={10}
       mr={4}
+      bgColor="brand.500"
       {...rest}
       source={{
         uri: url ? url : DEFAULT_IMAGE,

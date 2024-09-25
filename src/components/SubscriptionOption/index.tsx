@@ -1,3 +1,4 @@
+import { Avatar } from "@components/Avatar/Avatar";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { Image, Text, VStack } from "native-base";
 
@@ -8,7 +9,7 @@ interface IProps {
 export function SubscriptionOption({ subscription }: IProps) {
   return (
     <VStack justifyContent="center" alignItems="center" space={2}>
-      <Image
+      <Avatar
         rounded="full"
         w={12}
         h={12}
@@ -16,7 +17,6 @@ export function SubscriptionOption({ subscription }: IProps) {
         source={{
           uri: subscription.tenant?.avatar,
         }}
-        defaultSource={{ uri: subscription.tenant?.avatar }}
       />
       <Text fontSize="xs"> {subscription.tenant?.name}</Text>
     </VStack>

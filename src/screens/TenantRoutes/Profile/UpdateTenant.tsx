@@ -12,6 +12,7 @@ import { useState } from "react";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { TextArea } from "@components/form/TextArea";
 import { UpdateTenantSertvice } from "src/services/tenantsService";
+import { Avatar } from "@components/Avatar/Avatar";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -82,7 +83,7 @@ export function UpdateTenant() {
       <ScrollContainer>
         <VStack pb={20}>
           <Center>
-            <Image
+            <Avatar
               rounded="full"
               w={24}
               h={24}
@@ -91,7 +92,6 @@ export function UpdateTenant() {
               source={{
                 uri: tenant.avatar,
               }}
-              defaultSource={{ uri: tenant.avatar }}
             />
             < Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600" > Alterar foto de perfil </Text>
           </Center>

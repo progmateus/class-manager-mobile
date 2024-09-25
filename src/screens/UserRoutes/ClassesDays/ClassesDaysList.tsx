@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ListClassDaysService } from "src/services/classDaysService";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
+import { Avatar } from "@components/Avatar/Avatar";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -150,7 +151,7 @@ export function ClassesDaysList() {
                                 item.bookings.map((booking, index) => {
                                   return (
                                     index < 3 && (
-                                      <Image
+                                      <Avatar
                                         key={index}
                                         rounded="md"
                                         ml={-5}
@@ -160,7 +161,6 @@ export function ClassesDaysList() {
                                         source={{
                                           uri: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph',
                                         }}
-                                        defaultSource={{ uri: 'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph' }}
                                       />
                                     )
                                   )
