@@ -9,7 +9,6 @@ import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
 import { BookBookmark, GraduationCap, House, UserCircle } from "phosphor-react-native";
 import { SubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/SubscriptionProfile";
-import { ClassHoursList } from "@screens/TenantRoutes/classHours/list/ClassHoursList";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
 import { CreateClass } from "@screens/TenantRoutes/Classes/CRUD/CreateClass";
@@ -24,6 +23,8 @@ import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
 import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
 import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
+import { TimeTable } from "@screens/TenantRoutes/TimesTables/[id]/TimeTable";
+import { TimesTablesList } from "@screens/TenantRoutes/TimesTables/list/TimesTablesList";
 
 
 export type TenantRoutes = {
@@ -33,7 +34,8 @@ export type TenantRoutes = {
   classProfile: { classId: string, tenantIdParams: string };
   tenantProfile: { tenantIdParams: string };
   dashboard: undefined;
-  classHoursList: undefined;
+  timeTable: { timeTableId: string };
+  timesTablesList: undefined;
   tenantPlansList: undefined;
   createTenantPlan: undefined;
   createClass: undefined;
@@ -126,8 +128,16 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="classHoursList"
-        component={ClassHoursList}
+        name="timeTable"
+        component={TimeTable}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="timesTablesList"
+        component={TimesTablesList}
         options={{
           tabBarButton: () => (null)
         }}

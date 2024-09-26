@@ -1,11 +1,20 @@
 import { ClassHourItem } from "@components/Class/HoursItem/ClasshourItem";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
+import { useAuth } from "@hooks/useAuth";
+import { useFocusEffect } from "@react-navigation/native";
 import { HStack, Text, View, VStack } from "native-base";
 import { Check, Info } from "phosphor-react-native";
+import { useCallback, useState } from "react";
+import { GetTimeTableService } from "src/services/timeTablesService";
 import { THEME } from "src/theme";
 
 export function ClassHoursList() {
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [timeTable, setTimeTable] = useState(false)
+  const { tenant } = useAuth()
+
   const items = [
     {
       id: 1,

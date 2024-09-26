@@ -1,9 +1,11 @@
 import { GenericItem } from "@components/GenericItem"
+import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect } from "@react-navigation/native"
-import { View } from "native-base"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { Center, Text, View } from "native-base"
 import { Calendar, Plus } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
@@ -14,6 +16,7 @@ export function TimesTablesList() {
   const [isLoading, setIsLoading] = useState(false)
   const { tenant } = useAuth()
   const [timesTables, setTimesTables] = useState([])
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
@@ -35,17 +38,25 @@ export function TimesTablesList() {
       <PageHeader title="Horários" rightIcon={Plus} rightAction={handleAdd} />
       <ScrollContainer>
         {
-          timesTables && timesTables.length && (
-            timesTables.map((timeTable: any) => {
-              return (
-                <TouchableOpacity key={timeTable.id}>
-                  <GenericItem.Root>
-                    <GenericItem.Icon icon={Calendar} />
-                    <GenericItem.Content title={timeTable.name} caption="" />
-                  </GenericItem.Root>
-                </TouchableOpacity>
-              )
-            })
+          isLoading ? (<Loading />) : (
+
+            timesTables && timesTables.length > 0 ? (
+              timesTables.map((timeTable: any) => {
+                return (
+                  <TouchableOpacity key={timeTable.id} onPress={() => navigation.navigate('timeTable', { timeTableId: timeTable.id })}>
+                    <GenericItem.Root>
+                      <GenericItem.Icon icon={Calendar} />
+                      <GenericItem.Content title={timeTable.name} caption="" />
+                    </GenericItem.Root>
+                  </TouchableOpacity>
+                )
+              })
+            ) : (
+              <Center>
+                <Text> Nenhum resultado ecnontrado</Text>
+              </Center>
+            )
+
           )
         }
       </ScrollContainer>
