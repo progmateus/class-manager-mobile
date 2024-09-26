@@ -174,7 +174,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     try {
       const authentication_type = await storageAuthenticationTypeGet();
       loadUserData();
-
       if (authentication_type && authentication_type == "tenant") {
         loadTenantData()
         authenticationTypeUpdate(authentication_type)

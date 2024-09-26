@@ -54,7 +54,7 @@ export function ClassHoursList() {
   }
   return (
     <View flex={1}>
-      <PageHeader title="Jornadas" rightIcon={Check} rightAction={() => handleSave} />
+      <PageHeader title="Horários" rightIcon={Check} rightAction={() => handleSave} />
       <ScrollContainer>
         {
           items && items.length && (

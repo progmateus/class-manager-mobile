@@ -17,7 +17,6 @@ export function Routes() {
     return <Loading />
   }
 
-
   return (
     <Box flex={1} bg="white">
       <NavigationContainer>
