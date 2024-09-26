@@ -25,7 +25,7 @@ export function GetTimeTableService(timeTableId: string, tenantId: string) {
   })
 }
 
-export function ListTimesTablesTableService(tenantId: string) {
+export function ListTimesTablesService(tenantId: string) {
   return api({
     url: `${tenantId}times-tables`,
     method: 'get',
