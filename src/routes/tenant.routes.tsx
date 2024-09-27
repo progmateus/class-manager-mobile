@@ -25,6 +25,7 @@ import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
 import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
 import { TimeTable } from "@screens/TenantRoutes/TimesTables/[id]/TimeTable";
 import { TimesTablesList } from "@screens/TenantRoutes/TimesTables/list/TimesTablesList";
+import { CreateTimeTable } from "@screens/TenantRoutes/TimesTables/CreateTimeTable";
 
 
 export type TenantRoutes = {
@@ -37,6 +38,7 @@ export type TenantRoutes = {
   timeTable: { timeTableId: string };
   timesTablesList: undefined;
   tenantPlansList: undefined;
+  createTimeTable: undefined;
   createTenantPlan: undefined;
   createClass: undefined;
   listStudentsClass: { tenantIdParams: string; classId: string; }
@@ -138,6 +140,14 @@ export function TenantRoutes() {
       <Screen
         name="timesTablesList"
         component={TimesTablesList}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="createTimeTable"
+        component={CreateTimeTable}
         options={{
           tabBarButton: () => (null)
         }}

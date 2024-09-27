@@ -13,7 +13,6 @@ type IProps = IAvatarProps & {
 const DEFAULT_IMAGE = Image.resolveAssetSource(BlankProfileImage).uri;
 
 export function Avatar({ src, alt = "Imagem", type = "user", ...rest }: IProps) {
-  console.log(src)
   return (
     <NativeBaseAvatar
       rounded="full"

@@ -5,7 +5,7 @@ import { ScrollContainer } from "@components/ScrollContainer"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { Center, Text, View } from "native-base"
+import { Center, Text, View, VStack } from "native-base"
 import { Calendar, Plus } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
@@ -32,7 +32,7 @@ export function TimesTablesList() {
   }, []))
 
   const handleAdd = () => {
-    console.log('add')
+    navigation.navigate('createTimeTable')
   }
 
   return (
@@ -43,16 +43,20 @@ export function TimesTablesList() {
           isLoading ? (<Loading />) : (
 
             timesTables && timesTables.length > 0 ? (
-              timesTables.map((timeTable: any) => {
-                return (
-                  <TouchableOpacity key={timeTable.id} onPress={() => navigation.navigate('timeTable', { timeTableId: timeTable.id })}>
-                    <GenericItem.Root>
-                      <GenericItem.Icon icon={Calendar} />
-                      <GenericItem.Content title={timeTable.name} caption="" />
-                    </GenericItem.Root>
-                  </TouchableOpacity>
-                )
-              })
+              <VStack space={4}>
+                {
+                  timesTables.map((timeTable: any) => {
+                    return (
+                      <TouchableOpacity key={timeTable.id} onPress={() => navigation.navigate('timeTable', { timeTableId: timeTable.id })}>
+                        <GenericItem.Root>
+                          <GenericItem.Icon icon={Calendar} />
+                          <GenericItem.Content title={timeTable.name} caption="" />
+                        </GenericItem.Root>
+                      </TouchableOpacity>
+                    )
+                  })
+                }
+              </VStack>
             ) : (
               <Center>
                 <Text> Nenhum resultado encontrado</Text>
