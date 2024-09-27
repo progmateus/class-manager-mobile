@@ -4,6 +4,8 @@ import axios, { AxiosError, AxiosInstance } from "axios";
 import { storageAuthTokenGet, storageAuthTokenSave } from "@storage/storageAuthToken";
 import { AppError } from "@utils/errors/AppError";
 import { ValidationError } from "@utils/errors/ValidationError";
+import { errors } from "src/helpers/errors";
+import { fireErrorToast } from "@utils/HelperNotifications";
 
 type SignOut = () => void;
 
@@ -87,6 +89,15 @@ api.registerInterceptTokenManager = singOut => {
 
       singOut();
 
+    }
+
+    if (requestError?.response?.data?.message) {
+      const errorExists = errors.find(e => e.message === requestError?.response?.data?.message)
+      if (errorExists) {
+        fireErrorToast(errorExists.message)
+      } else {
+        fireErrorToast("Ocorreu um erro!")
+      }
     }
 
     if (requestError.response && requestError.response.data.errors) {
