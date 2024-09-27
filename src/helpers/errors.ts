@@ -96,32 +96,48 @@ const errors = [
     description: "Este professor já faz parte da turma"
   },
   {
-    message: "ERR_PLAN_NOT_FOUND",
-    description: "Plano não encontrado"
+    message: "ERR_ROLE_ALREADY_EXISTS",
+    description: "Este cargo já existe"
   },
   {
-    message: "ERR_TACHER_NOT_FOUND",
-    description: "Professor não encontrado"
+    message: "ERR_ROLE_NOT_FOUND",
+    description: "Cargo não encontrado"
   },
   {
-    message: "ERR_TACHER_NOT_FOUND",
-    description: "Professor não encontrado"
+    message: "ERR_USER_ROLE_ALREADY_EXISTS",
+    description: "O usuário já possui este cargo"
   },
   {
-    message: "ERR_TACHER_NOT_FOUND",
-    description: "Professor não encontrado"
+    message: "ERR_USER_ROLE_NOT_FOUND",
+    description: "O usuário não possui este cargo para poder ser removido"
   },
   {
-    message: "ERR_TACHER_NOT_FOUND",
-    description: "Professor não encontrado"
+    message: "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS",
+    description: "Já existe uma inscrição ativa com esta empresa"
   },
   {
-    message: "ERR_TACHER_NOT_FOUND",
-    description: "Professor não encontrado"
+    message: "ERR_SUBSCRIPTION_INACTIVE",
+    description: "Inscrição inativa"
   },
   {
-    message: "ERR_TACHER_NOT_FOUND",
-    description: "Professor não encontrado"
+    message: "ERR_PERMISSION_DENIED",
+    description: "Permissão negada"
+  },
+  {
+    message: "ERR_PLAN_ALREADY_EXISTS",
+    description: "Já existe um plano com este nome"
+  },
+  {
+    message: "ERR_TENANT_NOT_FOUND",
+    description: "Empresa não encontrada"
+  },
+  {
+    message: "ERR_TIME_TABLE_NOT_FOUND",
+    description: "Tabela de horários não encontrada"
+  },
+  {
+    message: "ERR_USERNAME_ALREADY_EXISTS",
+    description: "Este nome de usuário já está sendo utilizado"
   }
 ]
 export { errors }
