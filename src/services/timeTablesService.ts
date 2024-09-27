@@ -13,7 +13,7 @@ export function CreateTimeTableService(name: string, tenantId: string) {
 export function UpdateTimeTableService(data: any, tenantId: string, timeTableId: string) {
   return api({
     url: `${tenantId}/times-tables/${timeTableId}`,
-    method: 'get',
+    method: 'put',
     data
   })
 }

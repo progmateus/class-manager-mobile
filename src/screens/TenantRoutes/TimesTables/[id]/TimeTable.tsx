@@ -6,10 +6,11 @@ import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { useAuth } from "@hooks/useAuth";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { fireSuccesToast } from "@utils/HelperNotifications";
 import { HStack, Text, View, VStack } from "native-base";
 import { Check, Info } from "phosphor-react-native";
 import { useCallback, useEffect, useState } from "react";
-import { GetTimeTableService } from "src/services/timeTablesService";
+import { GetTimeTableService, UpdateTimeTableService } from "src/services/timeTablesService";
 import { THEME } from "src/theme";
 
 type RouteParamsProps = {
@@ -41,7 +42,11 @@ export function TimeTable() {
 
 
   const handleSave = () => {
-    alert('save')
+    UpdateTimeTableService(timeTable, tenant.id, timeTableId).then(() => {
+      fireSuccesToast('Table de horários atualizada!')
+    }).catch((err) => {
+      console.log('err: ', err)
+    })
   }
   return (
     <View flex={1}>
@@ -49,8 +54,7 @@ export function TimeTable() {
         isLoading ? (<Loading />)
           : (
             <>
-              <PageHeader title={timeTable.name ?? ''} rightIcon={Check}
-                rightAction={() => handleSave} />
+              <PageHeader title={timeTable.name ?? ''} rightIcon={Check} rightAction={handleSave} />
               <ScrollContainer >
                 {
 
