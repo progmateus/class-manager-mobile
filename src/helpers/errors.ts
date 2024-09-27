@@ -96,8 +96,8 @@ const errors = [
     description: "Este professor já faz parte da turma"
   },
   {
-    message: "ERR_TACHER_NOT_FOUND",
-    description: "Professor não encontrado"
+    message: "ERR_PLAN_NOT_FOUND",
+    description: "Plano não encontrado"
   },
   {
     message: "ERR_TACHER_NOT_FOUND",
