@@ -72,20 +72,56 @@ const errors = [
     description: "Esta aula já foi concluida"
   },
   {
-    message: "ERR_BOOKING_ALREADY_EXISTS",
-    description: "Esta aula já foi agendada"
+    message: "ERR_CLASS_NOT_FOUND",
+    description: "Turma não encontrada"
   },
   {
-    message: "ERR_BOOKING_ALREADY_EXISTS",
-    description: "Esta aula já foi agendada"
+    message: "ERR_CLASS_ALREADY_EXISTS",
+    description: "Já existe uma turma com este nome"
   },
   {
-    message: "ERR_BOOKING_ALREADY_EXISTS",
-    description: "Esta aula já foi agendada"
+    message: "ERR_STUDENT_NOT_FOUND",
+    description: "Aluno não encontrado"
   },
   {
-    message: "ERR_BOOKING_ALREADY_EXISTS",
-    description: "Esta aula já foi agendada"
+    message: "ERR_TACHER_NOT_FOUND",
+    description: "Professor não encontrado"
+  },
+  {
+    message: "STUDENT_ALREADY_ADDED",
+    description: "Este aluno já faz parte da turma"
+  },
+  {
+    message: "TEACHER_ALREADY_ADDED",
+    description: "Este professor já faz parte da turma"
+  },
+  {
+    message: "ERR_TACHER_NOT_FOUND",
+    description: "Professor não encontrado"
+  },
+  {
+    message: "ERR_TACHER_NOT_FOUND",
+    description: "Professor não encontrado"
+  },
+  {
+    message: "ERR_TACHER_NOT_FOUND",
+    description: "Professor não encontrado"
+  },
+  {
+    message: "ERR_TACHER_NOT_FOUND",
+    description: "Professor não encontrado"
+  },
+  {
+    message: "ERR_TACHER_NOT_FOUND",
+    description: "Professor não encontrado"
+  },
+  {
+    message: "ERR_TACHER_NOT_FOUND",
+    description: "Professor não encontrado"
+  },
+  {
+    message: "ERR_TACHER_NOT_FOUND",
+    description: "Professor não encontrado"
   }
 ]
 export { errors }
