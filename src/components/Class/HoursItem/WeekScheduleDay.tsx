@@ -1,21 +1,27 @@
-import { Button, HStack, PresenceTransition, Text, VStack } from "native-base"
-import { CaretDown, TrashSimple } from "phosphor-react-native"
+import { Label } from "@components/form/Label"
+import { ISCheduleDayDTO } from "@dtos/timeTables/IScheduleDayDTO"
+import { fireErrorToast } from "@utils/HelperNotifications"
+import { Actionsheet, Box, Button, Heading, HStack, Icon, PresenceTransition, Stack, Text, View, VStack } from "native-base"
+import { CaretDown, Plus, TrashSimple } from "phosphor-react-native"
 import { useState } from "react"
 import { TouchableOpacity } from "react-native"
+import { TextInputMask } from "react-native-masked-text"
 import { THEME } from "src/theme"
 
 interface IProps {
   dayOfWeek: number;
-  schedulesDays: ScheduleDay[]
+  setTimeTable: (any: any) => void;
+  schedulesDays: ISCheduleDayDTO[]
 }
 
-interface ScheduleDay {
-  id: number;
-  hourStart: string;
-  hourEnd: string
-}
-export function WeekScheduleDay({ dayOfWeek, schedulesDays }: IProps) {
+const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
+
+export function WeekScheduleDay({ dayOfWeek, schedulesDays, setTimeTable }: IProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [selectedWeekDay, setSelectedWeekDay] = useState(0)
+  const [hourStart, setHourStart] = useState("")
+  const [hourEnd, setHourEnd] = useState("")
 
   const transforWeekDay = (dayOfWeek: string | number) => {
     const objTransform: any = {
@@ -29,6 +35,48 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays }: IProps) {
     }
 
     return objTransform[String(dayOfWeek)]
+  }
+
+  const { colors, sizes } = THEME;
+
+  const handleOpenActions = (weekDay: number) => {
+    setSelectedWeekDay(weekDay)
+    setIsAddOpen(true)
+  }
+
+  const handleAddScheduleTime = () => {
+    if (!hourStart || !hourStart) {
+      fireErrorToast("Horário inválido")
+      return
+    }
+
+    if (!hourStart.match(timeRegex) || !hourEnd.match(timeRegex)) {
+      fireErrorToast("Horário inválido")
+      return
+    }
+    setTimeTable((prevState: any) => {
+      return {
+        ...prevState, schedulesDays: [...prevState.schedulesDays,
+        {
+          id: String(Math.floor(Math.random() * 100)),
+          weekDay: dayOfWeek,
+          hourStart, hourEnd
+        }
+        ]
+      }
+    })
+    onClose()
+  }
+
+
+  const handleDeleteScheduleTime = (id: string) => {
+    setTimeTable((prevState: any) => { return { ...prevState, schedulesDays: [...prevState.schedulesDays.filter((item: any) => item.id !== id)] } })
+  }
+
+  const onClose = () => {
+    setIsAddOpen(false)
+    setHourStart("")
+    setHourEnd("")
   }
 
   return (
@@ -54,19 +102,20 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays }: IProps) {
               <VStack px={8} space={4} my={6}>
                 {
                   schedulesDays && schedulesDays.length > 0 && (
-                    schedulesDays.map((scheduleDay: any) => {
+                    schedulesDays.map((scheduleDay: any, index) => {
                       return (
-                        <TouchableOpacity>
-                          <HStack key={scheduleDay.id} alignItems="center" justifyContent="space-evenly">
-                            <Text fontSize="lg">{`${scheduleDay.hourStart} - ${scheduleDay.hourEnd}`}</Text>
+                        <HStack key={scheduleDay.id} alignItems="center" justifyContent="space-evenly">
+                          <Text fontSize="lg">{`${scheduleDay.hourStart} - ${scheduleDay.hourEnd}`}</Text>
+                          <TouchableOpacity onPress={() => handleDeleteScheduleTime(scheduleDay.id)}>
                             <TrashSimple size={24} />
-                          </HStack>
-                        </TouchableOpacity>
+                          </TouchableOpacity>
+
+                        </HStack>
                       )
                     })
                   )
                 }
-                <Button alignSelf="center" size="md" w="1/2" variant="outline" color="brand.500" borderColor="brand.500" mt={4} rounded="full" borderStyle="dashed">
+                <Button onPress={() => handleOpenActions(dayOfWeek)} alignSelf="center" size="md" w="1/2" variant="outline" color="brand.500" borderColor="brand.500" mt={4} rounded="full" borderStyle="dashed">
                   Adicionar +
                 </Button>
 
@@ -75,6 +124,65 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays }: IProps) {
           )
         }
       </VStack>
+      <Actionsheet isOpen={isAddOpen} size="full" onClose={onClose}>
+        <Actionsheet.Content>
+          <VStack h="full" space={8}>
+            <Box w="100%" h={60} px={4} justifyContent="center" alignSelf="center">
+              <Heading fontSize="16" color="coolGray.700" textAlign="center">
+                {transforWeekDay(selectedWeekDay)}
+              </Heading>
+            </Box>
+            <HStack space={4} w="100%" px={4} alignContent="center" justifyContent="center">
+              <VStack flex={1} space={2}>
+                <Label text="Início:" />
+                <TextInputMask
+                  onChangeText={setHourStart}
+                  value={hourStart}
+                  style={{
+                    width: '100%',
+                    borderBottomColor: 'red',
+                    color: colors.coolGray[700],
+                    height: sizes[10],
+                    borderColor: colors.coolGray[300],
+                    borderWidth: 0.8,
+                    borderRadius: 4,
+                    paddingLeft: sizes[4]
+                  }}
+                  type={'datetime'}
+                  options={{
+                    format: 'HH:mm'
+                  }}
+                />
+              </VStack>
+
+              <VStack flex={1} space={2}>
+                <Label text="Fim:" />
+                <TextInputMask
+                  onChangeText={setHourEnd}
+                  value={hourEnd}
+                  style={{
+                    width: '100%',
+                    borderBottomColor: 'red',
+                    color: colors.coolGray[700],
+                    height: sizes[10],
+                    borderColor: colors.coolGray[300],
+                    borderWidth: 0.8,
+                    borderRadius: 4,
+                    paddingLeft: sizes[4]
+                  }}
+                  type={'datetime'}
+                  options={{
+                    format: 'HH:mm'
+                  }}
+                />
+              </VStack>
+            </HStack>
+            <Actionsheet.Item alignSelf="center">
+              <Button onPress={handleAddScheduleTime} color="brand.700" px={8} rounded="full"> Adicionar </Button>
+            </Actionsheet.Item>
+          </VStack>
+        </Actionsheet.Content>
+      </Actionsheet>
     </VStack>
   )
 }

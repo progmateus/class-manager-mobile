@@ -173,6 +173,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function verifyAuthenticationType() {
     try {
       const authentication_type = await storageAuthenticationTypeGet();
+      console.log(authentication_type)
       loadUserData();
       if (authentication_type && authentication_type == "tenant") {
         loadTenantData()

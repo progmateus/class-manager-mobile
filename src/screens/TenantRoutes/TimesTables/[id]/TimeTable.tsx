@@ -1,14 +1,14 @@
-import { ClassHourItem } from "@components/Class/HoursItem/ClasshourItem";
 import { WeekScheduleDay } from "@components/Class/HoursItem/WeekScheduleDay";
 import { Loading } from "@components/Loading";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
+import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { useAuth } from "@hooks/useAuth";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { HStack, Text, View, VStack } from "native-base";
 import { Check, Info } from "phosphor-react-native";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GetTimeTableService } from "src/services/timeTablesService";
 import { THEME } from "src/theme";
 
@@ -23,11 +23,10 @@ export function TimeTable() {
 
 
   const [isLoading, setIsLoading] = useState(false)
-  const [timeTable, setTimeTable] = useState<any>({})
+  const [timeTable, setTimeTable] = useState<ITimeTableDTO>({} as ITimeTableDTO)
   const { timeTableId } = route.params as RouteParamsProps;
 
   const weeksDays = [0, 1, 2, 3, 4, 5, 6]
-
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
@@ -57,7 +56,7 @@ export function TimeTable() {
 
                   <>
                     {
-                      weeksDays.map((wd) => <WeekScheduleDay dayOfWeek={wd} schedulesDays={timeTable.schedulesDays.filter((sd: any) => sd.weekDay == wd)} />)
+                      weeksDays.map((wd) => <WeekScheduleDay key={wd} dayOfWeek={wd} schedulesDays={timeTable?.schedulesDays?.filter((sd: any) => sd.weekDay == wd) ?? []} setTimeTable={setTimeTable} />)
                     }
                   </>
                 }
@@ -69,7 +68,8 @@ export function TimeTable() {
                   < Text flex={1}
                     color="danger.500" fontSize="xs" > As alterações afetarão todas as turmas que utilizam esta jornada de horários </Text>
                 </HStack>
-              </ScrollContainer></>
+              </ScrollContainer>
+            </>
           )
       }
 
