@@ -1,86 +1,78 @@
 import { ClassHourItem } from "@components/Class/HoursItem/ClasshourItem";
+import { WeekScheduleDay } from "@components/Class/HoursItem/WeekScheduleDay";
+import { Loading } from "@components/Loading";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
+import { useAuth } from "@hooks/useAuth";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { HStack, Text, View, VStack } from "native-base";
 import { Check, Info } from "phosphor-react-native";
+import { useCallback, useState } from "react";
+import { GetTimeTableService } from "src/services/timeTablesService";
 import { THEME } from "src/theme";
 
+type RouteParamsProps = {
+  timeTableId: string;
+}
+
 export function TimeTable() {
-  const items = [
-    {
-      id: 1,
-      dayOfWeek: '1',
-      hours: [
-        { id: 1, start: '7:00', end: '8:00' },
-        { id: 1, start: '8:00', end: '9:00' },
-        { id: 1, start: '9:00', end: '10:00' },
-        { id: 1, start: '10:00', end: '11:00' }
-      ]
-    },
-    {
-      id: 2,
-      dayOfWeek: '2',
-      hours:
-        [
-          { id: 1, start: '7:00', end: '8:00' },
-          { id: 1, start: '8:00', end: '9:00' },
-          { id: 1, start: '9:00', end: '10:00' },
-          { id: 1, start: '10:00', end: '11:00' }
-        ]
-    },
-    {
-      id: 3,
-      dayOfWeek: '3',
-      hours:
-        [
-          { id: 1, start: '7:00', end: '8:00' },
-          { id: 1, start: '8:00', end: '9:00' },
-          { id: 1, start: '9:00', end: '10:00' },
-          { id: 1, start: '10:00', end: '11:00' }
-        ]
-    },
-    {
-      id: 4,
-      dayOfWeek: '4',
-      hours:
-        [
-          { id: 1, start: '7:00', end: '8:00' },
-          { id: 1, start: '8:00', end: '9:00' },
-          { id: 1, start: '9:00', end: '10:00' },
-          { id: 1, start: '10:00', end: '11:00' }
-        ]
-    }
-  ]
+  const route = useRoute()
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
+  const { tenant } = useAuth()
+
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [timeTable, setTimeTable] = useState<any>({})
+  const { timeTableId } = route.params as RouteParamsProps;
+
+  const weeksDays = [0, 1, 2, 3, 4, 5, 6]
+
+
+  useFocusEffect(useCallback(() => {
+    setIsLoading(true)
+    GetTimeTableService(timeTableId, tenant.id).then(({ data }) => {
+      setTimeTable(data.data)
+    }).catch((err) => {
+      console.log('err: ', err)
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  }, []))
+
 
   const handleSave = () => {
     alert('save')
   }
   return (
     <View flex={1}>
-      < PageHeader title="Horários" rightIcon={Check}
-        rightAction={() => handleSave} />
-      < ScrollContainer >
-        {
-          items && items.length && (
-            items.map((item) => {
-              return (
+      {
+        isLoading ? (<Loading />)
+          : (
+            <>
+              <PageHeader title={timeTable.name ?? ''} rightIcon={Check}
+                rightAction={() => handleSave} />
+              <ScrollContainer >
+                {
 
-                < ClassHourItem key={item.id}
-                  item={item} />
-
-              )
-            })
+                  <>
+                    {
+                      weeksDays.map((wd) => <WeekScheduleDay dayOfWeek={wd} schedulesDays={timeTable.schedulesDays.filter((sd: any) => sd.weekDay == wd)} />)
+                    }
+                  </>
+                }
+                < HStack mt={2}
+                  alignItems="center" space={2}
+                  mb={20}>
+                  < Info size={18}
+                    color={THEME.colors.danger['500']} />
+                  < Text flex={1}
+                    color="danger.500" fontSize="xs" > As alterações afetarão todas as turmas que utilizam esta jornada de horários </Text>
+                </HStack>
+              </ScrollContainer></>
           )
-        }
-        < HStack mt={2}
-          alignItems="center" space={2}
-          mb={20}>
-          < Info size={18}
-            color={THEME.colors.danger['500']} />
-          < Text flex={1}
-            color="danger.500" fontSize="xs" > As alterações afetarão todas as turmas que utilizam esta jornada de horários </Text>
-        </HStack>
-      </ScrollContainer>
+      }
+
     </View >
   )
 }

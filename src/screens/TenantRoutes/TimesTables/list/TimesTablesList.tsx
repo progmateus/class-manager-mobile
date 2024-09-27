@@ -11,13 +11,15 @@ import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ListTimesTablesService } from "src/services/timeTablesService"
 
+
+
+
 export function TimesTablesList() {
 
   const [isLoading, setIsLoading] = useState(false)
   const { tenant } = useAuth()
   const [timesTables, setTimesTables] = useState([])
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
-
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
     ListTimesTablesService(tenant.id).then(({ data }) => {
@@ -53,7 +55,7 @@ export function TimesTablesList() {
               })
             ) : (
               <Center>
-                <Text> Nenhum resultado ecnontrado</Text>
+                <Text> Nenhum resultado encontrado</Text>
               </Center>
             )
 
