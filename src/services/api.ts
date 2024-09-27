@@ -94,7 +94,7 @@ api.registerInterceptTokenManager = singOut => {
     if (requestError?.response?.data?.message) {
       const errorExists = errors.find(e => e.message === requestError?.response?.data?.message)
       if (errorExists) {
-        fireErrorToast(errorExists.message)
+        fireErrorToast(errorExists.description)
       } else {
         fireErrorToast("Ocorreu um erro!")
       }
