@@ -99,6 +99,7 @@ export function CreateSubscription() {
     setIsLoadig(true)
     CreateSubscriptionService(tenantId, getValues("planId"), getValues("classId"), userFound.id).then(({ data }) => {
       fireSuccesToast('Inscrição realizada com sucesso!')
+      setIsModalOpen(false)
       navigation.navigate('subscriptionProfile', { subscriptionId: data.data.id })
     }).catch((err) => {
       console.log(err)
