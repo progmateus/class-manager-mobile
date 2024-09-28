@@ -10,6 +10,9 @@ import { GetTenantProfileService } from "src/services/tenantsService";
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { storageAuthenticationTypeGet, storageAuthenticationTypeRemove, storageAuthenticationTypeSave } from "@storage/storageAuthenticationType";
 import { storageTenantGet, storageTenantRemove, storageTenantSave } from "@storage/storageTenant";
+import { AxiosError } from "axios";
+import { AppError } from "@utils/errors/AppError";
+import { ValidationError } from "@utils/errors/ValidationError";
 
 
 export type AuthContextDataProps = {
@@ -57,22 +60,25 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     await storageAuthenticationTypeSave(type);
   }
 
-  async function singIn(email: string, password: string) {
+  async function singIn(email: string, password: string): Promise<void> {
     setIsLoadingData(true);
-    SignInService(email, password)
-      .then(async ({ data: { data } }) => {
-        if (data.id) {
-          const { user: userResponse, token, refresh_token } = data
-          await storageAuthTokenSave({ token, refresh_token });
-          tokenUpdate(token);
-          userUpdate(userResponse);
-        }
-      }).catch((err) => {
-        console.log('err: ', err)
-        return err
-      }).finally(() => {
-        setIsLoadingData(false);
-      })
+
+    try {
+      const { data } = await SignInService(email, password)
+      if (data.data.id) {
+        const { user: userResponse, token, refresh_token } = data.data
+        await storageAuthTokenSave({ token, refresh_token });
+        tokenUpdate(token);
+        userUpdate(userResponse);
+      }
+    } catch (err) {
+      if (err instanceof AxiosError || err instanceof AppError || err instanceof ValidationError) {
+        throw new Error(err.message)
+      }
+      throw new Error('Internal server error')
+    } finally {
+      setIsLoadingData(false);
+    }
   }
 
   async function signOut() {
@@ -173,7 +179,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function verifyAuthenticationType() {
     try {
       const authentication_type = await storageAuthenticationTypeGet();
-      console.log(authentication_type)
       loadUserData();
       if (authentication_type && authentication_type == "tenant") {
         loadTenantData()

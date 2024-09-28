@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@hooks/useAuth";
 import { useState } from "react";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { fireErrorToast } from "@utils/HelperNotifications";
 
 
 const signInSchema = z.object({
@@ -28,7 +29,7 @@ export function SignIn() {
   });
 
   const [isLoading, setIsLoading] = useState(false)
-  const { singIn } = useAuth()
+  const { singIn, user } = useAuth()
 
   function handleClickSignUp() {
     navigation.navigate('signUp');
@@ -37,17 +38,15 @@ export function SignIn() {
 
   async function handleSignIn({ email, password }: signInProps) {
     if (isLoading) return
-
     setIsLoading(true)
-    try {
-      await singIn(email, password).then(() => {
-        navigation.navigate('tenantsList');
-      })
-    } catch (err) {
+
+    singIn(email, password).then(() => {
+      /* navigation.navigate('tenantsList'); */
+    }).catch((err) => {
       console.log('err: ', err)
-    } finally {
+    }).finally(() => {
       setIsLoading(false)
-    }
+    })
   }
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
