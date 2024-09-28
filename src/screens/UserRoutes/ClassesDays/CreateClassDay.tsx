@@ -3,12 +3,12 @@ import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { IClassDTO } from "@dtos/classes/IClass";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { size } from "lodash";
 import { AddIcon, HStack, Select, Text, useTheme, View, VStack } from "native-base";
 import { background, border, color } from "native-base/lib/typescript/theme/styled-system";
 import { Check } from "phosphor-react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
 import { CreateClassDayService } from "src/services/classDaysService";
@@ -40,7 +40,7 @@ export function CreateClassDay() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id
 
-  const { control, handleSubmit, formState: { errors } } = useForm<createclassDayProps>({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<createclassDayProps>({
     resolver: zodResolver(createClassDaySchema)
   });
 
@@ -52,6 +52,10 @@ export function CreateClassDay() {
       console.log(err)
     })
   }, [tenantId])
+
+  useFocusEffect(useCallback(() => {
+    reset()
+  }, []))
 
   const handleCreateClassDay = (data: createclassDayProps) => {
     if (isLoading) return;

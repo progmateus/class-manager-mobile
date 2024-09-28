@@ -4,11 +4,11 @@ import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { FlatList, Text, View, VStack } from "native-base"
 import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
@@ -20,8 +20,7 @@ export function TenantPlansList() {
   const tenantId = tenant?.id
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
-
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     setIsLoading(true)
     ListTenantPlansService(tenantId).then(({ data }) => {
       setPlans(data.data)
@@ -30,7 +29,7 @@ export function TenantPlansList() {
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [tenantId])
+  }, [tenantId]))
 
   const priceFormatted = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {

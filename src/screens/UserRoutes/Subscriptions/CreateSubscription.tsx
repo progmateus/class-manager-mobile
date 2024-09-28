@@ -2,10 +2,10 @@ import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { Select, Text, useTheme, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ListClassesService } from "src/services/classesService";
 import { z } from "zod";
@@ -36,9 +36,13 @@ export function CreateSubscription() {
 
   const tenantId = tenant?.id
 
-  const { control, handleSubmit, formState: { errors } } = useForm<CreateSubscriptionProps>({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<CreateSubscriptionProps>({
     resolver: zodResolver(createSubscriptionSchema)
   });
+
+  useFocusEffect(useCallback(() => {
+    reset()
+  }, []))
 
 
   useEffect(() => {

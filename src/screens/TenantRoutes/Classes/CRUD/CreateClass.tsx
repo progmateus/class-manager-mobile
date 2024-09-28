@@ -2,10 +2,10 @@ import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { Text, useTheme, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
 import { CreateClassService, ListClassesService } from "src/services/classesService";
@@ -35,11 +35,15 @@ export function CreateClass() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id
 
-  const { control, handleSubmit, formState: { errors } } = useForm<CreateClassProps>({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<CreateClassProps>({
     resolver: zodResolver(createClassSchema)
   });
 
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
+
+  useFocusEffect(useCallback(() => {
+    reset()
+  }, []))
 
 
   useEffect(() => {

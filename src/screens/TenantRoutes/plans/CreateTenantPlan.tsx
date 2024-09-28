@@ -2,10 +2,10 @@ import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { Text, useTheme, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
 import { ListClassesService } from "src/services/classesService";
@@ -14,6 +14,7 @@ import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { CreateTenantPlanService } from "src/services/tenantPlansService";
 import { useAuth } from "@hooks/useAuth";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -32,13 +33,18 @@ export function CreateTenantPlan() {
   const [classes, setClasses] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
   const { sizes, colors } = useTheme();
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   const { tenant } = useAuth()
   const tenantId = tenant?.id
 
-  const { control, handleSubmit, formState: { errors } } = useForm<CreateTenantplanProps>({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<CreateTenantplanProps>({
     resolver: zodResolver(createTenantPlanSchema)
   });
+
+  useFocusEffect(useCallback(() => {
+    reset()
+  }, []))
 
 
   useEffect(() => {
@@ -54,9 +60,10 @@ export function CreateTenantPlan() {
     setIsLoadig(true)
 
     const { name, description, price, timesOfweek } = data;
-
-    CreateTenantPlanService(tenantId, name, description, Number(timesOfweek), price).then(() => {
+    CreateTenantPlanService(tenantId, name, description, Number(timesOfweek), price.replaceAll(/[A-z\$\.\-\,]/g, "").replace(/([0-9]+)([0-9]{2})/, '$1.$2')).then(() => {
       fireSuccesToast('Plano criado')
+      navigation.navigate('tenantPlansList')
+      reset()
     }).catch((err) => {
       console.log(err)
       fireErrorToast('Ocorreu um erro')

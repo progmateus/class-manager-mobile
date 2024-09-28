@@ -1,6 +1,4 @@
-import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { api } from "./api";
-import { ICreatetenantDTO } from "@dtos/tenants/ICreateTenantDTO";
 
 export function ListTenantPlansService(tenantId: string) {
   return api({
@@ -9,10 +7,18 @@ export function ListTenantPlansService(tenantId: string) {
   })
 }
 
-
 export function CreateTenantPlanService(tenantId: string, name: string, description: string, timesOfweek: number, price: string) {
+  console.log({
+    tenantId, name, description, timesOfweek, price
+  })
   return api({
     url: `${tenantId}/tenant-plans/`,
-    method: 'get'
+    method: 'post',
+    data: {
+      name,
+      description,
+      timesOfweek,
+      price: price
+    }
   })
 }
