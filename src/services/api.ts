@@ -98,6 +98,8 @@ api.registerInterceptTokenManager = singOut => {
       } else {
         fireErrorToast("Ocorreu um erro!")
       }
+    } else {
+      fireErrorToast("Ocorreu um erro!")
     }
 
     if (requestError.response && requestError.response.data.errors) {
