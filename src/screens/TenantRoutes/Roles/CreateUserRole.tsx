@@ -12,21 +12,14 @@ import { useCallback, useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
 import { DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 
-type RouteParamsProps = {
-  tenantIdParams: string
-}
-
 export function CreateUserRole() {
   const [usersRoles, setUsersRoles] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedUserRole, setSelectedUserRole] = useState<any>(null)
-  const route = useRoute()
-  const { tenantIdParams } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
-  const navigation = useNavigation<TenantNavigatorRoutesProps>();
+  const tenantId = tenant?.id
 
 
   const handleSelectUserRole = (userRole: any) => {

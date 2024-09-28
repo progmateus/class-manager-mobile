@@ -19,10 +19,6 @@ import { useAuth } from "@hooks/useAuth";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
-type RouteParamsProps = {
-  tenantIdParams: string;
-}
-
 const createTenantPlanSchema = z.object({
   name: z.string(),
   description: z.string(),
@@ -36,11 +32,9 @@ export function CreateTenantPlan() {
   const [classes, setClasses] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
   const { sizes, colors } = useTheme();
-  const route = useRoute()
 
-  const { tenantIdParams } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
+  const tenantId = tenant?.id
 
   const { control, handleSubmit, formState: { errors } } = useForm<CreateTenantplanProps>({
     resolver: zodResolver(createTenantPlanSchema)

@@ -20,10 +20,6 @@ import { useAuth } from "@hooks/useAuth";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
-type RouteParamsProps = {
-  tenantIdParams: string;
-}
-
 const createClassSchema = z.object({
   name: z.string().min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres'),
   description: z.string(),
@@ -35,12 +31,9 @@ type CreateClassProps = z.infer<typeof createClassSchema>
 export function CreateClass() {
   const [classes, setClasses] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
-  const { sizes, colors } = useTheme();
-  const route = useRoute()
 
-  const { tenantIdParams } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
+  const tenantId = tenant?.id
 
   const { control, handleSubmit, formState: { errors } } = useForm<CreateClassProps>({
     resolver: zodResolver(createClassSchema)

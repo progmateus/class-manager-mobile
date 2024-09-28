@@ -9,17 +9,11 @@ import { FlatList, Text, View, VStack } from "native-base"
 import { useCallback, useState } from "react"
 import { ListSubscriptionsService } from "src/services/subscriptionService"
 
-type RouteParamsProps = {
-  tenantIdParams: string;
-}
-
 export function SubscriptionsList() {
   const [subscriptions, setSubscriptions] = useState<ISubscriptionPreviewDTO[]>([])
   const [isLoading, setIsLoadig] = useState(false)
-  const route = useRoute()
-  const { tenantIdParams } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
+  const tenantId = tenant?.id
 
   useFocusEffect(useCallback(() => {
     setIsLoadig(true)
