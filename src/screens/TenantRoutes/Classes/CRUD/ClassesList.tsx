@@ -12,17 +12,13 @@ import { useCallback, useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ListClassesService } from "src/services/classesService"
 
-type RouteParamsProps = {
-  tenantIdParams: string;
-}
+
 export function ClassesList() {
   const [classes, setClasses] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
-  const route = useRoute()
-  const { tenantIdParams } = route.params as RouteParamsProps;
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
+  const tenantId = tenant?.id
 
 
   const handleClickCreate = () => {
