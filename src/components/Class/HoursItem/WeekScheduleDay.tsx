@@ -10,13 +10,14 @@ import { THEME } from "src/theme"
 
 interface IProps {
   dayOfWeek: number;
-  setTimeTable: (any: any) => void;
+  addScheduleDayFn: (dayOfWeek: number, hourStart: string, hourEnd: string) => void;
+  removeScheduleDayFn: (id: string) => void
   schedulesDays: ISCheduleDayDTO[]
 }
 
 const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
 
-export function WeekScheduleDay({ dayOfWeek, schedulesDays, setTimeTable }: IProps) {
+export function WeekScheduleDay({ dayOfWeek, schedulesDays, addScheduleDayFn, removeScheduleDayFn }: IProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [selectedWeekDay, setSelectedWeekDay] = useState(0)
@@ -44,8 +45,8 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, setTimeTable }: IPro
     setIsAddOpen(true)
   }
 
-  const handleAddScheduleTime = () => {
-    if (!hourStart || !hourStart) {
+  const handleAdd = () => {
+    if (!hourStart || !hourEnd) {
       fireErrorToast("Horário inválido")
       return
     }
@@ -54,23 +55,13 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, setTimeTable }: IPro
       fireErrorToast("Horário inválido")
       return
     }
-    setTimeTable((prevState: any) => {
-      return {
-        ...prevState, schedulesDays: [...prevState.schedulesDays,
-        {
-          id: String(Math.floor(Math.random() * 100)),
-          weekDay: dayOfWeek,
-          hourStart, hourEnd
-        }
-        ]
-      }
-    })
+    addScheduleDayFn(dayOfWeek, hourStart, hourEnd)
     onClose()
   }
 
 
-  const handleDeleteScheduleTime = (id: string) => {
-    setTimeTable((prevState: any) => { return { ...prevState, schedulesDays: [...prevState.schedulesDays.filter((item: any) => item.id !== id)] } })
+  const handleRemove = (id: string) => {
+    removeScheduleDayFn(id)
   }
 
   const onClose = () => {
@@ -106,7 +97,7 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, setTimeTable }: IPro
                       return (
                         <HStack key={scheduleDay.id} alignItems="center" justifyContent="space-evenly">
                           <Text fontSize="lg">{`${scheduleDay.hourStart} - ${scheduleDay.hourEnd}`}</Text>
-                          <TouchableOpacity onPress={() => handleDeleteScheduleTime(scheduleDay.id)}>
+                          <TouchableOpacity onPress={() => handleRemove(scheduleDay.id)}>
                             <TrashSimple size={24} />
                           </TouchableOpacity>
 
@@ -178,7 +169,7 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, setTimeTable }: IPro
               </VStack>
             </HStack>
             <Actionsheet.Item alignSelf="center">
-              <Button onPress={handleAddScheduleTime} color="brand.700" px={8} rounded="full"> Adicionar </Button>
+              <Button onPress={handleAdd} color="brand.700" px={8} rounded="full"> Adicionar </Button>
             </Actionsheet.Item>
           </VStack>
         </Actionsheet.Content>

@@ -1,7 +1,7 @@
 interface ISCheduleDayDTO {
   id: string;
   weekDay: number;
-  startHour: string;
-  endHour: string;
+  hourStart: string;
+  hourEnd: string;
 }
 export { ISCheduleDayDTO }

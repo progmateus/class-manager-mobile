@@ -4,12 +4,11 @@ import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { useAuth } from "@hooks/useAuth";
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { fireSuccesToast } from "@utils/HelperNotifications";
-import { HStack, Text, View, VStack } from "native-base";
+import { HStack, Text, View } from "native-base";
 import { Check, Info } from "phosphor-react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { GetTimeTableService, UpdateTimeTableService } from "src/services/timeTablesService";
 import { THEME } from "src/theme";
 
@@ -19,7 +18,6 @@ type RouteParamsProps = {
 
 export function TimeTable() {
   const route = useRoute()
-  const navigation = useNavigation<TenantNavigatorRoutesProps>()
   const { tenant } = useAuth()
 
 
@@ -39,6 +37,26 @@ export function TimeTable() {
       setIsLoading(false)
     })
   }, []))
+
+  const handleAddScheduleDay = useCallback((dayOfWeek: number, hourStart: string, hourEnd: string) => {
+    setTimeTable(prevState => (
+      {
+        ...prevState,
+        schedulesDays: [
+          ...prevState.schedulesDays,
+          {
+            id: String(Math.floor(Math.random() * 100)),
+            weekDay: dayOfWeek,
+            hourStart, hourEnd
+          }
+        ]
+      }
+    ))
+  }, [])
+
+  const handleRemoveScheduleDay = useCallback((id: string) => {
+    setTimeTable((prevState: any) => { return { ...prevState, schedulesDays: [...prevState.schedulesDays.filter((item: any) => item.id !== id)] } })
+  }, [])
 
 
   const handleSave = () => {
@@ -60,7 +78,15 @@ export function TimeTable() {
 
                   <>
                     {
-                      weeksDays.map((wd) => <WeekScheduleDay key={wd} dayOfWeek={wd} schedulesDays={timeTable?.schedulesDays?.filter((sd: any) => sd.weekDay == wd) ?? []} setTimeTable={setTimeTable} />)
+                      weeksDays.map((wd) => (
+                        <WeekScheduleDay
+                          key={wd}
+                          dayOfWeek={wd}
+                          schedulesDays={timeTable?.schedulesDays?.filter((sd: any) => sd.weekDay == wd) ?? []}
+                          addScheduleDayFn={handleAddScheduleDay}
+                          removeScheduleDayFn={handleRemoveScheduleDay}
+                        />
+                      ))
                     }
                   </>
                 }

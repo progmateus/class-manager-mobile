@@ -8,6 +8,7 @@ import { Routes } from '@routes/index';
 import { AuthContextProvider } from 'src/contexts/AuthContext';
 import { TenantContextProvider } from 'src/contexts/TenantContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 const queryClient = new QueryClient()
@@ -15,13 +16,15 @@ const queryClient = new QueryClient()
 export default function App() {
   const [fotnsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold })
   return (
-    <NativeBaseProvider theme={THEME}>
-      <StatusBar backgroundColor='transparent' translucent />
-      <QueryClientProvider client={queryClient}>
-        <AuthContextProvider>
-          {fotnsLoaded ? <Routes /> : <Loading />}
-        </AuthContextProvider>
-      </QueryClientProvider>
-    </NativeBaseProvider >
+    <SafeAreaProvider>
+      <NativeBaseProvider theme={THEME}>
+        <StatusBar backgroundColor='transparent' translucent />
+        <QueryClientProvider client={queryClient}>
+          <AuthContextProvider>
+            {fotnsLoaded ? <Routes /> : <Loading />}
+          </AuthContextProvider>
+        </QueryClientProvider>
+      </NativeBaseProvider >
+    </SafeAreaProvider>
   );
 }
