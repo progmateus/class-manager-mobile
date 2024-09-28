@@ -113,7 +113,7 @@ const errors = [
   },
   {
     message: "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS",
-    description: "Já existe uma inscrição ativa com esta empresa"
+    description: "Já existe uma inscrição ativa"
   },
   {
     message: "ERR_SUBSCRIPTION_INACTIVE",
