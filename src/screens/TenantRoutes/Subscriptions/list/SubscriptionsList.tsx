@@ -4,8 +4,10 @@ import { SubscriptionItem } from "@components/subscriptionItem"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect, useRoute } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { FlatList, Text, View, VStack } from "native-base"
+import { Plus } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { ListSubscriptionsService } from "src/services/subscriptionService"
 
@@ -14,6 +16,8 @@ export function SubscriptionsList() {
   const [isLoading, setIsLoadig] = useState(false)
   const { tenant } = useAuth()
   const tenantId = tenant?.id
+
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   useFocusEffect(useCallback(() => {
     setIsLoadig(true)
@@ -26,9 +30,14 @@ export function SubscriptionsList() {
     })
   }, []))
 
+
+  const handleAdd = () => {
+    navigation.navigate('createSubscription')
+  }
+
   return (
     <View flex={1}>
-      <PageHeader title="Alunos" />
+      <PageHeader title="Alunos" rightAction={handleAdd} rightIcon={Plus} />
       <Viewcontainer>
         {
           isLoading ? (<Loading />)

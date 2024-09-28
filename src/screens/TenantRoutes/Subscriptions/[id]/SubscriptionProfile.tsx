@@ -19,7 +19,7 @@ import { GetSubscriptionProfileService, ListSubscriptionsService, UpdateSubscrip
 
 
 type RouteParamsProps = {
-  tenantIdParams: string;
+  tenantIdParams?: string;
   subscriptionId: string;
 }
 

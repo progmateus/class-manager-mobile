@@ -26,10 +26,12 @@ import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
 import { TimeTable } from "@screens/TenantRoutes/TimesTables/[id]/TimeTable";
 import { TimesTablesList } from "@screens/TenantRoutes/TimesTables/list/TimesTablesList";
 import { CreateTimeTable } from "@screens/TenantRoutes/TimesTables/CreateTimeTable";
+import { CreateSubscription } from "@screens/TenantRoutes/Subscriptions/CreateSubscription";
 
 
 export type TenantRoutes = {
-  subscriptionProfile: { tenantIdParams: string, subscriptionId: string };
+  subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
+  createSubscription: undefined,
   students: { tenantIdParams: string };
   classes: { tenantIdParams: string; };
   classProfile: { classId: string, tenantIdParams: string };
@@ -84,16 +86,6 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="students"
-        component={SubscriptionsList}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <GraduationCap color={color} size={iconSize} />
-          )
-        }}
-      />
-
-      <Screen
         name="classes"
         component={ClassesList}
         options={{
@@ -114,13 +106,6 @@ export function TenantRoutes() {
         initialParams={{ tenantIdParams: "b1e4cc1f-8cda-47b6-b531-8587fc114ebd" }}
       />
 
-      <Screen
-        name="subscriptionProfile"
-        component={SubscriptionProfile}
-        options={{
-          tabBarButton: () => (null)
-        }}
-      />
       <Screen
         name="classProfile"
         component={ClassProfile}
@@ -235,6 +220,32 @@ export function TenantRoutes() {
         name="updateSubscriptionPlan"
         component={UpdateSubscriptionPlan}
         options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="subscriptionProfile"
+        component={SubscriptionProfile}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="students"
+        component={SubscriptionsList}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <GraduationCap color={color} size={iconSize} />
+          )
+        }}
+      />
+
+      <Screen
+        name="createSubscription"
+        component={CreateSubscription}
+        options={{
+          tabBarIcon: () => null
+        }}
       />
 
       <Screen
