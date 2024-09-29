@@ -1,4 +1,3 @@
-import { IUserDTO } from "@dtos/users/IUserDTO";
 import { api } from "./api";
 import { IUpdateUserDTO } from "@dtos/users/IUpateUserDTO";
 

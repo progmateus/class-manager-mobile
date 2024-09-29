@@ -16,13 +16,15 @@ import { useAuth } from "@hooks/useAuth";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 
 
+const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm
 
 const signUpSchema = z.object({
-  firstname: z.string().min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
-  lastname: z.string().min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
+  firstname: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
+  lastname: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
   email: z.string().email("E-mail inválido"),
-  password: z.string(),
-  document: z.string().transform((val) => val.replaceAll('.', '').replaceAll('-', ''))
+  username: z.string({ required_error: "Campo obrigatório", }).regex(usernameRegex, "Nome de usuário inválido").trim(),
+  password: z.string({ required_error: "Campo obrigatório", }),
+  document: z.string({ required_error: "Campo obrigatório", }).transform((val) => val.replaceAll('.', '').replaceAll('-', ''))
 });
 
 
@@ -42,7 +44,7 @@ export function SignUp() {
     navigation.navigate('signIn');
   }
 
-  const handleSignUp = ({ firstname, lastname, document, email, password }: signUpProps) => {
+  const handleSignUp = ({ firstname, lastname, document, email, password, username }: signUpProps) => {
     if (isLoading) return
 
     if (!isValidCPF(document)) {
@@ -52,19 +54,28 @@ export function SignUp() {
 
     setIsLoading(true)
 
-    CreateUserService({ firstname, lastname, document, email, password }).then(({ data }) => {
+    CreateUserService({ firstname, lastname, document, email, password, username }).then(({ data }) => {
       fireSuccesToast("Usuário criado")
       singIn(email, password)
       navigation.navigate('signIn');
     }).catch((err) => {
-      console.log(err)
-      const data: IApiResponse = err?.response?.data
-      if (data?.errors.find((err) => err.property === "Email" && err.message === "ERR_EMAIL_ALREADY_EXISTS")) {
-        setError('email', { message: "Este E-mail já está em uso" })
+      const data: IApiResponse = err
+      if (data?.errors.find((err) => err.message === "ERR_EMAIL_ALREADY_EXISTS")) {
+        setError('email', { message: "Este e-mail já está em uso" })
       }
 
-      if (data?.errors.find((err) => err.property === "Document" && err.message === "ERR_DOCUMENT_ALREADY_EXISTS")) {
+      if (data?.errors.find((err) => err.message === "ERR_DOCUMENT_ALREADY_EXISTS")) {
         setError('document', { message: "Este CPF já está sendo utilizado" })
+      }
+
+      if (data?.errors.find((err) => err.message === "ERR_USERNAME_ALREADY_EXISTS")) {
+        setError('username', { message: "Este nome de usuário já está sendo utilizado" })
+      }
+
+      if (data?.errors.find((e) => e.property == "Document.Number")) {
+        setError("document", {
+          message: "Documento inválido"
+        })
       }
     }).finally(() => {
       setIsLoading(false)
@@ -102,6 +113,14 @@ export function SignUp() {
                 )}
               />
             </HStack>
+
+            <Controller
+              name="username"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input placeholder="Nome de usuário" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.username?.message} />
+              )}
+            />
 
             <Controller
               name="document"
