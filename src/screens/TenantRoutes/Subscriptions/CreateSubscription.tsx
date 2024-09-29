@@ -209,6 +209,7 @@ export function CreateSubscription() {
                   h={20}
                   alt="Foto de perfil"
                   src={userFound.avatar}
+                  username={userFound.username}
                 />
 
                 <VStack alignItems="center" justifyContent="center" mt={4}>

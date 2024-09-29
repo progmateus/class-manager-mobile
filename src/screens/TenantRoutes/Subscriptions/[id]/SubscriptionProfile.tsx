@@ -111,6 +111,7 @@ export function SubscriptionProfile() {
                           h={24}
                           alt="Foto de perfil"
                           src={subscription.user.avatar}
+                          username={subscription.user.username}
                         />
                         <Text fontSize="sm" mt={2} color="coolGray.400">{subscription.user.username}</Text>
                       </Center>

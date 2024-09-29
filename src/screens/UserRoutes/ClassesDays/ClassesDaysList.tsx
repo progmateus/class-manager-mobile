@@ -152,13 +152,14 @@ export function ClassesDaysList() {
                                   return (
                                     index < 3 && (
                                       <Avatar
-                                        key={index}
+                                        key={booking.id}
                                         rounded="md"
                                         ml={-5}
                                         w={14}
                                         h={9}
                                         alt="image profile"
-                                        src={'https://img.freepik.com/fotos-gratis/estilo-de-vida-emocoes-das-pessoas-e-conceito-casual-mulher-asiatica-sorridente-confiante-e-bonita-com-os-bracos-cruzados-confiante-pronta-para-ajudar-ouvindo-colegas-de-trabalho-participando-da-conversa_1258-59335.jpg?ga=GA1.1.1603704743.1686338071&semt=sph'}
+                                        src={booking.user.avatar}
+                                        username={booking.user.username}
                                       />
                                     )
                                   )

@@ -97,6 +97,7 @@ export function Profile() {
             h={16}
             alt="user image"
             src={user.avatar}
+            username={user.username}
           />
           <VStack alignItems="left" justifyContent="center">
             <Heading fontFamily="heading"> {user.firstName} {user.lastName} </Heading>

@@ -49,7 +49,7 @@ export function SubscriptionsList() {
                 renderItem={({ item }) => (
                   <SubscriptionItem subscription={item} />
                 )}
-                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                 ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
               >
               </FlatList>

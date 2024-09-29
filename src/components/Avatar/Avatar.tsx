@@ -8,11 +8,19 @@ type IProps = IAvatarProps & {
   src?: string;
   alt?: string;
   type?: "user" | "tenant"
+  username?: string;
 }
 
-const DEFAULT_IMAGE = Image.resolveAssetSource(BlankProfileImage).uri;
 
-export function Avatar({ src, alt = "Imagem", type = "user", ...rest }: IProps) {
+export function Avatar({ src, alt = "Imagem", type = "user", username, ...rest }: IProps) {
+  let finalSrc = "";
+
+  finalSrc = Image.resolveAssetSource(BlankProfileImage).uri;
+
+  if (type === "user" && !src && username) {
+    finalSrc = `https://raw.githubusercontent.com/progmateus/avatars/refs/heads/main/assets/${username}.png`
+  }
+
   return (
     <NativeBaseAvatar
       rounded="full"
@@ -22,7 +30,7 @@ export function Avatar({ src, alt = "Imagem", type = "user", ...rest }: IProps) 
       bgColor="brand.500"
       {...rest}
       source={{
-        uri: src ? src : DEFAULT_IMAGE,
+        uri: finalSrc
       }}
     />
   )

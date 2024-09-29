@@ -40,6 +40,7 @@ function SubscriptionItem({ subscription }: IProps) {
           h={12}
           alt="Foto de perfil"
           src={subscription.user?.avatar}
+          username={subscription.user?.username}
         />
         <VStack flex={1}>
           <Text fontSize="sm" color="coolGray.900" fontWeight="bold">{`${subscription.user?.firstName} ${subscription.user?.lastName}`}</Text>
