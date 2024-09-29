@@ -15,11 +15,13 @@ type IProps = IAvatarProps & {
 export function Avatar({ src, alt = "Imagem", type = "user", username, ...rest }: IProps) {
   let finalSrc = "";
 
-  finalSrc = Image.resolveAssetSource(BlankProfileImage).uri;
+  finalSrc = src ? src : Image.resolveAssetSource(BlankProfileImage).uri;
 
   if (type === "user" && !src && username) {
     finalSrc = `https://raw.githubusercontent.com/progmateus/avatars/refs/heads/main/assets/${username}.png`
   }
+
+  console.log(finalSrc)
 
   return (
     <NativeBaseAvatar
