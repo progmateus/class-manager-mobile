@@ -45,9 +45,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
 
-  async function userUpdate(userData: IUserProfileDTO) {
+  async function userUpdate(userData: Partial<IUserProfileDTO>) {
     setUser(prevState => { return { ...prevState, ...userData } });
-    await storageUserSave(userData);
+    await storageUserSave(user);
   }
 
   async function tenantUpdate(tenantData: ITenantDTO) {
