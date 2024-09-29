@@ -15,7 +15,7 @@ interface IUserProfileDTO {
   avatar?: string;
   roles?: []
   subscriptions?: ISubscriptionPreviewDTO[];
-  usersRoles?: IUsersRolesDTO[];
+  usersRoles: IUsersRolesDTO[];
   studentsClasses: IStudentClassDTO[];
   teachersClasses: ITeacherClassDTO[];
 }

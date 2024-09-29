@@ -15,6 +15,10 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { ListAppPlansService } from "src/services/appServices";
 import { VerifyUsernameService } from "src/services/usernameService";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { useAuth } from "@hooks/useAuth";
+import { UpdateUser } from "../User/[id]/UpdateUser";
+import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
+import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 
 const cpfRegex = /(^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$)/
 const documentRegex = /(^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$)|(^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$)/gi
@@ -38,6 +42,8 @@ export function CreateTenant() {
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)
   const [tab, setTab] = useState(0)
   const [plans, setPlans] = useState<any[]>([])
+
+  const { user, userUpdate, tenant } = useAuth()
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
   const { control, handleSubmit, formState: { errors }, getValues, setError, trigger, getFieldState, reset } = useForm<CreateTenantProps>({
@@ -71,8 +77,31 @@ export function CreateTenant() {
       planId
     }).then(({ data }) => {
       fireSuccesToast('Empresa criada com sucesso!')
+
+      const responseRoles = data.data.usersRoles
+
+      const userRoles = user.usersRoles ?? []
+
+      const newUserRole = {
+        ...responseRoles[0],
+        tenant: data.data,
+        user: user,
+        role: responseRoles[0].role
+      }
+
+      const userUpdated = {
+        ...user,
+        usersRoles: [
+          ...userRoles,
+          newUserRole
+        ]
+      } as IUserProfileDTO
+
+      userUpdate(userUpdated)
+
       navigation.navigate('tenantProfile', { tenantIdParams: data.data.id })
     }).catch((err) => {
+      console.log('err: ', err)
       const { errors } = err;
       if (errors && errors.length) {
         checkErrors(errors)
