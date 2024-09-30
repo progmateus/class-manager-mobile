@@ -5,23 +5,20 @@ import MapSVG from "@assets/map-marker-outline.svg"
 import PersonSVG from "@assets/person-outline.svg"
 import { TouchableOpacity } from "react-native";
 import dayjs from "dayjs"
+import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO"
 
 interface IProps {
-  infos: {
-    date: Date,
-    hourStart: string,
-    hourEnd: string,
-    address: string,
-    teachers: ITeacher[]
-  }
+  classDay: ICLassDayDTO
 }
 
 interface ITeacher {
   name: string
 }
 
-export function Info({ infos }: IProps) {
+export function Info({ classDay }: IProps) {
+
   const getDate = (date: Date) => {
+    if (!date) return ""
     return new Intl.DateTimeFormat('pt-BR', {
       weekday: 'long',
       day: '2-digit',
@@ -32,32 +29,28 @@ export function Info({ infos }: IProps) {
   };
 
   return (
-    <VStack space={2} p={4} mt={2}>
+    <VStack space={2}>
       <HStack alignItems="center" space={1}>
         <CalendarSVG width={24} height={24} />
-        <Text fontSize="sm" textTransform="capitalize"> {getDate(infos.date)} </Text>
+        <Text fontSize="sm" textTransform="capitalize"> {getDate(classDay.date)} </Text>
       </HStack>
 
       <HStack alignItems="center" space={1}>
         <ClockSVG width={24} height={24} />
-        <Text fontSize="sm" > {infos.hourStart} </Text>
+        <Text fontSize="sm" > {classDay.hourStart} </Text>
         <Text fontSize="sm"> - </Text>
-        <Text fontSize="sm"> {infos.hourEnd} </Text>
+        <Text fontSize="sm"> {classDay.hourEnd} </Text>
       </HStack>
 
       <HStack alignItems="center" space={1}>
         <MapSVG width={24} height={24} />
-        <Text fontSize="sm"> {infos.address} </Text>
+        <Text fontSize="sm"> Praia da bica </Text>
       </HStack>
 
-      {
-        infos.teachers && infos.teachers.length > 0 && (
-          <HStack alignItems="center" space={1}>
-            <PersonSVG width={24} height={24} />
-            <Text fontSize="sm"> {infos.teachers[0].name} </Text>
-          </HStack>
-        )
-      }
+      <HStack alignItems="center" space={1}>
+        <PersonSVG width={24} height={24} />
+        <Text fontSize="sm"> {classDay.class?.teachersClasses[0]?.user?.name ?? 'Não informado'} </Text>
+      </HStack>
     </VStack>
   )
 }

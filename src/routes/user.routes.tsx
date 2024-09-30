@@ -6,7 +6,7 @@ import {
 import { useTheme } from "native-base";
 import { Bills } from "@screens/UserRoutes/Billing/Bills";
 import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
-import { ClassDayInfo } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayInfo";
+import { ClassDayProfile } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayProfile";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
 import { UpdateUser } from "@screens/UserRoutes/User/[id]/UpdateUser";
 import { Calendar, CurrencyDollar, MagnifyingGlass, UserCircle } from "phosphor-react-native";
@@ -26,7 +26,7 @@ type UserRoutes = {
   bills: undefined;
   tenantProfile: { tenantIdParams: string };
   classesDays: { tenantIdParams?: string };
-  classDayInfo: { tenantIdParams: string, classDayId: string };
+  classDayProfile: { tenantIdParams: string, classDayId: string };
   updateClassDayStatus: { tenantIdParams: string, classDayId: string };
   updateUser: undefined;
   updatePassword: undefined;
@@ -105,8 +105,8 @@ export function UserRoutes() {
       />
 
       <Screen
-        name="classDayInfo"
-        component={ClassDayInfo}
+        name="classDayProfile"
+        component={ClassDayProfile}
         options={{ tabBarButton: () => (null) }}
       />
 

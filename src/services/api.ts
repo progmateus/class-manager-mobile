@@ -103,13 +103,10 @@ api.registerInterceptTokenManager = singOut => {
     }
 
     if (requestError.response && requestError.response.data.errors) {
-      console.log('1 if: ', requestError.response.data.errors)
       return Promise.reject(new ValidationError(requestError.response.data.message, requestError.response.data.errors))
     } else if (requestError.response && requestError.response.data) {
-      console.log('2 if')
       return Promise.reject(new AppError(requestError.response.data.message))
     } else {
-      console.log('else')
       return Promise.reject(requestError)
     }
   });

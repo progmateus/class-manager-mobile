@@ -171,7 +171,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function signOutTenant() {
     setIsLoadingData(true);
     authenticationTypeUpdate("user")
-    tenantUpdate({} as ITenantDTO);
+    setTenant({} as ITenantDTO);
     await storageTenantRemove()
     setIsLoadingData(false)
   }

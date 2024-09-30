@@ -30,7 +30,7 @@ export function UpdateClassDayStatus() {
     setIsLoading(true)
     UpdateClassDayStatusService(tenantId, classDayId, EClassDayStatus.CANCELED, observation).then(({ data }) => {
       fireSuccesToast('Aula cancelada')
-      navigation.navigate('classDayInfo', {
+      navigation.navigate('classDayProfile', {
         classDayId,
         tenantIdParams: tenantId
       })
@@ -45,7 +45,7 @@ export function UpdateClassDayStatus() {
     setIsLoading(true)
     UpdateClassDayStatusService(tenantId, classDayId, EClassDayStatus.CONCLUDED, observation).then(({ data }) => {
       fireSuccesToast('Aula confirmada')
-      navigation.navigate('classDayInfo', {
+      navigation.navigate('classDayProfile', {
         classDayId,
         tenantIdParams: tenantId
       })

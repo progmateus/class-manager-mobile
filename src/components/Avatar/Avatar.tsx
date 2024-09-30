@@ -21,8 +21,6 @@ export function Avatar({ src, alt = "Imagem", type = "user", username, ...rest }
     finalSrc = `https://raw.githubusercontent.com/progmateus/avatars/refs/heads/main/assets/${username}.png`
   }
 
-  console.log(finalSrc)
-
   return (
     <NativeBaseAvatar
       rounded="full"

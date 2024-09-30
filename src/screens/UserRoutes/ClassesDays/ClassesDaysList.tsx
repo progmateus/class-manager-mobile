@@ -57,11 +57,10 @@ export function ClassesDaysList() {
     dayjs().day(7).toDate()
   ]
 
-  function handleClickClassDay() {
-    if (!tenantId) return
-    navigation.navigate('classDayInfo', {
+  function handleClickClassDay(classDayId: string, tenantId: string) {
+    navigation.navigate('classDayProfile', {
       tenantIdParams: tenantId,
-      classDayId: '24f072e1-703e-4c52-bfa5-3afa9deba9f1'
+      classDayId
     });
   }
 
@@ -134,7 +133,7 @@ export function ClassesDaysList() {
                     pb={20}
                     keyExtractor={classDay => classDay.id}
                     renderItem={({ item }) => (
-                      <TouchableOpacity key={item.id} onPress={handleClickClassDay}>
+                      <TouchableOpacity key={item.id} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
                         <HStack p={4} space={4} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
                           <VStack space={2} alignItems="center" justifyContent="center">
                             <ClockSVG />
@@ -155,7 +154,7 @@ export function ClassesDaysList() {
                                         key={booking.id}
                                         rounded="md"
                                         ml={-5}
-                                        w={14}
+                                        w={9}
                                         h={9}
                                         alt="image profile"
                                         src={booking.user.avatar}
