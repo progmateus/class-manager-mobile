@@ -3,7 +3,7 @@ import { Box, Button, FlatList, HStack, Heading, Image, Text, VStack } from "nat
 import { TouchableOpacity } from "react-native";
 
 type Props = {
-  image?: string
+  avatar?: string
   name: string;
   username: string;
   description?: string;
@@ -11,7 +11,7 @@ type Props = {
   onPress: () => void;
 }
 
-export function TenantItem({ image = "https://img.freepik.com/vetores-gratis/ilustracao-de-galeria-icone_53876-27002.jpg?t=st=1724109695~exp=1724113295~hmac=ac8b71c89561ce80233228d6f6aa1afee6f502ea59bb0621757817241fad45b7&w=826", name, username, description, categories, onPress }: Props) {
+export function TenantItem({ avatar = "https://img.freepik.com/vetores-gratis/ilustracao-de-galeria-icone_53876-27002.jpg?t=st=1724109695~exp=1724113295~hmac=ac8b71c89561ce80233228d6f6aa1afee6f502ea59bb0621757817241fad45b7&w=826", name, username, description, categories, onPress }: Props) {
   return (
     <TouchableOpacity onPress={onPress}>
       <HStack px={2} py={3} alignItems="center" rounded="md">
@@ -21,7 +21,7 @@ export function TenantItem({ image = "https://img.freepik.com/vetores-gratis/ilu
           h={12}
           alt="Imagem de perfil"
           mr={4}
-          src={image}
+          src={avatar}
         />
         <VStack flex={1}>
           <Heading numberOfLines={1} fontFamily="heading" fontSize="sm">{name} </Heading>

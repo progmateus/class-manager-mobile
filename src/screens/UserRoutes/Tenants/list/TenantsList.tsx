@@ -177,7 +177,7 @@ export function TenantsList() {
           data={tenants}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <TenantItem username={item.username} name={item.name} onPress={() => handleSelectTenant(item.id)} />
+            <TenantItem username={item.username} name={item.name} avatar={item.avatar} onPress={() => handleSelectTenant(item.id)} />
           )}>
         </FlatList>
       </View>

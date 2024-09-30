@@ -13,6 +13,7 @@ import { CreatebookingService, DeleteBookingService } from "src/services/booking
 import { useAuth } from "@hooks/useAuth";
 import { Viewcontainer } from "@components/ViewContainer";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
+import { orderBy } from "lodash";
 
 
 type RouteParamsProps = {
@@ -111,9 +112,12 @@ export function ClassDayProfile() {
       })
   }
 
-
   const isAdmin = useCallback(() => {
     return GetRole(user.usersRoles, tenantIdParams, "admin")
+  }, [classDayId])
+
+  const bookings = useCallback(() => {
+    return orderBy(classDay.bookings, (obj) => obj.user.name, ['asc'])
   }, [classDayId])
 
 
@@ -132,10 +136,10 @@ export function ClassDayProfile() {
               <Info classDay={classDay} />
               <Heading fontFamily="heading" fontSize="md" mt={8}> Lista de presença</Heading>
               <FlatList
-                data={classDay.bookings}
+                data={orderBy(classDay.bookings, (obj) => obj.user.name, ['asc'])}
                 pb={20}
                 px={2}
-                keyExtractor={student => student.id}
+                keyExtractor={booking => booking.id}
                 renderItem={({ item }) => (
                   <StudentItem key={item.id} user={item.user} />
                 )}
