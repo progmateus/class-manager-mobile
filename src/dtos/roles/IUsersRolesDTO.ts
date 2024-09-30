@@ -6,6 +6,7 @@ interface IUsersRolesDTO {
   id: string;
   userId: string;
   roleId: string;
+  tenantId: string;
   user: IUserPreviewDTO;
   role: IRoleDTO;
   tenant: ITenantDTO;

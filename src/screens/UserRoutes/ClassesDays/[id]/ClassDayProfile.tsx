@@ -44,7 +44,6 @@ export function ClassDayProfile() {
     }
   ]
 
-  const isTeacher = GetRole(roles, "123", "teacher")
 
   const route = useRoute()
 
@@ -54,7 +53,7 @@ export function ClassDayProfile() {
   const [classDay, setClassDay] = useState<ICLassDayDTO>({} as ICLassDayDTO)
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
-  const { user: { id: userId } } = useAuth()
+  const { user } = useAuth()
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   useFocusEffect(useCallback(() => {
@@ -81,7 +80,7 @@ export function ClassDayProfile() {
   function handleParticipate() {
     setIsLoadingAction(true)
 
-    CreatebookingService(tenantId, classDayId, userId).then(({ data }) => {
+    CreatebookingService(tenantId, classDayId, user.id).then(({ data }) => {
       const bookings = [...classDay.bookings, data.data]
       setClassDay({
         ...classDay,
@@ -95,8 +94,8 @@ export function ClassDayProfile() {
   function handleCancelbooking() {
     setIsLoadingAction(true)
     const bookings = [...classDay.bookings]
-    const index = bookings.findIndex((b) => b.userId === userId)
-    DeleteBookingService(tenantId, bookings[index].id, userId).then(({ data }) => {
+    const index = bookings.findIndex((b) => b.userId === user.id)
+    DeleteBookingService(tenantId, bookings[index].id, user.id).then(({ data }) => {
       if (index !== -1) {
         bookings.splice(index, 1)
       }
@@ -111,6 +110,11 @@ export function ClassDayProfile() {
         setIsLoadingAction(false)
       })
   }
+
+
+  const isAdmin = useCallback(() => {
+    return GetRole(user.usersRoles, tenantIdParams, "admin")
+  }, [classDayId])
 
 
 
@@ -140,16 +144,16 @@ export function ClassDayProfile() {
               >
               </FlatList>
 
-              <VStack space={4} px={4}>
+              <VStack space={4} px={4} mt={4}>
                 {
-                  classDay.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === userId) ? (
+                  classDay.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === user.id) ? (
                     <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={handleCancelbooking} variant="outline" color="brand.600" />
                   ) : (
                     <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={handleParticipate} />
                   )
                 }
                 {
-                  isTeacher && (
+                  isAdmin() && (
                     <>
                       <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
                     </>
