@@ -149,17 +149,18 @@ export function ClassesDaysList() {
                               item.bookings && item.bookings.length > 0 && (
                                 item.bookings.map((booking, index) => {
                                   return (
-                                    index < 3 && (
-                                      <Avatar
-                                        key={booking.id}
-                                        rounded="md"
-                                        ml={-5}
-                                        w={9}
-                                        h={9}
-                                        alt="image profile"
-                                        src={booking.user.avatar}
-                                        username={booking.user.username}
-                                      />
+                                    index <= 2 && (
+                                      <View ml={-5}>
+                                        <Avatar
+                                          rounded="md"
+                                          key={booking.id}
+                                          w={9}
+                                          h={9}
+                                          alt="image profile"
+                                          src={booking.user.avatar}
+                                          username={booking.user.username}
+                                        />
+                                      </View>
                                     )
                                   )
                                 })

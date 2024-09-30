@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
 import { Avatar } from "@components/Avatar/Avatar";
+import { ScrollContainer } from "@components/ScrollContainer";
 
 
 export function Profile() {
@@ -87,7 +88,7 @@ export function Profile() {
   ]
 
   return (
-    <View>
+    <View flex={1}>
       <PageHeader title="Informações" />
       <ScrollView>
         <HStack space={2} mt={8} px={4}>
@@ -100,7 +101,7 @@ export function Profile() {
             username={user.username}
           />
           <VStack alignItems="left" justifyContent="center">
-            <Heading fontFamily="heading"> {user.firstName} {user.lastName} </Heading>
+            <Heading fontFamily="heading">{user.firstName} {user.lastName}</Heading>
             <Text fontFamily="body"> @{user.username}</Text>
           </VStack>
         </HStack>
@@ -120,7 +121,7 @@ export function Profile() {
             }
           </HStack>
         </ScrollView>
-        <View mt={8}>
+        <View mt={8} pb="8">
           <MenuOption icon={<SettingsSVG width={22} height={22} />} title="Configurar Conta" onPress={() => navigation.navigate('updateUser')} />
           <MenuOption icon={<CardSVG width={22} height={22} />} title="Dados Pessoais" onPress={() => navigation.navigate('updateUser')} />
           <MenuOption icon={<ShieldSVG width={22} height={22} />} title="Alterar Senha" onPress={() => navigation.navigate('updatePassword')} />
