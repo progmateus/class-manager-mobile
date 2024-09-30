@@ -137,13 +137,14 @@ export function ClassDayProfile() {
               <Heading fontFamily="heading" fontSize="md" mt={8}> Lista de presença</Heading>
               <FlatList
                 data={orderBy(classDay.bookings, (obj) => obj.user.name, ['asc'])}
+                mt={4}
                 pb={20}
                 px={2}
                 keyExtractor={booking => booking.id}
                 renderItem={({ item }) => (
                   <StudentItem key={item.id} user={item.user} />
                 )}
-                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ItemSeparatorComponent={() => <View style={{ height: 18 }} />}
                 ListEmptyComponent={<Text fontFamily="body" textAlign="center" mt={4}> Nenhum aluno agendado </Text>}
               >
               </FlatList>
