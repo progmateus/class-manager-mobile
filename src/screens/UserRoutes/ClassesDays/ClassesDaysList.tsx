@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native";
 import { PageHeader } from "@components/PageHeader";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { Plus } from "phosphor-react-native";
+import { Clock, Plus } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
 import { useCallback, useState } from "react";
 import { Loading } from "@components/Loading";
@@ -14,10 +14,15 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ListClassDaysService } from "src/services/classDaysService";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { Avatar } from "@components/Avatar/Avatar";
+import Animated, { SlideInRight, SlideOutRight } from "react-native-reanimated";
+import { orderBy } from "lodash";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
 }
+
+const TouchableOpacityAnimated = Animated.createAnimatedComponent(TouchableOpacity)
+
 
 export function ClassesDaysList() {
 
@@ -32,7 +37,6 @@ export function ClassesDaysList() {
 
   const { data: classesDays, isLoading, refetch } = useQuery<ICLassDayDTO[]>({
     queryKey: ['get-class-days', String(selectedWeekDay)],
-    placeholderData: keepPreviousData,
     queryFn: () => {
       return ListClassDaysService(selectedWeekDay).then(({ data }) => {
         /* setClassesDays(data.data) */
@@ -109,12 +113,19 @@ export function ClassesDaysList() {
                         <Text textTransform="capitalize">
                           {getWeekDay(date).replace('.', '')}
                         </Text>
-                        <Text fontFamily="heading" mt={2} fontSize="xl">
+                        <Text
+                          color={dayjs(selectedWeekDay).format('DD/MM/YYYY') === dayjs(date).format('DD/MM/YYYY') ? "brand.500" : "coolGray.700"}
+                          fontFamily="heading" mt={2} fontSize="xl">
                           {getDay(date)}
                         </Text>
-                        <View mt={2} w="1/3" borderBottomColor={
-                          dayjs(selectedWeekDay).format('DD/MM/YYYY') === dayjs(date).format('DD/MM/YYYY') ? "brand.500" : "coolGray.300"
-                        } borderBottomWidth={2}></View>
+                        <View
+                          mt={2}
+                          w="1/3"
+                          borderBottomColor={
+                            dayjs(selectedWeekDay).format('DD/MM/YYYY') === dayjs(date).format('DD/MM/YYYY') ? "brand.500" : "coolGray.300"
+                          }
+                          borderBottomWidth={2}
+                        />
                       </Center>
                     </TouchableOpacity>
                   </VStack>
@@ -128,21 +139,24 @@ export function ClassesDaysList() {
               isLoading ? (<Loading />)
                 : (
                   <FlatList
-                    data={classesDays}
-                    flex={1}
-                    pb={20}
+                    data={orderBy(classesDays, (obj) => obj.date, ['asc'])}
+                    style={{
+                      flex: 1,
+                      paddingBottom: 20
+                    }}
+                    refreshing={isLoading}
                     keyExtractor={classDay => classDay.id}
-                    renderItem={({ item }) => (
-                      <TouchableOpacity key={item.id} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
-                        <HStack p={4} space={4} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
+                    renderItem={({ item, index }) => (
+                      <TouchableOpacityAnimated key={item.id} entering={SlideInRight} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
+                        <HStack p={4} space={6} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
                           <VStack space={2} alignItems="center" justifyContent="center">
-                            <ClockSVG />
-                            <Text> {getHours(item.date)}</Text>
+                            <Clock size={20} />
+                            <Text fontWeight="bold"> {getHours(item.date)}</Text>
                           </VStack>
                           <VStack space={0.5} flex={1}>
                             <Heading fontSize="sm">{item.class?.tenant?.name}</Heading>
-                            <Text fontSize="xs">{item.class.name}</Text>
-                            <Text fontSize="xs" color="coolGray.500">Não informado</Text>
+                            <Text fontSize="xs" fontWeight="light">{item.class.name}</Text>
+                            <Text fontSize="xs" fontWeight="light" color="coolGray.500">Não informado</Text>
                           </VStack>
                           <HStack>
                             {
@@ -175,7 +189,7 @@ export function ClassesDaysList() {
                             }
                           </HStack>
                         </HStack>
-                      </TouchableOpacity>
+                      </TouchableOpacityAnimated>
                     )}
                     ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                     ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}

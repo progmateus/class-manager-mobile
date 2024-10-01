@@ -22,7 +22,8 @@ module.exports = function (api) {
             "underscore": "lodash"
           }
         }
-      ]
+      ],
+      'react-native-reanimated/plugin',
     ]
   };
 };

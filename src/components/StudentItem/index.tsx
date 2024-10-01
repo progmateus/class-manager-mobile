@@ -4,11 +4,14 @@ import { HStack, Heading, Image, Text, VStack } from "native-base";
 import { UserCircle } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 
+
+
 interface IProps {
   user: IUserPreviewDTO;
+  index: number;
 }
 
-export function StudentItem({ user }: IProps) {
+export function StudentItem({ user, index }: IProps) {
   return (
     <TouchableOpacity key={user.avatar}>
       <HStack alignItems="center" rounded="md">

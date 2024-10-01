@@ -14,7 +14,7 @@ import { useAuth } from "@hooks/useAuth";
 import { Viewcontainer } from "@components/ViewContainer";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { orderBy } from "lodash";
-
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -35,27 +35,20 @@ interface ITeacher {
 }
 
 export function ClassDayProfile() {
-  const roles = [
-    {
-      tenantId: "123",
-      roleId: "456",
-      role: {
-        name: "teacher"
-      }
-    }
-  ]
 
-
-  const route = useRoute()
-
-  const { classDayId, tenantIdParams } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
   const [classDay, setClassDay] = useState<ICLassDayDTO>({} as ICLassDayDTO)
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
   const { user } = useAuth()
   const navigation = useNavigation<UserNavigatorRoutesProps>();
+
+  const route = useRoute()
+
+  const { classDayId, tenantIdParams } = route.params as RouteParamsProps;
+
+  const tenantId = tenant?.id ?? tenantIdParams
+
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
@@ -116,12 +109,6 @@ export function ClassDayProfile() {
     return GetRole(user.usersRoles, tenantIdParams, "admin")
   }, [classDayId])
 
-  const bookings = useCallback(() => {
-    return orderBy(classDay.bookings, (obj) => obj.user.name, ['asc'])
-  }, [classDayId])
-
-
-
   return (
     <View flex={1}>
       <PageHeader title="Detalhes da aula" />
@@ -134,20 +121,21 @@ export function ClassDayProfile() {
           (
             <Viewcontainer>
               <Info classDay={classDay} />
-              <Heading fontFamily="heading" fontSize="md" mt={8}> Lista de presença</Heading>
-              <FlatList
-                data={orderBy(classDay.bookings, (obj) => obj.user.name, ['asc'])}
-                mt={4}
-                pb={20}
-                px={2}
-                keyExtractor={booking => booking.id}
-                renderItem={({ item }) => (
-                  <StudentItem key={item.id} user={item.user} />
-                )}
-                ItemSeparatorComponent={() => <View style={{ height: 18 }} />}
-                ListEmptyComponent={<Text fontFamily="body" textAlign="center" mt={4}> Nenhum aluno agendado </Text>}
-              >
-              </FlatList>
+              <View flex={1} px={2}>
+                <Heading fontFamily="heading" fontSize="md" mt={8} mb={4}> Lista de presença</Heading>
+                <Animated.FlatList
+                  data={orderBy(classDay.bookings, (obj) => obj.user.name, ['asc'])}
+                  itemLayoutAnimation={LinearTransition}
+                  keyExtractor={booking => booking.id}
+                  refreshing={isLoading}
+                  renderItem={({ item, index }) => (
+                    <StudentItem key={item.id} user={item.user} index={index} />
+                  )}
+                  ItemSeparatorComponent={() => <View style={{ height: 18 }} />}
+                  ListEmptyComponent={<Text fontFamily="body" textAlign="center" mt={4}> Nenhum aluno agendado </Text>}
+                >
+                </Animated.FlatList>
+              </View>
 
               <VStack space={4} px={4} mt={4}>
                 {

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
-import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
+import { useFonts, Roboto_400Regular, Roboto_700Bold, Roboto_300Light } from '@expo-google-fonts/roboto';
 import { NativeBaseProvider } from 'native-base';
 import { Loading } from 'src/components/Loading';
 import { THEME } from 'src/theme';
@@ -14,7 +14,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 const queryClient = new QueryClient()
 
 export default function App() {
-  const [fotnsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold })
+  const [fotnsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold, Roboto_300Light })
   return (
     <SafeAreaProvider>
       <NativeBaseProvider theme={THEME}>
