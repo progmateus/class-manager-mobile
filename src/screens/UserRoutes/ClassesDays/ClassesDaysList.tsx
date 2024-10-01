@@ -16,6 +16,7 @@ import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { Avatar } from "@components/Avatar/Avatar";
 import Animated, { SlideInLeft, SlideInRight, SlideOutRight } from "react-native-reanimated";
 import { orderBy } from "lodash";
+import { ClassDaySkeleton } from "@components/skeletons/ClassDaySkeleton";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -136,7 +137,14 @@ export function ClassesDaysList() {
 
           <View flexGrow={1} px={2} mt={12}>
             {
-              isLoading ? (<Loading />)
+              isLoading ? (
+                <VStack space={3}>
+                  <ClassDaySkeleton />
+                  <ClassDaySkeleton />
+                  <ClassDaySkeleton />
+                  <ClassDaySkeleton />
+                </VStack>
+              )
                 : (
                   <FlatList
                     data={orderBy(classesDays, (obj) => obj.date, ['asc'])}
@@ -147,10 +155,12 @@ export function ClassesDaysList() {
                     refreshing={isLoading}
                     keyExtractor={classDay => classDay.id}
                     renderItem={({ item, index }) => (
-                      <TouchableOpacityAnimated key={item.id} entering={SlideInRight} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
+                      <TouchableOpacityAnimated key={item.id} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
                         <HStack p={4} space={6} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
                           <VStack space={2} alignItems="center" justifyContent="center">
-                            <Clock size={20} />
+                            <Clock size={20} style={{
+                              marginLeft: 4
+                            }} />
                             <Text fontWeight="bold"> {getHours(item.date)}</Text>
                           </VStack>
                           <VStack space={0.5} flex={1}>
