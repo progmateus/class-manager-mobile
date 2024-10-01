@@ -14,7 +14,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ListClassDaysService } from "src/services/classDaysService";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { Avatar } from "@components/Avatar/Avatar";
-import Animated, { SlideInRight, SlideOutRight } from "react-native-reanimated";
+import Animated, { SlideInLeft, SlideInRight, SlideOutRight } from "react-native-reanimated";
 import { orderBy } from "lodash";
 
 type RouteParamsProps = {
@@ -164,7 +164,7 @@ export function ClassesDaysList() {
                                 item.bookings.map((booking, index) => {
                                   return (
                                     index <= 2 && (
-                                      <View ml={-5}>
+                                      <View ml={-5} key={booking.id}>
                                         <Avatar
                                           rounded="md"
                                           key={booking.id}
