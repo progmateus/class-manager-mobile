@@ -7,6 +7,7 @@ import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfil
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { GetRole } from "@utils/GetRole"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
 import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
@@ -30,7 +31,7 @@ export function SubscriptionProfile() {
   const [subscription, setSubscription] = useState<ISubscriptionProfileDTO>({} as ISubscriptionProfileDTO)
   const route = useRoute()
   const { tenantIdParams, subscriptionId } = route.params as RouteParamsProps;
-  const { tenant } = useAuth()
+  const { tenant, user } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
@@ -68,6 +69,10 @@ export function SubscriptionProfile() {
       setIsActing(false)
     })
   }
+
+  const isAdmin = useCallback(() => {
+    return GetRole(user.usersRoles, tenantId, "admin")
+  }, [tenantId])
   return (
     <View flex={1}>
       {
@@ -157,13 +162,18 @@ export function SubscriptionProfile() {
 
                   <VStack space={4} pb={20}>
                     <Text color="coolGray.400" fontSize="md" mb={-2}> Ações</Text>
-                    <MenuItem.Root onPress={() => setIsOpen(true)}>
-                      <MenuItem.Icon icon={LockKey} />
-                      <MenuItem.Content title="Gerenciar assinatura" description="Gerencie a assinatura manualmente" />
-                      <MenuItem.Actions>
-                        <MenuItem.Action icon={ArrowRight} />
-                      </MenuItem.Actions>
-                    </MenuItem.Root>
+
+                    {
+                      isAdmin() && (
+                        <MenuItem.Root onPress={() => setIsOpen(true)}>
+                          <MenuItem.Icon icon={LockKey} />
+                          <MenuItem.Content title="Gerenciar assinatura" description="Gerencie a assinatura manualmente" />
+                          <MenuItem.Actions>
+                            <MenuItem.Action icon={ArrowRight} />
+                          </MenuItem.Actions>
+                        </MenuItem.Root>
+                      )
+                    }
 
                     <MenuItem.Root onPress={() => navigation.navigate('updateStudentclass', { tenantIdParams: tenantId, userId: subscription.userId, classIdExists: subscription.user?.studentsClasses[0].class?.id as string, subscriptionId })}>
                       <MenuItem.Icon icon={BookBookmark} />
