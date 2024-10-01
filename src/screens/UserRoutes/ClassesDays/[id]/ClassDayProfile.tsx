@@ -15,6 +15,7 @@ import { Viewcontainer } from "@components/ViewContainer";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { orderBy } from "lodash";
 import Animated, { LinearTransition } from "react-native-reanimated";
+import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -80,6 +81,8 @@ export function ClassDayProfile() {
         ...classDay,
         bookings
       })
+    }).then(() => {
+      fireSuccesToast("Aula agendada")
     }).finally(() => {
       setIsLoadingAction(false)
     })
@@ -97,6 +100,7 @@ export function ClassDayProfile() {
         ...classDay,
         bookings
       })
+      fireInfoToast('Agendamento cancelado')
     }).catch((err) => {
       console.log(err)
     })
