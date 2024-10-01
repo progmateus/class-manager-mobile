@@ -48,7 +48,7 @@ export function TenantProfile() {
   const route = useRoute()
 
   const [tenantInfo, setTenantInfo] = useState<ITenant>({} as ITenant)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isActionLoading, setIsActionLoading] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 

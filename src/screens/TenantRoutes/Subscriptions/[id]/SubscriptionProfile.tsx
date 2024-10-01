@@ -25,7 +25,7 @@ type RouteParamsProps = {
 }
 
 export function SubscriptionProfile() {
-  const [isLoading, setIsLoadig] = useState(false)
+  const [isLoading, setIsLoadig] = useState(true)
   const [isActing, setIsActing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [subscription, setSubscription] = useState<ISubscriptionProfileDTO>({} as ISubscriptionProfileDTO)

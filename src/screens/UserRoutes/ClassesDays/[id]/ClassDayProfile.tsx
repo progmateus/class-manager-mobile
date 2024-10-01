@@ -16,6 +16,7 @@ import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { orderBy } from "lodash";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
+import { ClassDayProfileSkeleton } from "@components/skeletons/screens/ClassDayProfile/ClassDayProfileSkeleton";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -39,7 +40,7 @@ export function ClassDayProfile() {
 
   const { tenant } = useAuth()
   const [classDay, setClassDay] = useState<ICLassDayDTO>({} as ICLassDayDTO)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
   const { user } = useAuth()
   const navigation = useNavigation<UserNavigatorRoutesProps>();
@@ -49,7 +50,6 @@ export function ClassDayProfile() {
   const { classDayId, tenantIdParams } = route.params as RouteParamsProps;
 
   const tenantId = tenant?.id ?? tenantIdParams
-
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
@@ -63,7 +63,7 @@ export function ClassDayProfile() {
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [classDayId]))
+  }, [tenantId, classDayId]))
 
   function handleClickUpdateStatus() {
     navigation.navigate('updateClassDayStatus', {
@@ -119,7 +119,7 @@ export function ClassDayProfile() {
       {
         isLoading ?
           (
-            <Loading />
+            <ClassDayProfileSkeleton />
           )
           :
           (

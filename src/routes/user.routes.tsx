@@ -48,6 +48,8 @@ export function UserRoutes() {
     <Navigator
       backBehavior="history"
       screenOptions={{
+        unmountOnBlur: true,
+        lazy: true,
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: colors.blue[500],
