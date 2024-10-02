@@ -31,6 +31,10 @@ export function ClassesList() {
     }
   })
 
+  useFocusEffect(useCallback(() => {
+    refetch()
+  }, []))
+
   const handleClickCreate = () => {
     navigation.navigate('createClass')
   }

@@ -48,7 +48,7 @@ export function ClassesDaysList() {
 
   useFocusEffect(useCallback(() => {
     refetch()
-  }, [selectedWeekDay]))
+  }, []))
 
 
   const weekDays = [
