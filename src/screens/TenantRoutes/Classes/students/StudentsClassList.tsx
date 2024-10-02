@@ -6,7 +6,7 @@ import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query"
 import { fireInfoToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, FlatList, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
@@ -27,6 +27,8 @@ export function StudentsClassList() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
+
+  const queryClient = new QueryClient();
 
   const { data: students, isLoading, refetch } = useQuery<IStudentClassDTO[]>({
     queryKey: ['get-classes', tenantId, classId],
@@ -55,18 +57,17 @@ export function StudentsClassList() {
     return await RemoveStudentFromClassService(tenantId, selectedStudent.id, classId)
   }
 
-  const removeMutation = useMutation({
+  const removeStudentClassMutation = useMutation({
     mutationFn: handleRemove,
     onSuccess: () => {
       if (!selectedStudent) {
         return
       }
-      const index = students?.findIndex(sc => sc.id == selectedStudent.id)
-      if (index != -1) {
-        students?.slice(1, index)
-      }
-      fireInfoToast('Aluno removido com sucesso!')
+      fireInfoToast('Aluno removido')
       setIsOpen(false)
+      queryClient.invalidateQueries({
+        queryKey: ['get-classes', tenantId, classId]
+      })
     }
   })
 
@@ -76,6 +77,7 @@ export function StudentsClassList() {
     setselectedStudent(student)
     setIsOpen(true)
   }
+
   return (
     <View flex={1}>
       <PageHeader title="Gerenciar alunos" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
@@ -96,6 +98,18 @@ export function StudentsClassList() {
           ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
         >
         </FlatList>
+        <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
+          <Actionsheet.Content>
+            <Box w="100%" h={60} px={4} justifyContent="center">
+              <Heading fontSize="16" color="coolGray.700" textAlign="center">
+                {`${selectedStudent?.user?.name.firstName} ${selectedStudent?.user?.name.lastName}`}
+              </Heading>
+            </Box>
+            <Actionsheet.Item onPress={() => removeStudentClassMutation.mutate()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
+              Remover
+            </Actionsheet.Item>
+          </Actionsheet.Content>
+        </Actionsheet>
       </Viewcontainer>
     </View>
   )

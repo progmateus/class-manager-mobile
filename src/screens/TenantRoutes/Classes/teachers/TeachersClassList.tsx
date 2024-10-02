@@ -47,7 +47,7 @@ export function TeachersClassList() {
     })
   }
 
-  const handleRemove = () => {
+  const handleRemoveTeacher = () => {
     if (!selectedTeacherClass) {
       return
     }
@@ -85,6 +85,18 @@ export function TeachersClassList() {
           ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
         >
         </FlatList>
+        <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
+          <Actionsheet.Content>
+            <Box w="100%" h={60} px={4} justifyContent="center">
+              <Heading fontSize="16" color="coolGray.700" textAlign="center">
+                {`${selectedTeacherClass?.user?.name.firstName} ${selectedTeacherClass?.user?.name.lastName}`}
+              </Heading>
+            </Box>
+            <Actionsheet.Item onPress={handleRemoveTeacher} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
+              Remover
+            </Actionsheet.Item>
+          </Actionsheet.Content>
+        </Actionsheet>
       </Viewcontainer>
     </View>
   )
