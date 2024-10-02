@@ -6,7 +6,7 @@ import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireInfoToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, FlatList, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
@@ -28,7 +28,7 @@ export function StudentsClassList() {
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const { data: students, isLoading, refetch } = useQuery<IStudentClassDTO[]>({
     queryKey: ['get-classes', tenantId, classId],
