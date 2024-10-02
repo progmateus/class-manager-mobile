@@ -35,7 +35,6 @@ export function TeachersClassList() {
     ListTeachersByClassService(tenantId, classId).then(({ data }) => {
       setTeachersClass(data.data)
     }).catch((err) => {
-      console.log(err)
     }).finally(() => {
       setIsLoading(false)
     })
@@ -77,12 +76,12 @@ export function TeachersClassList() {
           renderItem={({ item }) => (
             <TouchableOpacity key={item.user.id} onLongPress={() => handleSelectTeacher(item)}>
               <GenericItem.Root>
-                <GenericItem.Avatar url={item.user.avatar} alt={item.user.avatar} />
+                <GenericItem.Avatar url={item.user.avatar} alt="Foto de perfil do professor" username={item.user.username} />
                 <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption="@username" />
               </GenericItem.Root>
             </TouchableOpacity>
           )}
-          ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+          ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
           ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
         >
         </FlatList>

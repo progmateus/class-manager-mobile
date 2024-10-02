@@ -6,7 +6,7 @@ import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireErrorToast, fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
+import { Actionsheet, Box, FlatList, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
@@ -53,24 +53,22 @@ export function CreateUserRole() {
             <Loading />
           )
             : (
-              <VStack space={8}>
-                {
-                  usersRoles && usersRoles.length ? (
-                    usersRoles.map((userRole: any) => {
-                      return (
-                        <TouchableOpacity key={userRole.user.id} onLongPress={() => handleSelectUserRole(userRole)}>
-                          <GenericItem.Root>
-                            <GenericItem.Avatar url={userRole.user.avatar} alt={userRole.user.avatar} />
-                            <GenericItem.Content title={`${userRole.user.name.firstName} ${userRole.user.name.lastName}`} caption="@username" />
-                          </GenericItem.Root>
-                        </TouchableOpacity>
-                      )
-                    })
-                  )
-                    : (
-                      <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
-                    )
-                }
+              <View>
+                <FlatList
+                  data={usersRoles}
+                  pb={20}
+                  keyExtractor={userRole => userRole.id}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity key={item.user.id} onLongPress={() => handleSelectUserRole(item)}>
+                      <GenericItem.Root>
+                        <GenericItem.Avatar url={item.user.avatar} alt={item.user.avatar} username={item.user.username} />
+                        <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption="@username" />
+                      </GenericItem.Root>
+                    </TouchableOpacity>
+                  )}
+                  ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
+                  ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                />
 
                 <Actionsheet isOpen={isOpen} size="full">
                   <Actionsheet.Content>
@@ -84,7 +82,7 @@ export function CreateUserRole() {
                     </Actionsheet.Item>
                   </Actionsheet.Content>
                 </Actionsheet>
-              </VStack>
+              </View>
             )
         }
 

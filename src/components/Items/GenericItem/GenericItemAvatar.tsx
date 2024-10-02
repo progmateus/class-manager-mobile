@@ -5,16 +5,18 @@ import { UserCircle } from "phosphor-react-native";
 type IProps = {
   url?: string;
   alt?: string;
+  username: string;
 }
-export function GenericItemAvatar({ url, alt = "Imagem" }: IProps) {
+export function GenericItemAvatar({ url, alt = "Imagem", username }: IProps) {
   return (
     <Avatar
-      rounded="md"
+      rounded="full"
       w={12}
       h={12}
       alt={alt}
       mr={4}
       src={url}
+      username={username}
     />
   )
 }
