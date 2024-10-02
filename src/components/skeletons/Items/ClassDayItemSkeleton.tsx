@@ -1,6 +1,6 @@
 import { HStack, View, VStack } from "native-base";
 
-export function ClassDaySkeleton() {
+export function ClassDayItemSkeleton() {
   return (
     <HStack px={6} py={5} space={6} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
       <VStack space={2.5} alignItems="center" justifyContent="center">

@@ -16,7 +16,7 @@ import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { Avatar } from "@components/Avatar/Avatar";
 import Animated, { SlideInLeft, SlideInRight, SlideOutRight } from "react-native-reanimated";
 import { orderBy } from "lodash";
-import { ClassDaySkeleton } from "@components/skeletons/ClassDaySkeleton";
+import { ClassDayItemSkeleton } from "@components/skeletons/Items/ClassDayItemSkeleton";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -139,10 +139,10 @@ export function ClassesDaysList() {
             {
               isLoading ? (
                 <VStack space={3}>
-                  <ClassDaySkeleton />
-                  <ClassDaySkeleton />
-                  <ClassDaySkeleton />
-                  <ClassDaySkeleton />
+                  <ClassDayItemSkeleton />
+                  <ClassDayItemSkeleton />
+                  <ClassDayItemSkeleton />
+                  <ClassDayItemSkeleton />
                 </VStack>
               )
                 : (

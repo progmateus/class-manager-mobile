@@ -1,4 +1,4 @@
-import { BillItem } from "@components/BillItem";
+import { BillItem } from "@components/Items/BillItem";
 import { PageHeader } from "@components/PageHeader";
 import { Viewcontainer } from "@components/ViewContainer";
 import { FlatList, Text, View } from "native-base";

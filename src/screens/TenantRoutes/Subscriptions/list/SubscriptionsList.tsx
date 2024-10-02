@@ -1,6 +1,6 @@
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
-import { SubscriptionItem } from "@components/subscriptionItem"
+import { SubscriptionItem } from "@components/Items/subscriptionItem"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO"
 import { useAuth } from "@hooks/useAuth"

@@ -1,6 +1,6 @@
 import { Avatar } from "@components/Avatar/Avatar"
 import { Loading } from "@components/Loading"
-import { MenuItem } from "@components/MenuItem"
+import { MenuItem } from "@components/Items/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfileDTO"

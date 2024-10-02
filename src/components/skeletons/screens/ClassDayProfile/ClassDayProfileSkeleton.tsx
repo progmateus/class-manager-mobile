@@ -1,6 +1,6 @@
 import { Viewcontainer } from "@components/ViewContainer";
 import { HStack, View, VStack } from "native-base";
-import { StudentItemSkeleton } from "../../StudentItemSkeleton";
+import { StudentItemSkeleton } from "../../Items/StudentItemSkeleton";
 
 export function ClassDayProfileSkeleton() {
   return (

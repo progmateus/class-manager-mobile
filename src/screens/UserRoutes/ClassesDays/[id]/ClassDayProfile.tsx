@@ -1,7 +1,7 @@
 import { PageHeader } from "@components/PageHeader";
 import { FlatList, Heading, ScrollView, Text, VStack, View } from "native-base";
 import { Button } from "@components/Button";
-import { StudentItem } from "@components/StudentItem";
+import { StudentItem } from "@components/Items/StudentItem";
 import { Info } from "@components/ClassPage/Info";
 import { GetRole } from "@utils/GetRole";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";

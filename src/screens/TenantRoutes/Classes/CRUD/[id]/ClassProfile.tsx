@@ -1,5 +1,5 @@
 import { ClassInfoItem } from "@components/Class/InfoItem"
-import { MenuItem } from "@components/MenuItem"
+import { MenuItem } from "@components/Items/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { IClassDTO } from "@dtos/classes/IClass"

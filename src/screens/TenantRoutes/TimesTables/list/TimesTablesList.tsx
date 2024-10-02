@@ -1,4 +1,4 @@
-import { GenericItem } from "@components/GenericItem"
+import { GenericItem } from "@components/Items/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
