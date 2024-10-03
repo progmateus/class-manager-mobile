@@ -7,7 +7,7 @@ import WhatsappSVG from "@assets/whatsapp-outline.svg"
 import ImageSVG from "@assets/image-outline.svg"
 import { TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GetTenantProfileService } from "src/services/tenantsService";
 import { Loading } from "@components/Loading";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
@@ -57,7 +57,7 @@ export function TenantProfile() {
   const { tenant } = useAuth();
   const tenantId = tenant?.id ?? tenantIdParams;
 
-  const { user, userUpdate } = useAuth()
+  const { user } = useAuth()
 
   const loadTenantProfile = async () => {
     try {
@@ -69,7 +69,7 @@ export function TenantProfile() {
   }
 
   const { data: tenantProfile, isLoading, refetch } = useQuery<ITenantDTO>({
-    queryKey: ['get-tenant-profile', tenantId],
+    queryKey: ['get-tenant-profile', tenantId, user.id],
     queryFn: loadTenantProfile
   })
 
@@ -80,37 +80,19 @@ export function TenantProfile() {
   }
 
 
-  const handleCancelSubscription = () => {
-    if (isActionLoading) return
-    setIsActionLoading(true)
-    if (!user.subscriptions) {
-      return
+  const subscriptionExists = useMemo(() => {
+    if (!user.subscriptions || user.subscriptions?.length == 0 || !tenantProfile) {
+      return null
     }
-    const subscription = user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenantIdParams && s.status === ESubscriptionStatus.ACTIVE)
-    if (!subscription) {
-      return
-    }
-    DeleteSubscriptionService(tenantIdParams, subscription.id).then(() => {
-      if (!user.subscriptions) {
-        return
-      }
-      const subscriptions = [...user.subscriptions]
+    return user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenantProfile.id && s.status !== ESubscriptionStatus.CANCELED)
+  }, [tenantProfile, user.id])
 
-      const index = subscriptions.findIndex((s) => s.id === subscription.id)
-      if (index !== -1) {
-        subscriptions[index].status = ESubscriptionStatus.CANCELED
-      }
-      const newUser = {
-        ...user,
-        subscriptions: subscriptions
-      }
-      userUpdate(newUser)
-      fireSuccesToast('Inscrição cancelada com sucesso!')
-    }).catch((err) => {
-      console.log(err)
-      fireErrorToast('Ocorreu um erro!')
-    }).finally(() => {
-      setIsActionLoading(false)
+
+  const handleNavigateSubscription = () => {
+    if (!subscriptionExists) return
+    navigation.navigate('subscriptionProfile', {
+      tenantIdParams: tenantId,
+      subscriptionId: subscriptionExists.id
     })
   }
 
@@ -139,14 +121,13 @@ export function TenantProfile() {
                   <Heading mt={4} fontSize="xl">{tenantProfile.name}</Heading>
                   <Text fontSize="sm">@{tenantProfile.username}</Text>
                   {
-                    user?.subscriptions && user?.subscriptions?.length > 0 && user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenantProfile.id && s.status === ESubscriptionStatus.ACTIVE) ?
+                    subscriptionExists ?
                       (
-                        <Button title="CANCELAR INSCRIÇÃO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleCancelSubscription} isLoading={isActionLoading} />
+                        <Button title="INSCRITO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleNavigateSubscription} isLoading={isActionLoading} />
 
                       ) :
                       (
                         <Button title="INSCREVA-SE" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleSubscribe} />
-
                       )
                   }
                   <HStack mt={6} space={2}>
