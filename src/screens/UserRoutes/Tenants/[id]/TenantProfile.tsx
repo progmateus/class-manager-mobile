@@ -19,6 +19,8 @@ import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPrevie
 import { Avatar } from "@components/Avatar/Avatar";
 import { useTenant } from "@hooks/useTenant";
 import { TenantProfileSkeleton } from "@components/skeletons/screens/TenantProfile";
+import { useQuery } from "@tanstack/react-query";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 
 
 type RouteParamsProps = {
@@ -48,8 +50,6 @@ export function TenantProfile() {
 
   const route = useRoute()
 
-  const [tenantInfo, setTenantInfo] = useState<ITenant>({} as ITenant)
-  const [isLoading, setIsLoading] = useState(true)
   const [isActionLoading, setIsActionLoading] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
@@ -59,16 +59,19 @@ export function TenantProfile() {
 
   const { user, userUpdate } = useAuth()
 
-  useEffect(() => {
-    setIsLoading(true)
-    GetTenantProfileService(tenantId).then(({ data }) => {
-      setTenantInfo(data.data)
-    }).catch((err) => {
+  const loadTenantProfile = async () => {
+    try {
+      const { data } = await GetTenantProfileService(tenantId)
+      return data.data
+    } catch (err) {
       console.log(err)
-    }).finally(() => {
-      setIsLoading(true)
-    })
-  }, [tenantId])
+    }
+  }
+
+  const { data: tenantProfile, isLoading, refetch } = useQuery<ITenantDTO>({
+    queryKey: ['get-tenant-profile', tenantId],
+    queryFn: loadTenantProfile
+  })
 
   const handleSubscribe = () => {
     navigation.navigate('createSubscription', {
@@ -115,9 +118,8 @@ export function TenantProfile() {
     <View flex={1}>
       <PageHeader title="Perfil" />
       <ScrollView>
-        <Button onPress={() => setIsLoading(!isLoading)} title="change" />
         {
-          isLoading
+          isLoading || !tenantProfile
             ?
             (
               <TenantProfileSkeleton />
@@ -131,13 +133,13 @@ export function TenantProfile() {
                     w={24}
                     h={24}
                     alt="image profile"
-                    src={tenantInfo.avatar}
+                    src={tenantProfile.avatar}
                   />
 
-                  <Heading mt={4} fontSize="xl">{tenantInfo.name}</Heading>
-                  <Text fontSize="sm">@{tenantInfo.username}</Text>
+                  <Heading mt={4} fontSize="xl">{tenantProfile.name}</Heading>
+                  <Text fontSize="sm">@{tenantProfile.username}</Text>
                   {
-                    user?.subscriptions && user?.subscriptions?.length > 0 && user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenantInfo.id && s.status === ESubscriptionStatus.ACTIVE) ?
+                    user?.subscriptions && user?.subscriptions?.length > 0 && user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenantProfile.id && s.status === ESubscriptionStatus.ACTIVE) ?
                       (
                         <Button title="CANCELAR INSCRIÇÃO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleCancelSubscription} isLoading={isActionLoading} />
 
@@ -159,10 +161,14 @@ export function TenantProfile() {
                     </TouchableOpacity>
                   </HStack>
                 </Center>
-                <View px={4}>
-                  <Text color="coolGray.500" fontSize="md" mb={2}> Bio </Text>
-                  <Text>{tenantInfo.description}</Text>
-                </View>
+                {
+                  tenantProfile.description && (
+                    <View px={4} mt={2}>
+                      <Text color="coolGray.500" fontSize="md" mb={2}> Bio </Text>
+                      <Text>{tenantProfile.description}</Text>
+                    </View>
+                  )
+                }
                 <View mt={2} py={4} borderBottomWidth={0.5} borderBottomColor="coolGray.400">
                   <Center>
                     <ImageSVG />
@@ -188,10 +194,10 @@ export function TenantProfile() {
                     })
                   )}
                 </View>
-              </VStack>
+              </VStack >
             )
         }
-      </ScrollView>
+      </ScrollView >
     </View >
   );
 }

@@ -6,7 +6,7 @@ import { Skeleton } from "@components/skeletons";
 export function TenantProfileSkeleton() {
   return (
     <View>
-      <VStack space={2}>
+      <VStack space={2} mt={8}>
         <Center>
           <VStack space={5} justifyContent="center" alignItems="center">
             <Skeleton w="24" h="24" rounded="full" />
@@ -23,7 +23,7 @@ export function TenantProfileSkeleton() {
           </VStack>
         </Center>
       </VStack>
-      <Box>
+      <Box px={4}>
         <Skeleton w="8" h="3" />
         <VStack space={2} mt={4}>
           <Skeleton w="full" h="2" />
@@ -31,7 +31,7 @@ export function TenantProfileSkeleton() {
           <Skeleton w="4/5" h="2" />
         </VStack>
       </Box>
-      <View mt={4} py={2} borderBottomWidth={0.5} borderBottomColor="coolGray.400">
+      <View mt={2} py={4} borderBottomWidth={0.5} borderBottomColor="coolGray.400">
         <Center>
           <Skeleton w="4" h="4" />
         </Center>
