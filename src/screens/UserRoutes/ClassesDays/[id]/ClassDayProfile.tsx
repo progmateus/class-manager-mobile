@@ -1,14 +1,13 @@
 import { PageHeader } from "@components/PageHeader";
-import { FlatList, Heading, ScrollView, Text, VStack, View } from "native-base";
+import { FlatList, Heading, Text, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { StudentItem } from "@components/Items/StudentItem";
 import { Info } from "@components/ClassPage/Info";
 import { GetRole } from "@utils/GetRole";
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { GetClassDayService } from "src/services/classDaysService";
-import { Loading } from "@components/Loading";
 import { CreatebookingService, DeleteBookingService } from "src/services/bookingsService";
 import { useAuth } from "@hooks/useAuth";
 import { Viewcontainer } from "@components/ViewContainer";
@@ -17,30 +16,16 @@ import { orderBy } from "lodash";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ClassDayProfileSkeleton } from "@components/skeletons/screens/ClassDayProfile/ClassDayProfileSkeleton";
+import { useQuery } from "@tanstack/react-query";
 
 type RouteParamsProps = {
   classDayId: string;
   tenantIdParams: string;
 }
 
-interface IClassDay {
-  date: Date,
-  hourStart: string,
-  hourEnd: string,
-  address: string,
-  teachers: ITeacher[]
-  bookings: any[]
-}
-
-interface ITeacher {
-  name: string
-}
-
 export function ClassDayProfile() {
 
   const { tenant } = useAuth()
-  const [classDay, setClassDay] = useState<ICLassDayDTO>({} as ICLassDayDTO)
-  const [isLoading, setIsLoading] = useState(true)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
   const { user } = useAuth()
   const navigation = useNavigation<UserNavigatorRoutesProps>();
@@ -51,19 +36,19 @@ export function ClassDayProfile() {
 
   const tenantId = tenant?.id ?? tenantIdParams
 
-  useFocusEffect(useCallback(() => {
-    setIsLoading(true)
-    GetClassDayService(tenantId, classDayId).then(({ data }) => {
-      setClassDay({
-        ...data.data,
-        address: 'Praia da Bica, 255'
-      })
-    }).catch((err) => {
+  const loadClassDayProfile = async () => {
+    try {
+      const { data } = await GetClassDayService(tenantId, classDayId)
+      return data.data
+    } catch (err) {
       console.log(err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, [tenantId, classDayId]))
+    }
+  }
+
+  const { data: classDay, isLoading, refetch } = useQuery<ICLassDayDTO>({
+    queryKey: ['get-class-day-profile', tenantId, classDayId],
+    queryFn: loadClassDayProfile
+  })
 
   function handleClickUpdateStatus() {
     navigation.navigate('updateClassDayStatus', {
@@ -72,15 +57,18 @@ export function ClassDayProfile() {
     });
   }
 
-  function handleParticipate() {
+  function handleCreateBooking() {
+    if (!classDay || isLoadingAction) {
+      return
+    }
     setIsLoadingAction(true)
 
     CreatebookingService(tenantId, classDayId, user.id).then(({ data }) => {
       const bookings = [...classDay.bookings, data.data]
-      setClassDay({
-        ...classDay,
-        bookings
-      })
+      /*  setClassDay({
+         ...classDay,
+         bookings
+       }) */
     }).then(() => {
       fireSuccesToast("Aula agendada")
     }).finally(() => {
@@ -89,6 +77,9 @@ export function ClassDayProfile() {
   }
 
   function handleCancelbooking() {
+    if (!classDay || isLoadingAction) {
+      return;
+    }
     setIsLoadingAction(true)
     const bookings = [...classDay.bookings]
     const index = bookings.findIndex((b) => b.userId === user.id)
@@ -96,10 +87,10 @@ export function ClassDayProfile() {
       if (index !== -1) {
         bookings.splice(index, 1)
       }
-      setClassDay({
+      /* setClassDay({
         ...classDay,
         bookings
-      })
+      }) */
       fireInfoToast('Agendamento cancelado')
     }).catch((err) => {
       console.log(err)
@@ -109,7 +100,7 @@ export function ClassDayProfile() {
       })
   }
 
-  const isAdmin = useCallback(() => {
+  const isAdmin = useMemo(() => {
     return GetRole(user.usersRoles, tenantIdParams, "admin")
   }, [classDayId])
 
@@ -117,7 +108,7 @@ export function ClassDayProfile() {
     <View flex={1}>
       <PageHeader title="Detalhes da aula" />
       {
-        isLoading ?
+        isLoading || !classDay ?
           (
             <ClassDayProfileSkeleton />
           )
@@ -146,11 +137,11 @@ export function ClassDayProfile() {
                   classDay.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === user.id) ? (
                     <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={handleCancelbooking} variant="outline" color="brand.600" />
                   ) : (
-                    <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={handleParticipate} />
+                    <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={handleCreateBooking} />
                   )
                 }
                 {
-                  isAdmin() && (
+                  isAdmin && (
                     <>
                       <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
                     </>
