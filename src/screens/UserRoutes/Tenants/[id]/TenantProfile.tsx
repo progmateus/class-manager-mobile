@@ -18,6 +18,7 @@ import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { Avatar } from "@components/Avatar/Avatar";
 import { useTenant } from "@hooks/useTenant";
+import { TenantProfileSkeleton } from "@components/skeletons/screens/TenantProfile";
 
 
 type RouteParamsProps = {
@@ -65,7 +66,7 @@ export function TenantProfile() {
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
-      setIsLoading(false)
+      setIsLoading(true)
     })
   }, [tenantId])
 
@@ -114,11 +115,12 @@ export function TenantProfile() {
     <View flex={1}>
       <PageHeader title="Perfil" />
       <ScrollView>
+        <Button onPress={() => setIsLoading(!isLoading)} title="change" />
         {
           isLoading
             ?
             (
-              <Loading />
+              <TenantProfileSkeleton />
             )
             :
             (
