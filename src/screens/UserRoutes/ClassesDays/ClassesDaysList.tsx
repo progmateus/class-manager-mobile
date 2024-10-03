@@ -10,7 +10,7 @@ import { useCallback, useState } from "react";
 import { Loading } from "@components/Loading";
 import { Viewcontainer } from "@components/ViewContainer";
 import dayjs from "dayjs";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ListClassDaysService } from "src/services/classDaysService";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { Avatar } from "@components/Avatar/Avatar";

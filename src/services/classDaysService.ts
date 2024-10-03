@@ -32,13 +32,12 @@ export function CreateClassDayService(tenantId: string, hourStart: string, hourE
   })
 }
 
-export function ListClassDaysService(date: Date, userId?: string, tenantId?: string) {
+export function ListClassDaysService(date: Date, tenantId?: string) {
   return api({
     url: `class-days`,
     method: 'get',
     params: {
       tenantId,
-      userId,
       date
     }
   })
