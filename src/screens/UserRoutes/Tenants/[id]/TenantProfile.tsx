@@ -50,7 +50,6 @@ export function TenantProfile() {
 
   const route = useRoute()
 
-  const [isActionLoading, setIsActionLoading] = useState(false)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const { tenantIdParams } = route.params as RouteParamsProps;
@@ -123,7 +122,7 @@ export function TenantProfile() {
                   {
                     subscriptionExists ?
                       (
-                        <Button title="INSCRITO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleNavigateSubscription} isLoading={isActionLoading} />
+                        <Button title="INSCRITO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleNavigateSubscription} />
 
                       ) :
                       (
