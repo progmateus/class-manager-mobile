@@ -6,7 +6,7 @@ type IProps = {
 export function GenericItemContent({ title, caption }: IProps) {
   return (
     <VStack flex={1} space={1}>
-      <Text fontSize="md" color="coolGray.900"> {title}</Text>
+      <Text textTransform="-moz-initial" fontSize="md" color="coolGray.900"> {title}</Text>
       <Text fontSize="xs" color="coolGray.500"> {caption}</Text>
     </VStack>
   )

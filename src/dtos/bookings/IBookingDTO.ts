@@ -1,3 +1,4 @@
+import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
 
 export type IBookingDTO = {
@@ -5,5 +6,5 @@ export type IBookingDTO = {
   userId: string;
   classDayId: string;
   user: IUserPreviewDTO;
-  classDay: any;
+  classDay: ICLassDayDTO;
 }

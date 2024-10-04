@@ -3,7 +3,7 @@ import { GenericItem } from "@components/Items/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
-import { useFocusEffect, useRoute } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { FlatList, Icon, Text, View } from "native-base"
 import { CheckCircle, Clock, ClockClockwise, XCircle } from "phosphor-react-native"
 import { useCallback, useState } from "react"
@@ -14,6 +14,9 @@ import { transFormClassDayColor } from "@utils/TransformColor"
 import { ListUserBookingsService } from "src/services/usersService"
 import { IBookingDTO } from "@dtos/bookings/IBookingDTO"
 import { useAuth } from "@hooks/useAuth"
+import { TouchableOpacity } from "react-native"
+import { UserNavigatorRoutesProps } from "@routes/user.routes"
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -27,6 +30,9 @@ export function BookingsHistory() {
   const { tenantIdParams, userId } = route.params as RouteParamsProps;
   const { tenant, authenticationType } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
+
+  const userNavigation = useNavigation<UserNavigatorRoutesProps>()
+  const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>()
 
   const handleDeleteBooking = (booking: IBookingDTO) => {
     if (isActing || !tenantId) return
@@ -62,6 +68,16 @@ export function BookingsHistory() {
     }).finally(() => {
       setIsLoadig(false)
     })
+  }
+
+
+  const handleRedirectClassDay = (classDayId: string, tenantId: string) => {
+    if (authenticationType === "user") {
+      userNavigation.navigate('classDayProfile', {
+        classDayId,
+        tenantIdParams: tenantId
+      })
+    }
   }
 
   useFocusEffect(useCallback(() => {
@@ -111,16 +127,18 @@ export function BookingsHistory() {
                 pb={20}
                 keyExtractor={booking => booking.id}
                 renderItem={({ item }) => (
-                  <GenericItem.Root key={item.id}>
-                    <GenericItem.InfoSection>
-                      <Icon as={Clock} mr={4} />
-                      <Text mr={4}>{item.classDay.hourStart}</Text>
-                    </GenericItem.InfoSection>
-                    <GenericItem.Content title={formatDate(item.classDay.date)} caption={item.classDay.class.name} />
-                    <GenericItem.InfoSection>
-                      <Icon as={getIconStatus(item.classDay.status)} color={transFormClassDayColor(item.classDay.status)} />
-                    </GenericItem.InfoSection>
-                  </GenericItem.Root>
+                  <TouchableOpacity key={item.id} onPress={() => handleRedirectClassDay(item.classDay.id, item.classDay.class.tenantId)}>
+                    <GenericItem.Root >
+                      <GenericItem.InfoSection>
+                        <Icon as={Clock} mr={4} />
+                        <Text mr={4}>{item.classDay.hourStart}</Text>
+                      </GenericItem.InfoSection>
+                      <GenericItem.Content title={formatDate(item.classDay.date)} caption={item.classDay.class.name} />
+                      <GenericItem.InfoSection>
+                        <Icon as={getIconStatus(item.classDay.status)} color={transFormClassDayColor(item.classDay.status)} />
+                      </GenericItem.InfoSection>
+                    </GenericItem.Root>
+                  </TouchableOpacity>
                 )}
                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                 ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
