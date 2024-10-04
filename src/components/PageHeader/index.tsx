@@ -1,4 +1,4 @@
-import { HStack, Heading, Icon } from "native-base";
+import { HStack, Heading, Icon, View } from "native-base";
 import { ArrowLeft } from "phosphor-react-native"
 import Constants from "expo-constants";
 import { useNavigation } from "@react-navigation/native";
@@ -34,17 +34,16 @@ export function PageHeader({ title, rightIcon, rightAction, rightIconColor = "su
         <Icon as={ArrowLeft} />
       </TouchableOpacity>
       <Heading
-        style={{
-          marginLeft: rightAction ? 0 : -28
-        }}
         flex={1} textAlign="center" fontFamily="heading" fontSize="2xl"> {title} </Heading>
-      {
-        rightIcon && (
-          <TouchableOpacity onPress={rightAction}>
-            <Icon as={rightIcon} color={rightIconColor} />
-          </TouchableOpacity>
-        )
-      }
+      <View w={28}>
+        {
+          rightIcon && (
+            <TouchableOpacity onPress={rightAction}>
+              <Icon as={rightIcon} color={rightIconColor} />
+            </TouchableOpacity>
+          )
+        }
+      </View>
     </HStack>
   );
 }

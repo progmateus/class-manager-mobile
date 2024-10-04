@@ -21,11 +21,11 @@ type RouteParamsProps = {
 }
 export function BookingsHistory() {
   const [bookings, setBookings] = useState<IBookingDTO[]>([])
-  const [isLoading, setIsLoadig] = useState(false)
+  const [isLoading, setIsLoadig] = useState(true)
   const [isActing, setIsActing] = useState(false)
   const route = useRoute()
   const { tenantIdParams, userId } = route.params as RouteParamsProps;
-  const { tenant } = useAuth()
+  const { tenant, authenticationType } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
 
   const handleDeleteBooking = (booking: IBookingDTO) => {
@@ -65,10 +65,10 @@ export function BookingsHistory() {
   }
 
   useFocusEffect(useCallback(() => {
-    if (tenantId) {
-      loadTenantBookings()
-    } else {
+    if (authenticationType === "user") {
       loadUserBookings()
+    } else {
+      loadTenantBookings()
     }
   }, []))
 

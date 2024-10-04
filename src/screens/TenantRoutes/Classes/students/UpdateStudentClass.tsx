@@ -6,30 +6,35 @@ import { IClassDTO } from "@dtos/classes/IClass"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, Checkbox, Heading, Icon, Radio, Text, View, VStack } from "native-base"
-import { BookBookmark, Check, Plus, TrashSimple } from "phosphor-react-native"
+import { fireSuccesToast } from "@utils/HelperNotifications"
+import { Text, View, VStack } from "native-base"
+import { BookBookmark, Check } from "phosphor-react-native"
 import { useCallback, useState } from "react"
-import { TouchableOpacity, Vibration } from "react-native"
-import { ListClassesService, ListStudentsByClassService, RemoveStudentFromClassService, UpdateStudentClassService } from "src/services/classesService"
+import { TouchableOpacity } from "react-native"
+import { ListClassesService, UpdateStudentClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
   tenantIdParams: string;
   classIdExists: string;
-  userId: string;
+  userId?: string;
   subscriptionId?: string;
 }
 
 export function UpdateStudentClass() {
   const [classes, setClasses] = useState<IClassDTO[]>([])
   const [selectedClassId, setSelectedClassId] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const route = useRoute()
-  const { tenantIdParams, userId, classIdExists, subscriptionId } = route.params as RouteParamsProps;
-  const { tenant } = useAuth()
+  const { tenantIdParams, userId: userIdParam, classIdExists, subscriptionId } = route.params as RouteParamsProps;
+  const { tenant, authenticationType, user } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
+  let userId = userIdParam ?? ""
+
+  if (authenticationType === "user") {
+    userId = user.id
+  }
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)

@@ -18,7 +18,9 @@ import { CreateClassDay } from "@screens/UserRoutes/ClassesDays/CreateClassDay";
 import { CreateSubscription } from "@screens/UserRoutes/Subscriptions/CreateSubscription";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { CreateTenant } from "@screens/UserRoutes/Tenants/CreateTenant";
-import { SubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/SubscriptionProfile";
+import { SubscriptionProfile } from "@screens/UserRoutes/Subscriptions/[id]/SubscriptionProfile";
+import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
+import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
 
 
 type UserRoutes = {
@@ -36,6 +38,8 @@ type UserRoutes = {
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   createTenant: undefined
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
+  updateStudentclass: { tenantIdParams: string; classIdExists: string; subscriptionId?: string; }
+  updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
 }
 export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;
 
@@ -161,6 +165,20 @@ export function UserRoutes() {
         options={{
           tabBarButton: () => (null)
         }}
+      />
+
+      <Screen
+        name="updateStudentclass"
+        component={UpdateStudentClass}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="updateSubscriptionPlan"
+        component={UpdateSubscriptionPlan}
+        options={{ tabBarButton: () => (null) }}
       />
     </Navigator>
   )

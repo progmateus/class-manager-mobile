@@ -23,7 +23,7 @@ type RouteParamsProps = {
 
 export function UpdateSubscriptionPlan() {
   const [plans, setPlans] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const route = useRoute()
   const { tenantIdParams, planIdExists, subscriptionId } = route.params as RouteParamsProps;
