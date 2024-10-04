@@ -84,7 +84,7 @@ export function TenantProfile() {
       return null
     }
     return user.subscriptions.find((s: ISubscriptionPreviewDTO) => s.tenantId === tenantProfile.id && s.status !== ESubscriptionStatus.CANCELED)
-  }, [tenantProfile, user.id])
+  }, [tenantProfile, user.subscriptions])
 
 
   const handleNavigateSubscription = () => {

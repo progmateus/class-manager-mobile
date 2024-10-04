@@ -7,11 +7,11 @@ import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfil
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { fireInfoToast } from "@utils/HelperNotifications"
+import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
 import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
 import { Actionsheet, Box, Center, Heading, HStack, Icon, Text, View, VStack } from "native-base"
-import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard } from "phosphor-react-native"
+import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard, Plus } from "phosphor-react-native"
 import { useCallback, useMemo, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
@@ -19,6 +19,7 @@ import { GetSubscriptionProfileService, UpdateSubscriptionService } from "src/se
 import { HasRole } from "@utils/HasRole"
 import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/SubscriptionProfile"
 import { Button } from "@components/Button"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 
 type RouteParamsProps = {
@@ -27,27 +28,30 @@ type RouteParamsProps = {
 }
 
 export function SubscriptionProfile() {
-  const [isLoading, setIsLoadig] = useState(true)
   const [isActing, setIsActing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [subscription, setSubscription] = useState<ISubscriptionProfileDTO>({} as ISubscriptionProfileDTO)
   const route = useRoute()
   const { tenantIdParams, subscriptionId } = route.params as RouteParamsProps;
   const { tenant, user } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
+  const queryClient = useQueryClient();
 
-  useFocusEffect(useCallback(() => {
-    setIsLoadig(true)
-    GetSubscriptionProfileService(tenantId, subscriptionId).then(({ data }) => {
-      setSubscription(data.data)
-    }).catch((err) => {
-      console.log('err: ', err)
-    }).finally(() => {
-      setIsLoadig(false)
-    })
-  }, [tenantId, subscriptionId]))
+
+  const loadSubscriptionProfile = async () => {
+    try {
+      const { data } = await GetSubscriptionProfileService(tenantId, subscriptionId)
+      return data.data
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const { data: subscription, isLoading, refetch } = useQuery<ISubscriptionProfileDTO>({
+    queryKey: ['get-subscription-profile', tenantId, subscriptionId],
+    queryFn: loadSubscriptionProfile
+  })
 
 
   const payments = [
@@ -56,21 +60,29 @@ export function SubscriptionProfile() {
     }
   ]
 
-
-  const handleUpdateSubscription = (status: ESubscriptionStatus) => {
-    if (isActing) return
-    setIsActing(true)
-    UpdateSubscriptionService(tenantId, subscriptionId, status).then(() => {
-      setSubscription({
-        ...subscription,
-        status
-      })
-      fireInfoToast('Assinatura atualizada com sucesso')
-    }).finally(() => {
+  const { mutate: updateSubscriptionMutate, isPending } = useMutation({
+    mutationFn: async (status: ESubscriptionStatus) => {
+      if (isPending || !subscription || !subscriptionId) {
+        return
+      }
+      await UpdateSubscriptionService(tenantId, subscriptionId, status)
+    },
+    onSuccess: (data: void, variables: ESubscriptionStatus, context: unknown) => {
+      if (variables === ESubscriptionStatus.ACTIVE) {
+        fireSuccesToast('Assinatura ativada com sucesso')
+      } else {
+        fireInfoToast('Assinatura atualizada com sucesso')
+      }
       setIsOpen(false)
-      setIsActing(false)
-    })
-  }
+      queryClient.invalidateQueries({
+        queryKey: ['get-subscription-profile', tenantId, subscriptionId]
+      })
+    }
+  })
+
+  const handleSubscribe = useCallback(() => {
+    navigation.navigate('createSubscription')
+  }, [subscriptionId, tenantId])
 
   const isAdmin = useMemo(() => {
     return HasRole(user.usersRoles, tenantId, ["admin"])
@@ -79,10 +91,10 @@ export function SubscriptionProfile() {
   return (
     <View flex={1}>
       <PageHeader title={
-        isLoading ? "" : `${subscription.user?.firstName} ${subscription.user?.lastName}`
+        isLoading ? "" : `${subscription?.user?.firstName} ${subscription?.user?.lastName}`
       } />
       {
-        isLoading || !subscription.id ? (<SubscriptionProfileSkeleton />)
+        isLoading || !subscription ? (<SubscriptionProfileSkeleton />)
           : (
             <ScrollContainer>
               <VStack space={8}>
@@ -215,8 +227,16 @@ export function SubscriptionProfile() {
                     </Heading>
                   </Box>
                   {
-                    subscription.status !== ESubscriptionStatus.ACTIVE && (
-                      <Actionsheet.Item onPress={() => handleUpdateSubscription(ESubscriptionStatus.ACTIVE)} startIcon={<Icon as={Check} size="6" name="start" />}>
+                    subscription.status !== ESubscriptionStatus.ACTIVE && subscription.status === ESubscriptionStatus.CANCELED && (
+                      <Actionsheet.Item onPress={handleSubscribe} startIcon={<Icon as={Plus} size="6" name="start" />}>
+                        <Text fontSize="16"> Nova assinatura</Text>
+                      </Actionsheet.Item>
+                    )
+                  }
+
+                  {
+                    subscription.status !== ESubscriptionStatus.ACTIVE && subscription.status !== ESubscriptionStatus.CANCELED && (
+                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.ACTIVE)} startIcon={<Icon as={Check} size="6" name="start" />}>
                         <Text fontSize="16"> Ativar assinatura</Text>
                       </Actionsheet.Item>
                     )
@@ -224,7 +244,7 @@ export function SubscriptionProfile() {
 
                   {
                     subscription.status === ESubscriptionStatus.ACTIVE && (
-                      <Actionsheet.Item onPress={() => handleUpdateSubscription(ESubscriptionStatus.INACTIVE)} startIcon={<Icon as={Lock} size="6" name="pause" />}>
+                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.INACTIVE)} startIcon={<Icon as={Lock} size="6" name="pause" />}>
                         <Text fontSize="16"> Pausar assinatura</Text>
                       </Actionsheet.Item>
                     )
@@ -232,7 +252,7 @@ export function SubscriptionProfile() {
 
                   {
                     subscription.status !== ESubscriptionStatus.CANCELED && (
-                      <Actionsheet.Item onPress={() => handleUpdateSubscription(ESubscriptionStatus.CANCELED)} startIcon={<Icon as={X} size="6" name="cancel" color="red.600" />}>
+                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.CANCELED)} startIcon={<Icon as={X} size="6" name="cancel" color="red.600" />}>
                         <Text fontSize="16" color="red.600"> Cancelar assinatura</Text>
                       </Actionsheet.Item>
                     )
