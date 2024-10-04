@@ -32,7 +32,7 @@ type UserRoutes = {
   updateUser: undefined;
   updatePassword: undefined;
   createClassDay: { tenantIdParams?: string };
-  createSubscription: { tenantIdParams?: string };
+  createSubscription: { tenantIdParams: string };
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   createTenant: undefined
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };

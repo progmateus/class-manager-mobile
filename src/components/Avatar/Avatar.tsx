@@ -38,7 +38,7 @@ export function Avatar({ src, alt = "Imagem", type = "user", username, ...rest }
       fallbackSource={{
         uri: localSrc
       }}
-      defaultSource={{ uri: finalSrc }}
+      defaultSource={{ uri: localSrc }}
     />
   )
 }

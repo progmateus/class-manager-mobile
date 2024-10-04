@@ -1,9 +1,8 @@
-import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { Select, Text, useTheme, View, VStack } from "native-base";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import { Select, Text, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import { ListTenantPlansService } from "src/services/tenantPlansService";
 import { IClassDTO } from "@dtos/classes/IClass";
 import { CreateSubscriptionService } from "src/services/subscriptionService";
 import { useAuth } from "@hooks/useAuth";
+import { UserNavigatorRoutesProps } from "@routes/user.routes";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -26,7 +26,7 @@ const createSubscriptionSchema = z.object({
 });
 
 type RouteParamsProps = {
-  tenantIdParams?: string;
+  tenantIdParams: string;
 }
 
 const defaultValues = {
@@ -41,10 +41,14 @@ export function CreateSubscription() {
   const [plans, setPlans] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
   const route = useRoute()
-  const params = route.params as RouteParamsProps;
-  const { user, userUpdate, tenant } = useAuth()
+  const navigation = useNavigation<UserNavigatorRoutesProps>()
+  const { user, userUpdate } = useAuth()
 
-  const tenantId = tenant?.id || params?.tenantIdParams
+  const params = route.params as RouteParamsProps;
+
+  const { tenantIdParams } = params
+
+  const tenantId = tenantIdParams
 
   const { control, handleSubmit, formState: { errors }, reset, setValue } = useForm<CreateSubscriptionProps>({
     resolver: zodResolver(createSubscriptionSchema)
@@ -93,6 +97,7 @@ export function CreateSubscription() {
         subscriptions: [...user.subscriptions, data.data]
       })
       fireSuccesToast('Assinatura realizada com sucesso!')
+      navigation.navigate('subscriptionProfile', { subscriptionId: data.data.id, tenantIdParams: tenantId })
     }).catch((err) => {
       console.log(err)
       fireErrorToast('Ocorreu um erro')
@@ -134,6 +139,7 @@ export function CreateSubscription() {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select accessibilityLabel="Selecione a turma" selectedValue={value} variant="outline" mt={-2} onValueChange={onChange}>
+                <Select.Item label="Selecione" value="" />
                 {
                   classes && classes.length > 0 && (
                     classes.map((c: IClassDTO) => {
