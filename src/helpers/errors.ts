@@ -138,6 +138,10 @@ const errors = [
   {
     message: "ERR_USERNAME_ALREADY_EXISTS",
     description: "Este nome de usuário já está sendo utilizado"
+  },
+  {
+    message: "ERR_CLASS_DAY_TIME_EXPIRED",
+    description: "A data desta aula já passou"
   }
 ]
 export { errors }
