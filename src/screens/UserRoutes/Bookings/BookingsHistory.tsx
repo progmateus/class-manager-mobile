@@ -29,7 +29,7 @@ export function BookingsHistory() {
   const route = useRoute()
   const { tenantIdParams, userId } = route.params as RouteParamsProps;
   const { tenant, authenticationType } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
+  const tenantId = authenticationType == "tenant" ? tenant?.id : tenantIdParams
 
   const userNavigation = useNavigation<UserNavigatorRoutesProps>()
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>()
@@ -61,7 +61,7 @@ export function BookingsHistory() {
 
   const loadUserBookings = () => {
     setIsLoadig(true)
-    ListUserBookingsService().then(({ data }) => {
+    ListUserBookingsService(tenantId).then(({ data }) => {
       setBookings(data.data)
     }).catch((err) => {
       console.log(err)
@@ -86,7 +86,7 @@ export function BookingsHistory() {
     } else {
       loadTenantBookings()
     }
-  }, []))
+  }, [tenantId]))
 
 
   const formatDate = (date: Date) => {

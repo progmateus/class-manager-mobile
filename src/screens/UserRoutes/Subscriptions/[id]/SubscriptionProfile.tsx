@@ -34,9 +34,10 @@ export function SubscriptionProfile() {
   const route = useRoute()
   const { tenantIdParams, subscriptionId } = route.params as RouteParamsProps;
   const { tenant, user, authenticationType } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>()
   const userNavigation = useNavigation<UserNavigatorRoutesProps>()
+
+  const tenantId = authenticationType == "tenant" ? tenant?.id : tenantIdParams as string
 
   const queryClient = useQueryClient();
 
@@ -92,10 +93,6 @@ export function SubscriptionProfile() {
     }
 
   }, [subscriptionId, tenantId])
-
-  const isAdmin = useMemo(() => {
-    return HasRole(user.usersRoles, tenantId, ["admin"])
-  }, [tenantId, subscriptionId])
 
   return (
     <View flex={1}>

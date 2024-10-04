@@ -40,9 +40,12 @@ export function UpdateUserService({ firstName, lastName, email, document, phone 
   })
 }
 
-export function ListUserBookingsService() {
+export function ListUserBookingsService(tenantId?: string) {
   return api({
     url: '/users/bookings',
-    method: 'get'
+    method: 'get',
+    params: {
+      tenantId
+    }
   })
 }
