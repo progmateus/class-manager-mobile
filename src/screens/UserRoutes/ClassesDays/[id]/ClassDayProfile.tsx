@@ -3,7 +3,6 @@ import { FlatList, Heading, Text, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { StudentItem } from "@components/Items/StudentItem";
 import { Info } from "@components/ClassPage/Info";
-import { GetRole } from "@utils/GetRole";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useCallback, useMemo, useState } from "react";
@@ -16,7 +15,8 @@ import { orderBy } from "lodash";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ClassDayProfileSkeleton } from "@components/skeletons/screens/ClassDayProfile/ClassDayProfileSkeleton";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { HasRole } from "@utils/HasRole";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -32,6 +32,8 @@ export function ClassDayProfile() {
 
   const route = useRoute()
 
+  const queryClient = useQueryClient();
+
   const { classDayId, tenantIdParams } = route.params as RouteParamsProps;
 
   const tenantId = tenant?.id ?? tenantIdParams
@@ -45,10 +47,43 @@ export function ClassDayProfile() {
     }
   }
 
-  const { data: classDay, isLoading, refetch } = useQuery<ICLassDayDTO>({
+  const { data: classDay, isLoading } = useQuery<ICLassDayDTO>({
     queryKey: ['get-class-day-profile', tenantId, classDayId],
     queryFn: loadClassDayProfile
   })
+
+
+  const { mutate: createBookMutate, isPending: createIsPending } = useMutation({
+    mutationFn: async () => {
+      if (!classDay || createIsPending || !classDayId) {
+        return
+      }
+      await CreatebookingService(tenantId, classDayId, user.id)
+    },
+    onSuccess: () => {
+      fireSuccesToast("Aula agendada")
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-day-profile', tenantId, classDayId]
+      })
+    }
+  })
+
+  const { mutate: cancelBookMutate, isPending: cancelIsPending } = useMutation({
+    mutationFn: async () => {
+      if (!classDay || cancelIsPending || !classDayId) {
+        return
+      }
+      const index = classDay.bookings.findIndex((b) => b.userId === user.id)
+      await DeleteBookingService(tenantId, classDay.bookings[index].id, user.id)
+    },
+    onSuccess: () => {
+      fireInfoToast("Aula cancelada")
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-day-profile', tenantId, classDayId]
+      })
+    }
+  })
+
 
   function handleClickUpdateStatus() {
     navigation.navigate('updateClassDayStatus', {
@@ -57,52 +92,13 @@ export function ClassDayProfile() {
     });
   }
 
-  function handleCreateBooking() {
-    if (!classDay || isLoadingAction) {
-      return
-    }
-    setIsLoadingAction(true)
+  const isTenantAdminOrTeacher = useMemo(() => {
+    return HasRole(user.usersRoles, tenantIdParams, ["admin", "teacher"])
+  }, [classDay])
 
-    CreatebookingService(tenantId, classDayId, user.id).then(({ data }) => {
-      const bookings = [...classDay.bookings, data.data]
-      /*  setClassDay({
-         ...classDay,
-         bookings
-       }) */
-    }).then(() => {
-      fireSuccesToast("Aula agendada")
-    }).finally(() => {
-      setIsLoadingAction(false)
-    })
-  }
-
-  function handleCancelbooking() {
-    if (!classDay || isLoadingAction) {
-      return;
-    }
-    setIsLoadingAction(true)
-    const bookings = [...classDay.bookings]
-    const index = bookings.findIndex((b) => b.userId === user.id)
-    DeleteBookingService(tenantId, bookings[index].id, user.id).then(({ data }) => {
-      if (index !== -1) {
-        bookings.splice(index, 1)
-      }
-      /* setClassDay({
-        ...classDay,
-        bookings
-      }) */
-      fireInfoToast('Agendamento cancelado')
-    }).catch((err) => {
-      console.log(err)
-    })
-      .finally(() => {
-        setIsLoadingAction(false)
-      })
-  }
-
-  const isAdmin = useMemo(() => {
-    return GetRole(user.usersRoles, tenantIdParams, "admin")
-  }, [classDayId])
+  const alreadyBooked = useMemo(() => {
+    return classDay?.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === user.id)
+  }, [classDay])
 
   return (
     <View flex={1}>
@@ -134,14 +130,14 @@ export function ClassDayProfile() {
 
               <VStack space={4} px={4} mt={4}>
                 {
-                  classDay.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === user.id) ? (
-                    <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={handleCancelbooking} variant="outline" color="brand.600" />
+                  alreadyBooked ? (
+                    <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={() => cancelBookMutate()} variant="outline" color="brand.600" isLoading={cancelIsPending} />
                   ) : (
-                    <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={handleCreateBooking} />
+                    <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={() => createBookMutate()} isLoading={createIsPending} />
                   )
                 }
                 {
-                  isAdmin && (
+                  isTenantAdminOrTeacher && (
                     <>
                       <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
                     </>

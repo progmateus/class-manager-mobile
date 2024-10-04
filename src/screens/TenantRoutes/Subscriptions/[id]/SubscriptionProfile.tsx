@@ -7,16 +7,16 @@ import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfil
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { GetRole } from "@utils/GetRole"
-import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
+import { fireInfoToast } from "@utils/HelperNotifications"
 import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
 import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
-import { Actionsheet, Box, Center, Heading, HStack, Icon, Image, Text, View, VStack } from "native-base"
-import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, TrashSimple, Lock, Check, X, SimCard } from "phosphor-react-native"
+import { Actionsheet, Box, Center, Heading, HStack, Icon, Text, View, VStack } from "native-base"
+import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
-import { GetSubscriptionProfileService, ListSubscriptionsService, UpdateSubscriptionService } from "src/services/subscriptionService"
+import { GetSubscriptionProfileService, UpdateSubscriptionService } from "src/services/subscriptionService"
+import { HasRole } from "@utils/HasRole"
 
 
 type RouteParamsProps = {
@@ -71,7 +71,7 @@ export function SubscriptionProfile() {
   }
 
   const isAdmin = useCallback(() => {
-    return GetRole(user.usersRoles, tenantId, "admin")
+    return HasRole(user.usersRoles, tenantId, ["admin"])
   }, [tenantId])
   return (
     <View flex={1}>

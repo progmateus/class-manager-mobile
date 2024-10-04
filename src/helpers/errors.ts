@@ -65,7 +65,7 @@ const errors = [
   },
   {
     message: "ERR_BOOKING_NOT_FOUND",
-    description: "Check-in não encontrado"
+    description: "Aula não encontrada"
   },
   {
     message: "ERR_CLASS_DAY_ALREADY_CONCLUDED",

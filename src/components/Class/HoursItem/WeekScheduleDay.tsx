@@ -118,7 +118,7 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, addScheduleDayFn, re
       <Actionsheet isOpen={isAddOpen} size="full" onClose={onClose}>
         <Actionsheet.Content>
           <VStack h="full" space={8}>
-            <Box w="100%" h={60} px={4} justifyContent="center" alignSelf="center">
+            <Box w="100%" minH={60} px={4} justifyContent="center" alignSelf="center">
               <Heading fontSize="16" color="coolGray.700" textAlign="center">
                 {transforWeekDay(selectedWeekDay)}
               </Heading>

@@ -25,18 +25,13 @@ export function Button({ title, variant = "solid", fontSize = "sm", ...rest }: P
       }}
       {...rest}
     >
-      {
-        isLoading ? (<Spinner />) : (
-          <Text
-            color={definedColor}
-            fontFamily="heading"
-            fontSize={fontSize}
-          >
-            {title}
-          </Text>
-        )}
-
-
+      <Text
+        color={definedColor}
+        fontFamily="heading"
+        fontSize={fontSize}
+      >
+        {title}
+      </Text>
     </NativeBaseButton>
   );
 }
