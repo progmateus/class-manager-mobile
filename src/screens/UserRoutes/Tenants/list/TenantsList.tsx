@@ -3,29 +3,19 @@ import Constants from "expo-constants";
 import { Input } from "@components/form/Input";
 import { TenantItem } from "@components/Items/TenantItem";
 import { MagnifyingGlass } from "phosphor-react-native"
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useCallback, useEffect, useState } from "react";
 import { ListTenantsService } from "src/services/tenantsService";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { debounce } from "lodash";
 import { useForm } from "react-hook-form";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 
 const statusBarHeight = Constants.statusBarHeight;
 
-interface ITenant {
-  id: string,
-  name: string,
-  username: string,
-  avatar: string
-}
-
-type serahcProps = {
-  search: string
-}
-
 export function TenantsList() {
-  const [tenants, setTenants] = useState<ITenant[]>([])
+  const [tenants, setTenants] = useState<ITenantDTO[]>([])
   const [search, setSearch] = useState("")
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
@@ -35,8 +25,12 @@ export function TenantsList() {
     listTenants();
   }
 
+  useFocusEffect(useCallback(() => {
+    listTenants()
+  }, [search]))
 
-  function listTenants() {
+
+  const listTenants = () => {
     ListTenantsService(search).then(({ data }) => {
       setTenants(data.data)
     }).catch((err) => {
@@ -50,12 +44,18 @@ export function TenantsList() {
     });
   }
 
+
+  const changeTextDebounced = (text: string) => {
+    setSearch(text)
+  }
+
+  const changeTextDebouncer = useCallback(debounce(changeTextDebounced, 250), []);
+
   return (
     <VStack flex={1} mt={statusBarHeight + 12}>
       <View px={4}>
         <Input
-          value={search}
-          onChangeText={handleSearch}
+          onChangeText={changeTextDebouncer}
           placeholder="Buscar"
           InputLeftElement={<Icon as={MagnifyingGlass} style={{ marginLeft: 8 }} color="coolGray.400" />}
         />
