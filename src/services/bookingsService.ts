@@ -23,12 +23,13 @@ export function DeleteBookingService(tenantId: string, bookingId: string, userId
 }
 
 
-export function ListBookingsService(tenantId: string, userId: string) {
+export function ListBookingsService(tenantId?: string, userId?: string) {
   return api({
-    url: `${tenantId}/bookings`,
+    url: 'bookings',
     method: 'get',
     params: {
-      userId
+      userId,
+      tenantId
     }
   })
 }

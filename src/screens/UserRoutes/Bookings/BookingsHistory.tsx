@@ -17,24 +17,23 @@ import { useAuth } from "@hooks/useAuth"
 import { TouchableOpacity } from "react-native"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { useQuery } from "@tanstack/react-query"
 
 type RouteParamsProps = {
   tenantIdParams?: string;
   userId?: string;
 }
 export function BookingsHistory() {
-  const [bookings, setBookings] = useState<IBookingDTO[]>([])
-  const [isLoading, setIsLoadig] = useState(true)
   const [isActing, setIsActing] = useState(false)
   const route = useRoute()
   const { tenantIdParams, userId } = route.params as RouteParamsProps;
-  const { tenant, authenticationType } = useAuth()
+  const { tenant, authenticationType, user } = useAuth()
   const tenantId = authenticationType == "tenant" ? tenant?.id : tenantIdParams
 
   const userNavigation = useNavigation<UserNavigatorRoutesProps>()
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>()
 
-  const handleDeleteBooking = (booking: IBookingDTO) => {
+  /* const handleDeleteBooking = (booking: IBookingDTO) => {
     if (isActing || !tenantId) return
     setIsActing(true)
     DeleteBookingService(tenantId, booking.id, booking.userId).then(({ data }) => {
@@ -45,31 +44,30 @@ export function BookingsHistory() {
     }).finally(() => {
       setIsActing(false)
     })
+  } */
+
+  const fetchBookings = () => {
+    if (authenticationType === "user") {
+      return loadUserBookings()
+    } else {
+      return loadTenantBookings()
+    }
   }
 
-  const loadTenantBookings = () => {
-    if (!tenantId || !userId) return
-    setIsLoadig(true)
-    ListBookingsService(tenantId, userId).then(({ data }) => {
-      setBookings(data.data)
-    }).catch((err) => {
-      console.log(err)
-    }).finally(() => {
-      setIsLoadig(false)
-    })
+  const { data: bookings, isLoading, refetch } = useQuery<IBookingDTO[]>({
+    queryKey: ['get-bookings', tenantId, userId, user.id],
+    queryFn: fetchBookings
+  })
+
+  const loadTenantBookings = async () => {
+    const { data } = await ListBookingsService(tenantId, userId)
+    return data.data
   }
 
-  const loadUserBookings = () => {
-    setIsLoadig(true)
-    ListUserBookingsService(tenantId).then(({ data }) => {
-      setBookings(data.data)
-    }).catch((err) => {
-      console.log(err)
-    }).finally(() => {
-      setIsLoadig(false)
-    })
+  const loadUserBookings = async () => {
+    const { data } = await ListUserBookingsService(tenantId)
+    return data.data
   }
-
 
   const handleRedirectClassDay = (classDayId: string, tenantId: string) => {
     if (authenticationType === "user") {
@@ -79,15 +77,6 @@ export function BookingsHistory() {
       })
     }
   }
-
-  useFocusEffect(useCallback(() => {
-    if (authenticationType === "user") {
-      loadUserBookings()
-    } else {
-      loadTenantBookings()
-    }
-  }, [tenantId]))
-
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('pt-BR', {
