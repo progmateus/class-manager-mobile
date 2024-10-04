@@ -29,6 +29,11 @@ type RouteParamsProps = {
   tenantIdParams?: string;
 }
 
+const defaultValues = {
+  planId: "",
+  classId: ""
+}
+
 type CreateSubscriptionProps = z.infer<typeof createSubscriptionSchema>
 
 export function CreateSubscription() {
@@ -46,9 +51,7 @@ export function CreateSubscription() {
   });
 
   useFocusEffect(useCallback(() => {
-    setValue('classId', '')
-    setValue('planId', '')
-    reset()
+    reset(defaultValues)
   }, []))
 
 
@@ -111,6 +114,7 @@ export function CreateSubscription() {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select accessibilityLabel="Selecione o plano" selectedValue={value} variant="outline" mt={-2} onValueChange={onChange}>
+                <Select.Item label="Selecione" value="" />
                 {
                   plans && plans.length > 0 && (
                     plans.map((c: any) => {

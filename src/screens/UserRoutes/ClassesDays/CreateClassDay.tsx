@@ -30,6 +30,10 @@ const createClassDaySchema = z.object({
   classId: z.string()
 });
 
+const defaultValues = {
+  classId: "",
+}
+
 type createclassDayProps = z.infer<typeof createClassDaySchema>
 
 export function CreateClassDay() {
@@ -44,7 +48,6 @@ export function CreateClassDay() {
     resolver: zodResolver(createClassDaySchema)
   });
 
-
   useEffect(() => {
     ListClassesService(tenantId).then(({ data }) => {
       setClasses(data.data)
@@ -54,7 +57,7 @@ export function CreateClassDay() {
   }, [tenantId])
 
   useFocusEffect(useCallback(() => {
-    reset()
+    reset(defaultValues)
   }, []))
 
   const handleCreateClassDay = (data: createclassDayProps) => {
@@ -164,6 +167,7 @@ export function CreateClassDay() {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select accessibilityLabel="Selecione a turma" selectedValue={value} variant="outline" mt={-2} onValueChange={onChange}>
+                <Select.Item label="Selecione" value="" />
                 {
                   classes && classes.length > 0 && (
                     classes.map((c: IClassDTO) => {
