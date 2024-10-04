@@ -25,6 +25,10 @@ const createSubscriptionSchema = z.object({
   classId: z.string()
 });
 
+type RouteParamsProps = {
+  tenantIdParams?: string;
+}
+
 type CreateSubscriptionProps = z.infer<typeof createSubscriptionSchema>
 
 export function CreateSubscription() {
@@ -32,15 +36,18 @@ export function CreateSubscription() {
   const [plans, setPlans] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
   const route = useRoute()
+  const params = route.params as RouteParamsProps;
   const { user, userUpdate, tenant } = useAuth()
 
-  const tenantId = tenant?.id
+  const tenantId = tenant?.id || params?.tenantIdParams
 
-  const { control, handleSubmit, formState: { errors }, reset } = useForm<CreateSubscriptionProps>({
+  const { control, handleSubmit, formState: { errors }, reset, setValue } = useForm<CreateSubscriptionProps>({
     resolver: zodResolver(createSubscriptionSchema)
   });
 
   useFocusEffect(useCallback(() => {
+    setValue('classId', '')
+    setValue('planId', '')
     reset()
   }, []))
 
@@ -54,6 +61,7 @@ export function CreateSubscription() {
 
 
   const listTenantplans = () => {
+    if (!tenantId) return
     ListTenantPlansService(tenantId).then(({ data }) => {
       setPlans(data.data)
     }).catch((err) => {
@@ -63,6 +71,7 @@ export function CreateSubscription() {
 
 
   const listClasses = () => {
+    if (!tenantId) return
     ListClassesService(tenantId).then(({ data }) => {
       setClasses(data.data)
     }).catch((err) => {
@@ -71,6 +80,7 @@ export function CreateSubscription() {
   }
 
   const handeCreateSubscription = (data: CreateSubscriptionProps) => {
+    if (!tenantId) return
     setIsLoadig(true)
     const { planId, classId } = data
     CreateSubscriptionService(tenantId, planId, classId).then(({ data }) => {
@@ -79,7 +89,7 @@ export function CreateSubscription() {
         ...user,
         subscriptions: [...user.subscriptions, data.data]
       })
-      fireSuccesToast('Inscrição realizada com sucesso!')
+      fireSuccesToast('Assinatura realizada com sucesso!')
     }).catch((err) => {
       console.log(err)
       fireErrorToast('Ocorreu um erro')
@@ -91,7 +101,7 @@ export function CreateSubscription() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Realizar inscrição" rightIcon={Check} rightAction={handleSubmit(handeCreateSubscription)} />
+      <PageHeader title="Realizar assinatura" rightIcon={Check} rightAction={handleSubmit(handeCreateSubscription)} />
       <ScrollContainer>
         <VStack space={6} mt={2}>
 

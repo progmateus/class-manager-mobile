@@ -37,11 +37,11 @@ const errors = [
   },
   {
     message: "ERR_SUBSCRIPTION_NOT_FOUND",
-    description: "Inscrição não encontrada"
+    description: "Assinatura não encontrada"
   },
   {
     message: "ERR_SUBSCRIPTION_NOT_ACTIVE",
-    description: "Inscrição não inativa"
+    description: "Assinatura não inativa"
   },
   {
     message: "ERR_NOT_CLASS_STUDENT",
@@ -113,11 +113,11 @@ const errors = [
   },
   {
     message: "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS",
-    description: "Já existe uma inscrição ativa"
+    description: "Já existe uma assinatura ativa"
   },
   {
     message: "ERR_SUBSCRIPTION_INACTIVE",
-    description: "Inscrição inativa"
+    description: "Assinatura inativa"
   },
   {
     message: "ERR_PERMISSION_DENIED",

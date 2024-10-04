@@ -26,10 +26,16 @@ var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 const createSubscriptionSchema = z.object({
-  planId: z.string({ required_error: 'Campo obrigatório' }),
-  classId: z.string({ required_error: 'Campo obrigatório' }),
+  planId: z.string({ required_error: 'Campo obrigatório' }).min(1, 'Campo obrigatório'),
+  classId: z.string({ required_error: 'Campo obrigatório' }).min(1, 'Campo obrigatório'),
   username: z.string({ required_error: 'Campo obrigatório' })
 });
+
+const defaultValues = {
+  planId: "",
+  classId: "",
+  username: "",
+}
 
 type CreateSubscriptionProps = z.infer<typeof createSubscriptionSchema>
 
@@ -50,7 +56,7 @@ export function CreateSubscription() {
   });
 
   useFocusEffect(useCallback(() => {
-    reset()
+    reset(defaultValues)
   }, []))
 
 
@@ -89,7 +95,7 @@ export function CreateSubscription() {
     }
 
     if (user.id === userFound.id) {
-      fireErrorToast('Você não pode criar uma inscrição para si mesmo')
+      fireErrorToast('Você não pode criar uma assinatura para si mesmo')
       resetField('username')
       setIsModalOpen(false)
       return
@@ -98,7 +104,7 @@ export function CreateSubscription() {
     errors.root
     setIsLoadig(true)
     CreateSubscriptionService(tenantId, getValues("planId"), getValues("classId"), userFound.id).then(({ data }) => {
-      fireSuccesToast('Inscrição realizada com sucesso!')
+      fireSuccesToast('Assinatura realizada com sucesso!')
       setIsModalOpen(false)
       navigation.navigate('subscriptionProfile', { subscriptionId: data.data.id })
     }).catch((err) => {
@@ -129,7 +135,7 @@ export function CreateSubscription() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Realizar inscrição" rightIcon={Check} rightAction={handleSubmit(handleCreateSubscription)} />
+      <PageHeader title="Realizar assinatura" rightIcon={Check} rightAction={handleSubmit(handleCreateSubscription)} />
       <ScrollContainer>
         <VStack space={6} mt={2}>
           <Text fontSize="sm" fontWeight="medium" color="coolGray.700"> Selecione o plano: </Text>
@@ -139,6 +145,7 @@ export function CreateSubscription() {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Select accessibilityLabel="Selecione o plano" selectedValue={value} variant="outline" mt={-4} onValueChange={onChange} fontSize={14}>
+                  <Select.Item label="Selecione" value="" />
                   {
                     plans && plans.length > 0 && (
                       plans.map((c: any) => {
@@ -151,7 +158,7 @@ export function CreateSubscription() {
                 </Select>
               )}
             />
-            {errors.planId?.message && (<Text color="red.500">{errors.planId?.message}</Text>)}
+            {errors.planId?.message && (<Text color="red.500" ml={1}>{errors.planId?.message}</Text>)}
           </VStack>
 
 
@@ -162,6 +169,7 @@ export function CreateSubscription() {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Select accessibilityLabel="Selecione a turma" selectedValue={value} variant="outline" mt={-4} onValueChange={onChange} fontSize={14}>
+                  <Select.Item label="Selecione" value="" />
                   {
                     classes && classes.length > 0 && (
                       classes.map((c: IClassDTO) => {
@@ -175,7 +183,7 @@ export function CreateSubscription() {
                 </Select>
               )}
             />
-            {errors.planId?.message && (<Text color="red.500">{errors.planId?.message}</Text>)}
+            {errors.planId?.message && (<Text color="red.500" ml={1}>{errors.planId?.message}</Text>)}
           </VStack>
 
           <Controller
@@ -199,9 +207,9 @@ export function CreateSubscription() {
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} safeAreaTop={true}>
           <Modal.Content maxWidth="350">
             {/* <Modal.CloseButton /> */}
-            <Modal.Header>Criar inscrição</Modal.Header>
+            <Modal.Header>Criar assinatura</Modal.Header>
             <Modal.Body justifyContent="center">
-              <Text fontFamily="body" color="coolGray.600">Deseja criar uma inscrição para este usuário?</Text>
+              <Text fontFamily="body" color="coolGray.600">Deseja criar uma assinatura para este usuário?</Text>
               <View alignItems="center" justifyContent="center" py={4} mt={2}>
                 <Avatar
                   rounded="full"

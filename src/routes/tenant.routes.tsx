@@ -31,7 +31,7 @@ import { CreateSubscription } from "@screens/TenantRoutes/Subscriptions/CreateSu
 
 export type TenantRoutes = {
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
-  createSubscription: undefined,
+  createSubscription: { tenantIdParams?: string },
   students: { tenantIdParams: string };
   classes: { tenantIdParams: string; };
   classProfile: { classId: string, tenantIdParams: string };

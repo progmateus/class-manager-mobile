@@ -146,8 +146,7 @@ export function Profile() {
                     <Actionsheet.Item key={ur.id} onPress={() => authenticateTenant(ur.tenant.id)}>
                       <HStack alignItems="center" justifyContent="center" space={4}>
                         <Avatar
-                          size="md"
-                          bg="green.500"
+                          size="10"
                           src={ur.tenant.avatar}
                         />
                         <Text fontSize="16" color="gray.700">
@@ -161,7 +160,7 @@ export function Profile() {
             }
             <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
               <HStack alignItems="center" justifyContent="center" space={4}>
-                <View p={3.5} bgColor="gray.100" rounded="full">
+                <View p={2.5} bgColor="gray.100" rounded="full">
                   <Icon as={Plus} color="gray.500" rounded="full" />
                 </View>
                 <Text fontSize="16" color="gray.700">
@@ -172,7 +171,7 @@ export function Profile() {
           </Actionsheet.Content>
         </Actionsheet>
       </ScrollView>
-    </View>
+    </View >
 
   );
 }
