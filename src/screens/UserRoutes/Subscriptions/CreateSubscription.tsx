@@ -87,7 +87,7 @@ export function CreateSubscription() {
   }
 
   const handeCreateSubscription = (data: CreateSubscriptionProps) => {
-    if (!tenantId) return
+    if (!tenantId || isLoading) return
     setIsLoadig(true)
     const { planId, classId } = data
     CreateSubscriptionService(tenantId, planId, classId).then(({ data }) => {
