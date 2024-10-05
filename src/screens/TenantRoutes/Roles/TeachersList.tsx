@@ -4,8 +4,7 @@ import { Input } from "@components/form/Input"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
-import { useNavigation, useRoute } from "@react-navigation/native"
-import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { useRoute } from "@react-navigation/native"
 import { fireErrorToast, fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, FlatList, Heading, Icon, Modal, Text, View, VStack } from "native-base"
 import { MagnifyingGlass, Plus, TrashSimple } from "phosphor-react-native"
@@ -24,7 +23,7 @@ type RouteParamsProps = {
   roleName: "teacher" | "student"
 }
 
-export function UsersRoloesList() {
+export function TeachersList() {
   const [isLoadingAction, setIsLoadingAction] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
   const [userFound, setUserFound] = useState<IUserPreviewDTO | null>(null)
@@ -37,21 +36,20 @@ export function UsersRoloesList() {
   const { tenantIdParams, roleName } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
-  const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
-  const loadUsersRoles = async () => {
+  const loadTeachers = async () => {
     try {
-      const { data } = await ListUsersRolesService(tenantId, roleName)
+      const { data } = await ListUsersRolesService(tenantId, [roleName])
       return data.data
     } catch (err) {
       console.log(err)
     }
   }
 
-  const { data: usersRoles, isLoading } = useQuery<IUsersRolesDTO[]>({
-    queryKey: ['get-users-teachers-roles', tenantId, roleName],
-    queryFn: loadUsersRoles
+  const { data: teachers, isLoading } = useQuery<IUsersRolesDTO[]>({
+    queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())],
+    queryFn: loadTeachers
   })
 
 
@@ -66,9 +64,9 @@ export function UsersRoloesList() {
     setIsLoadingAction(true)
     DeleteUserRoleService(tenantId, selectedUserRole.id).then(() => {
       fireInfoToast('Professor removido com sucesso')
-      const index = usersRoles?.findIndex((ur) => ur.id == selectedUserRole.id)
+      const index = teachers?.findIndex((ur) => ur.id == selectedUserRole.id)
       if (index !== -1) {
-        usersRoles?.slice(index, 1)
+        teachers?.slice(index, 1)
       }
     }).catch((err) => {
       console.log('err: ', err)
@@ -105,7 +103,7 @@ export function UsersRoloesList() {
       return
     }
     CreateUserRoleService(tenantId, userFound.id, "teacher").then(({ data }) => {
-      usersRoles?.push(data.data)
+      teachers?.push(data.data)
       fireSuccesToast('Professor cadastrado com sucesso!')
       setIsModalOpen(false)
       setIsOpenAdd(false)
@@ -129,9 +127,9 @@ export function UsersRoloesList() {
 
               <>
                 <FlatList
-                  data={usersRoles}
+                  data={teachers}
                   pb={20}
-                  keyExtractor={userRole => userRole.id}
+                  keyExtractor={teacher => teacher.id}
                   renderItem={({ item }) => (
                     <TouchableOpacity key={item.user.id} onLongPress={() => handleSelectUserRole(item)}>
                       <GenericItem.Root>

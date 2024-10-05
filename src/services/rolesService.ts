@@ -1,11 +1,14 @@
 import { api } from "./api";
 
-export function ListUsersRolesService(tenantId: string, roleName: string) {
+export function ListUsersRolesService(tenantId: string, rolesNames: string[]) {
   return api({
     url: `${tenantId}/users-roles`,
     method: 'get',
     params: {
-      roleName
+      rolesNames
+    },
+    paramsSerializer: {
+      indexes: true
     }
   })
 }

@@ -16,7 +16,7 @@ import { ClassProfile } from "@screens/TenantRoutes/Classes/CRUD/[id]/ClassProfi
 import { StudentsClassList } from "@screens/TenantRoutes/Classes/students/StudentsClassList";
 import { TeachersClassList } from "@screens/TenantRoutes/Classes/teachers/TeachersClassList";
 import { AddUserToClass } from "@screens/TenantRoutes/Classes/AddUserToClass";
-import { UsersRoloesList } from "@screens/TenantRoutes/Roles/ListUsersRoles";
+import { TeachersList } from "@screens/TenantRoutes/Roles/TeachersList";
 import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
@@ -46,7 +46,7 @@ export type TenantRoutes = {
   listStudentsClass: { tenantIdParams: string; classId: string; }
   listTeachersClass: { tenantIdParams: string; classId: string; }
   addUserToClass: { classId: string; roleName: string; }
-  usersRolesList: { roleName: string; }
+  teachersList: { roleName: string; }
   createUserRole: undefined;
   updateStudentclass: { tenantIdParams: string; userId: string; classIdExists: string; subscriptionId?: string; }
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
@@ -187,8 +187,8 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="usersRolesList"
-        component={UsersRoloesList}
+        name="teachersList"
+        component={TeachersList}
         options={{
           tabBarButton: () => (null)
         }}
