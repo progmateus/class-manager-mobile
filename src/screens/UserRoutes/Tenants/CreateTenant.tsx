@@ -1,23 +1,20 @@
 import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Center, Divider, HStack, Heading, Icon, Image, Text, TextArea, VStack, View } from "native-base";
+import { Button, Center, Divider, HStack, Heading, Icon, Text, TextArea, VStack, View } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { CaretLeft, CaretRight, Check, Plus, PlusCircle } from "phosphor-react-native"
+import { CaretLeft, CaretRight, Check } from "phosphor-react-native"
 import { ScrollContainer } from "@components/ScrollContainer";
 import { useCallback, useState } from "react";
-import { fireErrorToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
+import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { CreateTenantservice } from "src/services/tenantsService";
-import { GetUserByUsernameService } from "src/services/usersService";
 import { isValidCPF } from "@utils/isValidCPF";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { ListAppPlansService } from "src/services/appServices";
 import { VerifyUsernameService } from "src/services/usernameService";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useAuth } from "@hooks/useAuth";
-import { UpdateUser } from "../User/[id]/UpdateUser";
-import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
 import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 
 const cpfRegex = /(^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$)/

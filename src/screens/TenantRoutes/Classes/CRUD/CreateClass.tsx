@@ -2,17 +2,15 @@ import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import { Text, useTheme, View, VStack } from "native-base";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { TextInputMask } from "react-native-masked-text";
-import { CreateClassService, ListClassesService } from "src/services/classesService";
+import { CreateClassService } from "src/services/classesService";
 import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
-import { CreateTenantPlanService } from "src/services/tenantPlansService";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { useAuth } from "@hooks/useAuth";
 
@@ -29,7 +27,6 @@ const createClassSchema = z.object({
 type CreateClassProps = z.infer<typeof createClassSchema>
 
 export function CreateClass() {
-  const [classes, setClasses] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
 
   const { tenant } = useAuth()
@@ -44,15 +41,6 @@ export function CreateClass() {
   useFocusEffect(useCallback(() => {
     reset()
   }, []))
-
-
-  useEffect(() => {
-    ListClassesService(tenantId).then(({ data }) => {
-      setClasses(data.data)
-    }).catch((err) => {
-      console.log('err: ', err)
-    })
-  }, [tenantId])
 
   const handleCreateClass = (data: CreateClassProps) => {
     if (isLoading) return;

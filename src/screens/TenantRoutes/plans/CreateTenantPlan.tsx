@@ -2,13 +2,12 @@ import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Text, useTheme, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
-import { ListClassesService } from "src/services/classesService";
 import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
@@ -30,7 +29,6 @@ const createTenantPlanSchema = z.object({
 type CreateTenantplanProps = z.infer<typeof createTenantPlanSchema>
 
 export function CreateTenantPlan() {
-  const [classes, setClasses] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
   const { sizes, colors } = useTheme();
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
@@ -45,15 +43,6 @@ export function CreateTenantPlan() {
   useFocusEffect(useCallback(() => {
     reset()
   }, []))
-
-
-  useEffect(() => {
-    ListClassesService(tenantId).then(({ data }) => {
-      setClasses(data.data)
-    }).catch((err) => {
-      console.log('err: ', err)
-    })
-  }, [tenantId])
 
   const handleCreateTenantPlan = (data: CreateTenantplanProps) => {
     if (isLoading) return;

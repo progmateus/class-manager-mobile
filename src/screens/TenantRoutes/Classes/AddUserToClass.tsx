@@ -6,13 +6,14 @@ import { Viewcontainer } from "@components/ViewContainer"
 import { useRoute } from "@react-navigation/native"
 import { Actionsheet, Box, Heading, Icon, Text, View, VStack } from "native-base"
 import { Plus } from "phosphor-react-native"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { UpdateStudentClassService, UpdateTeacherClassService, ListUsersByRoleNameService } from "src/services/classesService"
 import { Vibration } from "react-native"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
 import { useAuth } from "@hooks/useAuth"
+import { useQuery } from "@tanstack/react-query"
 
 
 type RouteParamsProps = {
@@ -22,8 +23,6 @@ type RouteParamsProps = {
 }
 
 export function AddUserToClass() {
-  const [usersRoles, setUsersRoles] = useState<IUsersRolesDTO[]>([])
-  const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<IUserPreviewDTO | null>(null)
   const route = useRoute()
@@ -31,16 +30,19 @@ export function AddUserToClass() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
 
-  useEffect(() => {
-    setIsLoading(true)
-    ListUsersByRoleNameService(tenantId, roleName).then(({ data }) => {
-      setUsersRoles(data.data)
-    }).catch((err) => {
+  const loadUsersRoles = async () => {
+    try {
+      const { data } = await ListUsersByRoleNameService(tenantId, roleName)
+      return data.data
+    } catch (err) {
       console.log(err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, [classId])
+    }
+  }
+
+  const { data: usersRoles, isLoading } = useQuery<IUsersRolesDTO[]>({
+    queryKey: ['get-users-roles', classId, tenantId, roleName],
+    queryFn: loadUsersRoles
+  })
 
   const handleAddUser = () => {
     if (roleName === "student") {

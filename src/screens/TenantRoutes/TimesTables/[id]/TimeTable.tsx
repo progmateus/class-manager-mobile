@@ -4,11 +4,12 @@ import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { useAuth } from "@hooks/useAuth";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { HStack, Text, View } from "native-base";
 import { Check, Info } from "phosphor-react-native";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { GetTimeTableService, UpdateTimeTableService } from "src/services/timeTablesService";
 import { THEME } from "src/theme";
 
@@ -20,42 +21,37 @@ export function TimeTable() {
   const route = useRoute()
   const { tenant } = useAuth()
 
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [timeTable, setTimeTable] = useState<ITimeTableDTO>({} as ITimeTableDTO)
   const { timeTableId } = route.params as RouteParamsProps;
 
   const weeksDays = [0, 1, 2, 3, 4, 5, 6]
 
-  useFocusEffect(useCallback(() => {
-    setIsLoading(true)
-    GetTimeTableService(timeTableId, tenant.id).then(({ data }) => {
-      setTimeTable(data.data)
-    }).catch((err) => {
-      console.log('err: ', err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, []))
+  const loadTimeTable = async () => {
+    try {
+      const { data } = await GetTimeTableService(timeTableId, tenant.id)
+      return data.data
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const { data: timeTable, isLoading } = useQuery<ITimeTableDTO>({
+    queryKey: ['get-time-table', timeTableId],
+    queryFn: loadTimeTable
+  })
 
   const handleAddScheduleDay = useCallback((dayOfWeek: number, hourStart: string, hourEnd: string) => {
-    setTimeTable(prevState => (
-      {
-        ...prevState,
-        schedulesDays: [
-          ...prevState.schedulesDays,
-          {
-            id: String(Math.floor(Math.random() * 100)),
-            weekDay: dayOfWeek,
-            hourStart, hourEnd
-          }
-        ]
-      }
-    ))
+    timeTable?.schedulesDays.push({
+      id: String(Math.floor(Math.random() * 100)),
+      weekDay: dayOfWeek,
+      hourStart, hourEnd
+    })
   }, [])
 
   const handleRemoveScheduleDay = useCallback((id: string) => {
-    setTimeTable((prevState: any) => { return { ...prevState, schedulesDays: [...prevState.schedulesDays.filter((item: any) => item.id !== id)] } })
+    const index = timeTable?.schedulesDays.findIndex((tt) => tt.id == id)
+    if (index != -1) {
+      timeTable?.schedulesDays.slice(index, 1)
+    }
   }, [])
 
 
@@ -69,7 +65,7 @@ export function TimeTable() {
   return (
     <View flex={1}>
       {
-        isLoading ? (<Loading />)
+        isLoading || !timeTable ? (<Loading />)
           : (
             <>
               <PageHeader title={timeTable.name ?? ''} rightIcon={Check} rightAction={handleSave} />

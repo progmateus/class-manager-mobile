@@ -4,32 +4,32 @@ import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { FlatList, Text, View, VStack } from "native-base"
-import { Barbell, Coin, Money, Plus, SimCard } from "phosphor-react-native"
-import { useCallback, useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { FlatList, Text, View } from "native-base"
+import { Barbell, Money, Plus, SimCard } from "phosphor-react-native"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
 export function TenantPlansList() {
-  const [plans, setPlans] = useState<ITenantPlanDTO[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const route = useRoute()
   const { tenant } = useAuth()
   const tenantId = tenant?.id
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
-  useFocusEffect(useCallback(() => {
-    setIsLoading(true)
-    ListTenantPlansService(tenantId).then(({ data }) => {
-      setPlans(data.data)
-    }).catch((err) => {
+  const loadTenantPlans = async () => {
+    try {
+      const { data } = await ListTenantPlansService(tenantId)
+      return data.data
+    } catch (err) {
       console.log(err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, [tenantId]))
+    }
+  }
+
+  const { data: plans, isLoading } = useQuery<ITenantPlanDTO[]>({
+    queryKey: ['get-tenant-plans', tenantId],
+    queryFn: loadTenantPlans
+  })
 
   const priceFormatted = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {

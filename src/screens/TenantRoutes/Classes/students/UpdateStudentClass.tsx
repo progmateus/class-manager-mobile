@@ -4,12 +4,13 @@ import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/classes/IClass"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { useQuery } from "@tanstack/react-query"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { Text, View, VStack } from "native-base"
 import { BookBookmark, Check } from "phosphor-react-native"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ListClassesService, UpdateStudentClassService } from "src/services/classesService"
 
@@ -21,9 +22,7 @@ type RouteParamsProps = {
 }
 
 export function UpdateStudentClass() {
-  const [classes, setClasses] = useState<IClassDTO[]>([])
   const [selectedClassId, setSelectedClassId] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
   const route = useRoute()
   const { tenantIdParams, userId: userIdParam, classIdExists, subscriptionId } = route.params as RouteParamsProps;
   const { tenant, authenticationType, user } = useAuth()
@@ -36,17 +35,19 @@ export function UpdateStudentClass() {
     userId = user.id
   }
 
-  useFocusEffect(useCallback(() => {
-    setIsLoading(true)
-    ListClassesService(tenantId).then(({ data }) => {
-      setSelectedClassId(classIdExists)
-      setClasses(data.data)
-    }).catch((err) => {
+  const loadClasses = async () => {
+    try {
+      const { data } = await ListClassesService(tenantId)
+      return data.data
+    } catch (err) {
       console.log(err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, [tenantId, userId]))
+    }
+  }
+
+  const { data: classes, isLoading } = useQuery<IClassDTO[]>({
+    queryKey: ['get-students-classes', tenantId, tenant.id, userId],
+    queryFn: loadClasses
+  })
 
 
   const handleSelectClass = (classId: string) => {

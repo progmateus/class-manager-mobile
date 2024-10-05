@@ -4,14 +4,14 @@ import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { IClassDTO } from "@dtos/classes/IClass"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireErrorToast } from "@utils/HelperNotifications"
 import { SimpleGrid, Text, View, VStack } from "native-base"
-import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, Calendar, CalendarBlank, ArrowsLeftRight } from "phosphor-react-native"
+import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, CalendarBlank, ArrowsLeftRight } from "phosphor-react-native"
 import { useEffect, useState } from "react"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
-import { GetClassProfileService, GetClassService } from "src/services/classesService"
+import { GetClassProfileService } from "src/services/classesService"
 
 type RouteParamsProps = {
   classId: string;

@@ -2,12 +2,13 @@ import { GenericItem } from "@components/Items/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
+import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { useQuery } from "@tanstack/react-query"
 import { Center, Text, View, VStack } from "native-base"
 import { Calendar, Plus } from "phosphor-react-native"
-import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ListTimesTablesService } from "src/services/timeTablesService"
 
@@ -16,20 +17,22 @@ import { ListTimesTablesService } from "src/services/timeTablesService"
 
 export function TimesTablesList() {
 
-  const [isLoading, setIsLoading] = useState(false)
   const { tenant } = useAuth()
-  const [timesTables, setTimesTables] = useState([])
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
-  useFocusEffect(useCallback(() => {
-    setIsLoading(true)
-    ListTimesTablesService(tenant.id).then(({ data }) => {
-      setTimesTables(data.data)
-    }).catch((err) => {
-      console.log('err: ', err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, []))
+
+  const loadTimesTables = async () => {
+    try {
+      const { data } = await ListTimesTablesService(tenant.id)
+      return data.data
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const { data: timesTables, isLoading } = useQuery<ITimeTableDTO[]>({
+    queryKey: ['get-times-tables', tenant.id],
+    queryFn: loadTimesTables
+  })
 
   const handleAdd = () => {
     navigation.navigate('createTimeTable')

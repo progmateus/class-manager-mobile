@@ -7,17 +7,13 @@ import WhatsappSVG from "@assets/whatsapp-outline.svg"
 import ImageSVG from "@assets/image-outline.svg"
 import { TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { GetTenantProfileService } from "src/services/tenantsService";
-import { Loading } from "@components/Loading";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useAuth } from "@hooks/useAuth";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
-import { DeleteSubscriptionService } from "src/services/subscriptionService";
-import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { Avatar } from "@components/Avatar/Avatar";
-import { useTenant } from "@hooks/useTenant";
 import { TenantProfileSkeleton } from "@components/skeletons/screens/TenantProfile";
 import { useQuery } from "@tanstack/react-query";
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";

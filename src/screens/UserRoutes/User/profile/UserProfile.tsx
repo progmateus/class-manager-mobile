@@ -1,5 +1,5 @@
 import { PageHeader } from "@components/PageHeader";
-import { Actionsheet, Box, Center, HStack, Heading, Icon, Image, ScrollView, Text, VStack, View } from "native-base";
+import { Actionsheet, Box, HStack, Heading, Icon, ScrollView, Text, VStack, View } from "native-base";
 import SettingsSVG from "@assets/settings-outline.svg";
 import CardSVG from "@assets/card-outline.svg";
 import MoneySVG from "@assets/money-outline.svg";
@@ -12,11 +12,10 @@ import { SubscriptionOption } from "@components/Items/SubscriptionOption";
 import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { ArrowsLeftRight, Plus } from "phosphor-react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@hooks/useAuth";
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
 import { Avatar } from "@components/Avatar/Avatar";
-import { ScrollContainer } from "@components/ScrollContainer";
 
 
 export function Profile() {

@@ -5,12 +5,11 @@ import { TenantItem } from "@components/Items/TenantItem";
 import { MagnifyingGlass } from "phosphor-react-native"
 import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { ListTenantsService } from "src/services/tenantsService";
 import { debounce } from "lodash";
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "@components/skeletons";
 import { TenantItemSkeleton } from "@components/skeletons/Items/TenantItemSkeleton";
 
 const statusBarHeight = Constants.statusBarHeight;

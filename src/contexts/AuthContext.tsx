@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 import { api } from "src/services/api";
 import { storageUserRemove, storageUserSave } from "@storage/storageUser";
@@ -8,7 +8,7 @@ import { GetUserProfileService } from "src/services/usersService";
 import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 import { GetTenantProfileService } from "src/services/tenantsService";
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
-import { storageAuthenticationTypeGet, storageAuthenticationTypeRemove, storageAuthenticationTypeSave } from "@storage/storageAuthenticationType";
+import { storageAuthenticationTypeGet, storageAuthenticationTypeSave } from "@storage/storageAuthenticationType";
 import { storageTenantGet, storageTenantRemove, storageTenantSave } from "@storage/storageTenant";
 import { AxiosError } from "axios";
 import { AppError } from "@utils/errors/AppError";

@@ -4,18 +4,20 @@ import { Input } from "@components/form/Input"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireErrorToast, fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, FlatList, Heading, Icon, Image, Modal, Text, View, VStack } from "native-base"
+import { Actionsheet, Box, FlatList, Heading, Icon, Modal, Text, View, VStack } from "native-base"
 import { MagnifyingGlass, Plus, TrashSimple } from "phosphor-react-native"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
 import { CreateUserRoleService, DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 import { GetUserByUsernameService } from "src/services/usersService"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
 import { Avatar } from "@components/Avatar/Avatar"
+import { useQuery } from "@tanstack/react-query"
+import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
 
 type RouteParamsProps = {
   tenantIdParams: string;
@@ -23,8 +25,6 @@ type RouteParamsProps = {
 }
 
 export function UsersRoloesList() {
-  const [usersRoles, setUsersRoles] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState(false)
   const [isLoadingAction, setIsLoadingAction] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
   const [userFound, setUserFound] = useState<IUserPreviewDTO | null>(null)
@@ -40,16 +40,19 @@ export function UsersRoloesList() {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
 
-  useFocusEffect(useCallback(() => {
-    setIsLoading(true)
-    ListUsersRolesService(tenantId, roleName).then(({ data }) => {
-      setUsersRoles(data.data)
-    }).catch((err) => {
+  const loadUsersRoles = async () => {
+    try {
+      const { data } = await ListUsersRolesService(tenantId, roleName)
+      return data.data
+    } catch (err) {
       console.log(err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, [tenantId, roleName]))
+    }
+  }
+
+  const { data: usersRoles, isLoading } = useQuery<IUsersRolesDTO[]>({
+    queryKey: ['get-users-teachers-roles', tenantId, roleName],
+    queryFn: loadUsersRoles
+  })
 
 
   const handleSelectUserRole = (userRole: any) => {
@@ -63,7 +66,10 @@ export function UsersRoloesList() {
     setIsLoadingAction(true)
     DeleteUserRoleService(tenantId, selectedUserRole.id).then(() => {
       fireInfoToast('Professor removido com sucesso')
-      setUsersRoles(list => list.filter(item => item.id !== selectedUserRole.id))
+      const index = usersRoles?.findIndex((ur) => ur.id == selectedUserRole.id)
+      if (index !== -1) {
+        usersRoles?.slice(index, 1)
+      }
     }).catch((err) => {
       console.log('err: ', err)
       fireErrorToast('Ocorreu um erro!')
@@ -99,7 +105,7 @@ export function UsersRoloesList() {
       return
     }
     CreateUserRoleService(tenantId, userFound.id, "teacher").then(({ data }) => {
-      setUsersRoles([...usersRoles, data.data])
+      usersRoles?.push(data.data)
       fireSuccesToast('Professor cadastrado com sucesso!')
       setIsModalOpen(false)
       setIsOpenAdd(false)
@@ -130,7 +136,7 @@ export function UsersRoloesList() {
                     <TouchableOpacity key={item.user.id} onLongPress={() => handleSelectUserRole(item)}>
                       <GenericItem.Root>
                         <GenericItem.Avatar url={item.user.avatar} alt="Foto de perfil do usuário" username={item.user.username} />
-                        <GenericItem.Content title={`${item.user.name.firstName} ${item.user.name.lastName}`} caption="@username" />
+                        <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption="@username" />
                       </GenericItem.Root>
                     </TouchableOpacity>
                   )}
