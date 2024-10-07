@@ -6,7 +6,7 @@ import { IUserClassDTO } from "@dtos/classes/IUserClassDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireInfoToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, FlatList, Heading, Icon, Text, View } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
@@ -49,20 +49,28 @@ export function TeachersClassList() {
     })
   }
 
-  const handleRemoveTeacher = () => {
+  const handleRemoveTeacher = async () => {
     if (!selectedTeacherClass) {
       return
     }
-
-    RemoveTeacherFromClassService(tenantId, selectedTeacherClass.id, classId).then(() => {
-      fireInfoToast('Professor removido com sucesso!')
-      const index = teachersClass?.findIndex((ur) => ur.id == selectedTeacherClass.id)
-      if (index !== -1) {
-        teachersClass?.slice(index, 1)
-      }
+    try {
+      await RemoveTeacherFromClassService(tenantId, selectedTeacherClass.id, classId)
+    } finally {
       setIsOpen(false)
-    })
+    }
   }
+
+  const queryClient = useQueryClient();
+
+  const { mutate: removeTeacherMutation } = useMutation({
+    mutationFn: handleRemoveTeacher,
+    onSuccess: () => {
+      fireInfoToast('Professor removido com sucesso!')
+      queryClient.invalidateQueries({
+        queryKey: ['get-teachers-class', tenantId, classId]
+      })
+    }
+  })
 
 
   const handleSelectTeacher = (teacherClass: IUserClassDTO) => {
@@ -100,7 +108,7 @@ export function TeachersClassList() {
                       {`${selectedTeacherClass?.user?.name.firstName} ${selectedTeacherClass?.user?.name.lastName}`}
                     </Heading>
                   </Box>
-                  <Actionsheet.Item onPress={handleRemoveTeacher} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
+                  <Actionsheet.Item onPress={() => removeTeacherMutation()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
                     Remover
                   </Actionsheet.Item>
                 </Actionsheet.Content>

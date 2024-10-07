@@ -6,7 +6,7 @@ import { IClassDTO } from "@dtos/classes/IClass"
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { Text, View, VStack } from "native-base"
 import { BookBookmark, Check } from "phosphor-react-native"
@@ -29,6 +29,8 @@ export function UpdateStudentClass() {
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
+  const queryClient = useQueryClient();
+
   let userId = userIdParam ?? ""
 
   if (authenticationType === "user") {
@@ -45,7 +47,7 @@ export function UpdateStudentClass() {
   }
 
   const { data: classes, isLoading } = useQuery<IClassDTO[]>({
-    queryKey: ['get-students-classes', tenantId, tenant.id, userId],
+    queryKey: ['get-students-class', tenantId, tenant.id, classIdExists, userId],
     queryFn: loadClasses
   })
 
@@ -54,22 +56,32 @@ export function UpdateStudentClass() {
     setSelectedClassId(classId)
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!selectedClassId || !subscriptionId) {
       return
     }
 
-    UpdateStudentClassService(tenantId, userId, selectedClassId).then(() => {
+    try {
+      await UpdateStudentClassService(tenantId, userId, selectedClassId)
       fireSuccesToast('Turma alterada com sucesso!')
       navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
-    }).catch((err) => {
-      console.log(err)
-    })
+    } catch (err) {
+      console.log('err')
+    }
   }
+
+  const { mutate: handleSaveMutation } = useMutation({
+    mutationFn: handleSave,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['get-students-class', tenantId, tenant.id, classIdExists, userId]
+      })
+    }
+  })
 
   return (
     <View flex={1}>
-      <PageHeader title="Alterar turma" rightIcon={Check} rightAction={handleSave} />
+      <PageHeader title="Alterar turma" rightIcon={Check} rightAction={handleSaveMutation} />
       <Viewcontainer>
 
         {

@@ -23,7 +23,6 @@ export function SubscriptionsList() {
     queryKey: ['get-subscriptions', tenantId],
     queryFn: () => {
       return ListSubscriptionsService(tenantId).then(({ data }) => {
-        /* setClassesDays(data.data) */
         return data.data
       })
     }

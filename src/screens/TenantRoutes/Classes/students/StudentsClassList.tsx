@@ -31,7 +31,7 @@ export function StudentsClassList() {
   const queryClient = useQueryClient();
 
   const { data: students, isLoading, refetch } = useQuery<IStudentClassDTO[]>({
-    queryKey: ['get-classes', tenantId, classId],
+    queryKey: ['get-students-class', tenantId, classId],
     queryFn: () => {
       return ListStudentsByClassService(tenantId, classId).then(({ data }) => {
         return data.data
@@ -57,6 +57,8 @@ export function StudentsClassList() {
     return await RemoveStudentFromClassService(tenantId, selectedStudent.id, classId)
   }
 
+
+
   const removeStudentClassMutation = useMutation({
     mutationFn: handleRemove,
     onSuccess: () => {
@@ -66,7 +68,7 @@ export function StudentsClassList() {
       fireInfoToast('Aluno removido')
       setIsOpen(false)
       queryClient.invalidateQueries({
-        queryKey: ['get-classes', tenantId, classId]
+        queryKey: ['get-students-class', tenantId, classId]
       })
     }
   })
@@ -82,34 +84,43 @@ export function StudentsClassList() {
     <View flex={1}>
       <PageHeader title="Gerenciar alunos" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
       <Viewcontainer>
-        <FlatList
-          data={students}
-          pb={20}
-          keyExtractor={student => student.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity key={item.user?.id} onLongPress={() => handleSelectStudent(item)}>
-              <GenericItem.Root>
-                <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do aluno" username={item.user?.username ?? ""} />
-                <GenericItem.Content title={`${item.user?.firstName} ${item.user?.lastName}`} caption="@username" />
-              </GenericItem.Root>
-            </TouchableOpacity>
-          )}
-          ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
-          ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
-        >
-        </FlatList>
-        <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
-          <Actionsheet.Content>
-            <Box w="100%" h={60} px={4} justifyContent="center">
-              <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                {`${selectedStudent?.user?.name.firstName} ${selectedStudent?.user?.name.lastName}`}
-              </Heading>
-            </Box>
-            <Actionsheet.Item onPress={() => removeStudentClassMutation.mutate()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
-              Remover
-            </Actionsheet.Item>
-          </Actionsheet.Content>
-        </Actionsheet>
+        {
+          isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              <FlatList
+                data={students}
+                pb={20}
+                keyExtractor={student => student.id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity key={item.user?.id} onLongPress={() => handleSelectStudent(item)}>
+                    <GenericItem.Root>
+                      <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do aluno" username={item.user?.username ?? ""} />
+                      <GenericItem.Content title={`${item.user?.firstName} ${item.user?.lastName}`} caption="@username" />
+                    </GenericItem.Root>
+                  </TouchableOpacity>
+                )}
+                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+              >
+              </FlatList>
+              <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
+                <Actionsheet.Content>
+                  <Box w="100%" h={60} px={4} justifyContent="center">
+                    <Heading fontSize="16" color="coolGray.700" textAlign="center">
+                      {`${selectedStudent?.user?.name.firstName} ${selectedStudent?.user?.name.lastName}`}
+                    </Heading>
+                  </Box>
+                  <Actionsheet.Item onPress={() => removeStudentClassMutation.mutate()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
+                    Remover
+                  </Actionsheet.Item>
+                </Actionsheet.Content>
+              </Actionsheet>
+            </>
+          )
+        }
+
       </Viewcontainer>
     </View>
   )

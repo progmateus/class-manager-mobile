@@ -15,7 +15,7 @@ import { GetUserByUsernameService } from "src/services/usersService"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
 import { Avatar } from "@components/Avatar/Avatar"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
 
 type RouteParamsProps = {
@@ -62,20 +62,25 @@ export function TeachersList() {
   const handleRemoveTeacher = async () => {
     if (isLoadingAction) return
     setIsLoadingAction(true)
-    DeleteUserRoleService(tenantId, selectedUserRole.id).then(() => {
+    try {
+      await DeleteUserRoleService(tenantId, selectedUserRole.id)
       fireInfoToast('Professor removido com sucesso')
-      const index = teachers?.findIndex((ur) => ur.id == selectedUserRole.id)
-      if (index !== -1) {
-        teachers?.slice(index, 1)
-      }
-    }).catch((err) => {
-      console.log('err: ', err)
-      fireErrorToast('Ocorreu um erro!')
-    }).finally(() => {
+    } finally {
       setIsLoadingAction(false)
       setIsOpen(false)
-    })
+    }
   }
+
+  const queryClient = useQueryClient();
+
+  const { mutate: removeTeacherMutation } = useMutation({
+    mutationFn: handleRemoveTeacher,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())]
+      })
+    }
+  })
 
 
   const handleSearchUser = async () => {
@@ -149,7 +154,7 @@ export function TeachersList() {
                         {`${selectedUserRole?.user?.name.firstName} ${selectedUserRole?.user?.name.lastName}`}
                       </Heading>
                     </Box>
-                    <Actionsheet.Item onPress={handleRemoveTeacher} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
+                    <Actionsheet.Item onPress={() => removeTeacherMutation()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
                       Remover
                     </Actionsheet.Item>
                   </Actionsheet.Content>

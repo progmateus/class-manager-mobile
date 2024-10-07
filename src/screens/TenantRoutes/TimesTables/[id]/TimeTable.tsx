@@ -4,12 +4,12 @@ import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { useAuth } from "@hooks/useAuth";
-import { useRoute } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { HStack, Text, View } from "native-base";
 import { Check, Info } from "phosphor-react-native";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { GetTimeTableService, UpdateTimeTableService } from "src/services/timeTablesService";
 import { THEME } from "src/theme";
 
@@ -22,46 +22,60 @@ export function TimeTable() {
   const { tenant } = useAuth()
 
   const { timeTableId } = route.params as RouteParamsProps;
+  const [isLoading, setIsLoading] = useState(false)
+  const [timeTable, setTimeTable] = useState<ITimeTableDTO>({} as ITimeTableDTO)
+  const [isActing, setIsActing] = useState(false)
+
+  useFocusEffect(useCallback(() => {
+    loadTimeTable()
+  }, [timeTableId]))
 
   const weeksDays = [0, 1, 2, 3, 4, 5, 6]
 
   const loadTimeTable = async () => {
-    try {
-      const { data } = await GetTimeTableService(timeTableId, tenant.id)
-      return data.data
-    } catch (err) {
+    setIsLoading(true)
+    GetTimeTableService(timeTableId, tenant.id).then(({ data }) => {
+      setTimeTable(data.data)
+    }).catch((err) => {
       console.log(err)
-    }
-  }
-
-  const { data: timeTable, isLoading } = useQuery<ITimeTableDTO>({
-    queryKey: ['get-time-table', timeTableId],
-    queryFn: loadTimeTable
-  })
-
-  const handleAddScheduleDay = useCallback((dayOfWeek: number, hourStart: string, hourEnd: string) => {
-    timeTable?.schedulesDays.push({
-      id: String(Math.floor(Math.random() * 100)),
-      weekDay: dayOfWeek,
-      hourStart, hourEnd
+    }).finally(() => {
+      setIsLoading(false)
     })
-  }, [])
-
-  const handleRemoveScheduleDay = useCallback((id: string) => {
-    const index = timeTable?.schedulesDays.findIndex((tt) => tt.id == id)
-    if (index != -1) {
-      timeTable?.schedulesDays.slice(index, 1)
-    }
-  }, [])
-
-
-  const handleSave = () => {
+  }
+  const handleSave = async () => {
+    if (isActing) return
+    setIsActing(true)
     UpdateTimeTableService(timeTable, tenant.id, timeTableId).then(() => {
       fireSuccesToast('Table de horários atualizada!')
     }).catch((err) => {
-      console.log('err: ', err)
+      console.log(err)
+    }).finally(() => {
+      setIsActing(false)
     })
   }
+
+  const handleAddScheduleDay = useCallback((dayOfWeek: number, hourStart: string, hourEnd: string) => {
+    setTimeTable(prevState => (
+      {
+        ...prevState,
+        schedulesDays: [
+          ...prevState.schedulesDays,
+          {
+            id: String(Math.floor(Math.random() * 100)),
+            weekDay: dayOfWeek,
+            hourStart, hourEnd
+          }
+        ]
+      }
+    ))
+  }, [timeTable])
+
+  const handleRemoveScheduleDay = useCallback((id: string) => {
+    setTimeTable((prevState: any) => { return { ...prevState, schedulesDays: [...prevState.schedulesDays.filter((item: any) => item.id !== id)] } })
+  }, [timeTable])
+
+
+
   return (
     <View flex={1}>
       {
@@ -78,7 +92,7 @@ export function TimeTable() {
                         <WeekScheduleDay
                           key={wd}
                           dayOfWeek={wd}
-                          schedulesDays={timeTable?.schedulesDays?.filter((sd: any) => sd.weekDay == wd) ?? []}
+                          schedulesDays={timeTable?.schedulesDays?.filter((sd: any) => sd.weekDay == wd)}
                           addScheduleDayFn={handleAddScheduleDay}
                           removeScheduleDayFn={handleRemoveScheduleDay}
                         />
@@ -89,9 +103,9 @@ export function TimeTable() {
                 < HStack mt={2}
                   alignItems="center" space={2}
                   mb={20}>
-                  < Info size={18}
+                  <Info size={18}
                     color={THEME.colors.danger['500']} />
-                  < Text flex={1}
+                  <Text flex={1}
                     color="danger.500" fontSize="xs" > As alterações afetarão todas as turmas que utilizam esta jornada de horários </Text>
                 </HStack>
               </ScrollContainer>

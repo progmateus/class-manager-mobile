@@ -48,7 +48,7 @@ export function SubscriptionProfile() {
     }
   }
 
-  const { data: subscription, isLoading, refetch } = useQuery<ISubscriptionProfileDTO>({
+  const { data: subscription, isLoading } = useQuery<ISubscriptionProfileDTO>({
     queryKey: ['get-subscription-profile', tenantId, subscriptionId],
     queryFn: loadSubscriptionProfile
   })
