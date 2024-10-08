@@ -50,7 +50,7 @@ export function ListTeachersByClassService(tenantId: string, classId: string,) {
 
 export function ListUsersByRoleNameService(tenantId: string, roleName: "student" | "teacher") {
   return api({
-    url: `${tenantId}/users-roles/users`,
+    url: `${tenantId}/users-roles`,
     method: 'get',
     params: {
       roleName

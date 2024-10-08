@@ -33,9 +33,11 @@ export function AddUserToClass() {
   const loadUsersRoles = async () => {
     try {
       const { data } = await ListUsersByRoleNameService(tenantId, roleName)
+      console.log(data.data)
       return data.data
     } catch (err) {
       console.log(err)
+      return []
     }
   }
 

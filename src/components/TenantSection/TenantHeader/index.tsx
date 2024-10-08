@@ -22,7 +22,7 @@ export function TenantHeader() {
     <HStack mt={statusBarHeight} pb={4} pt={6} px={4} alignItems="center" borderColor="gray.300" borderBottomWidth={0.5}>
       <Avatar src={tenant.avatar} alt="Foto de perfil da empresa" type="tenant" />
       <HStack flex={1}>
-        <Text>Olá,</Text>
+        <Text ml={2}>Olá,</Text>
         <Heading fontFamily="heading" fontSize="md"> {tenant.name}</Heading>
       </HStack>
       <TouchableOpacity onPress={signOutTenant}>
