@@ -96,3 +96,13 @@ export function RemoveTeacherFromClassService(tenantId: string, teacherClassId: 
     method: 'delete'
   })
 }
+
+export function UpdateClasstimeTableService(tenantId: string, classId: string, timeTableId: string) {
+  return api({
+    url: `${tenantId}/classes/${classId}`,
+    method: 'put',
+    data: {
+      timeTableId
+    }
+  })
+}
