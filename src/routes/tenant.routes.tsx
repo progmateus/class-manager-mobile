@@ -27,6 +27,7 @@ import { TimeTable } from "@screens/TenantRoutes/TimesTables/[id]/TimeTable";
 import { TimesTablesList } from "@screens/TenantRoutes/TimesTables/list/TimesTablesList";
 import { CreateTimeTable } from "@screens/TenantRoutes/TimesTables/CreateTimeTable";
 import { CreateSubscription } from "@screens/TenantRoutes/Subscriptions/CreateSubscription";
+import { UpdateClassTimeTable } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassTimeTable";
 
 
 export type TenantRoutes = {
@@ -52,6 +53,7 @@ export type TenantRoutes = {
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateTenant: undefined;
+  updateClassTimeTable: { classId: string; timeTableIdExists: string; };
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -103,7 +105,16 @@ export function TenantRoutes() {
             <UserCircle color={color} size={iconSize} />
           )
         }}
-        initialParams={{ tenantIdParams: "b1e4cc1f-8cda-47b6-b531-8587fc114ebd" }}
+      />
+
+      <Screen
+        name="students"
+        component={SubscriptionsList}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <GraduationCap color={color} size={iconSize} />
+          )
+        }}
       />
 
       <Screen
@@ -225,32 +236,25 @@ export function TenantRoutes() {
       <Screen
         name="subscriptionProfile"
         component={SubscriptionProfile}
-        options={{
-          tabBarButton: () => (null)
-        }}
+        options={{ tabBarButton: () => (null) }}
       />
 
-      <Screen
-        name="students"
-        component={SubscriptionsList}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <GraduationCap color={color} size={iconSize} />
-          )
-        }}
-      />
 
       <Screen
         name="createSubscription"
         component={CreateSubscription}
-        options={{
-          tabBarIcon: () => null
-        }}
+        options={{ tabBarButton: () => (null) }}
       />
 
       <Screen
         name="updateTenant"
         component={UpdateTenant}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="updateClassTimeTable"
+        component={UpdateClassTimeTable}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>
