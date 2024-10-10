@@ -5,12 +5,11 @@ import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { IClassDTO } from "@dtos/classes/IClassDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { fireErrorToast } from "@utils/HelperNotifications"
-import { HStack, SimpleGrid, Text, View, VStack } from "native-base"
+import { useQuery } from "@tanstack/react-query"
+import { HStack, Text, View, VStack } from "native-base"
 import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, CalendarBlank, ArrowsLeftRight } from "phosphor-react-native"
-import { useCallback, useEffect, useState } from "react"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
 import { GetClassProfileService } from "src/services/classesService"
 
@@ -21,7 +20,7 @@ type RouteParamsProps = {
 
 
 type infoProfile = {
-  classFound: IClassDTO;
+  classEntity: IClassDTO;
   teachersCount: number;
   studentscount: number;
   classesDaysOfTheMonth: any[];
@@ -29,35 +28,35 @@ type infoProfile = {
 
 export function ClassProfile() {
 
-  const [infoProfile, setInfoProfile] = useState<infoProfile>({} as infoProfile)
-  const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const route = useRoute()
-
 
   const { classId, tenantIdParams } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
 
-  useFocusEffect(useCallback(() => {
-    setIsLoading(true)
-    GetClassProfileService(tenantId, classId).then(({ data }) => {
-      setInfoProfile(data.data)
-    }).catch((err) => {
-      fireErrorToast('Ocorreu um erro!')
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }, [classId]))
+  const loadClassProfile = async () => {
+    try {
+      const { data } = await GetClassProfileService(tenantId, classId)
+      return data.data
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const { data: infoProfile, isLoading } = useQuery<infoProfile>({
+    queryKey: ['get-class-profile', tenantId, classId],
+    queryFn: loadClassProfile
+  })
 
   return (
     <View flex={1}>
       {
-        isLoading ? (
+        isLoading || !infoProfile ? (
           <Loading />
         ) : (
           <>
-            <PageHeader title={`Turma: ${infoProfile?.classFound?.name}`} />
+            <PageHeader title={`Turma: ${infoProfile?.classEntity?.name}`} />
 
             <ScrollContainer>
               <View>
@@ -105,7 +104,7 @@ export function ClassProfile() {
                   </MenuItem.Actions>
                 </MenuItem.Root>
 
-                <MenuItem.Root onPress={() => navigation.navigate('updateClassTimeTable', { classId, timeTableIdExists: infoProfile.classFound.timeTableId })}>
+                <MenuItem.Root onPress={() => navigation.navigate('updateClassTimeTable', { classId, timeTableIdExists: infoProfile.classEntity.timeTableId })}>
                   <MenuItem.Icon icon={Clock} />
                   <MenuItem.Content title="Configurar horários" description="gerencie os horários das aulas" />
                   <MenuItem.Actions>
