@@ -99,7 +99,7 @@ export function RemoveTeacherFromClassService(tenantId: string, teacherClassId: 
 
 export function UpdateClasstimeTableService(tenantId: string, classId: string, timeTableId: string) {
   return api({
-    url: `${tenantId}/classes/${classId}`,
+    url: `${tenantId}/classes/${classId}/time-table`,
     method: 'put',
     data: {
       timeTableId
