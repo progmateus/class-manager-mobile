@@ -2,7 +2,7 @@ import { GenericItem } from "@components/Items/GenericItem"
 import { PageHeader } from "@components/PageHeader"
 import { ClassItemSkeleton } from "@components/skeletons/Items/ClassItemSkeleton"
 import { Viewcontainer } from "@components/ViewContainer"
-import { IClassDTO } from "@dtos/classes/IClass"
+import { IClassDTO } from "@dtos/classes/IClassDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
@@ -68,7 +68,7 @@ export function ClassesList() {
                   <TouchableOpacity key={item.id} onPress={() => handleSelectClass(item.id)}>
                     <GenericItem.Root>
                       <GenericItem.Icon icon={BookBookmark} />
-                      <GenericItem.Content title={item.name} caption={item.businessHour} />
+                      <GenericItem.Content title={item.name} caption="" />
                       <GenericItem.InfoSection>
                         <GenericItem.InfoContainer >
                           <GraduationCap size={18} color="#6b7280" />

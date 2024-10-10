@@ -1,4 +1,4 @@
-import { IClassDTO } from "./IClass";
+import { IClassDTO } from "./IClassDTO";
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
 
 interface IUserClassDTO {

@@ -1,7 +1,7 @@
 import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
-import { IClassDTO } from "@dtos/classes/IClass";
+import { IClassDTO } from "@dtos/classes/IClassDTO";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { size } from "lodash";

@@ -1,5 +1,5 @@
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
-import { IClassDTO } from "./IClass";
+import { IClassDTO } from "./IClassDTO";
 
 interface ITeacherClassDTO {
   id: string;

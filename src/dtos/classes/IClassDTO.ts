@@ -6,8 +6,9 @@ export interface IClassDTO {
   name: string;
   tenantId: string;
   tenant?: ITenantDTO;
-  businessHour: string;
+  timeTableId: string;
   teachersClasses: ITeacherClassDTO[];
+  timetable: any;
   description: string;
   createdAt: string;
   updatedAt: string;

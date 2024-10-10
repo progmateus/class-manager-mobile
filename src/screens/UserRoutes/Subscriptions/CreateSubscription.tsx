@@ -11,7 +11,7 @@ import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ListTenantPlansService } from "src/services/tenantPlansService";
-import { IClassDTO } from "@dtos/classes/IClass";
+import { IClassDTO } from "@dtos/classes/IClassDTO";
 import { CreateSubscriptionService } from "src/services/subscriptionService";
 import { useAuth } from "@hooks/useAuth";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";

@@ -1,5 +1,5 @@
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
-import { IClassDTO } from "./IClass"
+import { IClassDTO } from "./IClassDTO"
 import { IBookingDTO } from "@dtos/bookings/IBookingDTO"
 
 export type ICLassDayDTO = {
