@@ -56,6 +56,7 @@ export function UpdateSubscriptionPlan() {
   })
 
   const priceFormatted = (price: number) => {
+    if (!price) return '0,00'
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL',
