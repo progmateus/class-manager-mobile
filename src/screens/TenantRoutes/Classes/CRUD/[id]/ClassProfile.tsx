@@ -18,9 +18,8 @@ type RouteParamsProps = {
   tenantIdParams: string;
 }
 
-
 type infoProfile = {
-  classEntity: IClassDTO;
+  classFound: IClassDTO;
   teachersCount: number;
   studentscount: number;
   classesDaysOfTheMonth: any[];
@@ -56,7 +55,7 @@ export function ClassProfile() {
           <Loading />
         ) : (
           <>
-            <PageHeader title={`Turma: ${infoProfile?.classEntity?.name}`} />
+            <PageHeader title={`Turma: ${infoProfile?.classFound?.name}`} />
 
             <ScrollContainer>
               <View>
@@ -104,9 +103,9 @@ export function ClassProfile() {
                   </MenuItem.Actions>
                 </MenuItem.Root>
 
-                <MenuItem.Root onPress={() => navigation.navigate('updateClassTimeTable', { classId, timeTableIdExists: infoProfile.classEntity.timeTableId })}>
+                <MenuItem.Root onPress={() => navigation.navigate('updateClassTimeTable', { classId, timeTableIdExists: infoProfile.classFound.timeTableId })}>
                   <MenuItem.Icon icon={Clock} />
-                  <MenuItem.Content title="Configurar horários" description="gerencie os horários das aulas" />
+                  <MenuItem.Content title="Configurar horários" description="Gerencie os horários das aulas" />
                   <MenuItem.Actions>
                     <MenuItem.Action icon={ArrowRight} />
                   </MenuItem.Actions>
@@ -114,7 +113,7 @@ export function ClassProfile() {
 
                 <MenuItem.Root>
                   <MenuItem.Icon icon={CalendarBlank} />
-                  <MenuItem.Content title="criar aula" description="Crie aulas manualmente" />
+                  <MenuItem.Content title="Criar aula" description="Crie aulas manualmente" />
                   <MenuItem.Actions>
                     <MenuItem.Action icon={ArrowRight} />
                   </MenuItem.Actions>
@@ -122,7 +121,7 @@ export function ClassProfile() {
 
                 <MenuItem.Root>
                   <MenuItem.Icon icon={ArrowsLeftRight} />
-                  <MenuItem.Content title="Transferir alunos" description="transfira todos os alunos para outra turma" />
+                  <MenuItem.Content title="Transferir alunos" description="Transfira todos os alunos para outra turma" />
                   <MenuItem.Actions>
                     <MenuItem.Action icon={ArrowRight} />
                   </MenuItem.Actions>

@@ -7,7 +7,7 @@ import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { Center, FlatList, Text, View, VStack } from "native-base"
 import { Calendar, Check, Plus } from "phosphor-react-native"
@@ -28,11 +28,11 @@ export function UpdateClassTimeTable() {
   const { tenant } = useAuth()
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
   const route = useRoute()
+  const queryClient = useQueryClient();
 
   const { timeTableIdExists, classId } = route.params as RouteParamsProps;
 
   const [selectedTimeTable, setSelectedTimeTable] = useState("")
-
 
   useFocusEffect(useCallback(() => {
     setSelectedTimeTable(timeTableIdExists)
@@ -55,7 +55,11 @@ export function UpdateClassTimeTable() {
   const handleUpdateClassTimeTable = async () => {
     await UpdateClasstimeTableService(tenant.id, classId, selectedTimeTable).then(() => {
       fireSuccesToast("Horário atualizado")
-      navigation.navigate('classProfile', { classId: classId, tenantIdParams: tenant.id })
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-profile', tenant.id, classId],
+      }).then(() => {
+        navigation.navigate('classProfile', { classId: classId, tenantIdParams: tenant.id })
+      })
     }).catch(err => {
       console.log(err)
     })
