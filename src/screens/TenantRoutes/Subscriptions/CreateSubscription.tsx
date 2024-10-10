@@ -20,6 +20,8 @@ import { GetUserByUsernameService } from "src/services/usersService";
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
 import { Button } from "@components/Button";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -40,14 +42,20 @@ const defaultValues = {
 type CreateSubscriptionProps = z.infer<typeof createSubscriptionSchema>
 
 export function CreateSubscription() {
-  const [classes, setClasses] = useState([])
-  const [plans, setPlans] = useState([])
+  const [classes, setClasses] = useState<IClassDTO[]>([])
+  const [plans, setPlans] = useState<ITenantPlanDTO[]>([])
   const [isLoading, setIsLoadig] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
+  const [userFound, setUserFound] = useState<IUserPreviewDTO>({} as IUserPreviewDTO)
+
+
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
   const { tenant, user } = useAuth()
-  const [userFound, setUserFound] = useState<IUserPreviewDTO>({} as IUserPreviewDTO)
+
+
+  const queryClient = useQueryClient();
+
 
   const tenantId = tenant?.id
 
@@ -103,9 +111,12 @@ export function CreateSubscription() {
 
     errors.root
     setIsLoadig(true)
-    CreateSubscriptionService(tenantId, getValues("planId"), getValues("classId"), userFound.id).then(({ data }) => {
+    CreateSubscriptionService(tenantId, getValues("planId"), getValues("classId"), userFound.id).then(async ({ data }) => {
       fireSuccesToast('Assinatura realizada com sucesso!')
       setIsModalOpen(false)
+      await queryClient.invalidateQueries({
+        queryKey: ['get-subscriptions', tenantId]
+      })
       navigation.navigate('subscriptionProfile', { subscriptionId: data.data.id })
     }).catch((err) => {
       console.log(err)

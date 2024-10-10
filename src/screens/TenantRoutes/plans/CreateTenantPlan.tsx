@@ -14,6 +14,7 @@ import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { CreateTenantPlanService } from "src/services/tenantPlansService";
 import { useAuth } from "@hooks/useAuth";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -34,7 +35,10 @@ export function CreateTenantPlan() {
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   const { tenant } = useAuth()
+  const queryClient = useQueryClient();
+
   const tenantId = tenant?.id
+
 
   const { control, handleSubmit, formState: { errors }, reset } = useForm<CreateTenantplanProps>({
     resolver: zodResolver(createTenantPlanSchema)
@@ -49,8 +53,11 @@ export function CreateTenantPlan() {
     setIsLoadig(true)
 
     const { name, description, price, timesOfweek } = data;
-    CreateTenantPlanService(tenantId, name, description, Number(timesOfweek), price.replaceAll(/[A-z\$\.\-\,]/g, "").replace(/([0-9]+)([0-9]{2})/, '$1.$2')).then(() => {
+    CreateTenantPlanService(tenantId, name, description, Number(timesOfweek), price.replaceAll(/[A-z\$\.\-\,]/g, "").replace(/([0-9]+)([0-9]{2})/, '$1.$2')).then(async () => {
       fireSuccesToast('Plano criado')
+      await queryClient.invalidateQueries({
+        queryKey: ['get-tenant-plans', tenantId]
+      })
       navigation.navigate('tenantPlansList')
       reset()
     }).catch((err) => {

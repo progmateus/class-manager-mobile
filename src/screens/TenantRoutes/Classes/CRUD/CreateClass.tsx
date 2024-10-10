@@ -13,6 +13,7 @@ import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { useAuth } from "@hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -32,6 +33,9 @@ export function CreateClass() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id
 
+  const queryClient = useQueryClient();
+
+
   const { control, handleSubmit, formState: { errors }, reset } = useForm<CreateClassProps>({
     resolver: zodResolver(createClassSchema)
   });
@@ -46,8 +50,11 @@ export function CreateClass() {
     if (isLoading) return;
     setIsLoadig(true)
 
-    CreateClassService(tenantId, data.name, data.description, data.businessHour).then(({ data }) => {
+    CreateClassService(tenantId, data.name, data.description, data.businessHour).then(async ({ data }) => {
       fireSuccesToast('Turma criada')
+      await queryClient.invalidateQueries({
+        queryKey: ['get-classes', tenantId]
+      })
       navigation.navigate('classProfile', {
         tenantIdParams: tenantId,
         classId: data.data.id
