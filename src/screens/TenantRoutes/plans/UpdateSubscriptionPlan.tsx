@@ -4,12 +4,13 @@ import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { View, VStack } from "native-base"
 import { Barbell, Check, Money, SimCard } from "phosphor-react-native"
-import { useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { UpdateSubscriptionService } from "src/services/subscriptionService"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
@@ -22,26 +23,37 @@ type RouteParamsProps = {
 }
 
 export function UpdateSubscriptionPlan() {
-  const [plans, setPlans] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
   const [selectedPlanId, setSelectedPlanId] = useState("")
-  const route = useRoute()
-  const { tenantIdParams, planIdExists, subscriptionId } = route.params as RouteParamsProps;
-  const { tenant } = useAuth()
-  const tenantId = tenant?.id ?? tenantIdParams
+  const [isActing, setIsActing] = useState(false)
+
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
+  const queryClient = useQueryClient();
+  const route = useRoute()
+  const { tenant } = useAuth()
 
 
-  useEffect(() => {
-    ListTenantPlansService(tenantId).then(({ data }) => {
-      setSelectedPlanId(planIdExists)
-      setPlans(data.data)
-    }).catch((err) => {
+  const { tenantIdParams, planIdExists, subscriptionId } = route.params as RouteParamsProps;
+
+  const tenantId = tenant?.id ?? tenantIdParams
+
+
+  useFocusEffect(useCallback(() => {
+    setSelectedPlanId(planIdExists)
+  }, [subscriptionId, planIdExists]))
+
+  const loadTenantPlans = async () => {
+    try {
+      const { data } = await ListTenantPlansService(tenantId)
+      return data.data
+    } catch (err) {
       console.log(err)
-    }).finally(() => {
+    }
+  }
 
-    })
-  }, [tenantId])
+  const { data: plans, isLoading } = useQuery<ITenantPlanDTO[]>({
+    queryKey: ['get-tenant-plans', tenant.id, subscriptionId],
+    queryFn: loadTenantPlans
+  })
 
   const priceFormatted = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -56,15 +68,19 @@ export function UpdateSubscriptionPlan() {
   }
 
   const handleSave = () => {
-    if (!selectedPlanId || !subscriptionId || isLoading) {
+    if (!selectedPlanId || !subscriptionId || isActing) {
       return
     }
-    setIsLoading(true)
+    setIsActing(true)
     UpdateSubscriptionService(tenantId, subscriptionId, null, selectedPlanId).then(() => {
       fireSuccesToast('Plano alterado com sucesso!')
-      navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
+      queryClient.invalidateQueries({
+        queryKey: ['get-tenant-plans', tenant.id],
+      }).then(() => {
+        navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
+      })
     }).finally(() => {
-      setIsLoading(false)
+      setIsActing(false)
     })
   }
 

@@ -48,7 +48,7 @@ export function UpdateClassTimeTable() {
   }
 
   const { data: timesTables, isLoading } = useQuery<ITimeTableDTO[]>({
-    queryKey: ['get-times-tables', tenant.id, classId],
+    queryKey: ['get-times-tables', tenant.id],
     queryFn: loadTimesTables
   })
 
