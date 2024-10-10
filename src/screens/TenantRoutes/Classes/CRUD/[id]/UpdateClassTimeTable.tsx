@@ -36,7 +36,7 @@ export function UpdateClassTimeTable() {
 
   useFocusEffect(useCallback(() => {
     setSelectedTimeTable(timeTableIdExists)
-  }, [classId]))
+  }, [classId, timeTableIdExists]))
 
   const loadTimesTables = async () => {
     try {
