@@ -11,16 +11,18 @@ import { UpdateUserService } from "src/services/usersService";
 import { useState } from "react";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { Avatar } from "@components/Avatar/Avatar";
+import { InputMask } from "@components/form/InputMask";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
+const phoneRegex = /(\(?\d{2}\)?) ?(9{1})? ?(\d{4})-? ?(\d{4})/
 
 const updateUserSchema = z.object({
   firstName: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
   lastName: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
   email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
   document: z.string().regex(CPFRegex, "CPF Inválido").trim().optional(),
-  phone: z.string().trim().optional(),
+  phone: z.string().regex(phoneRegex, "Número inválido").trim().optional().transform((val) => val?.replaceAll(/\W/g, '')),
 });
 
 type updateUserProps = z.infer<typeof updateUserSchema>
@@ -34,7 +36,7 @@ export function UpdateUser() {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phone: '2140028922',
+      phone: user.phone,
       document: user.document
     },
     resolver: zodResolver(updateUserSchema)
@@ -106,7 +108,7 @@ export function UpdateUser() {
               name="phone"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input label="Telefone" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.phone?.message} />
+                <InputMask label="Telefone" type="cel-phone" onChangeText={onChange} value={value} errorMessage={errors.phone?.message} />
               )}
             />
           </VStack>
