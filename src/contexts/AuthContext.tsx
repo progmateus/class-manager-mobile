@@ -54,7 +54,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function tenantUpdate(tenantData: Partial<ITenantDTO>) {
     setTenant(prevState => { return { ...prevState, ...tenantData } });
-    console.log('chamou: ', tenantData)
     await storageTenantSave(tenant);
   }
 

@@ -1,9 +1,6 @@
 import { Button } from "@components/Button";
 import { PageHeader } from "@components/PageHeader";
-import { Center, HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
-import FacebookSVG from "@assets/facebook-outine.svg"
-import InstagramSVG from "@assets/instagram-outline.svg"
-import WhatsappSVG from "@assets/whatsapp-outline.svg"
+import { Center, HStack, Heading, Icon, Image, Link, ScrollView, Text, VStack, View } from "native-base";
 import ImageSVG from "@assets/image-outline.svg"
 import { TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -17,18 +14,14 @@ import { Avatar } from "@components/Avatar/Avatar";
 import { TenantProfileSkeleton } from "@components/skeletons/screens/TenantProfile";
 import { useQuery } from "@tanstack/react-query";
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
+import { FacebookLogo, InstagramLogo, WhatsappLogo } from "phosphor-react-native";
+import { THEME } from "src/theme";
+import { ITenantSocial } from "@dtos/tenants/ITenantSocial";
+import { ESocialType } from "src/enums/ESocialType";
 
 
 type RouteParamsProps = {
   tenantIdParams: string;
-}
-
-interface ITenant {
-  id: string;
-  name: string;
-  username: string;
-  description: string;
-  avatar: string;
 }
 
 export function TenantProfile() {
@@ -53,6 +46,7 @@ export function TenantProfile() {
   const tenantId = tenant?.id ?? tenantIdParams;
 
   const { user } = useAuth()
+  const { sizes } = THEME
 
   const loadTenantProfile = async () => {
     try {
@@ -63,7 +57,7 @@ export function TenantProfile() {
     }
   }
 
-  const { data: tenantProfile, isLoading, refetch } = useQuery<ITenantDTO>({
+  const { data: tenantProfile, isLoading } = useQuery<ITenantDTO>({
     queryKey: ['get-tenant-profile', tenantId, user.id],
     queryFn: loadTenantProfile
   })
@@ -89,6 +83,23 @@ export function TenantProfile() {
       tenantIdParams: tenantId,
       subscriptionId: subscriptionExists.id
     })
+  }
+
+  const tranformSocialIcon = (number: number): Element => {
+    const icons: any = {
+      1: <WhatsappLogo size={sizes['10']} />,
+      2: <InstagramLogo size={sizes['10']} />,
+      3: <FacebookLogo size={sizes['10']} />
+    }
+    return icons[number];
+  }
+
+
+  const getLinkHref = (ts: ITenantSocial): string => {
+    if (ts.type == ESocialType.WHATSAPP) {
+      return `https://wa.me/${ts.url}`
+    }
+    return ts.url
   }
 
   return (
@@ -126,15 +137,19 @@ export function TenantProfile() {
                       )
                   }
                   <HStack mt={6} space={2}>
-                    <TouchableOpacity>
-                      <FacebookSVG width={36} height={36} />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <InstagramSVG width={36} height={36} />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <WhatsappSVG width={36} height={36} />
-                    </TouchableOpacity>
+                    {
+                      tenantProfile.tenantsSocials && tenantProfile.tenantsSocials.length > 0 && (
+                        tenantProfile.tenantsSocials.map((ts) => {
+                          return (
+                            <TouchableOpacity>
+                              <Link href={getLinkHref(ts)}>
+                                <Icon as={tranformSocialIcon(ts.type)} color="coolGray.800" />
+                              </Link>
+                            </TouchableOpacity>
+                          )
+                        })
+                      )
+                    }
                   </HStack>
                 </Center>
                 {
