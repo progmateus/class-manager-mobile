@@ -99,7 +99,7 @@ export function TenantProfile() {
     if (ts.type == ESocialType.WHATSAPP) {
       return `https://wa.me/${ts.url}`
     }
-    return ts.url
+    return !ts.url.startsWith('https://') ? `https://${ts.url}` : ts.url
   }
 
   return (
