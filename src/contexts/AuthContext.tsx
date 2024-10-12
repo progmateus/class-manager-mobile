@@ -26,6 +26,8 @@ export type AuthContextDataProps = {
   signOut: () => Promise<void>;
   authenticateTenant: (tenantId: string) => Promise<void>;
   signOutTenant: () => Promise<void>
+  refreshUser: () => Promise<void>
+  refreshTenant: () => Promise<void>
 }
 
 type AuthContextProviderProps = {
@@ -50,9 +52,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     await storageUserSave(user);
   }
 
-  async function tenantUpdate(tenantData: ITenantDTO) {
+  async function tenantUpdate(tenantData: Partial<ITenantDTO>) {
     setTenant(prevState => { return { ...prevState, ...tenantData } });
-    await storageTenantSave(tenantData);
+    console.log('chamou: ', tenantData)
+    await storageTenantSave(tenant);
   }
 
   async function authenticationTypeUpdate(type: "tenant" | "user") {
@@ -92,7 +95,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     setIsLoadingData(false)
   }
 
-  async function getUserProfile() {
+  async function refreshUser() {
     GetUserProfileService().then(({ data }) => {
       if (data.data) {
         userUpdate(data.data)
@@ -100,8 +103,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     })
   }
 
-  async function getTenantProfile(tenantId: string) {
-    GetTenantProfileService(tenantId).then(({ data }) => {
+  async function refreshTenant() {
+    GetTenantProfileService(tenant.id).then(({ data }) => {
       if (data.data) {
         tenantUpdate(data.data);
       }
@@ -113,7 +116,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       setIsLoadingData(true);
       const { token } = await storageAuthTokenGet();
       if (token) {
-        await getUserProfile()
+        await refreshUser()
       }
     } catch (error) {
       throw error
@@ -126,8 +129,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     try {
       setIsLoadingData(true);
       const tenant = await storageTenantGet();
-      if (tenant) {
-        await getTenantProfile(tenant.id)
+      if (tenant && tenant.id) {
+        await refreshTenant()
+      } else {
+        signOutTenant()
       }
     } catch (error) {
       throw error
@@ -181,8 +186,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const authentication_type = await storageAuthenticationTypeGet();
       loadUserData();
       if (authentication_type && authentication_type == "tenant") {
-        loadTenantData()
-        authenticationTypeUpdate(authentication_type)
+        if (tenant.id) {
+          authenticationTypeUpdate(authentication_type)
+          loadTenantData()
+        } else {
+          authenticationTypeUpdate("user")
+        }
       }
     } catch (error) {
       throw error
@@ -217,7 +226,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       authenticateTenant,
       signOutTenant,
       tenantUpdate,
-      userUpdate
+      userUpdate,
+      refreshUser,
+      refreshTenant
     }
     }>
       {children}
