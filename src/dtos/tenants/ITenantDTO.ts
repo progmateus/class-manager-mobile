@@ -1,6 +1,6 @@
 import { EdocumentType } from "src/enums/EDocumentType";
 import { ETenantStatus } from "src/enums/ETenantStatus";
-import { ITenantSocial } from "./ITenantSocial";
+import { ILinkDTO } from "./ILinkDTO";
 
 interface ITenantDTO {
   id: string;
@@ -11,7 +11,7 @@ interface ITenantDTO {
   email: string;
   username: string;
   avatar: string;
-  tenantsSocials: ITenantSocial[];
+  links: ILinkDTO[];
   description?: string;
   createdAt?: string;
   updatedAt?: string;

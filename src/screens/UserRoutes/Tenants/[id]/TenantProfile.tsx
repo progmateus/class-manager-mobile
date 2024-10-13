@@ -16,8 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { FacebookLogo, InstagramLogo, WhatsappLogo } from "phosphor-react-native";
 import { THEME } from "src/theme";
-import { ITenantSocial } from "@dtos/tenants/ITenantSocial";
-import { ESocialType } from "src/enums/ESocialType";
+import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
+import { ELinkType } from "src/enums/ELinkType";
 
 
 type RouteParamsProps = {
@@ -95,11 +95,11 @@ export function TenantProfile() {
   }
 
 
-  const getLinkHref = (ts: ITenantSocial): string => {
-    if (ts.type == ESocialType.WHATSAPP) {
-      return `https://wa.me/${ts.url}`
+  const getLinkHref = (link: ILinkDTO): string => {
+    if (link.type == ELinkType.WHATSAPP) {
+      return `https://wa.me/${link.url}`
     }
-    return !ts.url.startsWith('https://') ? `https://${ts.url}` : ts.url
+    return !link.url.startsWith('https://') ? `https://${link.url}` : link.url
   }
 
   return (
@@ -138,8 +138,8 @@ export function TenantProfile() {
                   }
                   <HStack mt={6} space={2}>
                     {
-                      tenantProfile.tenantsSocials && tenantProfile.tenantsSocials.length > 0 && (
-                        tenantProfile.tenantsSocials.map((ts) => {
+                      tenantProfile.links && tenantProfile.links.length > 0 && (
+                        tenantProfile.links.map((ts) => {
                           return (
                             <TouchableOpacity>
                               <Link href={getLinkHref(ts)}>

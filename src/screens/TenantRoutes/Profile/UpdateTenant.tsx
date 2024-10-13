@@ -1,13 +1,12 @@
 import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Actionsheet, Box, Center, CheckIcon, HStack, Heading, Icon, Image, Select, Text, VStack, View } from "native-base";
+import { Actionsheet, Box, Center, HStack, Heading, Icon, Text, VStack, View } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Check, FacebookLogo, InstagramLogo, Plus, Rss, Trash, TrashSimple, WhatsappLogo } from "phosphor-react-native"
+import { Check, FacebookLogo, InstagramLogo, Plus, TrashSimple, WhatsappLogo } from "phosphor-react-native"
 import { ScrollContainer } from "@components/ScrollContainer";
 import { useAuth } from "@hooks/useAuth";
-import { UpdateUserService } from "src/services/usersService";
 import { useCallback, useState } from "react";
 import { fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
 import { TextArea } from "@components/form/TextArea";
@@ -18,9 +17,9 @@ import { THEME } from "src/theme";
 import { TouchableOpacity } from "react-native";
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { ESocialType } from "src/enums/ESocialType";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
-import { ITenantSocial } from "@dtos/tenants/ITenantSocial";
+import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
+import { ELinkType } from "src/enums/ELinkType";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -83,19 +82,20 @@ export function UpdateTenant() {
     }
   }
 
-  const handleAddSocial = () => {
-    const newTenant: ITenantDTO = {
-      ...tenant,
-      tenantsSocials: [
-        ...tenant.tenantsSocials,
-        {
-          id: String(Math.floor(Math.random() * 100)),
-          type: ESocialType.WHATSAPP,
-          url: ''
-        }
-      ]
-    }
-    setTenant(newTenant)
+  const handleAddLink = () => {
+    setTenant(prevState => {
+      return {
+        ...prevState,
+        links: [
+          ...tenant.links,
+          {
+            id: String(Math.floor(Math.random() * 100)),
+            type: ELinkType.WHATSAPP,
+            url: ''
+          }
+        ]
+      }
+    });
   }
 
   const tranformSocialIcon = (number: number): Element => {
@@ -113,19 +113,20 @@ export function UpdateTenant() {
   }
 
   const handleChooseSocialType = (optionType: number) => {
-    const tenantSocial = tenant.tenantsSocials.find(ts => ts.id === selectedSocialOptionId)
-    if (tenantSocial) {
-      tenantSocial.type = optionType
+    const link = tenant.links.find(ts => ts.id === selectedSocialOptionId)
+    if (link) {
+      link.type = optionType
     }
     setIsSelectSocialOpen(false)
   }
 
-  const handleDeleteTenantSocial = (optionId: string) => {
-    const newTenant: ITenantDTO = {
-      ...tenant,
-      tenantsSocials: [...tenant.tenantsSocials.filter(ts => ts.id !== optionId)]
-    }
-    setTenant(newTenant)
+  const handleRemoveLink = (optionId: string) => {
+    setTenant(prevState => {
+      return {
+        ...prevState,
+        links: [...tenant.links.filter(link => link.id !== optionId)]
+      }
+    });
   }
 
   const handleUpdate = ({ name, description, email, document }: UpdateTenantProps) => {
@@ -133,28 +134,28 @@ export function UpdateTenant() {
 
     let isValid = true;
 
-    if (tenant.tenantsSocials && tenant.tenantsSocials.length > 0) {
-      tenant.tenantsSocials.map((ts) => {
-        if (!ts.url || (ts.type == ESocialType.WHATSAPP && !ts.url.match(phoneRegex))) {
+    if (tenant.links && tenant.links.length > 0) {
+      tenant.links.map((ts) => {
+        if (!ts.url || (ts.type == ELinkType.WHATSAPP && !ts.url.match(phoneRegex))) {
           isValid = false
           fireWarningToast('Informe uma rede social válida')
         }
       })
       if (!isValid) return
 
-      tenant.tenantsSocials = [
-        ...tenant.tenantsSocials.map((ts) => {
+      tenant.links = [
+        ...tenant.links.map((ts) => {
           return {
             type: ts.type,
-            url: ts.type === ESocialType.WHATSAPP ? ts.url.replaceAll(/\W/g, '') : ts.url
+            url: ts.type === ELinkType.WHATSAPP ? ts.url.replaceAll(/\W/g, '') : ts.url
           }
-        }) as ITenantSocial[]
+        }) as ILinkDTO[]
       ]
     }
 
 
     setIsLoading(true)
-    UpdateTenantSertvice({ name, description, email, document, tenantsSocials: tenant.tenantsSocials }, tenant.id).then(() => {
+    UpdateTenantSertvice({ name, description, email, document, links: tenant.links }, tenant.id).then(() => {
       fireSuccesToast("Empresa atualizada!")
       refreshTenant()
       navigation.navigate('dashboard')
@@ -229,27 +230,27 @@ export function UpdateTenant() {
             <View>
               <HStack justifyContent="space-between" my={4}>
                 <Text fontSize="lg" fontWeight="bold"> Redes Sociais</Text>
-                <TouchableOpacity onPress={handleAddSocial}>
+                <TouchableOpacity onPress={handleAddLink}>
                   <Plus color={colors.brand['500']} size={22} />
                 </TouchableOpacity>
               </HStack>
               <VStack space={4} >
                 {
-                  tenant.tenantsSocials && tenant.tenantsSocials.length > 0 && (
-                    tenant.tenantsSocials.map((ts) => {
+                  tenant.links && tenant.links.length > 0 && (
+                    tenant.links.map((link) => {
                       return (
-                        <HStack key={ts.id} alignItems="center" pr="20" space={2} >
-                          <TouchableOpacity onPress={() => handleOpenSelectAction(ts.id)}>
-                            <Icon as={tranformSocialIcon(ts.type)} />
+                        <HStack key={link.id} alignItems="center" pr="20" space={2} >
+                          <TouchableOpacity onPress={() => handleOpenSelectAction(link.id)}>
+                            <Icon as={tranformSocialIcon(link.type)} />
                           </TouchableOpacity>
                           <Input
-                            defaultValue={ts.url}
+                            defaultValue={link.url}
                             variant="outline"
-                            onChangeText={text => ts.url = text}
+                            onChangeText={text => link.url = text}
                             placeholderTextColor={colors.coolGray['300']}
-                            placeholder={ts.type === ESocialType.INSTAGRAM ? 'www.instagram.com/username' : ts.type === ESocialType.FACEBOOK ? 'www.facebook.com/username' : '11999999999'}
+                            placeholder={link.type === ELinkType.INSTAGRAM ? 'www.instagram.com/username' : link.type === ELinkType.FACEBOOK ? 'www.facebook.com/username' : '11999999999'}
                           />
-                          <TouchableOpacity onPress={() => handleDeleteTenantSocial(ts.id)}>
+                          <TouchableOpacity onPress={() => handleRemoveLink(link.id)}>
                             <Icon as={TrashSimple} />
                           </TouchableOpacity>
                         </HStack>

@@ -35,7 +35,7 @@ export function GetTenantProfileService(tenantId: string) {
   })
 }
 
-export function UpdateTenantSertvice({ name, description, email, document, tenantsSocials }: Pick<ITenantDTO, "name" | "description" | "email" | "document" | "tenantsSocials">, tenantId: string) {
+export function UpdateTenantSertvice({ name, description, email, document, links }: Pick<ITenantDTO, "name" | "description" | "email" | "document" | "links">, tenantId: string) {
   return api({
     url: `/tenants/${tenantId}`,
     method: 'put',
@@ -44,7 +44,7 @@ export function UpdateTenantSertvice({ name, description, email, document, tenan
       description,
       email,
       document,
-      tenantsSocials
+      links
     }
   })
 }
