@@ -251,7 +251,7 @@ export function SubscriptionProfile() {
 
                   {
                     subscription.status === ESubscriptionStatus.ACTIVE && (
-                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.INACTIVE)} startIcon={<Icon as={Lock} size="6" name="pause" />}>
+                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.PAUSED)} startIcon={<Icon as={Lock} size="6" name="pause" />}>
                         <Text fontSize="16"> Pausar assinatura</Text>
                       </Actionsheet.Item>
                     )

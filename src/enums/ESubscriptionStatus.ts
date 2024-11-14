@@ -1,7 +1,9 @@
 enum ESubscriptionStatus {
-  INACTIVE = 1,
-  CANCELED = 2,
-  ACTIVE = 3,
+  INCOMPLETE = 1,
+  ACTIVE = 2,
+  PAUSED = 3,
+  CANCELED = 4,
+  INCOMPLETE_EXPIRED = 5
 }
 
 export { ESubscriptionStatus }
