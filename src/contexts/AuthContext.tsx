@@ -13,16 +13,17 @@ import { storageTenantGet, storageTenantRemove, storageTenantSave } from "@stora
 import { AxiosError } from "axios";
 import { AppError } from "@utils/errors/AppError";
 import { ValidationError } from "@utils/errors/ValidationError";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 
 
 export type AuthContextDataProps = {
   user: IUserProfileDTO;
-  tenant: ITenantDTO;
+  tenant: ITenantProfileDTO;
   authenticationType: "user" | "tenant";
   isLoadingData: boolean;
   singIn: (email: string, password: string) => Promise<void>;
   userUpdate: (userUpdated: IUserProfileDTO) => Promise<void>;
-  tenantUpdate: (tenantData: ITenantDTO) => Promise<void>;
+  tenantUpdate: (tenantData: ITenantProfileDTO) => Promise<void>;
   signOut: () => Promise<void>;
   authenticateTenant: (tenantId: string) => Promise<void>;
   signOutTenant: () => Promise<void>
@@ -39,7 +40,7 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const [user, setUser] = useState<IUserProfileDTO>({} as IUserProfileDTO);
-  const [tenant, setTenant] = useState<ITenantDTO>({} as ITenantDTO);
+  const [tenant, setTenant] = useState<ITenantProfileDTO>({} as ITenantProfileDTO);
   const [authenticationType, setAuthenticationType] = useState<"user" | "tenant">("user");
   const [isLoadingData, setIsLoadingData] = useState(true);
 
@@ -52,7 +53,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     await storageUserSave(user);
   }
 
-  async function tenantUpdate(tenantData: Partial<ITenantDTO>) {
+  async function tenantUpdate(tenantData: Partial<ITenantProfileDTO>) {
     setTenant(prevState => { return { ...prevState, ...tenantData } });
     await storageTenantSave(tenant);
   }
@@ -175,7 +176,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function signOutTenant() {
     setIsLoadingData(true);
     authenticationTypeUpdate("user")
-    setTenant({} as ITenantDTO);
+    setTenant({} as ITenantProfileDTO);
     await storageTenantRemove()
     setIsLoadingData(false)
   }

@@ -30,6 +30,13 @@ export function ListTenantsService(search: string) {
 
 export function GetTenantProfileService(tenantId: string) {
   return api({
+    url: `/tenants/${tenantId}/profile`,
+    method: 'get'
+  })
+}
+
+export function GetTenantService(tenantId: string) {
+  return api({
     url: `/tenants/${tenantId}`,
     method: 'get'
   })

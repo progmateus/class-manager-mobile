@@ -2,7 +2,7 @@ import { EdocumentType } from "src/enums/EDocumentType";
 import { ETenantStatus } from "src/enums/ETenantStatus";
 import { ILinkDTO } from "./ILinkDTO";
 
-interface ITenantDTO {
+interface ITenantProfileDTO {
   id: string;
   name: string;
   document: string;
@@ -14,8 +14,9 @@ interface ITenantDTO {
   links: ILinkDTO[];
   description?: string;
   stripeChargesEnabled: boolean;
+  stripeOnboardUrl: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export { ITenantDTO }
+export { ITenantProfileDTO }

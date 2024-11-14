@@ -1,12 +1,12 @@
 import { TenantHeader } from "@components/TenantSection/TenantHeader";
-import { ScrollContainer } from "@components/ScrollContainer";
 import { DashboardOption } from "@components/tenant/dashboardOption";
 import { Viewcontainer } from "@components/ViewContainer";
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
-import { SimpleGrid, View } from "native-base";
-import { BookBookmark, Clock, GraduationCap, IdentificationBadge, Receipt, SimCard } from "phosphor-react-native";
+import { Link, SimpleGrid, Text, View } from "native-base";
+import { BookBookmark, Clock, GraduationCap, IdentificationBadge, SimCard } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
+import { TouchableOpacity } from "react-native";
 
 
 export function Dashboard() {
@@ -18,6 +18,17 @@ export function Dashboard() {
   return (
     <View flex={1}>
       <TenantHeader />
+      {
+        !tenant.stripeChargesEnabled && (
+          <TouchableOpacity>
+            <Link href={tenant.stripeOnboardUrl} px={4} py={3} bgColor="yellow.400">
+              <Text fontSize="sm" fontFamily="body" color="coolGray.700">
+                Confirme a sua identidade para começar a receber pagamentos.
+              </Text>
+            </Link>
+          </TouchableOpacity>
+        )
+      }
       <Viewcontainer>
         <SimpleGrid columns={2} spacingX={4} spacingY={2} flex={1} pl={3}>
           <DashboardOption text="Alunos" icon={<GraduationCap size={size} color={color} />} onPress={() => navigation.navigate('students', { tenantIdParams: tenant.id })} />
