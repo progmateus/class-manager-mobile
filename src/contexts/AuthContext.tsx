@@ -7,7 +7,6 @@ import { SignInService } from "src/services/authService";
 import { GetUserProfileService } from "src/services/usersService";
 import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 import { GetTenantProfileService } from "src/services/tenantsService";
-import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { storageAuthenticationTypeGet, storageAuthenticationTypeSave } from "@storage/storageAuthenticationType";
 import { storageTenantGet, storageTenantRemove, storageTenantSave } from "@storage/storageTenant";
 import { AxiosError } from "axios";

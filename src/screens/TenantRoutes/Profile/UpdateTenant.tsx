@@ -15,11 +15,11 @@ import { Avatar } from "@components/Avatar/Avatar";
 import { InputMask } from "@components/form/InputMask";
 import { THEME } from "src/theme";
 import { TouchableOpacity } from "react-native";
-import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -39,7 +39,7 @@ export function UpdateTenant() {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedSocialOptionId, setSelectedSocialOptionId] = useState("")
   const [isSelectSocialOpen, setIsSelectSocialOpen] = useState(false)
-  const [tenant, setTenant] = useState<ITenantDTO>({} as ITenantDTO)
+  const [tenant, setTenant] = useState<ITenantProfileDTO>({} as ITenantProfileDTO)
 
 
   const { tenant: tenantcontext, refreshTenant } = useAuth();

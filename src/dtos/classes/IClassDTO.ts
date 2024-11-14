@@ -1,11 +1,11 @@
-import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { ITeacherClassDTO } from "./TeacherClassDTO";
+import { ITenantPreviewDTO } from "@dtos/tenants/ITenantPreviewDTO";
 
 export interface IClassDTO {
   id: string;
   name: string;
   tenantId: string;
-  tenant?: ITenantDTO;
+  tenant?: ITenantPreviewDTO;
   timeTableId: string;
   teachersClasses: ITeacherClassDTO[];
   timetable: any;

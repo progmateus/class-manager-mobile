@@ -8,9 +8,9 @@ import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useCallback, useState } from "react";
 import { ListTenantsService } from "src/services/tenantsService";
 import { debounce } from "lodash";
-import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { useQuery } from "@tanstack/react-query";
 import { TenantItemSkeleton } from "@components/skeletons/Items/TenantItemSkeleton";
+import { ITenantPreviewDTO } from "@dtos/tenants/ITenantPreviewDTO";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -27,7 +27,7 @@ export function TenantsList() {
     }
   }
 
-  const { data: tenants, isLoading } = useQuery<ITenantDTO[]>({
+  const { data: tenants, isLoading } = useQuery<ITenantPreviewDTO[]>({
     queryKey: ['get-tenants', search],
     queryFn: loadTenants
   })

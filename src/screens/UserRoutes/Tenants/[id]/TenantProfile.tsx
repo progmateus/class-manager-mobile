@@ -13,11 +13,11 @@ import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPrevie
 import { Avatar } from "@components/Avatar/Avatar";
 import { TenantProfileSkeleton } from "@components/skeletons/screens/TenantProfile";
 import { useQuery } from "@tanstack/react-query";
-import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { FacebookLogo, InstagramLogo, WhatsappLogo } from "phosphor-react-native";
 import { THEME } from "src/theme";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 
 
 type RouteParamsProps = {
@@ -57,7 +57,7 @@ export function TenantProfile() {
     }
   }
 
-  const { data: tenantProfile, isLoading } = useQuery<ITenantDTO>({
+  const { data: tenantProfile, isLoading } = useQuery<ITenantProfileDTO>({
     queryKey: ['get-tenant-profile', tenantId, user.id],
     queryFn: loadTenantProfile
   })

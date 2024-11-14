@@ -1,17 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TENANT_STORAGE } from "./storageConfig";
-import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
-import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 
 
-export async function storageTenantSave(tenant: ITenantDTO) {
+export async function storageTenantSave(tenant: ITenantProfileDTO) {
   await AsyncStorage.setItem(TENANT_STORAGE, JSON.stringify(tenant))
 }
 
 export async function storageTenantGet() {
   const storage = await AsyncStorage.getItem(TENANT_STORAGE);
 
-  const tenant: ITenantDTO = storage ? JSON.parse(storage) : {};
+  const tenant: ITenantProfileDTO = storage ? JSON.parse(storage) : {};
 
   return tenant
 }
