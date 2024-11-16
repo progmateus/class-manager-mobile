@@ -4,7 +4,7 @@ import {
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
 import { useTheme } from "native-base";
-import { Bills } from "@screens/UserRoutes/Billing/Bills";
+import { InvoicesList } from "@screens/UserRoutes/Billing/InvoicesList";
 import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
 import { ClassDayProfile } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayProfile";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
@@ -86,7 +86,7 @@ export function UserRoutes() {
 
       <Screen
         name="bills"
-        component={Bills}
+        component={InvoicesList}
         options={{
           tabBarIcon: ({ color }) => (
             <CurrencyDollar color={color} size={iconSize} />
