@@ -17,7 +17,7 @@
     "@react-navigation/native-stack": "^6.9.26",
     "@tanstack/react-query": "^5.56.2",
     "axios": "^1.7.4",
-    "expo": "~51.0.35",
+    "expo": "^52.0.7",
     "expo-font": "~12.0.7",
     "expo-status-bar": "~1.12.1",
     "loadash": "^1.0.0",
