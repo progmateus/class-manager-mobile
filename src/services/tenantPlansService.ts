@@ -1,9 +1,13 @@
 import { api } from "./api";
 
-export function ListTenantPlansService(tenantId: string) {
+export function ListTenantPlansService(tenantId: string, { search = "", page = 1 }: IPaginationDTO) {
   return api({
     url: `${tenantId}/tenant-plans/`,
-    method: 'get'
+    method: 'get',
+    params: {
+      search,
+      page
+    }
   })
 }
 

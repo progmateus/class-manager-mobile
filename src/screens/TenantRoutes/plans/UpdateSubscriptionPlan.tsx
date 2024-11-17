@@ -43,7 +43,7 @@ export function UpdateSubscriptionPlan() {
 
   const loadTenantPlans = async () => {
     try {
-      const { data } = await ListTenantPlansService(tenantId)
+      const { data } = await ListTenantPlansService(tenantId, { page: 1, search: "" })
       return data.data
     } catch (err) {
       console.log(err)
