@@ -18,12 +18,13 @@ export function CreateTenantservice({ name, username, document, email, number, p
   })
 }
 
-export function ListTenantsService(search: string) {
+export function ListTenantsService({ search = "", page = 1 }: IPaginationDTO) {
   return api({
     url: '/tenants/',
     method: 'get',
     params: {
-      search
+      search,
+      page
     }
   })
 }
