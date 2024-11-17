@@ -1,4 +1,5 @@
 import { GenericItem } from "@components/Items/GenericItem"
+import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { ClassItemSkeleton } from "@components/skeletons/Items/ClassItemSkeleton"
 import { Viewcontainer } from "@components/ViewContainer"
@@ -6,7 +7,7 @@ import { IClassDTO } from "@dtos/classes/IClassDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { FlatList, Text, View, VStack } from "native-base"
 import { BookBookmark, GraduationCap, IdentificationBadge, Plus } from "phosphor-react-native"
 import { useCallback } from "react"
@@ -19,15 +20,26 @@ export function ClassesList() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id
 
-  const { data: classes, isLoading, refetch } = useQuery<IClassDTO[]>({
+
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IClassDTO[]>({
     queryKey: ['get-classes', tenantId],
-    queryFn: () => {
-      return ListClassesService(tenantId).then(({ data }) => {
-        /* setClassesDays(data.data) */
+    queryFn: ({ pageParam }) => {
+      return ListClassesService(tenantId, { page: Number(pageParam), search: "" }).then(({ data }) => {
         return data.data
       })
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length === 0) return undefined
+      return allPages.length + 1
     }
   })
+
+  function onLoadMore() {
+    if (hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }
 
   useFocusEffect(useCallback(() => {
     refetch()
@@ -61,7 +73,8 @@ export function ClassesList() {
           )
             : (
               <FlatList
-                data={classes}
+                data={results?.pages.map(page => page).flat()}
+
                 pb={20}
                 keyExtractor={classItem => classItem.id}
                 renderItem={({ item }) => (
@@ -83,7 +96,16 @@ export function ClassesList() {
                   </TouchableOpacity>
                 )}
                 ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
-                ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                ListFooterComponent={
+                  isFetchingNextPage ? <Loading /> : <></>
+                }
+                onEndReached={onLoadMore}
+                onEndReachedThreshold={0.3}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                ListEmptyComponent={
+                  <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
+                }
               />
             )
         }
