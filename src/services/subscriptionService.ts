@@ -32,10 +32,14 @@ export function UpdateSubscriptionService(tenantId: string, subscriptionId: stri
   })
 }
 
-export function ListSubscriptionsService(tenantId: string) {
+export function ListSubscriptionsService(tenantId: string, { page = 1, search = "" }: IPaginationDTO) {
   return api({
     url: `${tenantId}/subscriptions/`,
-    method: 'get'
+    method: 'get',
+    params: {
+      page,
+      search
+    }
   })
 }
 
