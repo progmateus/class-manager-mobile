@@ -109,7 +109,7 @@ export function ClassesDaysList() {
               weekDays.map((date, index) => {
                 return (
                   <VStack key={index} flex={1} justifyContent="space-between">
-                    <TouchableOpacity onPress={() => setSelectedWeekDay(date)}>
+                    <TouchableOpacityAnimated onPress={() => setSelectedWeekDay(date)}>
                       <Center>
                         <Text textTransform="capitalize">
                           {getWeekDay(date).replace('.', '')}
@@ -128,7 +128,7 @@ export function ClassesDaysList() {
                           borderBottomWidth={2}
                         />
                       </Center>
-                    </TouchableOpacity>
+                    </TouchableOpacityAnimated>
                   </VStack>
                 )
               })
@@ -155,7 +155,7 @@ export function ClassesDaysList() {
                     refreshing={isLoading}
                     keyExtractor={classDay => classDay.id}
                     renderItem={({ item, index }) => (
-                      <TouchableOpacityAnimated key={item.id} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
+                      <TouchableOpacity key={item.id} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
                         <HStack p={4} space={6} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
                           <VStack space={2} alignItems="center" justifyContent="center">
                             <Clock size={20} style={{
@@ -199,7 +199,7 @@ export function ClassesDaysList() {
                             }
                           </HStack>
                         </HStack>
-                      </TouchableOpacityAnimated>
+                      </TouchableOpacity>
                     )}
                     ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                     ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}

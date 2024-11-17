@@ -10,7 +10,7 @@ import { GuestNavigatorRoutesProps } from "@routes/guest.routes";
 import { useState } from "react";
 import { CreateUserService } from "src/services/usersService";
 import { isValidCPF } from "@utils/isValidCPF";
-import { IApiResponse } from "@dtos/IApiResponse";
+import { IApiResponse } from "@dtos/shared/IApiResponse";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { useAuth } from "@hooks/useAuth";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";

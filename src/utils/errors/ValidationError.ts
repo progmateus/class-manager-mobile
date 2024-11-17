@@ -1,4 +1,4 @@
-import { IError } from "@dtos/IApiResponse";
+import { IError } from "@dtos/shared/IApiResponse";
 
 export class ValidationError {
   message: string;

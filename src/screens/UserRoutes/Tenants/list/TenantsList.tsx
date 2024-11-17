@@ -16,6 +16,7 @@ const statusBarHeight = Constants.statusBarHeight;
 
 export function TenantsList() {
   const [search, setSearch] = useState("")
+  const [page, setPage] = useState(1)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const loadTenants = async () => {
@@ -40,6 +41,7 @@ export function TenantsList() {
 
 
   const changeTextDebounced = (text: string) => {
+    setPage(1)
     setSearch(text)
   }
 

@@ -116,7 +116,6 @@ export function ClassDayProfile() {
                 <Heading fontFamily="heading" fontSize="md" mt={8} mb={4}> Lista de presença</Heading>
                 <Animated.FlatList
                   data={orderBy(classDay.bookings, (obj) => obj.user.name, ['asc'])}
-                  itemLayoutAnimation={LinearTransition}
                   keyExtractor={booking => booking.id}
                   refreshing={isLoading}
                   renderItem={({ item, index }) => (
