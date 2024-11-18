@@ -40,12 +40,13 @@ export function UpdateUserService({ firstName, lastName, email, document, phone 
   })
 }
 
-export function ListUserBookingsService(tenantId?: string) {
+export function ListUserBookingsService({ page, tenantId }: IUserAndTenantPaginationDTO) {
   return api({
     url: '/users/bookings',
     method: 'get',
     params: {
-      tenantId
+      tenantId,
+      page
     }
   })
 }

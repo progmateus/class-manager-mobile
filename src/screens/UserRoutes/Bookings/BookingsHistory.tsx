@@ -6,7 +6,6 @@ import { Viewcontainer } from "@components/ViewContainer"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { FlatList, Icon, Text, View } from "native-base"
 import { CheckCircle, Clock, ClockClockwise, XCircle } from "phosphor-react-native"
-import { useState } from "react"
 import { ListBookingsService } from "src/services/bookingsService"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
 import { transFormClassDayColor } from "@utils/TransformColor"
@@ -15,22 +14,19 @@ import { IBookingDTO } from "@dtos/bookings/IBookingDTO"
 import { useAuth } from "@hooks/useAuth"
 import { TouchableOpacity } from "react-native"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
-import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 
 type RouteParamsProps = {
   tenantIdParams?: string;
   userId?: string;
 }
 export function BookingsHistory() {
-  const [isActing, setIsActing] = useState(false)
   const route = useRoute()
   const { tenantIdParams, userId } = route.params as RouteParamsProps;
   const { tenant, authenticationType, user } = useAuth()
   const tenantId = authenticationType == "tenant" ? tenant?.id : tenantIdParams
 
   const userNavigation = useNavigation<UserNavigatorRoutesProps>()
-  const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>()
 
   /* const handleDeleteBooking = (booking: IBookingDTO) => {
     if (isActing || !tenantId) return
@@ -45,26 +41,42 @@ export function BookingsHistory() {
     })
   } */
 
-  const fetchBookings = () => {
-    if (authenticationType === "user") {
-      return loadUserBookings()
-    } else {
-      return loadTenantBookings()
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IBookingDTO[]>({
+    queryKey: ['get-bookings', tenantId, userId, user.id],
+    queryFn: ({ pageParam }) => {
+      return fetchBookings(Number(pageParam)).then(({ data }) => {
+        return data.data
+      })
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length === 0) return undefined
+      return allPages.length + 1
+    }
+  })
+
+  function onLoadMore() {
+    if (hasNextPage && !isLoading) {
+      fetchNextPage();
     }
   }
 
-  const { data: bookings, isLoading, refetch } = useQuery<IBookingDTO[]>({
-    queryKey: ['get-bookings', tenantId, userId, user.id],
-    queryFn: fetchBookings
-  })
 
-  const loadTenantBookings = async () => {
-    const { data } = await ListBookingsService(tenantId, userId)
+  const fetchBookings = (page: number) => {
+    if (authenticationType === "user") {
+      return loadUserBookings(page)
+    } else {
+      return loadTenantBookings(page)
+    }
+  }
+
+  const loadTenantBookings = async (page: number) => {
+    const { data } = await ListBookingsService({ tenantId, userId, page })
     return data.data
   }
 
-  const loadUserBookings = async () => {
-    const { data } = await ListUserBookingsService(tenantId)
+  const loadUserBookings = async (page: number) => {
+    const { data } = await ListUserBookingsService({ tenantId, page })
     return data.data
   }
 
@@ -111,7 +123,7 @@ export function BookingsHistory() {
           isLoading ? (<Loading />)
             : (
               <FlatList
-                data={bookings}
+                data={results?.pages.map(page => page).flat()}
                 pb={20}
                 keyExtractor={booking => booking.id}
                 renderItem={({ item }) => (
@@ -129,7 +141,16 @@ export function BookingsHistory() {
                   </TouchableOpacity>
                 )}
                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-                ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                ListFooterComponent={
+                  isFetchingNextPage ? <Loading /> : <></>
+                }
+                onEndReached={onLoadMore}
+                onEndReachedThreshold={0.3}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                ListEmptyComponent={
+                  <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
+                }
               ></FlatList>
             )
         }
