@@ -10,7 +10,7 @@ import { useCallback, useState } from "react";
 import { Loading } from "@components/Loading";
 import { Viewcontainer } from "@components/ViewContainer";
 import dayjs from "dayjs";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { ListClassDaysService } from "src/services/classDaysService";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { Avatar } from "@components/Avatar/Avatar";
@@ -30,21 +30,32 @@ export function ClassesDaysList() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const route = useRoute()
-  /* const [classesDays, setClassesDays] = useState<ICLassDayDTO[]>([]) */
   const [selectedWeekDay, setSelectedWeekDay] = useState(dayjs().toDate())
   const params = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id || params?.tenantIdParams || null
 
-  const { data: classesDays, isLoading, refetch } = useQuery<ICLassDayDTO[]>({
+
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<ICLassDayDTO[]>({
     queryKey: ['get-class-days', String(selectedWeekDay)],
-    queryFn: () => {
-      return ListClassDaysService(selectedWeekDay).then(({ data }) => {
-        /* setClassesDays(data.data) */
+    queryFn: ({ pageParam }) => {
+      return ListClassDaysService(selectedWeekDay, { page: Number(pageParam), search: "" }).then(({ data }) => {
         return data.data
       })
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length === 0) return undefined
+      return allPages.length + 1
     }
   })
+
+  function onLoadMore() {
+    if (hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }
+
 
   useFocusEffect(useCallback(() => {
     refetch()
@@ -147,7 +158,7 @@ export function ClassesDaysList() {
               )
                 : (
                   <FlatList
-                    data={orderBy(classesDays, (obj) => obj.date, ['asc'])}
+                    data={orderBy(results?.pages.map(page => page).flat(), (obj) => obj.date, ['asc'])}
                     style={{
                       flex: 1,
                       paddingBottom: 20
@@ -202,7 +213,16 @@ export function ClassesDaysList() {
                       </TouchableOpacity>
                     )}
                     ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-                    ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                    ListFooterComponent={
+                      isFetchingNextPage ? <Loading /> : <></>
+                    }
+                    onEndReached={onLoadMore}
+                    onEndReachedThreshold={0.3}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    ListEmptyComponent={
+                      <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
+                    }
                   ></FlatList>
                 )
             }
