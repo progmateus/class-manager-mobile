@@ -4,29 +4,37 @@ import { PageHeader } from "@components/PageHeader";
 import { Viewcontainer } from "@components/ViewContainer";
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 import { useAuth } from "@hooks/useAuth";
-import { useNavigation } from "@react-navigation/native";
-import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { FlatList, Text, View, VStack } from "native-base";
 import { ListInvoicesService } from "src/services/invoiceService";
 
 export function InvoicesList() {
-  const navigation = useNavigation<UserNavigatorRoutesProps>();
-  const { user } = useAuth();
+  const { user, authenticationType } = useAuth();
 
-  const loadInvoices = async () => {
+  const loadInvoices = async (page: number) => {
     try {
-      const { data } = await ListInvoicesService(undefined, user.id)
+      const { data } = await ListInvoicesService({ page, userId: authenticationType == "user" ? user.id : undefined })
       return data.data
     } catch (err) {
       console.log(err)
     }
   }
 
-  const { data: invoices, isLoading } = useQuery<IInvoiceDTO[]>({
-    queryKey: ['get-tenants', user.id],
-    queryFn: loadInvoices
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IInvoiceDTO[]>({
+    queryKey: ['get-invoices', user.id],
+    queryFn: ({ pageParam }) => loadInvoices(Number(pageParam)),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length === 0) return undefined
+      return allPages.length + 1
+    }
   })
+
+  function onLoadMore() {
+    if (hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }
 
   return (
     <View flex={1}>
@@ -40,14 +48,23 @@ export function InvoicesList() {
           )
             : (
               <FlatList
-                data={invoices}
+                data={results?.pages.map(page => page).flat()}
                 pb={20}
                 keyExtractor={invoice => invoice.id}
                 renderItem={({ item }) => (
                   <InvoiceItem invoice={item} />
                 )}
                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-                ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                ListFooterComponent={
+                  isFetchingNextPage ? <Loading /> : <></>
+                }
+                onEndReached={onLoadMore}
+                onEndReachedThreshold={0.3}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                ListEmptyComponent={
+                  <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
+                }
               >
               </FlatList>
             )

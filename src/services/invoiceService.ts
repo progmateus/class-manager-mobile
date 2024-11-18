@@ -1,12 +1,13 @@
 import { api } from "./api";
 
-export function ListInvoicesService(tenantId?: string, userId?: string) {
+export function ListInvoicesService({ userId, tenantId, page }: IUserAndTenantPaginationDTO) {
   return api({
     url: 'invoices/',
     method: 'get',
     data: {
       tenantId,
-      userId
+      userId,
+      page
     }
   })
 }
