@@ -25,9 +25,12 @@ export function GetTimeTableService(timeTableId: string, tenantId: string) {
   })
 }
 
-export function ListTimesTablesService(tenantId: string) {
+export function ListTimesTablesService(tenantId: string, { page }: IPaginationDTO) {
   return api({
     url: `${tenantId}/times-tables`,
     method: 'get',
+    params: {
+      page
+    }
   })
 }
