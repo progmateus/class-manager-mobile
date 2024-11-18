@@ -6,9 +6,9 @@ import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fireInfoToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, FlatList, Heading, Icon, Text, View, VStack } from "native-base"
+import { Actionsheet, Box, FlatList, Heading, Icon, Text, View } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
@@ -26,18 +26,29 @@ export function StudentsClassList() {
   const { tenantIdParams, classId } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
-  const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
+  const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const queryClient = useQueryClient();
 
-  const { data: students, isLoading, refetch } = useQuery<IStudentClassDTO[]>({
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IStudentClassDTO[]>({
     queryKey: ['get-students-class', tenantId, classId],
-    queryFn: () => {
-      return ListStudentsByClassService(tenantId, classId).then(({ data }) => {
+    queryFn: ({ pageParam }) => {
+      return ListStudentsByClassService(tenantId, classId, { page: Number(pageParam) }).then(({ data }) => {
         return data.data
       })
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length === 0) return undefined
+      return allPages.length + 1
     }
   })
+
+  function onLoadMore() {
+    if (hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }
 
   useFocusEffect(useCallback(() => {
     refetch()
@@ -57,8 +68,6 @@ export function StudentsClassList() {
     return await RemoveStudentFromClassService(tenantId, selectedStudent.id, classId)
   }
 
-
-
   const removeStudentClassMutation = useMutation({
     mutationFn: handleRemove,
     onSuccess: () => {
@@ -72,7 +81,6 @@ export function StudentsClassList() {
       })
     }
   })
-
 
   const handleSelectStudent = (student: any) => {
     Vibration.vibrate(100)
@@ -90,7 +98,7 @@ export function StudentsClassList() {
           ) : (
             <>
               <FlatList
-                data={students}
+                data={results?.pages.map(page => page).flat()}
                 pb={20}
                 keyExtractor={student => student.id}
                 renderItem={({ item }) => (
@@ -102,7 +110,16 @@ export function StudentsClassList() {
                   </TouchableOpacity>
                 )}
                 ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
-                ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                ListFooterComponent={
+                  isFetchingNextPage ? <Loading /> : <></>
+                }
+                onEndReached={onLoadMore}
+                onEndReachedThreshold={0.3}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                ListEmptyComponent={
+                  <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
+                }
               >
               </FlatList>
               <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
