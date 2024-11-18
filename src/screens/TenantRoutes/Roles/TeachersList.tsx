@@ -15,7 +15,7 @@ import { GetUserByUsernameService } from "src/services/usersService"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
 import { Avatar } from "@components/Avatar/Avatar"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
 
 type RouteParamsProps = {
@@ -38,19 +38,30 @@ export function TeachersList() {
   const tenantId = tenant?.id ?? tenantIdParams
 
 
-  const loadTeachers = async () => {
+  const loadTeachers = async (page: number) => {
     try {
-      const { data } = await ListUsersRolesService(tenantId, [roleName])
+      const { data } = await ListUsersRolesService([roleName], { page, tenantId })
       return data.data
     } catch (err) {
       console.log(err)
     }
   }
 
-  const { data: teachers, isLoading } = useQuery<IUsersRolesDTO[]>({
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IUsersRolesDTO[]>({
     queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())],
-    queryFn: loadTeachers
+    queryFn: ({ pageParam }) => loadTeachers(Number(pageParam)),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length === 0) return undefined
+      return allPages.length + 1
+    }
   })
+
+  function onLoadMore() {
+    if (hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }
 
 
   const handleSelectUserRole = (userRole: any) => {
@@ -71,10 +82,36 @@ export function TeachersList() {
     }
   }
 
+
+  const handleAddTeacher = async () => {
+    if (!userFound) {
+      return
+    }
+    try {
+      await CreateUserRoleService(tenantId, userFound.id, "teacher")
+      fireSuccesToast('Professor cadastrado com sucesso!')
+      setIsModalOpen(false)
+      setIsOpenAdd(false)
+      setIsOpen(false)
+    } catch (err) {
+      console.log('err: ', err)
+    }
+  }
+
   const queryClient = useQueryClient();
 
   const { mutate: removeTeacherMutation } = useMutation({
     mutationFn: handleRemoveTeacher,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())]
+      })
+    }
+  })
+
+
+  const { mutate: addTeahcerMutation } = useMutation({
+    mutationFn: handleAddTeacher,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())]
@@ -102,22 +139,6 @@ export function TeachersList() {
     })
   }
 
-
-  const handleCreateTeacherRole = () => {
-    if (!userFound) {
-      return
-    }
-    CreateUserRoleService(tenantId, userFound.id, "teacher").then(({ data }) => {
-      teachers?.push(data.data)
-      fireSuccesToast('Professor cadastrado com sucesso!')
-      setIsModalOpen(false)
-      setIsOpenAdd(false)
-      setIsOpen(false)
-    }).catch((err) => {
-      console.log('err: ', err)
-    })
-  }
-
   return (
     <View flex={1}>
       <PageHeader title="Gerenciar professores" rightIcon={tenantId ? Plus : null} rightAction={() => setIsOpenAdd(true)} />
@@ -132,7 +153,7 @@ export function TeachersList() {
 
               <>
                 <FlatList
-                  data={teachers}
+                  data={results?.pages.map(page => page).flat()}
                   pb={20}
                   keyExtractor={teacher => teacher.id}
                   renderItem={({ item }) => (
@@ -144,7 +165,16 @@ export function TeachersList() {
                     </TouchableOpacity>
                   )}
                   ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-                  ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                  ListFooterComponent={
+                    isFetchingNextPage ? <Loading /> : <></>
+                  }
+                  onEndReached={onLoadMore}
+                  onEndReachedThreshold={0.3}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                  ListEmptyComponent={
+                    <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
+                  }
                 />
 
                 <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
@@ -205,7 +235,7 @@ export function TeachersList() {
                     </Modal.Body>
                     <Modal.Footer>
                       <VStack space={2} flex={1}>
-                        <Button title="Cadastrar" isLoading={isSearching} onPress={handleCreateTeacherRole} />
+                        <Button title="Cadastrar" isLoading={isSearching} onPress={() => addTeahcerMutation()} />
                         <Button title="Cancelar" variant="outline" onPress={() => setIsModalOpen(false)} />
                       </VStack>
                     </Modal.Footer>
