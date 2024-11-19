@@ -1,5 +1,5 @@
 import { PageHeader } from "@components/PageHeader";
-import { Actionsheet, Box, HStack, Heading, Icon, ScrollView, Text, VStack, View } from "native-base";
+import { Actionsheet, Box, FlatList, HStack, Heading, Icon, ScrollView, Text, VStack, View } from "native-base";
 import SettingsSVG from "@assets/settings-outline.svg";
 import CardSVG from "@assets/card-outline.svg";
 import MoneySVG from "@assets/money-outline.svg";
@@ -138,35 +138,43 @@ export function Profile() {
                 Empresas
               </Text>
             </Box>
-            {
-              user.usersRoles && user.usersRoles.length > 0 && (
-                user.usersRoles.filter((ur) => ur.role.name === "admin").map((ur) => {
-                  return (
-                    <Actionsheet.Item key={ur.id} onPress={() => authenticateTenant(ur.tenant.id)}>
-                      <HStack alignItems="center" justifyContent="center" space={4}>
-                        <Avatar
-                          size="10"
-                          src={ur.tenant.avatar}
-                        />
-                        <Text fontSize="16" color="gray.700">
-                          {ur.tenant?.name}
-                        </Text>
-                      </HStack>
-                    </Actionsheet.Item>
-                  )
-                })
-              )
-            }
-            <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
-              <HStack alignItems="center" justifyContent="center" space={4}>
-                <View p={2.5} bgColor="gray.100" rounded="full">
-                  <Icon as={Plus} color="gray.500" rounded="full" />
-                </View>
-                <Text fontSize="16" color="gray.700">
-                  Adicionar
-                </Text>
-              </HStack>
-            </Actionsheet.Item>
+            <FlatList
+              w="100%"
+              data={user.usersRoles.filter((ur) => ur.role.name === "admin")}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) => (
+                <Actionsheet.Item key={item.id} onPress={() => authenticateTenant(item.tenant.id)}>
+                  <HStack alignItems="center" justifyContent="center" space={4}>
+                    <Avatar
+                      size="10"
+                      src={item.tenant.avatar}
+                    />
+                    <Text fontSize="16" color="gray.700">
+                      {item.tenant?.name}
+                    </Text>
+                  </HStack>
+                </Actionsheet.Item>
+              )}
+              ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              ListFooterComponent={
+                <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
+                  <HStack alignItems="center" justifyContent="center" space={4}>
+                    <View p={2.5} bgColor="gray.100" rounded="full">
+                      <Icon as={Plus} color="gray.500" rounded="full" />
+                    </View>
+                    <Text fontSize="16" color="gray.700">
+                      Adicionar
+                    </Text>
+                  </HStack>
+                </Actionsheet.Item>
+              }
+              ListEmptyComponent={
+                <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
+              }
+            />
+
           </Actionsheet.Content>
         </Actionsheet>
       </ScrollView>
