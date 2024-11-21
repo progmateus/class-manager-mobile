@@ -77,7 +77,7 @@ export function CreateSubscription() {
 
 
   const listTenantplans = () => {
-    ListTenantPlansService(tenantId).then(({ data }) => {
+    ListTenantPlansService(tenantId, {}).then(({ data }) => {
       setPlans(data.data)
     }).catch((err) => {
       console.log(err)
@@ -86,7 +86,7 @@ export function CreateSubscription() {
 
 
   const listClasses = () => {
-    ListClassesService(tenantId).then(({ data }) => {
+    ListClassesService(tenantId, {}).then(({ data }) => {
       setClasses(data.data)
     }).catch((err) => {
       console.log(err)

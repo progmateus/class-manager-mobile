@@ -33,59 +33,6 @@ export function Profile() {
     return []
   }
 
-
-  const subscriptions = [
-    {
-      id: '1',
-      tenant: {
-        name: "Vôlei Na Ilha",
-        avatar: "https://img.freepik.com/vetores-premium/modelo-de-vetor-de-esporte-de-volei-ilustracao-grafica-de-voleibol-no-estilo-de-remendo-do-emblema-distintivo_687309-317.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
-      },
-    },
-    {
-      id: '2',
-      tenant: {
-        name: "Bica Beach",
-        avatar: "https://img.freepik.com/vetores-gratis/silhueta-de-volei-desenhada-de-mao_23-2149397214.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
-      },
-    },
-    {
-      id: '3',
-      tenant: {
-        name: "Beach tennis",
-        avatar: "https://img.freepik.com/fotos-premium/jogadores-de-voleibol-profissional-feminino-em-acao-no-estadio-3d_654080-1098.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
-      },
-    },
-    {
-      id: '4',
-      tenant: {
-        name: "Vôlei Insulanos",
-        avatar: "https://img.freepik.com/fotos-gratis/jogadores-de-basquete-na-grande-arena-profissional-durante-o-jogo_654080-388.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
-      },
-    },
-    {
-      id: '5',
-      tenant: {
-        name: "Vôlei Insulanos",
-        avatar: "https://img.freepik.com/fotos-gratis/jogadores-de-basquete-na-grande-arena-profissional-durante-o-jogo_654080-388.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
-      },
-    },
-    {
-      id: '6',
-      tenant: {
-        name: "Vôlei Insulanos",
-        avatar: "https://img.freepik.com/fotos-gratis/jogadores-de-basquete-na-grande-arena-profissional-durante-o-jogo_654080-388.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
-      },
-    },
-    {
-      id: '7',
-      tenant: {
-        name: "Vôlei Insulanos",
-        avatar: "https://img.freepik.com/fotos-gratis/jogadores-de-basquete-na-grande-arena-profissional-durante-o-jogo_654080-388.jpg?ga=GA1.1.1603704743.1686338071&semt=sph"
-      },
-    }
-  ]
-
   return (
     <View flex={1}>
       <PageHeader title="Informações" />

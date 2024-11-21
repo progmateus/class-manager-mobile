@@ -69,7 +69,7 @@ export function CreateSubscription() {
 
   const listTenantplans = () => {
     if (!tenantId) return
-    ListTenantPlansService(tenantId).then(({ data }) => {
+    ListTenantPlansService(tenantId, { search: "", page: 1 }).then(({ data }) => {
       setPlans(data.data)
     }).catch((err) => {
       console.log(err)
@@ -79,7 +79,7 @@ export function CreateSubscription() {
 
   const listClasses = () => {
     if (!tenantId) return
-    ListClassesService(tenantId).then(({ data }) => {
+    ListClassesService(tenantId, { search: "", page: 1 }).then(({ data }) => {
       setClasses(data.data)
     }).catch((err) => {
       console.log(err)
