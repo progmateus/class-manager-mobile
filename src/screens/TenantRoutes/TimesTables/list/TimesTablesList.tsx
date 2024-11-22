@@ -6,7 +6,7 @@ import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { FlatList, Text, View } from "native-base"
 import { Calendar, Plus } from "phosphor-react-native"
 import { TouchableOpacity } from "react-native"
@@ -16,6 +16,9 @@ export function TimesTablesList() {
 
   const { tenant } = useAuth()
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
+
+  const queryClient = useQueryClient();
+
 
   const loadTimesTables = async (page: number) => {
     try {
@@ -43,6 +46,10 @@ export function TimesTablesList() {
   }
 
   const handleAdd = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-times-tables', tenant.id]
+    })
+
     navigation.navigate('createTimeTable')
   }
 
