@@ -56,3 +56,11 @@ export function UpdateTenantSertvice({ name, description, email, document, links
     }
   })
 }
+
+export function RefreshTenantSubscriptionService(tenantId: string) {
+  return api({
+    url: `/tenants/${tenantId}/subscriptions/refresh`,
+    method: 'patch',
+  })
+}
+

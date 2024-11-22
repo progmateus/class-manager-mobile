@@ -8,13 +8,27 @@ import { BookBookmark, Clock, GraduationCap, IdentificationBadge, SimCard } from
 import { useAuth } from "@hooks/useAuth";
 import { TouchableOpacity } from "react-native";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
+import { RefreshTenantSubscriptionService } from "src/services/tenantsService";
+import { fireSuccesToast } from "@utils/HelperNotifications";
 
 
 export function Dashboard() {
-  const { tenant } = useAuth()
+  const { tenant, tenantUpdate } = useAuth()
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const size = 18
   const color = "white"
+
+
+
+  const handleRefreshTenantsubscription = async () => {
+    try {
+      const { data } = await RefreshTenantSubscriptionService(tenant.id)
+      tenantUpdate({ ...tenant, subscriptionStatus: data.data.subscriptionStatus })
+      fireSuccesToast('Assinatura gerada com sucesso')
+    } catch (err) {
+      console.log('err: ', err)
+    }
+  }
 
   return (
     <View flex={1}>
@@ -34,10 +48,10 @@ export function Dashboard() {
 
         {
           tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE_EXPIRED && (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleRefreshTenantsubscription}>
               <View px={4} py={3} bgColor="red.400">
                 <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                  sua assinatura expirou. Clique aqui para gerar uma nova assinatura
+                  sua assinatura expirou. Clique aqui para gerar uma nova assinatura.
                 </Text>
               </View>
             </TouchableOpacity>
@@ -48,10 +62,12 @@ export function Dashboard() {
         {
           tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE && (
             <TouchableOpacity>
-              <Text fontSize="sm" fontFamily="body" color="coolGray.700">
-                Pague a primeira cobrança da sua assinatura em até 24h para
-                ativá-la
-              </Text>
+              <View px={4} py={3} bgColor="brand.200">
+                <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                  Pague a primeira cobrança em até 24 horas para que a sua assinatura seja ativada.
+                </Text>
+              </View>
+
             </TouchableOpacity>
           )
         }
