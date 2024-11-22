@@ -67,6 +67,11 @@ export function InvoiceItem({ invoice }: IProps) {
     }
   }
 
+
+  const isInvoiceStatus = (status: EInvoiceStatus[]): boolean => {
+    return status.includes(invoice.status)
+  }
+
   const color = convertBillStatus(invoice.status).color
 
   return (
@@ -80,9 +85,15 @@ export function InvoiceItem({ invoice }: IProps) {
             <Text color={color} fontSize="sm" fontWeight="light">{convertBillStatus(invoice.status).label} </Text>
           </VStack>
           <Text color={color} fontSize="md" mr={2}>{priceFormatted(invoice.amount)}</Text>
-          <TouchableOpacity onPress={handleClickInvoice}>
-            <Icon as={CaretDown} color="coolGray.600" />
-          </TouchableOpacity>
+
+          {
+            isInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
+              <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
+                <Icon as={CaretDown} color="coolGray.600" />
+              </TouchableOpacity>
+            )
+          }
+
         </HStack>
         {
           isOpen && (
