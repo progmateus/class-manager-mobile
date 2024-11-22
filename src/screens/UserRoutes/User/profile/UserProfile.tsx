@@ -12,7 +12,7 @@ import { SubscriptionOption } from "@components/Items/SubscriptionOption";
 import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { ArrowsLeftRight, Plus } from "phosphor-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
 import { Avatar } from "@components/Avatar/Avatar";
@@ -105,22 +105,20 @@ export function Profile() {
               ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
-              ListFooterComponent={
-                <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
-                  <HStack alignItems="center" justifyContent="center" space={4}>
-                    <View p={2.5} bgColor="gray.100" rounded="full">
-                      <Icon as={Plus} color="gray.500" rounded="full" />
-                    </View>
-                    <Text fontSize="16" color="gray.700">
-                      Adicionar
-                    </Text>
-                  </HStack>
-                </Actionsheet.Item>
-              }
               ListEmptyComponent={
                 <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
               }
             />
+            <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
+              <HStack alignItems="center" justifyContent="center" space={4}>
+                <View p={2.5} bgColor="gray.100" rounded="full">
+                  <Icon as={Plus} color="gray.500" rounded="full" />
+                </View>
+                <Text fontSize="16" color="gray.700">
+                  Adicionar
+                </Text>
+              </HStack>
+            </Actionsheet.Item>
 
           </Actionsheet.Content>
         </Actionsheet>
