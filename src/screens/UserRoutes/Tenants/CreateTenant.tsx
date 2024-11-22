@@ -1,7 +1,7 @@
 import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Center, Divider, HStack, Heading, Icon, Text, TextArea, VStack, View } from "native-base";
+import { Button, Center, Divider, HStack, Heading, Icon, Text, VStack, View } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { CaretLeft, CaretRight, Check } from "phosphor-react-native"
@@ -16,6 +16,8 @@ import { VerifyUsernameService } from "src/services/usernameService";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useAuth } from "@hooks/useAuth";
 import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
+import { useQueryClient } from "@tanstack/react-query";
+import { TextArea } from "@components/form/TextArea";
 
 const cpfRegex = /(^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$)/
 const documentRegex = /(^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$)|(^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$)/gi
@@ -41,6 +43,9 @@ export function CreateTenant() {
   const [plans, setPlans] = useState<any[]>([])
 
   const { user, userUpdate, tenant } = useAuth()
+
+  const queryClient = useQueryClient();
+
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
   const { control, handleSubmit, formState: { errors }, getValues, setError, trigger, getFieldState, reset } = useForm<CreateTenantProps>({
@@ -95,6 +100,10 @@ export function CreateTenant() {
       } as IUserProfileDTO
 
       userUpdate(userUpdated)
+
+      queryClient.invalidateQueries({
+        queryKey: ['get-tenants']
+      })
 
       navigation.navigate('tenantProfile', { tenantIdParams: data.data.id })
     }).catch((err) => {
@@ -273,7 +282,7 @@ export function CreateTenant() {
                   name="description"
                   control={control}
                   render={({ field: { onChange, value } }) => (
-                    <TextArea autoCompleteType={false} value={value} onChangeText={onChange} h={24} px={2} mb={20} fontSize="sm" variant="outline" color="coolGray.800" />
+                    <TextArea value={value} onChangeText={onChange} h={24} px={2} mb={20} fontSize="sm" variant="outline" color="coolGray.800" />
                   )}
                 />
               </View>
