@@ -39,7 +39,7 @@ export function UpdateStudentClass() {
 
   const loadClasses = async () => {
     try {
-      const { data } = await ListClassesService(tenantId)
+      const { data } = await ListClassesService(tenantId, {})
       return data.data
     } catch (err) {
       console.log(err)

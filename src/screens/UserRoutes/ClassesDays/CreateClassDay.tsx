@@ -49,7 +49,7 @@ export function CreateClassDay() {
   });
 
   useEffect(() => {
-    ListClassesService(tenantId).then(({ data }) => {
+    ListClassesService(tenantId, {}).then(({ data }) => {
       setClasses(data.data)
     }).catch((err) => {
       console.log(err)
