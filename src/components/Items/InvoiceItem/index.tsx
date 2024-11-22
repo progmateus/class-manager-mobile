@@ -48,6 +48,14 @@ export function InvoiceItem({ invoice }: IProps) {
         label: "Em Atraso",
         color: "danger.500"
       },
+      4: {
+        label: "Expirado",
+        color: "coolGray.500"
+      },
+      5: {
+        label: "Indisponível",
+        color: "coolGray.500"
+      },
     }
     return formatBillState[billState]
   }

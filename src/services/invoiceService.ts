@@ -4,7 +4,7 @@ export function ListInvoicesService({ userId, tenantId, page }: IUserAndTenantPa
   return api({
     url: 'invoices/',
     method: 'get',
-    data: {
+    params: {
       tenantId,
       userId,
       page
