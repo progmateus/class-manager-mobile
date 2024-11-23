@@ -8,13 +8,13 @@ import { FlatList, Icon, Text, View } from "native-base"
 import { CheckCircle, Clock, ClockClockwise, XCircle } from "phosphor-react-native"
 import { ListBookingsService } from "src/services/bookingsService"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
-import { transFormClassDayColor } from "@utils/TransformColor"
 import { ListUserBookingsService } from "src/services/usersService"
 import { IBookingDTO } from "@dtos/bookings/IBookingDTO"
 import { useAuth } from "@hooks/useAuth"
 import { TouchableOpacity } from "react-native"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
 import { useInfiniteQuery } from "@tanstack/react-query"
+import { transFormClassDayColor } from "@utils/StatusHelper"
 
 type RouteParamsProps = {
   tenantIdParams?: string;

@@ -1,5 +1,3 @@
-import { transformSubscriptionColor } from "@utils/TransformColor";
-import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus";
 import { HStack, Image, Text, VStack } from "native-base";
 import { SimCard } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
@@ -8,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { Avatar } from "@components/Avatar/Avatar";
+import { transformSubscriptionColor, transformSubscriptionStatus } from "@utils/StatusHelper";
 
 interface IProps {
   subscription: ISubscriptionPreviewDTO

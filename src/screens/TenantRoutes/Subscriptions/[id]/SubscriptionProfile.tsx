@@ -7,8 +7,7 @@ import { useAuth } from "@hooks/useAuth"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
-import { transformInvoiceStatus } from "@utils/TransformInvoiceStatus"
-import { transformSubscriptionStatus } from "@utils/TransformSubscriptionStatus"
+import { transformInvoiceColor, transformInvoiceStatus, transformSubscriptionColor, transformSubscriptionStatus } from "@utils/StatusHelper"
 import { Actionsheet, Box, Center, Heading, HStack, Icon, Text, View, VStack } from "native-base"
 import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard, Plus } from "phosphor-react-native"
 import { useCallback, useMemo, useState } from "react"
@@ -151,21 +150,21 @@ export function SubscriptionProfile() {
                   <HStack borderWidth={0.8} rounded="lg" px={4} alignItems="center" justifyContent="space-between" flex={1}>
                     <VStack flex={1}>
                       <Text fontSize="xs" color="coolGray.400">SITUAÇÃO</Text>
-                      <Text fontSize="lg" color="brand.500">
+                      <Text fontSize="lg" color={transformSubscriptionColor(subscription.status)}>
                         {transformSubscriptionStatus(subscription.status)}
                       </Text>
                     </VStack>
-                    <Icon as={Target} color="brand.500" />
+                    <Icon as={Target} color={transformSubscriptionColor(subscription.status)} />
                   </HStack>
 
                   <HStack borderWidth={0.8} rounded="lg" px={4} py={1} alignItems="center" justifyContent="space-between" flex={1}>
                     <VStack flex={1}>
                       <Text fontSize="xs" color="coolGray.400">PAGAMENTO</Text>
-                      <Text fontSize="lg" color="success.500">
+                      <Text fontSize="lg" color={transformInvoiceColor(subscription.status)}>
                         {transformInvoiceStatus(payments[0].status)}
                       </Text>
                     </VStack>
-                    <Icon as={CheckCircle} color="success.500" />
+                    <Icon as={CheckCircle} color={transformInvoiceColor(subscription.status)} />
                   </HStack>
                 </HStack>
 
