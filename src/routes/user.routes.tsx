@@ -14,7 +14,7 @@ import { Profile } from "@screens/UserRoutes/User/profile/UserProfile";
 import { UpdatePassword } from "@screens/UserRoutes/User/[id]/UpdatePassword";
 import { TenantsList } from "@screens/UserRoutes/Tenants/list/TenantsList";
 import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
-import { CreateClassDay } from "@screens/UserRoutes/ClassesDays/CreateClassDay";
+import { CreateClassDay } from "@screens/TenantRoutes/ClassesDays/CreateClassDay";
 import { CreateSubscription } from "@screens/UserRoutes/Subscriptions/CreateSubscription";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { CreateTenant } from "@screens/UserRoutes/Tenants/CreateTenant";
@@ -33,7 +33,6 @@ type UserRoutes = {
   updateClassDayStatus: { tenantIdParams: string, classDayId: string };
   updateUser: undefined;
   updatePassword: undefined;
-  createClassDay: { tenantIdParams?: string };
   createSubscription: { tenantIdParams: string };
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   createTenant: undefined
@@ -131,12 +130,6 @@ export function UserRoutes() {
       <Screen
         name="updatePassword"
         component={UpdatePassword}
-        options={{ tabBarButton: () => (null) }}
-      />
-
-      <Screen
-        name="createClassDay"
-        component={CreateClassDay}
         options={{ tabBarButton: () => (null) }}
       />
 

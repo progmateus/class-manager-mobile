@@ -1,19 +1,15 @@
-import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { IClassDTO } from "@dtos/classes/IClassDTO";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { size } from "lodash";
-import { AddIcon, HStack, Select, Text, useTheme, View, VStack } from "native-base";
-import { background, border, color } from "native-base/lib/typescript/theme/styled-system";
+import { useFocusEffect } from "@react-navigation/native";
+import { HStack, Select, Text, useTheme, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TextInputMask } from "react-native-masked-text";
 import { CreateClassDayService } from "src/services/classDaysService";
 import { ListClassesService } from "src/services/classesService";
-import { THEME } from "src/theme";
 import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";

@@ -7,7 +7,7 @@ import { useTheme } from "native-base";
 import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/SubscriptionsList";
 import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
-import { BookBookmark, GraduationCap, House, UserCircle } from "phosphor-react-native";
+import { BookBookmark, Buildings, Calendar, GraduationCap, House, UserCircle } from "phosphor-react-native";
 import { SubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/SubscriptionProfile";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
@@ -28,6 +28,8 @@ import { TimesTablesList } from "@screens/TenantRoutes/TimesTables/list/TimesTab
 import { CreateTimeTable } from "@screens/TenantRoutes/TimesTables/CreateTimeTable";
 import { CreateSubscription } from "@screens/TenantRoutes/Subscriptions/CreateSubscription";
 import { UpdateClassTimeTable } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassTimeTable";
+import { CreateClassDay } from "@screens/TenantRoutes/ClassesDays/CreateClassDay";
+import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
 
 
 export type TenantRoutes = {
@@ -54,6 +56,8 @@ export type TenantRoutes = {
   updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateTenant: undefined;
   updateClassTimeTable: { classId: string; timeTableIdExists: string; };
+  createClassDay: undefined;
+  classesDaysList: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -88,21 +92,11 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="classes"
-        component={ClassesList}
+        name="classesDaysList"
+        component={ClassesDaysList}
         options={{
           tabBarIcon: ({ color }) => (
-            <BookBookmark color={color} size={iconSize} />
-          )
-        }}
-      />
-
-      <Screen
-        name="tenantProfile"
-        component={TenantProfile}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <UserCircle color={color} size={iconSize} />
+            <Calendar color={color} size={iconSize} />
           )
         }}
       />
@@ -113,6 +107,17 @@ export function TenantRoutes() {
         options={{
           tabBarIcon: ({ color }) => (
             <GraduationCap color={color} size={iconSize} />
+          )
+        }}
+      />
+
+
+      <Screen
+        name="tenantProfile"
+        component={TenantProfile}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Buildings color={color} size={iconSize} />
           )
         }}
       />
@@ -255,6 +260,12 @@ export function TenantRoutes() {
       <Screen
         name="updateClassTimeTable"
         component={UpdateClassTimeTable}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="createClassDay"
+        component={CreateClassDay}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

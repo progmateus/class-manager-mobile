@@ -1,5 +1,4 @@
-import ClockSVG from "@assets/clock-outline.svg"
-import { Center, FlatList, HStack, Heading, Image, ScrollView, Text, VStack, View } from "native-base";
+import { Center, FlatList, HStack, Heading, Text, VStack, View } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { PageHeader } from "@components/PageHeader";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
@@ -10,13 +9,14 @@ import { useCallback, useState } from "react";
 import { Loading } from "@components/Loading";
 import { Viewcontainer } from "@components/ViewContainer";
 import dayjs from "dayjs";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { ListClassDaysService } from "src/services/classDaysService";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { Avatar } from "@components/Avatar/Avatar";
-import Animated, { SlideInLeft, SlideInRight, SlideOutRight } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { orderBy } from "lodash";
 import { ClassDayItemSkeleton } from "@components/skeletons/Items/ClassDayItemSkeleton";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -28,6 +28,7 @@ const TouchableOpacityAnimated = Animated.createAnimatedComponent(TouchableOpaci
 export function ClassesDaysList() {
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
+  const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>();
 
   const route = useRoute()
   const [selectedWeekDay, setSelectedWeekDay] = useState(dayjs().toDate())
@@ -103,16 +104,12 @@ export function ClassesDaysList() {
   };
 
   const createClassDay = () => {
-    if (!tenantId) return
-
-    navigation.navigate('createClassDay', {
-      tenantIdParams: tenantId
-    })
+    tenantNavigation.navigate('createClassDay')
   }
 
   return (
     <View flex={1}>
-      <PageHeader title="Aulas" rightIcon={tenantId ? Plus : null} rightIconColor="brand.500" rightAction={() => createClassDay()} />
+      <PageHeader title="Aulas" rightIcon={tenant.id ? Plus : null} rightIconColor="brand.500" rightAction={() => createClassDay()} />
       <Viewcontainer>
         <View flex={1}>
           <HStack mt={4}>
