@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
 
 import { api } from "src/services/api";
 import { storageUserRemove, storageUserSave } from "@storage/storageUser";
@@ -27,7 +27,8 @@ export type AuthContextDataProps = {
   authenticateTenant: (tenantId: string) => Promise<void>;
   signOutTenant: () => Promise<void>
   refreshUser: () => Promise<void>
-  refreshTenant: () => Promise<void>
+  refreshTenant: () => Promise<void>;
+  hasTenants: boolean;
 }
 
 type AuthContextProviderProps = {
@@ -46,6 +47,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   function tokenUpdate(token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
+
+
+  const hasTenants = useMemo(() => {
+    return user.usersRoles && user.usersRoles.filter((ur) => ur.role.name === "admin").length > 0
+  }, [user.usersRoles])
 
   async function userUpdate(userData: Partial<IUserProfileDTO>) {
     setUser(prevState => { return { ...prevState, ...userData } });
@@ -227,7 +233,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       tenantUpdate,
       userUpdate,
       refreshUser,
-      refreshTenant
+      refreshTenant,
+      hasTenants
     }
     }>
       {children}
