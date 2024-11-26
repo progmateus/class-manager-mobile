@@ -14,6 +14,7 @@ import { z } from "zod";
 import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { useAuth } from "@hooks/useAuth";
+import { InputMask } from "@components/form/InputMask";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -64,7 +65,8 @@ export function CreateClassDay() {
     const fullDate = dayjs(`${date} ${hourStart}`, "DD/MM/YYYY HH:mm").toISOString();
 
     CreateClassDayService(tenantId, hourStart, hourEnd, fullDate, classId).then(() => {
-      fireSuccesToast('Aula criada')
+      fireSuccesToast('Aula criada com sucesso!')
+      reset(defaultValues)
     }).catch((err) => {
       console.log(err)
       fireErrorToast('Ocorreu um erro')
@@ -78,78 +80,49 @@ export function CreateClassDay() {
       <PageHeader title="Criar aula" rightIcon={Check} rightAction={handleSubmit(handleCreateClassDay)} />
       <ScrollContainer>
         <VStack space={6} mt={4}>
-          <Text fontSize="sm" fontWeight="medium" color="coolGray.700" mb={-4}> Data: </Text>
           <Controller
             name="date"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <TextInputMask
-                style={{
-                  width: '100%',
-                  borderBottomColor: 'red',
-                  color: colors.coolGray[700],
-                  height: sizes[10],
-                  borderColor: colors.coolGray[300],
-                  borderWidth: 0.8,
-                  borderRadius: 4,
-                  paddingLeft: sizes[4]
-                }}
-                type={'datetime'}
+              <InputMask
+                label="Data:"
+                type="datetime"
                 options={{
                   format: 'DD/MM/YYYY'
-                }} onChangeText={onChange} value={value}
-              />
-
+                }}
+                onChangeText={onChange} value={value} errorMessage={errors.date?.message} />
             )}
           />
           <HStack space={4} w={'48%'}>
             <VStack space={4} w={'100%'}>
-              <Text fontSize="sm" fontWeight="medium" color="coolGray.700"> Horário de inicio: </Text>
               <Controller
                 name="hourStart"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <TextInputMask
-                    style={{
-                      width: '100%',
-                      borderBottomColor: 'red',
-                      color: colors.coolGray[700],
-                      height: sizes[10],
-                      borderColor: colors.coolGray[300],
-                      borderWidth: 0.8,
-                      borderRadius: 4,
-                      paddingLeft: sizes[4]
-                    }}
-                    type={'datetime'}
+                  <InputMask
+                    label="Horário de inicio:"
+                    type="datetime"
                     options={{
                       format: 'HH:mm'
-                    }} onChangeText={onChange} value={value}
+                    }}
+                    onChangeText={onChange} value={value} errorMessage={errors.hourStart?.message}
                   />
                 )}
               />
             </VStack>
 
             <VStack space={4} w={'100%'}>
-              <Text fontSize="sm" fontWeight="medium" color="coolGray.700"> Horário de término: </Text>
               <Controller
                 name="hourEnd"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <TextInputMask
-                    style={{
-                      width: '100%',
-                      borderBottomColor: 'red',
-                      color: colors.coolGray[700],
-                      height: sizes[10],
-                      borderColor: colors.coolGray[300],
-                      borderWidth: 0.8,
-                      borderRadius: 4,
-                      paddingLeft: sizes[4]
-                    }}
-                    type={'datetime'}
+                  <InputMask
+                    label="Horário de término:"
+                    type="datetime"
                     options={{
                       format: 'HH:mm'
-                    }} onChangeText={onChange} value={value}
+                    }}
+                    onChangeText={onChange} value={value} errorMessage={errors.hourEnd?.message}
                   />
                 )}
               />
