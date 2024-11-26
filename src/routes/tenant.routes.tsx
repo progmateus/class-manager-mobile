@@ -31,6 +31,7 @@ import { UpdateClassTimeTable } from "@screens/TenantRoutes/Classes/CRUD/[id]/Up
 import { CreateClassDay } from "@screens/TenantRoutes/ClassesDays/CreateClassDay";
 import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
 import { ClassDayProfile } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayProfile";
+import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
 
 
 export type TenantRoutes = {
@@ -60,6 +61,7 @@ export type TenantRoutes = {
   createClassDay: undefined;
   classesDaysList: undefined;
   classDayProfile: { tenantIdParams: string, classDayId: string };
+  updateClassDayStatus: { tenantIdParams: string, classDayId: string };
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -275,6 +277,12 @@ export function TenantRoutes() {
       <Screen
         name="classDayProfile"
         component={ClassDayProfile}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="updateClassDayStatus"
+        component={UpdateClassDayStatus}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

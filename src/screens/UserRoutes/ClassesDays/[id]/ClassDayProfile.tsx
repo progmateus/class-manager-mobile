@@ -5,18 +5,19 @@ import { StudentItem } from "@components/Items/StudentItem";
 import { Info } from "@components/ClassPage/Info";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { GetClassDayService } from "src/services/classDaysService";
 import { CreatebookingService, DeleteBookingService } from "src/services/bookingsService";
 import { useAuth } from "@hooks/useAuth";
 import { Viewcontainer } from "@components/ViewContainer";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { orderBy } from "lodash";
-import Animated, { LinearTransition } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ClassDayProfileSkeleton } from "@components/skeletons/screens/ClassDayProfile/ClassDayProfileSkeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HasRole } from "@utils/HasRole";
+import { EClassDayStatus } from "src/enums/EClassDayStatus";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -26,9 +27,9 @@ type RouteParamsProps = {
 export function ClassDayProfile() {
 
   const { tenant } = useAuth()
-  const [isLoadingAction, setIsLoadingAction] = useState(false)
-  const { user } = useAuth()
-  const navigation = useNavigation<UserNavigatorRoutesProps>();
+  const { user, authenticationType } = useAuth()
+  const userNavigation = useNavigation<UserNavigatorRoutesProps>();
+  const tenantNavigation = useNavigation<UserNavigatorRoutesProps>();
 
   const route = useRoute()
 
@@ -86,10 +87,18 @@ export function ClassDayProfile() {
 
 
   function handleClickUpdateStatus() {
-    navigation.navigate('updateClassDayStatus', {
-      tenantIdParams: tenantId,
-      classDayId
-    });
+    if (authenticationType == "user") {
+      userNavigation.navigate('updateClassDayStatus', {
+        tenantIdParams: tenantId,
+        classDayId
+      });
+    } else {
+      tenantNavigation.navigate('updateClassDayStatus', {
+        tenantIdParams: tenantId,
+        classDayId
+      });
+    }
+
   }
 
   const isTenantAdminOrTeacher = useMemo(() => {
@@ -127,22 +136,26 @@ export function ClassDayProfile() {
                 </Animated.FlatList>
               </View>
 
-              <VStack space={4} px={4} mt={4}>
-                {
-                  alreadyBooked ? (
-                    <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={() => cancelBookMutate()} variant="outline" color="brand.600" isLoading={cancelIsPending} />
-                  ) : (
-                    <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={() => createBookMutate()} isLoading={createIsPending} />
-                  )
-                }
-                {
-                  isTenantAdminOrTeacher && (
-                    <>
-                      <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
-                    </>
-                  )
-                }
-              </VStack>
+              {
+                classDay.status === EClassDayStatus.PENDING && (
+                  <VStack space={4} px={4} mt={4}>
+                    {
+                      alreadyBooked ? (
+                        <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={() => cancelBookMutate()} variant="outline" color="brand.600" isLoading={cancelIsPending} />
+                      ) : (
+                        <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={() => createBookMutate()} isLoading={createIsPending} />
+                      )
+                    }
+                    {
+                      isTenantAdminOrTeacher && (
+                        <>
+                          <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
+                        </>
+                      )
+                    }
+                  </VStack>
+                )
+              }
             </Viewcontainer>
           )
       }

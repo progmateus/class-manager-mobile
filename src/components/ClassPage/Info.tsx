@@ -6,6 +6,8 @@ import PersonSVG from "@assets/person-outline.svg"
 import { TouchableOpacity } from "react-native";
 import dayjs from "dayjs"
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO"
+import { Cloud } from "phosphor-react-native"
+import { EClassDayStatus } from "src/enums/EClassDayStatus"
 
 interface IProps {
   classDay: ICLassDayDTO
@@ -27,6 +29,9 @@ export function Info({ classDay }: IProps) {
       timeZone: 'America/Sao_Paulo',
     }).format(dayjs(date, 'YYYY-MM-DD:hh:mm').toDate())
   };
+
+  const status = classDay.status == EClassDayStatus.PENDING ? 'Pendente' : classDay.status == EClassDayStatus.CANCELED ? 'Cancelada' : 'Concluída'
+  const color = classDay.status == EClassDayStatus.PENDING ? 'warning.400' : classDay.status == EClassDayStatus.CANCELED ? 'red.500' : 'green.600'
 
   return (
     <VStack space={2}>
@@ -50,6 +55,15 @@ export function Info({ classDay }: IProps) {
       <HStack alignItems="center" space={1}>
         <PersonSVG width={24} height={24} />
         <Text fontSize="sm"> {classDay.class?.teachersClasses[0]?.user?.name ?? 'Não informado'} </Text>
+      </HStack>
+
+      <HStack alignItems="center" space={1}>
+        <Cloud size={24} />
+        <Text
+          fontSize="sm"
+          color={classDay.status == EClassDayStatus.PENDING ? 'warning.400' : classDay.status == EClassDayStatus.CANCELED ? 'red.500' : 'green.600'}>
+          {status}
+        </Text>
       </HStack>
     </VStack>
   )

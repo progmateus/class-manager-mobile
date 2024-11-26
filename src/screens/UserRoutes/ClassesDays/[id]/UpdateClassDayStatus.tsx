@@ -1,13 +1,16 @@
 import { PageHeader } from "@components/PageHeader";
-import { Text, TextArea, VStack, View } from "native-base";
+import { Text, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UpdateClassDayStatusService } from "src/services/classDaysService";
-import { fireSuccesToast } from "@utils/HelperNotifications";
+import { fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useAuth } from "@hooks/useAuth";
+import { TextArea } from "@components/form/TextArea";
+import { ValidationError } from "@utils/errors/ValidationError";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 type RouteParamsProps = {
@@ -25,26 +28,26 @@ export function UpdateClassDayStatus() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
 
+  const queryClient = useQueryClient();
 
-  const handleCancelClassDay = () => {
-    setIsLoading(true)
-    UpdateClassDayStatusService(tenantId, classDayId, EClassDayStatus.CANCELED, observation).then(({ data }) => {
-      fireSuccesToast('Aula cancelada')
-      navigation.navigate('classDayProfile', {
-        classDayId,
-        tenantIdParams: tenantId
-      })
-    }).catch((err) => {
-      console.log(err)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }
 
-  const handleConfirmClassDay = () => {
-    setIsLoading(true)
+  const handleUpdateClassDayStatus = (status: EClassDayStatus) => {
+
+    if (observation.length > 40) {
+      fireWarningToast('A observação seve conter no máximo 40 caracteres')
+      return
+    }
     UpdateClassDayStatusService(tenantId, classDayId, EClassDayStatus.CONCLUDED, observation).then(({ data }) => {
-      fireSuccesToast('Aula confirmada')
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-day-profile', tenantId, classDayId]
+      })
+      if (status == EClassDayStatus.CONCLUDED) {
+        fireSuccesToast('Aula confirmada')
+      }
+
+      if (status == EClassDayStatus.CANCELED) {
+        fireInfoToast('Aula cancelada')
+      }
       navigation.navigate('classDayProfile', {
         classDayId,
         tenantIdParams: tenantId
@@ -61,12 +64,11 @@ export function UpdateClassDayStatus() {
       <PageHeader title="Atualizar status" />
       <VStack justifyContent="space-between" px={4} py={8} flex={1}>
         <View>
-          <Text fontSize="sm" fontWeight="medium" mb={2} color="coolGray.700"> Observação: </Text>
-          <TextArea autoCompleteType={false} value={observation} onChangeText={setObservation} h={24} px={2} fontSize="sm" variant="outline" color="coolGray.800" />
+          <TextArea label="Observação:" value={observation} onChangeText={setObservation} h={24} px={2} fontSize="sm" variant="outline" color="coolGray.800" />
         </View>
         <VStack space={4}>
-          <Button title="CONFIRMAR AULA" onPress={handleConfirmClassDay} isLoading={isLoading}> </Button>
-          <Button title="CANCELAR AULA" variant="outline" onPress={handleCancelClassDay} color="danger.500" isLoading={isLoading}> </Button>
+          <Button title="CONFIRMAR AULA" h={10} fontSize="xs" rounded="md" onPress={() => handleUpdateClassDayStatus(EClassDayStatus.CONCLUDED)} isLoading={isLoading}> </Button>
+          <Button title="CANCELAR AULA" h={10} fontSize="xs" rounded="md" variant="outline" onPress={() => handleUpdateClassDayStatus(EClassDayStatus.CANCELED)} color="danger.500" isLoading={isLoading}> </Button>
         </VStack>
       </VStack>
     </View >

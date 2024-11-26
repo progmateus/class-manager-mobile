@@ -17,6 +17,8 @@ import Animated from "react-native-reanimated";
 import { orderBy } from "lodash";
 import { ClassDayItemSkeleton } from "@components/skeletons/Items/ClassDayItemSkeleton";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { THEME } from "src/theme";
+import { EClassDayStatus } from "src/enums/EClassDayStatus";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -35,6 +37,8 @@ export function ClassesDaysList() {
   const params = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id || params?.tenantIdParams || null
+
+  const { colors } = THEME;
 
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<ICLassDayDTO[]>({
@@ -107,6 +111,11 @@ export function ClassesDaysList() {
     tenantNavigation.navigate('createClassDay')
   }
 
+
+  const getClassDayStatusColor = (item: ICLassDayDTO) => {
+    return item.status == EClassDayStatus.PENDING ? colors.coolGray['700'] : item.status == EClassDayStatus.CANCELED ? colors.red['500'] : colors.green['500']
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Aulas" rightIcon={tenant.id ? Plus : null} rightIconColor="brand.500" rightAction={() => createClassDay()} />
@@ -166,10 +175,11 @@ export function ClassesDaysList() {
                       <TouchableOpacity key={item.id} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
                         <HStack p={4} space={6} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
                           <VStack space={2} alignItems="center" justifyContent="center">
-                            <Clock size={20} style={{
-                              marginLeft: 4
-                            }} />
-                            <Text fontWeight="bold"> {getHours(item.date)}</Text>
+                            <Clock size={20} color={getClassDayStatusColor(item)}
+                              style={{
+                                marginLeft: 4
+                              }} />
+                            <Text fontWeight="bold" color={getClassDayStatusColor(item)}> {getHours(item.date)}</Text>
                           </VStack>
                           <VStack space={0.5} flex={1}>
                             <Heading fontSize="sm">{item.class?.tenant?.name}</Heading>
