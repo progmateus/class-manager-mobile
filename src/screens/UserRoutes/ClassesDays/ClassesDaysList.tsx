@@ -41,7 +41,7 @@ export function ClassesDaysList() {
 
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<ICLassDayDTO[]>({
-    queryKey: ['get-class-days', String(selectedWeekDay)],
+    queryKey: ['get-classes-days', String(selectedWeekDay)],
     queryFn: ({ pageParam }) => {
       return ListClassDaysService(selectedWeekDay, { page: Number(pageParam), search: "" }).then(({ data }) => {
         return data.data

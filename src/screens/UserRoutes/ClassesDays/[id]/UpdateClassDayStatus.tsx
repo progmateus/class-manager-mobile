@@ -41,6 +41,9 @@ export function UpdateClassDayStatus() {
       queryClient.invalidateQueries({
         queryKey: ['get-class-day-profile', tenantId, classDayId]
       })
+      queryClient.invalidateQueries({
+        queryKey: ['get-classes-days']
+      })
       if (status == EClassDayStatus.CONCLUDED) {
         fireSuccesToast('Aula confirmada')
       }
