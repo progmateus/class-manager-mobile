@@ -24,6 +24,7 @@ export function Profile() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
   const { user, signOut } = useAuth()
   const { authenticateTenant } = useAuth()
+  const hasSubscriptions = user.subscriptions && user.subscriptions.length > 0;
 
 
   function getUserTenantOwners(): IUsersRolesDTO[] {
@@ -52,29 +53,33 @@ export function Profile() {
           </VStack>
         </HStack>
 
-        <Text px={4} mt={8} mb={4}> Minhas inscrições</Text>
+        {
+          user.subscriptions && user.subscriptions.length > 0 && (
+            <>
+              <Text px={4} mt={8} mb={4}> Minhas inscrições</Text>
 
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <HStack space={4} px={4} >
-            {
-              user.subscriptions && user.subscriptions.length > 0 && (
-                user.subscriptions.map((subscription) => {
-                  return (
-                    <SubscriptionOption key={subscription.id} subscription={subscription} />
-                  )
-                })
-              )
-            }
-          </HStack>
-        </ScrollView>
-        <View mt={8} pb="8">
-          <MenuOption icon={<SettingsSVG width={22} height={22} />} title="Configurar Conta" onPress={() => navigation.navigate('updateUser')} />
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                <HStack space={4} px={4} >
+                  {
+                    user.subscriptions.map((subscription) => {
+                      return (
+                        <SubscriptionOption key={subscription.id} subscription={subscription} />
+                      )
+                    })
+                  }
+
+                </HStack>
+              </ScrollView>
+            </>
+          )
+        }
+
+        <View pb="8" mt={!hasSubscriptions ? '16' : 8}>
           <MenuOption icon={<CardSVG width={22} height={22} />} title="Dados Pessoais" onPress={() => navigation.navigate('updateUser')} />
           <MenuOption icon={<ShieldSVG width={22} height={22} />} title="Alterar Senha" onPress={() => navigation.navigate('updatePassword')} />
-          <MenuOption icon={<MoneySVG width={22} height={22} />} title="Cobranças" onPress={() => navigation.navigate('updateUser')} />
           <MenuOption icon={<HistorySVG width={22} height={22} />} title="Histórico de Aulas" onPress={() => navigation.navigate('bookingsHistory', {})} />
           <MenuOption icon={<SubscriptionsSVG width={22} height={22} />} title="Gerenciar Inscrições" onPress={() => navigation.navigate('updateUser')} />
-          <MenuOption icon={<ArrowsLeftRight />} title="Alterar conta" onPress={() => setIsOpen(true)} />
+          <MenuOption icon={<ArrowsLeftRight />} title="Empresas" onPress={() => setIsOpen(true)} />
           <MenuOption icon={<LogoutSVG width={22} height={22} />} title="Sair" onPress={signOut} />
         </View>
 
