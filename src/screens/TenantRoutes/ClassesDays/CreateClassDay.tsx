@@ -2,7 +2,7 @@ import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { IClassDTO } from "@dtos/classes/IClassDTO";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { HStack, Select, Text, useTheme, View, VStack } from "native-base";
 import { Check } from "phosphor-react-native";
 import { useCallback, useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { useAuth } from "@hooks/useAuth";
 import { InputMask } from "@components/form/InputMask";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -36,7 +37,7 @@ type createclassDayProps = z.infer<typeof createClassDaySchema>
 export function CreateClassDay() {
   const [classes, setClasses] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
-  const { sizes, colors } = useTheme();
+  const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
   const { tenant } = useAuth()
   const tenantId = tenant?.id
@@ -64,9 +65,13 @@ export function CreateClassDay() {
 
     const fullDate = dayjs(`${date} ${hourStart}`, "DD/MM/YYYY HH:mm").toISOString();
 
-    CreateClassDayService(tenantId, hourStart, hourEnd, fullDate, classId).then(() => {
+    CreateClassDayService(tenantId, hourStart, hourEnd, fullDate, classId).then(({ data }) => {
       fireSuccesToast('Aula criada com sucesso!')
       reset(defaultValues)
+      navigation.navigate('classDayProfile', {
+        classDayId: data.data.id,
+        tenantIdParams: tenantId
+      })
     }).catch((err) => {
       console.log(err)
       fireErrorToast('Ocorreu um erro')

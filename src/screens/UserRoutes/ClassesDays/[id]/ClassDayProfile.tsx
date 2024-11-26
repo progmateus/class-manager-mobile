@@ -122,7 +122,7 @@ export function ClassDayProfile() {
                     <StudentItem key={item.id} user={item.user} index={index} />
                   )}
                   ItemSeparatorComponent={() => <View style={{ height: 18 }} />}
-                  ListEmptyComponent={<Text fontFamily="body" textAlign="center" mt={4}> Nenhum aluno agendado </Text>}
+                  ListEmptyComponent={<Text fontFamily="body" textAlign="center" mt={8}> Nenhuma presença confirmada </Text>}
                 >
                 </Animated.FlatList>
               </View>

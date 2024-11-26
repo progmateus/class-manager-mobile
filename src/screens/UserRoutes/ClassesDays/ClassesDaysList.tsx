@@ -27,7 +27,7 @@ const TouchableOpacityAnimated = Animated.createAnimatedComponent(TouchableOpaci
 
 export function ClassesDaysList() {
 
-  const navigation = useNavigation<UserNavigatorRoutesProps>();
+  const userNavigation = useNavigation<UserNavigatorRoutesProps>();
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>();
 
   const route = useRoute()
@@ -75,7 +75,7 @@ export function ClassesDaysList() {
   ]
 
   function handleClickClassDay(classDayId: string, tenantId: string) {
-    navigation.navigate('classDayProfile', {
+    userNavigation.navigate('classDayProfile', {
       tenantIdParams: tenantId,
       classDayId
     });
