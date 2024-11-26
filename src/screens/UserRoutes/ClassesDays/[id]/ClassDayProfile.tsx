@@ -2,7 +2,6 @@ import { PageHeader } from "@components/PageHeader";
 import { FlatList, Heading, Text, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { StudentItem } from "@components/Items/StudentItem";
-import { Info } from "@components/ClassPage/Info";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -18,6 +17,7 @@ import { ClassDayProfileSkeleton } from "@components/skeletons/screens/ClassDayP
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HasRole } from "@utils/HasRole";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
+import { ClassDayHeader } from "@components/ClassDayPage/Info";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -120,7 +120,7 @@ export function ClassDayProfile() {
           :
           (
             <Viewcontainer>
-              <Info classDay={classDay} />
+              <ClassDayHeader classDay={classDay} />
               <View flex={1} px={2}>
                 <Heading fontFamily="heading" fontSize="md" mt={8} mb={4}> Lista de presença</Heading>
                 <Animated.FlatList

@@ -13,11 +13,7 @@ interface IProps {
   classDay: ICLassDayDTO
 }
 
-interface ITeacher {
-  name: string
-}
-
-export function Info({ classDay }: IProps) {
+export function ClassDayHeader({ classDay }: IProps) {
 
   const getDate = (date: Date) => {
     if (!date) return ""
@@ -31,7 +27,6 @@ export function Info({ classDay }: IProps) {
   };
 
   const status = classDay.status == EClassDayStatus.PENDING ? 'Pendente' : classDay.status == EClassDayStatus.CANCELED ? 'Cancelada' : 'Concluída'
-  const color = classDay.status == EClassDayStatus.PENDING ? 'warning.400' : classDay.status == EClassDayStatus.CANCELED ? 'red.500' : 'green.600'
 
   return (
     <VStack space={2}>
@@ -57,7 +52,7 @@ export function Info({ classDay }: IProps) {
         <Text fontSize="sm"> {classDay.class?.teachersClasses[0]?.user?.name ?? 'Não informado'} </Text>
       </HStack>
 
-      <HStack alignItems="center" space={1}>
+      <HStack alignItems="center" space={2}>
         <Cloud size={24} />
         <Text
           fontSize="sm"

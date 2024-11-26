@@ -19,6 +19,7 @@ import { ClassDayItemSkeleton } from "@components/skeletons/Items/ClassDayItemSk
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { THEME } from "src/theme";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
+import { ClassDayItem } from "@components/Items/ClassDayItem";
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -37,8 +38,6 @@ export function ClassesDaysList() {
   const params = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id || params?.tenantIdParams || null
-
-  const { colors } = THEME;
 
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<ICLassDayDTO[]>({
@@ -99,21 +98,8 @@ export function ClassesDaysList() {
     }).format(new Date(date))
   };
 
-  const getHours = (date: Date) => {
-    return new Intl.DateTimeFormat('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'America/Sao_Paulo',
-    }).format(new Date(date))
-  };
-
   const createClassDay = () => {
     tenantNavigation.navigate('createClassDay')
-  }
-
-
-  const getClassDayStatusColor = (item: ICLassDayDTO) => {
-    return item.status == EClassDayStatus.PENDING ? colors.coolGray['700'] : item.status == EClassDayStatus.CANCELED ? colors.red['500'] : colors.green['500']
   }
 
   return (
@@ -172,52 +158,7 @@ export function ClassesDaysList() {
                     refreshing={isLoading}
                     keyExtractor={classDay => classDay.id}
                     renderItem={({ item, index }) => (
-                      <TouchableOpacity key={item.id} onPress={() => handleClickClassDay(item.id, item.class.tenantId)}>
-                        <HStack p={4} space={6} alignItems="center" borderWidth={0.4} borderColor="coolGray.400" rounded="lg">
-                          <VStack space={2} alignItems="center" justifyContent="center">
-                            <Clock size={20} color={getClassDayStatusColor(item)}
-                              style={{
-                                marginLeft: 4
-                              }} />
-                            <Text fontWeight="bold" color={getClassDayStatusColor(item)}> {getHours(item.date)}</Text>
-                          </VStack>
-                          <VStack space={0.5} flex={1}>
-                            <Heading fontSize="sm">{item.class?.tenant?.name}</Heading>
-                            <Text fontSize="xs" fontWeight="light">{item.class.name}</Text>
-                            <Text fontSize="xs" fontWeight="light" color="coolGray.500">Não informado</Text>
-                          </VStack>
-                          <HStack>
-                            {
-                              item.bookings && item.bookings.length > 0 && (
-                                item.bookings.map((booking, index) => {
-                                  return (
-                                    index <= 2 && (
-                                      <View ml={-5} key={booking.id}>
-                                        <Avatar
-                                          rounded="md"
-                                          key={booking.id}
-                                          w={9}
-                                          h={9}
-                                          alt="image profile"
-                                          src={booking.user.avatar}
-                                          username={booking.user.username}
-                                        />
-                                      </View>
-                                    )
-                                  )
-                                })
-                              )
-                            }
-                            {
-                              item.bookings && item.bookings.length > 3 && (
-                                <View w={9} h={9} backgroundColor="brand.600" rounded="md" ml={-5} alignItems="center" justifyContent="center">
-                                  <Text color="coolGray.100" fontSize="xs"> +{item.bookings.length - 3}</Text>
-                                </View>
-                              )
-                            }
-                          </HStack>
-                        </HStack>
-                      </TouchableOpacity>
+                      <ClassDayItem classDay={item} />
                     )}
                     ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                     ListFooterComponent={
