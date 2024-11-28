@@ -1,5 +1,5 @@
 import { PageHeader } from "@components/PageHeader";
-import { Text, VStack, View } from "native-base";
+import { Modal, Text, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -9,7 +9,6 @@ import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useAuth } from "@hooks/useAuth";
 import { TextArea } from "@components/form/TextArea";
-import { ValidationError } from "@utils/errors/ValidationError";
 import { useQueryClient } from "@tanstack/react-query";
 
 
@@ -22,6 +21,8 @@ export function UpdateClassDayStatus() {
   const route = useRoute()
   const [observation, setObservation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [status, setStatus] = useState(EClassDayStatus.CONCLUDED)
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
   const { classDayId, tenantIdParams } = route.params as RouteParamsProps;
@@ -31,7 +32,7 @@ export function UpdateClassDayStatus() {
   const queryClient = useQueryClient();
 
 
-  const handleUpdateClassDayStatus = (status: EClassDayStatus) => {
+  const handleUpdateClassDayStatus = () => {
 
     if (observation.length > 40) {
       fireWarningToast('A observação seve conter no máximo 40 caracteres')
@@ -45,7 +46,7 @@ export function UpdateClassDayStatus() {
         queryKey: ['get-classes-days']
       })
       if (status == EClassDayStatus.CONCLUDED) {
-        fireSuccesToast('Aula confirmada')
+        fireSuccesToast('Aula concluida')
       }
 
       if (status == EClassDayStatus.CANCELED) {
@@ -62,6 +63,11 @@ export function UpdateClassDayStatus() {
     })
   }
 
+  const handleSelectNewStatus = (status: EClassDayStatus) => {
+    setStatus(status)
+    setIsModalOpen(true)
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Atualizar status" />
@@ -70,10 +76,35 @@ export function UpdateClassDayStatus() {
           <TextArea label="Observação:" value={observation} onChangeText={setObservation} h={24} px={2} fontSize="sm" variant="outline" color="coolGray.800" />
         </View>
         <VStack space={4}>
-          <Button title="CONFIRMAR AULA" h={10} fontSize="xs" rounded="md" onPress={() => handleUpdateClassDayStatus(EClassDayStatus.CONCLUDED)} isLoading={isLoading}> </Button>
-          <Button title="CANCELAR AULA" h={10} fontSize="xs" rounded="md" variant="outline" onPress={() => handleUpdateClassDayStatus(EClassDayStatus.CANCELED)} color="danger.500" isLoading={isLoading}> </Button>
+          <Button title="CONCLUIR AULA" h={10} fontSize="xs" rounded="md" onPress={() => handleSelectNewStatus(EClassDayStatus.CONCLUDED)} isLoading={isLoading}> </Button>
+          <Button title="CANCELAR AULA" h={10} fontSize="xs" rounded="md" variant="outline" onPress={() => handleSelectNewStatus(EClassDayStatus.CANCELED)} color="danger.500" isLoading={isLoading}> </Button>
         </VStack>
       </VStack>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} safeAreaTop={true}>
+        <Modal.Content maxWidth="350">
+          <Modal.Header>
+            <Text fontFamily="heading"> {status == EClassDayStatus.CONCLUDED ? 'Concluir' : 'Cancelar'} Aula </Text>
+          </Modal.Header>
+          <Modal.Body justifyContent="center" py={6}>
+            <Text fontFamily="body" color="coolGray.600">
+              Deseja atualizar o status da aula? Depois de realizada esta ação não poderá ser desfeita.
+            </Text>
+          </Modal.Body>
+          <Modal.Footer>
+            <VStack flex={1}>
+              {
+                status == EClassDayStatus.CONCLUDED ? (
+                  <Button title="Concluir" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
+                ) : (
+                  <Button title="Cancelar" variant="outline" color="red.500" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
+                )
+              }
+              <Button title="Voltar" variant="unstyled" onPress={() => setIsModalOpen(false)} />
+            </VStack>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
     </View >
   )
 }

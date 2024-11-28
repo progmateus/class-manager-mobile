@@ -2,16 +2,15 @@ import { Button as NativeBaseButton, IButtonProps, Text, Spinner } from "native-
 
 type Props = IButtonProps & {
   title: string;
-  variant?: "solid" | "outline";
+  variant?: "solid" | "outline" | "unstyled";
   fontSize?: string;
 }
 
 export function Button({ title, variant = "solid", fontSize = "sm", ...rest }: Props) {
   const { color, bg, bgColor, backgroundColor, background } = rest
   const useBgProp = bg || bgColor || backgroundColor || background;
-  const definedColor = color ? color : variant === "outline" ? "brand.600" : "white";
-  const definedBg = useBgProp ? useBgProp : variant === "outline" ? "transparent" : "brand.600";
-  const { isLoading } = rest
+  const definedColor = color ? color : variant === "outline" || variant === "unstyled" ? "brand.600" : "white";
+  const definedBg = variant == "unstyled" ? 'transparent' : useBgProp ? useBgProp : variant === "outline" ? "transparent" : "brand.600";
   return (
     <NativeBaseButton
       w="full"
