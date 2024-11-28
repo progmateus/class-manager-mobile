@@ -16,6 +16,7 @@ import { GetSubscriptionProfileService, UpdateSubscriptionService } from "src/se
 import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/SubscriptionProfile"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
+import { TouchableOpacity } from "react-native"
 
 
 type RouteParamsProps = {
@@ -99,6 +100,30 @@ export function SubscriptionProfile() {
           : (
             <ScrollContainer>
               <VStack space={8}>
+                {
+                  subscription.status == ESubscriptionStatus.INCOMPLETE && (
+                    <TouchableOpacity>
+                      <View px={4} py={3} bgColor="yellow.400">
+                        <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                          Pague a primeira cobrança em até 24 horas após a criação
+                          da assinatura para que ela seja ativada
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )
+                }
+
+                {
+                  subscription.status == ESubscriptionStatus.INCOMPLETE_EXPIRED && (
+                    <TouchableOpacity onPress={handleSubscribe}>
+                      <View px={4} py={3} bgColor="red.400">
+                        <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                          Sua assinatura expirou. Crie uma nova.
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )
+                }
                 <HStack justifyContent="space-between">
                   <VStack space={1}>
                     <HStack alignItems="center" space={1}>
@@ -155,11 +180,11 @@ export function SubscriptionProfile() {
                   <HStack borderWidth={0.8} rounded="lg" px={4} py={1} alignItems="center" justifyContent="space-between" flex={1}>
                     <VStack flex={1}>
                       <Text fontSize="xs" color="coolGray.400">PAGAMENTO</Text>
-                      <Text fontSize="lg" color={transformInvoiceColor(subscription.status)}>
-                        {transformInvoiceStatus(subscription.invoices[0].status)}
+                      <Text fontSize="lg" color={transformInvoiceColor(subscription.invoices[0]?.status)}>
+                        {transformInvoiceStatus(subscription.invoices[0]?.status)}
                       </Text>
                     </VStack>
-                    <Icon as={CheckCircle} color={transformInvoiceColor(subscription.status)} />
+                    <Icon as={CheckCircle} color={transformInvoiceColor(subscription.invoices[0]?.status)} />
                   </HStack>
                 </HStack>
 

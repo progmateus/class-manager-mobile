@@ -160,11 +160,11 @@ export function SubscriptionProfile() {
                   <HStack borderWidth={0.8} rounded="lg" px={4} py={1} alignItems="center" justifyContent="space-between" flex={1}>
                     <VStack flex={1}>
                       <Text fontSize="xs" color="coolGray.400">PAGAMENTO</Text>
-                      <Text fontSize="lg" color={transformInvoiceColor(subscription.status)}>
+                      <Text fontSize="lg" color={transformInvoiceColor(subscription.invoices[0]?.status)}>
                         {transformInvoiceStatus(payments[0].status)}
                       </Text>
                     </VStack>
-                    <Icon as={CheckCircle} color={transformInvoiceColor(subscription.status)} />
+                    <Icon as={CheckCircle} color={transformInvoiceColor(subscription.invoices[0]?.status)} />
                   </HStack>
                 </HStack>
 
