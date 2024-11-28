@@ -21,7 +21,7 @@ import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 
 
 type RouteParamsProps = {
-  tenantIdParams: string;
+  tenantIdParams?: string;
 }
 
 export function TenantProfile() {
@@ -64,7 +64,7 @@ export function TenantProfile() {
 
   const handleSubscribe = () => {
     navigation.navigate('createSubscription', {
-      tenantIdParams
+      tenantIdParams: tenantId
     })
   }
 

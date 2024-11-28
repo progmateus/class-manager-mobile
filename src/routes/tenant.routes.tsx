@@ -32,6 +32,7 @@ import { CreateClassDay } from "@screens/TenantRoutes/ClassesDays/CreateClassDay
 import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
 import { ClassDayProfile } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayProfile";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
+import { useAuth } from "@hooks/useAuth";
 
 
 export type TenantRoutes = {
@@ -40,7 +41,7 @@ export type TenantRoutes = {
   students: { tenantIdParams: string };
   classes: { tenantIdParams: string; };
   classProfile: { classId: string, tenantIdParams: string };
-  tenantProfile: { tenantIdParams: string };
+  tenantProfile: { tenantIdParams?: string };
   dashboard: undefined;
   timeTable: { timeTableId: string };
   timesTablesList: undefined;
@@ -68,6 +69,7 @@ export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 export function TenantRoutes() {
   const { sizes, colors } = useTheme();
   const { Navigator, Screen } = createBottomTabNavigator<TenantRoutes>();
+  const { tenant } = useAuth();
 
   const iconSize = sizes[6]
   return (

@@ -99,7 +99,7 @@ export function Profile() {
                   <HStack alignItems="center" justifyContent="center" space={4}>
                     <Avatar
                       size="10"
-                      src={item.tenant.avatar}
+                      src={item.tenant?.avatar}
                     />
                     <Text fontSize="16" color="gray.700">
                       {item.tenant?.name}
