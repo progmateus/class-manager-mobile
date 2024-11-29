@@ -40,7 +40,7 @@ export function UpdateClassTimeTable() {
 
   const loadTimesTables = async () => {
     try {
-      const { data } = await ListTimesTablesService(tenant.id)
+      const { data } = await ListTimesTablesService(tenant.id, {})
       return data.data
     } catch (err) {
       console.log(err)

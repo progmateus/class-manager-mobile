@@ -39,7 +39,7 @@ export type TenantRoutes = {
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
   createSubscription: undefined,
   students: { tenantIdParams: string };
-  classes: { tenantIdParams: string; };
+  classes: undefined;
   classProfile: { classId: string, tenantIdParams: string };
   tenantProfile: { tenantIdParams?: string };
   dashboard: undefined;
@@ -285,6 +285,12 @@ export function TenantRoutes() {
       <Screen
         name="updateClassDayStatus"
         component={UpdateClassDayStatus}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="classes"
+        component={ClassesList}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

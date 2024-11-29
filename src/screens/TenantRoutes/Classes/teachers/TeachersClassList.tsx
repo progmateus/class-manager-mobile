@@ -30,7 +30,7 @@ export function TeachersClassList() {
 
   const loadTeachersClass = async () => {
     try {
-      const { data } = await ListTeachersByClassService(tenantId, classId)
+      const { data } = await ListTeachersByClassService(tenantId, classId, {})
       return data.data
     } catch (err) {
       console.log(err)

@@ -5,7 +5,7 @@ import { ClassItemSkeleton } from "@components/skeletons/Items/ClassItemSkeleton
 import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/classes/IClassDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { FlatList, Text, View, VStack } from "native-base"
@@ -18,8 +18,7 @@ import { ListClassesService } from "src/services/classesService"
 export function ClassesList() {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const { tenant } = useAuth()
-  const tenantId = tenant?.id
-
+  const tenantId = tenant?.id;
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IClassDTO[]>({
     queryKey: ['get-classes', tenantId],

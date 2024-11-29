@@ -72,7 +72,7 @@ export function ClassProfile() {
                 <HStack mt={4}>
                   <ClassInfoItem title="CONCLUÍDAS" info={infoProfile?.classesDaysOfTheMonth?.filter((cd) => cd.status === EClassDayStatus.CONCLUDED).length || 0} />
                   <ClassInfoItem title="PENDENTES" info={infoProfile?.classesDaysOfTheMonth?.filter((cd) => cd.status === EClassDayStatus.PENDING).length || 0} />
-                  <ClassInfoItem title="CANCLEDAS" info={infoProfile?.classesDaysOfTheMonth?.filter((cd) => cd.status === EClassDayStatus.CANCELED).length || 0} />
+                  <ClassInfoItem title="CANCELADAS" info={infoProfile?.classesDaysOfTheMonth?.filter((cd) => cd.status === EClassDayStatus.CANCELED).length || 0} />
                 </HStack>
               </View>
 
