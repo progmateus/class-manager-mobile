@@ -47,8 +47,8 @@ export function TeachersList() {
     }
   }
 
-  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IUsersRolesDTO[]>({
-    queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())],
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<IUsersRolesDTO[]>({
+    queryKey: ['get-tenant-teachers', tenantId, roleName],
     queryFn: ({ pageParam }) => loadTeachers(Number(pageParam)),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam: any) => {
