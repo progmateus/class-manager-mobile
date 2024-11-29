@@ -96,6 +96,7 @@ export function CreateSubscription() {
         ...user,
         subscriptions: [...user.subscriptions, data.data]
       })
+      reset(defaultValues)
       fireSuccesToast('Assinatura realizada com sucesso!')
       navigation.navigate('subscriptionProfile', { subscriptionId: data.data.id, tenantIdParams: tenantId })
     }).catch((err) => {

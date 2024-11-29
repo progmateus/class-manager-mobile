@@ -146,7 +146,7 @@ export function CreateSubscription() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Realizar assinatura" rightIcon={Check} rightAction={handleSubmit(handleCreateSubscription)} />
+      <PageHeader title="Realizar assinatura" />
       <ScrollContainer>
         <VStack space={6} mt={2}>
           <Text fontSize="sm" fontWeight="medium" color="coolGray.700"> Selecione o plano: </Text>

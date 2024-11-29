@@ -4,7 +4,8 @@ import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { useAuth } from "@hooks/useAuth";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { HStack, Text, View } from "native-base";
@@ -25,6 +26,8 @@ export function TimeTable() {
   const [isLoading, setIsLoading] = useState(false)
   const [timeTable, setTimeTable] = useState<ITimeTableDTO>({} as ITimeTableDTO)
   const [isActing, setIsActing] = useState(false)
+
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   useFocusEffect(useCallback(() => {
     loadTimeTable()
@@ -47,6 +50,7 @@ export function TimeTable() {
     setIsActing(true)
     UpdateTimeTableService(timeTable, tenant.id, timeTableId).then(() => {
       fireSuccesToast('Table de horários atualizada!')
+      navigation.navigate('timesTablesList')
     }).catch((err) => {
       console.log(err)
     }).finally(() => {

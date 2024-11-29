@@ -105,8 +105,7 @@ export function SubscriptionProfile() {
                     <TouchableOpacity>
                       <View px={4} py={3} bgColor="yellow.400">
                         <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                          Pague a primeira cobrança em até 24 horas após a criação
-                          da assinatura para que ela seja ativada
+                          Pague a primeira cobrança em até 24 horas para que a sua assinatura seja ativada.
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -118,7 +117,7 @@ export function SubscriptionProfile() {
                     <TouchableOpacity onPress={handleSubscribe}>
                       <View px={4} py={3} bgColor="red.400">
                         <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                          Sua assinatura expirou. Crie uma nova.
+                          Sua assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura
                         </Text>
                       </View>
                     </TouchableOpacity>
