@@ -17,13 +17,7 @@ import Animated from "react-native-reanimated";
 import { orderBy } from "lodash";
 import { ClassDayItemSkeleton } from "@components/skeletons/Items/ClassDayItemSkeleton";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
-import { THEME } from "src/theme";
-import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { ClassDayItem } from "@components/Items/ClassDayItem";
-
-type RouteParamsProps = {
-  tenantIdParams?: string;
-}
 
 const TouchableOpacityAnimated = Animated.createAnimatedComponent(TouchableOpacity)
 
@@ -33,17 +27,15 @@ export function ClassesDaysList() {
   const userNavigation = useNavigation<UserNavigatorRoutesProps>();
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>();
 
-  const route = useRoute()
   const [selectedWeekDay, setSelectedWeekDay] = useState(dayjs().toDate())
-  const params = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const tenantId = tenant?.id || params?.tenantIdParams || null
+  const tenantId = tenant?.id
 
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<ICLassDayDTO[]>({
     queryKey: ['get-classes-days', String(selectedWeekDay)],
     queryFn: ({ pageParam }) => {
-      return ListClassDaysService(selectedWeekDay, { page: Number(pageParam), search: "" }).then(({ data }) => {
+      return ListClassDaysService(selectedWeekDay, { page: Number(pageParam), search: "", tenantId }).then(({ data }) => {
         return data.data
       })
     },
