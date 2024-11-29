@@ -7,7 +7,7 @@ import { UpdateStudentClassService, UpdateTeacherClassService } from "src/servic
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { ListUsersRolesService } from "src/services/rolesService"
 
@@ -23,6 +23,8 @@ export function AddUserToClass() {
   const { tenantIdParams, classId, roleName } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
+
+  const queryClient = useQueryClient();
 
   const loadUsersRoles = async () => {
     try {
@@ -50,12 +52,18 @@ export function AddUserToClass() {
   const addStudent = (userId: string) => {
     UpdateStudentClassService(tenantId, userId, classId).then(() => {
       fireSuccesToast('Aluno adicionado com sucesso!')
+      queryClient.invalidateQueries({
+        queryKey: ['get-students-class']
+      })
     })
   }
 
   const addTeacher = (userId: string) => {
     UpdateTeacherClassService(tenantId, userId, classId).then(() => {
       fireSuccesToast('Professor adicionado com sucesso!')
+      queryClient.invalidateQueries({
+        queryKey: ['get-teachers-class']
+      })
     })
   }
 
@@ -74,17 +82,15 @@ export function AddUserToClass() {
                   usersRoles && usersRoles.length ? (
                     usersRoles.map((userRole) => {
                       return (
-                        <HStack>
-                          <UserItem.Root key={userRole.id} onPress={() => handleAddUser(userRole.user.id)}>
-                            <UserItem.Avatar url={userRole.user.avatar ?? ""} alt="Foto de perfil" />
-                            <UserItem.Section>
-                              <UserItem.Content>
-                                <UserItem.Title title={`${userRole.user.firstName} ${userRole.user.lastName}`} />
-                                <UserItem.Caption caption={userRole.user.username} />
-                              </UserItem.Content>
-                            </UserItem.Section>
-                          </UserItem.Root>
-                        </HStack>
+                        <UserItem.Root key={userRole.id} onPress={() => handleAddUser(userRole.user.id)}>
+                          <UserItem.Avatar url={userRole.user.avatar ?? ""} alt="Foto de perfil" />
+                          <UserItem.Section>
+                            <UserItem.Content>
+                              <UserItem.Title title={`${userRole.user.firstName} ${userRole.user.lastName}`} />
+                              <UserItem.Caption caption={userRole.user.username} />
+                            </UserItem.Content>
+                          </UserItem.Section>
+                        </UserItem.Root>
                       )
                     })
                   )

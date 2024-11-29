@@ -1,6 +1,7 @@
 import { GenericItem } from "@components/Items/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
+import { UserItem } from "@components/Users/UserItem"
 import { Viewcontainer } from "@components/ViewContainer"
 import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
 import { useAuth } from "@hooks/useAuth"
@@ -103,15 +104,20 @@ export function StudentsClassList() {
                 data={results?.pages.map(page => page).flat()}
                 pb={20}
                 keyExtractor={student => student.id}
-                renderItem={({ item }) => (
-                  <TouchableOpacity key={item.user?.id} onLongPress={() => handleSelectStudent(item)}>
-                    <GenericItem.Root>
-                      <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do aluno" username={item.user?.username ?? ""} />
-                      <GenericItem.Content title={`${item.user?.firstName} ${item.user?.lastName}`} caption="@username" />
-                    </GenericItem.Root>
-                  </TouchableOpacity>
+                renderItem={({ item }) => (<>
+                  <UserItem.Root key={item.id} onLongPress={() => handleSelectStudent(item)}>
+                    <UserItem.Avatar url={item.user?.avatar ?? ""} alt="Foto de perfil do aluno " />
+                    <UserItem.Section>
+                      <UserItem.Content>
+                        <UserItem.Title title={`${item.user?.firstName} ${item.user?.lastName}`} />
+                        <UserItem.Caption caption={`@${item.user?.username}`} />
+                      </UserItem.Content>
+                    </UserItem.Section>
+                  </UserItem.Root>
+                </>
+
                 )}
-                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ItemSeparatorComponent={() => <View style={{ height: 28 }} />}
                 ListFooterComponent={
                   isFetchingNextPage ? <Loading /> : <></>
                 }
@@ -128,7 +134,7 @@ export function StudentsClassList() {
                 <Actionsheet.Content>
                   <Box w="100%" h={60} px={4} justifyContent="center">
                     <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                      {`${selectedStudent?.user?.name.firstName} ${selectedStudent?.user?.name.lastName}`}
+                      {`${selectedStudent?.user?.firstName} ${selectedStudent?.user?.lastName}`}
                     </Heading>
                   </Box>
                   <Actionsheet.Item onPress={() => removeStudentClassMutation.mutate()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
