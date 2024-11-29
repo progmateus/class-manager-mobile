@@ -57,17 +57,6 @@ export function ListTeachersByClassService(tenantId: string, classId: string, { 
   })
 }
 
-
-export function ListUsersByRoleNameService(tenantId: string, roleName: "student" | "teacher") {
-  return api({
-    url: `${tenantId}/users-roles`,
-    method: 'get',
-    params: {
-      roleName
-    }
-  })
-}
-
 export function UpdateStudentClassService(tenantId: string, userId: string, classId: string) {
   return api({
     url: `${tenantId}/students`,

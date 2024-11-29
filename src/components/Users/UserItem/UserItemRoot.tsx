@@ -11,7 +11,7 @@ type IUserItemRootProps = {
 export function UserItemRoot({ children, onPress, onLongPress }: IUserItemRootProps) {
   return (
     <TouchableOpacity onPress={onPress} onLongPress={onLongPress}>
-      <HStack w="full" rounded="lg" h={16} alignItems="center" px={4}>
+      <HStack w="full" rounded="lg" alignItems="center" px={4}>
         {children}
       </HStack>
     </TouchableOpacity>
