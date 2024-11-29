@@ -21,7 +21,7 @@ import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 
 
 type RouteParamsProps = {
-  tenantIdParams?: string;
+  tenantIdParams: string;
 }
 
 export function TenantProfile() {
@@ -41,9 +41,13 @@ export function TenantProfile() {
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
 
-  const { tenantIdParams } = route.params as RouteParamsProps;
-  const { tenant } = useAuth();
-  const tenantId = tenant?.id ?? tenantIdParams;
+  const { tenant, authenticationType } = useAuth();
+  let tenantId = tenant?.id;
+
+  if (authenticationType == "user") {
+    const { tenantIdParams } = route.params as RouteParamsProps;
+    tenantId = tenantIdParams;
+  }
 
   const { user } = useAuth()
   const { sizes } = THEME
