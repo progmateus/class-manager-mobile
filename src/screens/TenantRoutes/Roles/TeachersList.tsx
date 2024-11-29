@@ -5,7 +5,7 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { useRoute } from "@react-navigation/native"
-import { fireErrorToast, fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
+import { fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, FlatList, Heading, Icon, Modal, Text, View, VStack } from "native-base"
 import { MagnifyingGlass, Plus, TrashSimple } from "phosphor-react-native"
 import { useState } from "react"
@@ -15,7 +15,7 @@ import { GetUserByUsernameService } from "src/services/usersService"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
 import { Avatar } from "@components/Avatar/Avatar"
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
 
 type RouteParamsProps = {
@@ -106,7 +106,7 @@ export function TeachersList() {
     mutationFn: handleRemoveTeacher,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())]
+        queryKey: ['get-tenant-teachers', tenantId, roleName]
       })
     }
   })
@@ -116,7 +116,7 @@ export function TeachersList() {
     mutationFn: handleAddTeacher,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())]
+        queryKey: ['get-tenant-teachers', tenantId, roleName]
       })
     }
   })
