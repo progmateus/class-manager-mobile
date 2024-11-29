@@ -14,9 +14,12 @@ import { IApiResponse } from "@dtos/shared/IApiResponse";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { useAuth } from "@hooks/useAuth";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { InputMask } from "@components/form/InputMask";
 
 
 const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm
+const phoneRegex = /(\(?\d{2}\)?) ?(9{1})? ?(\d{4})-? ?(\d{4})/
+const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 
 const signUpSchema = z.object({
   firstname: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
@@ -24,7 +27,9 @@ const signUpSchema = z.object({
   email: z.string().email("E-mail inválido"),
   username: z.string({ required_error: "Campo obrigatório", }).regex(usernameRegex, "Nome de usuário inválido").trim(),
   password: z.string({ required_error: "Campo obrigatório", }),
-  document: z.string({ required_error: "Campo obrigatório", }).transform((val) => val.replaceAll('.', '').replaceAll('-', ''))
+  document: z.string({ required_error: "Campo obrigatório", }).regex(CPFRegex, "Telefone inválido").transform((val) => val.replaceAll(/\W/g, '').trim()),
+  phone: z.string({ required_error: "Campo obrigatório", }).regex(phoneRegex, "Telefone inválido").transform((val) => val.replaceAll(/\W/g, '').trim())
+
 });
 
 
@@ -44,7 +49,7 @@ export function SignUp() {
     navigation.navigate('signIn');
   }
 
-  const handleSignUp = ({ firstname, lastname, document, email, password, username }: signUpProps) => {
+  const handleSignUp = ({ firstname, lastname, document, email, password, username, phone }: signUpProps) => {
     if (isLoading) return
 
     if (!isValidCPF(document)) {
@@ -54,7 +59,7 @@ export function SignUp() {
 
     setIsLoading(true)
 
-    CreateUserService({ firstname, lastname, document, email, password, username }).then(({ data }) => {
+    CreateUserService({ firstname, lastname, document, email, password, username, phone }).then(({ data }) => {
       fireSuccesToast("Usuário criado")
       singIn(email, password)
       navigation.navigate('signIn');
@@ -75,6 +80,12 @@ export function SignUp() {
       if (data?.errors.find((e) => e.property == "Document.Number")) {
         setError("document", {
           message: "Documento inválido"
+        })
+      }
+
+      if (data?.errors.find((e) => e.property == "Phone")) {
+        setError("phone", {
+          message: "Telefone inválido"
         })
       }
     }).finally(() => {
@@ -101,7 +112,7 @@ export function SignUp() {
                 name="firstname"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Input placeholder="Nome" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.firstname?.message} />
+                  <Input placeholder="Nome" autoCapitalize="none" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.firstname?.message} />
                 )}
               />
 
@@ -109,16 +120,24 @@ export function SignUp() {
                 name="lastname"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Input placeholder="Sobrenome" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.lastname?.message} />
+                  <Input placeholder="Sobrenome" autoCapitalize="none" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.lastname?.message} />
                 )}
               />
             </HStack>
 
             <Controller
+              name="email"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input placeholder="E-mail" keyboardType="email-address" autoCapitalize="none" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.email?.message} />
+              )}
+            />
+
+            <Controller
               name="username"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input placeholder="Nome de usuário" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.username?.message} />
+                <Input placeholder="Nome de usuário" autoCapitalize="none" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.username?.message} />
               )}
             />
 
@@ -126,15 +145,23 @@ export function SignUp() {
               name="document"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input placeholder="CPF" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.document?.message} />
+                <InputMask
+                  placeholder="CPF"
+                  type="cpf"
+                  onChangeText={onChange} value={value} errorMessage={errors.document?.message}
+                />
               )}
             />
 
             <Controller
-              name="email"
+              name="phone"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input placeholder="E-mail" keyboardType="email-address" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.email?.message} />
+                <InputMask
+                  placeholder="Telefone"
+                  type="cel-phone"
+                  onChangeText={onChange} value={value} errorMessage={errors.phone?.message}
+                />
               )}
             />
 
@@ -142,7 +169,7 @@ export function SignUp() {
               name="password"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input placeholder="Senha" secureTextEntry onChangeText={onChange} value={value} errorMessage={errors.password?.message} />
+                <Input placeholder="Senha" variant="outline" secureTextEntry onChangeText={onChange} value={value} errorMessage={errors.password?.message} />
               )}
             />
           </VStack>
