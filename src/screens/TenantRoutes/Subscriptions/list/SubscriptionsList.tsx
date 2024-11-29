@@ -23,9 +23,11 @@ export function SubscriptionsList() {
     queryKey: ['get-subscriptions', tenantId],
     queryFn: ({ pageParam }) => loadSubscriptions(Number(pageParam)),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length === 0) return undefined
-      return allPages.length + 1
+    getNextPageParam: (lastPage, allPages, lastPageParam: any) => {
+      if (lastPage.length === 0) {
+        return undefined
+      }
+      return lastPageParam + 1
     }
   })
 

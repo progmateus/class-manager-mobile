@@ -51,14 +51,16 @@ export function TeachersList() {
     queryKey: ['get-tenant-teachers', tenantId, roleName, String(new Date())],
     queryFn: ({ pageParam }) => loadTeachers(Number(pageParam)),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length === 0) return undefined
-      return allPages.length + 1
+    getNextPageParam: (lastPage, allPages, lastPageParam: any) => {
+      if (lastPage.length === 0) {
+        return undefined
+      }
+      return lastPageParam + 1
     }
   })
 
   function onLoadMore() {
-    if (hasNextPage && !isLoading) {
+    if (hasNextPage && !isLoading && !isFetchingNextPage) {
       fetchNextPage();
     }
   }
@@ -159,8 +161,8 @@ export function TeachersList() {
                   renderItem={({ item }) => (
                     <TouchableOpacity key={item.user.id} onLongPress={() => handleSelectUserRole(item)}>
                       <GenericItem.Root>
-                        <GenericItem.Avatar url={item.user.avatar} alt="Foto de perfil do usuário" username={item.user.username} />
-                        <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption="@username" />
+                        <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do usuário" username={item.user.username} />
+                        <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption={item.user.username} />
                       </GenericItem.Root>
                     </TouchableOpacity>
                   )}
@@ -169,7 +171,7 @@ export function TeachersList() {
                     isFetchingNextPage ? <Loading /> : <></>
                   }
                   onEndReached={onLoadMore}
-                  onEndReachedThreshold={0.3}
+                  onEndReachedThreshold={0.5}
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   ListEmptyComponent={
