@@ -13,6 +13,7 @@ import { ListUsersRolesService } from "src/services/rolesService"
 import { ITeacherClassDTO } from "@dtos/classes/TeacherClassDTO"
 import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
 import { useEffect, useState } from "react"
+import { Check, Plus } from "phosphor-react-native"
 
 
 type RouteParamsProps = {
@@ -62,7 +63,7 @@ export function AddUserToClass() {
     queryFn: loadExistentUsersClass
   })
 
-  const handleAddUser = () => {
+  const handleAddUsers = () => {
     if (roleName === "student") {
       addStudent()
     } else {
@@ -72,7 +73,7 @@ export function AddUserToClass() {
 
   const addStudent = () => {
     UpdateStudentClassService(tenantId, existentClassRolesIds, classId).then(() => {
-      fireSuccesToast('Aluno adicionado com sucesso!')
+      fireSuccesToast('Alunos adicionados com sucesso!')
       queryClient.invalidateQueries({
         queryKey: ['get-students-class']
       })
@@ -81,7 +82,7 @@ export function AddUserToClass() {
 
   const addTeacher = () => {
     UpdateTeacherClassService(tenantId, existentClassRolesIds, classId).then(() => {
-      fireSuccesToast('Professor adicionado com sucesso!')
+      fireSuccesToast('Professores adicionados com sucesso!')
       queryClient.invalidateQueries({
         queryKey: ['get-teachers-class']
       })
@@ -91,7 +92,7 @@ export function AddUserToClass() {
 
   return (
     <View flex={1}>
-      <PageHeader title={`Adicionar ${roleName === 'student' ? 'alunos' : 'professores'}`} />
+      <PageHeader title={`Adicionar ${roleName === 'student' ? 'alunos' : 'professores'}`} rightIcon={tenantId ? Check : null} rightAction={handleAddUsers} />
       <ScrollContainer>
 
         {
