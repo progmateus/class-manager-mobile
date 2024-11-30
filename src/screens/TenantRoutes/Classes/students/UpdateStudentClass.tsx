@@ -62,7 +62,7 @@ export function UpdateStudentClass() {
     }
 
     try {
-      await UpdateStudentClassService(tenantId, userId, selectedClassId)
+      await UpdateStudentClassService(tenantId, [userId], selectedClassId)
       fireSuccesToast('Turma alterada com sucesso!')
       navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
     } catch (err) {
