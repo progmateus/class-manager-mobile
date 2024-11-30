@@ -8,7 +8,7 @@ type IProps = {
 
 export function GenericItemRightInfoContainer({ children }: IProps) {
   return (
-    <HStack alignItems="center" w="full">
+    <HStack alignItems="center">
       {children}
     </HStack>
   )

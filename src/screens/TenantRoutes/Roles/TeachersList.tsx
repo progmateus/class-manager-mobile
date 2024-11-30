@@ -6,10 +6,9 @@ import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { useRoute } from "@react-navigation/native"
 import { fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, FlatList, Heading, Icon, Modal, Text, View, VStack } from "native-base"
-import { MagnifyingGlass, Plus, TrashSimple } from "phosphor-react-native"
+import { Actionsheet, Box, FlatList, Heading, Icon, Modal, Text, View, VStack, Button as NativeBaseButton } from "native-base"
+import { MagnifyingGlass, Plus } from "phosphor-react-native"
 import { useState } from "react"
-import { TouchableOpacity, Vibration } from "react-native"
 import { CreateUserRoleService, DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 import { GetUserByUsernameService } from "src/services/usersService"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
@@ -31,7 +30,6 @@ export function TeachersList() {
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isOpenAdd, setIsOpenAdd] = useState(false)
-  const [selectedUserRole, setSelectedUserRole] = useState<any>(null)
   const route = useRoute()
   const { tenantIdParams, roleName } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
@@ -66,17 +64,14 @@ export function TeachersList() {
   }
 
 
-  const handleSelectUserRole = (userRole: any) => {
-    Vibration.vibrate(100)
-    setSelectedUserRole(userRole)
-    setIsOpen(true)
-  }
-
-  const handleRemoveTeacher = async () => {
+  const handleRemoveTeacher = async (userRoleId: string) => {
     if (isLoadingAction) return
     setIsLoadingAction(true)
     try {
-      await DeleteUserRoleService(tenantId, selectedUserRole.id)
+      await DeleteUserRoleService(tenantId, userRoleId)
+      queryClient.invalidateQueries({
+        queryKey: ['get-tenant-teachers', tenantId, roleName]
+      })
       fireInfoToast('Professor removido com sucesso')
     } finally {
       setIsLoadingAction(false)
@@ -101,15 +96,6 @@ export function TeachersList() {
   }
 
   const queryClient = useQueryClient();
-
-  const { mutate: removeTeacherMutation } = useMutation({
-    mutationFn: handleRemoveTeacher,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['get-tenant-teachers', tenantId, roleName]
-      })
-    }
-  })
 
 
   const { mutate: addTeahcerMutation } = useMutation({
@@ -159,12 +145,15 @@ export function TeachersList() {
                   pb={20}
                   keyExtractor={teacher => teacher.id}
                   renderItem={({ item }) => (
-                    <TouchableOpacity key={item.user.id} onLongPress={() => handleSelectUserRole(item)}>
-                      <GenericItem.Root>
-                        <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do usuário" username={item.user.username} />
-                        <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption={item.user.username} />
-                      </GenericItem.Root>
-                    </TouchableOpacity>
+                    <GenericItem.Root key={item.id}>
+                      <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do usuário" username={item.user.username} />
+                      <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption={item.user.username} />
+                      <GenericItem.InfoSection>
+                        <NativeBaseButton bg="red.500" size="xs" px={4} onPress={() => handleRemoveTeacher(item.id)}>
+                          Remover
+                        </NativeBaseButton>
+                      </GenericItem.InfoSection>
+                    </GenericItem.Root>
                   )}
                   ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                   ListFooterComponent={
@@ -178,19 +167,6 @@ export function TeachersList() {
                     <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                   }
                 />
-
-                <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
-                  <Actionsheet.Content>
-                    <Box w="100%" h={60} px={4} justifyContent="center">
-                      <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                        {`${selectedUserRole?.user?.name.firstName} ${selectedUserRole?.user?.name.lastName}`}
-                      </Heading>
-                    </Box>
-                    <Actionsheet.Item onPress={() => removeTeacherMutation()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
-                      Remover
-                    </Actionsheet.Item>
-                  </Actionsheet.Content>
-                </Actionsheet>
 
                 <Actionsheet isOpen={isOpenAdd} onClose={() => setIsOpenAdd(false)} size="full">
                   <Actionsheet.Content>
@@ -216,7 +192,6 @@ export function TeachersList() {
 
                 <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} safeAreaTop={true}>
                   <Modal.Content maxWidth="350">
-                    {/* <Modal.CloseButton /> */}
                     <Modal.Header>Cadastrar professor</Modal.Header>
                     <Modal.Body justifyContent="center">
                       <View alignItems="center" justifyContent="center" py={4}>
