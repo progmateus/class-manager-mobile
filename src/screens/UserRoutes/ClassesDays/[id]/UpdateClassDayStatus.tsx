@@ -95,9 +95,9 @@ export function UpdateClassDayStatus() {
             <VStack flex={1}>
               {
                 status == EClassDayStatus.CONCLUDED ? (
-                  <Button title="Concluir" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
+                  <Button title="Concluir" variant="unstyled" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
                 ) : (
-                  <Button title="Cancelar" variant="outline" color="red.500" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
+                  <Button title="Cancelar" variant="unstyled" color="red.500" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
                 )
               }
               <Button title="Voltar" variant="unstyled" onPress={() => setIsModalOpen(false)} />
