@@ -57,25 +57,31 @@ export function ListTeachersByClassService(tenantId: string, classId: string, { 
   })
 }
 
-export function UpdateStudentClassService(tenantId: string, userId: string, classId: string) {
+export function UpdateStudentClassService(tenantId: string, usersIds: string[], classId: string) {
   return api({
     url: `${tenantId}/students`,
     method: 'put',
     data: {
-      userId,
+      usersIds,
       classId
+    },
+    paramsSerializer: {
+      indexes: true
     }
   })
 }
 
 
-export function UpdateTeacherClassService(tenantId: string, userId: string, classId: string) {
+export function UpdateTeacherClassService(tenantId: string, usersIds: string[], classId: string) {
   return api({
     url: `${tenantId}/teachers`,
     method: 'put',
     data: {
-      userId,
+      usersIds,
       classId
+    },
+    paramsSerializer: {
+      indexes: true
     }
   })
 }

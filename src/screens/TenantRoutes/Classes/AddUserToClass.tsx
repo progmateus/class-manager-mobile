@@ -25,7 +25,7 @@ export function AddUserToClass() {
   const route = useRoute()
   const { tenantIdParams, classId, roleName } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
-  const [groupValues, setGroupValues] = useState<string[]>([])
+  const [existentClassRolesIds, setExistentClassRolesIds] = useState<string[]>([])
   const tenantId = tenant?.id ?? tenantIdParams
 
   const queryClient = useQueryClient();
@@ -43,11 +43,11 @@ export function AddUserToClass() {
   const loadExistentUsersClass = async () => {
     if (roleName == "student") {
       const { data } = await ListStudentsByClassService(tenantId, classId, {})
-      setGroupValues(data.data.map((x: ITeacherClassDTO) => x.userId))
+      setExistentClassRolesIds(data.data.map((x: ITeacherClassDTO) => x.userId))
       return data.data
     } else {
       const { data } = await ListTeachersByClassService(tenantId, classId, {})
-      setGroupValues(data.data.map((x: IStudentClassDTO) => x.userId))
+      setExistentClassRolesIds(data.data.map((x: IStudentClassDTO) => x.userId))
       return data.data
     }
   }
@@ -62,16 +62,16 @@ export function AddUserToClass() {
     queryFn: loadExistentUsersClass
   })
 
-  const handleAddUser = (userId: string) => {
+  const handleAddUser = () => {
     if (roleName === "student") {
-      addStudent(userId)
+      addStudent()
     } else {
-      addTeacher(userId)
+      addTeacher()
     }
   }
 
-  const addStudent = (userId: string) => {
-    UpdateStudentClassService(tenantId, userId, classId).then(() => {
+  const addStudent = () => {
+    UpdateStudentClassService(tenantId, existentClassRolesIds, classId).then(() => {
       fireSuccesToast('Aluno adicionado com sucesso!')
       queryClient.invalidateQueries({
         queryKey: ['get-students-class']
@@ -79,8 +79,8 @@ export function AddUserToClass() {
     })
   }
 
-  const addTeacher = (userId: string) => {
-    UpdateTeacherClassService(tenantId, userId, classId).then(() => {
+  const addTeacher = () => {
+    UpdateTeacherClassService(tenantId, existentClassRolesIds, classId).then(() => {
       fireSuccesToast('Professor adicionado com sucesso!')
       queryClient.invalidateQueries({
         queryKey: ['get-teachers-class']
@@ -100,7 +100,7 @@ export function AddUserToClass() {
           )
             : (
               <VStack space={8} pb={20}>
-                <Checkbox.Group onChange={setGroupValues} value={groupValues}>
+                <Checkbox.Group onChange={setExistentClassRolesIds} value={existentClassRolesIds} accessibilityLabel="Selecione os usuários">
                   {
                     usersRoles && usersRoles.length ? (
                       usersRoles.map((userRole) => {
@@ -108,11 +108,11 @@ export function AddUserToClass() {
                           <UserItem.Root key={userRole.id}>
                             <UserItem.Avatar url={userRole.user.avatar ?? ""} alt="Foto de perfil" />
                             <UserItem.Content>
-                              <UserItem.Title title={`${userRole.user.firstName} ${userRole.user.lastName}`} />
+                              <UserItem.Title title={`${userRole.user.name}`} />
                               <UserItem.Caption caption={userRole.user.username} />
                             </UserItem.Content>
                             <UserItem.Section>
-                              <Checkbox value={userRole.userId} />
+                              <Checkbox accessibilityLabel={userRole.user?.name} value={userRole.userId} />
                             </UserItem.Section>
                           </UserItem.Root>
                         )
