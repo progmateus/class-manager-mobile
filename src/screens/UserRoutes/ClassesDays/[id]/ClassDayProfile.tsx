@@ -101,12 +101,20 @@ export function ClassDayProfile() {
 
   }
 
-  const isTenantAdminOrTeacher = useMemo(() => {
-    return HasRole(user.usersRoles, tenantIdParams, ["admin", "teacher"])
+  const isTenantAdmin = useMemo(() => {
+    return HasRole(user.usersRoles, tenantIdParams, ["admin"])
+  }, [classDay])
+
+  const isClassTeacher = useMemo(() => {
+    return user.teachersClasses.some(x => x.clasId == classDay?.classId);
   }, [classDay])
 
   const alreadyBooked = useMemo(() => {
     return classDay?.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === user.id)
+  }, [classDay])
+
+  const isClassStudent = useMemo(() => {
+    return user.studentsClasses.some(x => x.clasId == classDay?.classId);
   }, [classDay])
 
   return (
@@ -140,14 +148,17 @@ export function ClassDayProfile() {
                 classDay.status === EClassDayStatus.PENDING && (
                   <VStack space={4} px={4} mt={4}>
                     {
-                      alreadyBooked ? (
-                        <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={() => cancelBookMutate()} variant="outline" color="brand.600" isLoading={cancelIsPending} />
-                      ) : (
-                        <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={() => createBookMutate()} isLoading={createIsPending} />
+                      isClassStudent && (
+                        alreadyBooked ? (
+                          <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={() => cancelBookMutate()} variant="outline" color="brand.600" isLoading={cancelIsPending} />
+                        ) : (
+                          <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={() => createBookMutate()} isLoading={createIsPending} />
+                        )
+
                       )
                     }
                     {
-                      isTenantAdminOrTeacher && (
+                      isClassTeacher || isTenantAdmin && (
                         <>
                           <Button title="ATUALIZAR STATUS" h={10} fontSize="xs" rounded="md" variant="outline" onPress={handleClickUpdateStatus}></Button>
                         </>
