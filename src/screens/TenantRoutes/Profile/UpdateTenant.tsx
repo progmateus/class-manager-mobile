@@ -198,7 +198,7 @@ export function UpdateTenant() {
               name="description"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <TextArea label="Bio" value={value} onChangeText={onChange} h={24} px={2} fontSize="sm" variant="outline" color="coolGray.800" />
+                <TextArea label="Bio" value={value} onChangeText={onChange} h={24} px={2} fontSize="sm" variant="outline" color="coolGray.800" errorMessage={errors.description?.message} />
               )}
             />
 
