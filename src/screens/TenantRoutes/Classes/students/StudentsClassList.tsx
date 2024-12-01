@@ -9,7 +9,7 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fireInfoToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, FlatList, Heading, Icon, Text, View } from "native-base"
+import { Actionsheet, Box, Button, FlatList, Heading, Icon, Text, View } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
@@ -21,8 +21,6 @@ type RouteParamsProps = {
 }
 
 export function StudentsClassList() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedStudent, setselectedStudent] = useState<any>(null)
   const route = useRoute()
   const { tenantIdParams, classId } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
@@ -64,31 +62,19 @@ export function StudentsClassList() {
     })
   }
 
-  const handleRemove = async () => {
-    if (!selectedStudent) {
-      return
-    }
-    return await RemoveStudentFromClassService(tenantId, selectedStudent.id, classId)
-  }
-
-  const removeStudentClassMutation = useMutation({
-    mutationFn: handleRemove,
-    onSuccess: () => {
-      if (!selectedStudent) {
-        return
-      }
-      fireInfoToast('Aluno removido')
-      setIsOpen(false)
+  const handleRemveStudentFromClass = async (studentClassId: string) => {
+    try {
+      await RemoveStudentFromClassService(tenantId, studentClassId, classId)
+      fireInfoToast('Aluno removido com sucesso')
       queryClient.invalidateQueries({
         queryKey: ['get-students-class', tenantId, classId]
       })
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-profile', tenantId, classId]
+      })
+    } catch (err) {
+      console.log(err)
     }
-  })
-
-  const handleSelectStudent = (student: any) => {
-    Vibration.vibrate(100)
-    setselectedStudent(student)
-    setIsOpen(true)
   }
 
   return (
@@ -105,13 +91,16 @@ export function StudentsClassList() {
                 pb={20}
                 keyExtractor={student => student.id}
                 renderItem={({ item }) => (<>
-                  <UserItem.Root key={item.id} onLongPress={() => handleSelectStudent(item)}>
+                  <UserItem.Root key={item.id}>
                     <UserItem.Avatar url={item.user?.avatar ?? ""} alt="Foto de perfil do aluno " />
+                    <UserItem.Content>
+                      <UserItem.Title title={`${item.user?.firstName} ${item.user?.lastName}`} />
+                      <UserItem.Caption caption={`@${item.user?.username}`} />
+                    </UserItem.Content>
                     <UserItem.Section>
-                      <UserItem.Content>
-                        <UserItem.Title title={`${item.user?.firstName} ${item.user?.lastName}`} />
-                        <UserItem.Caption caption={`@${item.user?.username}`} />
-                      </UserItem.Content>
+                      <Button bg="red.500" size="xs" px={4} onPress={() => handleRemveStudentFromClass(item.id)}>
+                        Remover
+                      </Button>
                     </UserItem.Section>
                   </UserItem.Root>
                 </>
@@ -130,18 +119,6 @@ export function StudentsClassList() {
                 }
               >
               </FlatList>
-              <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
-                <Actionsheet.Content>
-                  <Box w="100%" h={60} px={4} justifyContent="center">
-                    <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                      {`${selectedStudent?.user?.firstName} ${selectedStudent?.user?.lastName}`}
-                    </Heading>
-                  </Box>
-                  <Actionsheet.Item onPress={() => removeStudentClassMutation.mutate()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
-                    Remover
-                  </Actionsheet.Item>
-                </Actionsheet.Content>
-              </Actionsheet>
             </>
           )
         }

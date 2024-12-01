@@ -1,8 +1,8 @@
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { UserItem } from "@components/Users/UserItem"
-import { useRoute } from "@react-navigation/native"
-import { Checkbox, HStack, Text, View, VStack } from "native-base"
+import { useNavigation, useRoute } from "@react-navigation/native"
+import { Box, Checkbox, HStack, Icon, Text, View, VStack } from "native-base"
 import { ListStudentsByClassService, ListTeachersByClassService, UpdateStudentClassService, UpdateTeacherClassService } from "src/services/classesService"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
@@ -14,6 +14,7 @@ import { ITeacherClassDTO } from "@dtos/classes/TeacherClassDTO"
 import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
 import { useEffect, useState } from "react"
 import { Check, Plus } from "phosphor-react-native"
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 
 
 type RouteParamsProps = {
@@ -28,6 +29,8 @@ export function AddUserToClass() {
   const { tenant } = useAuth()
   const [existentClassRolesIds, setExistentClassRolesIds] = useState<string[]>([])
   const tenantId = tenant?.id ?? tenantIdParams
+
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   const queryClient = useQueryClient();
 
@@ -77,6 +80,10 @@ export function AddUserToClass() {
       queryClient.invalidateQueries({
         queryKey: ['get-students-class']
       })
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-profile', tenantId, classId]
+      })
+      navigation.navigate('classProfile', { tenantIdParams: tenantId, classId })
     })
   }
 
@@ -86,9 +93,20 @@ export function AddUserToClass() {
       queryClient.invalidateQueries({
         queryKey: ['get-teachers-class']
       })
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-profile', tenantId, classId]
+      })
+      navigation.navigate('classProfile', { tenantIdParams: tenantId, classId })
     })
   }
 
+  const handleSelectUserRole = (userId: string) => {
+    if (existentClassRolesIds.some(x => x == userId)) {
+      setExistentClassRolesIds(list => list.filter(id => id !== userId))
+    } else {
+      setExistentClassRolesIds([...existentClassRolesIds, userId])
+    }
+  }
 
   return (
     <View flex={1}>
@@ -100,20 +118,20 @@ export function AddUserToClass() {
             <Loading />
           )
             : (
-              <VStack space={8} pb={20}>
-                <Checkbox.Group onChange={setExistentClassRolesIds} value={existentClassRolesIds} accessibilityLabel="Selecione os usuários">
+              <Checkbox.Group value={existentClassRolesIds} accessibilityLabel="Selecione os usuários">
+                <VStack space={4} pb={20} w="full">
                   {
                     usersRoles && usersRoles.length ? (
                       usersRoles.map((userRole) => {
                         return (
-                          <UserItem.Root key={userRole.id}>
+                          <UserItem.Root key={userRole.id} onPress={() => handleSelectUserRole(userRole.userId)}>
                             <UserItem.Avatar url={userRole.user.avatar ?? ""} alt="Foto de perfil" />
                             <UserItem.Content>
                               <UserItem.Title title={`${userRole.user.name}`} />
                               <UserItem.Caption caption={userRole.user.username} />
                             </UserItem.Content>
                             <UserItem.Section>
-                              <Checkbox accessibilityLabel={userRole.user?.name} value={userRole.userId} />
+                              <Checkbox aria-label="jdskajdksajdjksaj" accessibilityLabelledBy="opa eai ksdkdsa" accessibilityLabel="opa eai ksdkdsa" value={userRole.userId} />
                             </UserItem.Section>
                           </UserItem.Root>
                         )
@@ -123,8 +141,8 @@ export function AddUserToClass() {
                         <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                       )
                   }
-                </Checkbox.Group>
-              </VStack>
+                </VStack>
+              </Checkbox.Group>
             )
         }
 

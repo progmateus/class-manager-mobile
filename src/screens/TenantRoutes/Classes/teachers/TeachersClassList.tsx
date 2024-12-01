@@ -9,7 +9,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireInfoToast } from "@utils/HelperNotifications"
-import { Actionsheet, Box, FlatList, Heading, Icon, Text, View } from "native-base"
+import { Actionsheet, Box, Button, FlatList, Heading, Icon, Text, View } from "native-base"
 import { Plus, TrashSimple } from "phosphor-react-native"
 import { useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
@@ -22,12 +22,13 @@ type RouteParamsProps = {
 
 export function TeachersClassList() {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedTeacherClass, setSelectedTeacherClass] = useState<any>(null)
   const route = useRoute()
   const { tenantIdParams, classId } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
+
+  const queryClient = useQueryClient();
 
   const loadTeachersClass = async () => {
     try {
@@ -50,35 +51,23 @@ export function TeachersClassList() {
     })
   }
 
-  const handleRemoveTeacher = async () => {
-    if (!selectedTeacherClass) {
-      return
-    }
+  const handleRemoveTeacher = async (teacherClassId: string) => {
     try {
-      await RemoveTeacherFromClassService(tenantId, selectedTeacherClass.id, classId)
+      await RemoveTeacherFromClassService(tenantId, teacherClassId, classId)
+      fireInfoToast('Professor removido com sucesso!')
+      queryClient.invalidateQueries({
+        queryKey: ['get-teachers-class', tenantId, classId]
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-profile', tenantId, classId]
+      })
+    } catch (err) {
+      console.log(err)
     } finally {
       setIsOpen(false)
     }
   }
 
-  const queryClient = useQueryClient();
-
-  const { mutate: removeTeacherMutation } = useMutation({
-    mutationFn: handleRemoveTeacher,
-    onSuccess: () => {
-      fireInfoToast('Professor removido com sucesso!')
-      queryClient.invalidateQueries({
-        queryKey: ['get-teachers-class', tenantId, classId]
-      })
-    }
-  })
-
-
-  const handleSelectTeacher = (teacherClass: IUserClassDTO) => {
-    Vibration.vibrate(100)
-    setSelectedTeacherClass(teacherClass)
-    setIsOpen(true)
-  }
   return (
     <View flex={1}>
       <PageHeader title="Gerenciar professores" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
@@ -91,13 +80,16 @@ export function TeachersClassList() {
                 pb={20}
                 keyExtractor={teacherClass => teacherClass.id}
                 renderItem={({ item }) => (
-                  <UserItem.Root key={item.id} onLongPress={() => handleSelectTeacher(item)}>
+                  <UserItem.Root key={item.id} onLongPress={() => handleRemoveTeacher(item.id)}>
                     <UserItem.Avatar url={item.user?.avatar ?? ""} alt="Foto de perfil do aluno " />
+                    <UserItem.Content>
+                      <UserItem.Title title={`${item.user?.firstName} ${item.user?.lastName}`} />
+                      <UserItem.Caption caption={`@${item.user?.username}`} />
+                    </UserItem.Content>
                     <UserItem.Section>
-                      <UserItem.Content>
-                        <UserItem.Title title={`${item.user?.firstName} ${item.user?.lastName}`} />
-                        <UserItem.Caption caption={`@${item.user?.username}`} />
-                      </UserItem.Content>
+                      <Button bg="red.500" size="xs" px={4} onPress={() => handleRemoveTeacher(item.id)}>
+                        Remover
+                      </Button>
                     </UserItem.Section>
                   </UserItem.Root>
                 )}
@@ -105,18 +97,6 @@ export function TeachersClassList() {
                 ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
               >
               </FlatList>
-              <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
-                <Actionsheet.Content>
-                  <Box w="100%" h={60} px={4} justifyContent="center">
-                    <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                      {`${selectedTeacherClass?.user?.firstName} ${selectedTeacherClass?.user?.lastName}`}
-                    </Heading>
-                  </Box>
-                  <Actionsheet.Item onPress={() => removeTeacherMutation()} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>
-                    Remover
-                  </Actionsheet.Item>
-                </Actionsheet.Content>
-              </Actionsheet>
             </>
           )
         }
