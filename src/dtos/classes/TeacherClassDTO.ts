@@ -4,7 +4,7 @@ import { IClassDTO } from "./IClassDTO";
 interface ITeacherClassDTO {
   id: string;
   userId: string;
-  clasId: string;
+  classId: string;
   user?: IUserPreviewDTO;
   class?: IClassDTO
 }

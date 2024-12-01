@@ -106,7 +106,7 @@ export function ClassDayProfile() {
   }, [classDay])
 
   const isClassTeacher = useMemo(() => {
-    return user.teachersClasses.some(x => x.clasId == classDay?.classId);
+    return user.teachersClasses.some(x => x.classId == classDay?.classId);
   }, [classDay])
 
   const alreadyBooked = useMemo(() => {
@@ -114,8 +114,8 @@ export function ClassDayProfile() {
   }, [classDay])
 
   const isClassStudent = useMemo(() => {
-    return user.studentsClasses.some(x => x.clasId == classDay?.classId);
-  }, [classDay])
+    return user.studentsClasses.some(x => x.classId == classDay?.classId);
+  }, [classDay, user.studentsClasses])
 
   return (
     <View flex={1}>
