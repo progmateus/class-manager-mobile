@@ -59,7 +59,7 @@ export function ClassDayProfile() {
       if (!classDay || createIsPending || !classDayId) {
         return
       }
-      await CreatebookingService(tenantId, classDayId, user.id)
+      await CreatebookingService(tenantId, classDayId)
     },
     onSuccess: () => {
       fireSuccesToast("Aula agendada")
@@ -103,19 +103,19 @@ export function ClassDayProfile() {
 
   const isTenantAdmin = useMemo(() => {
     return HasRole(user.usersRoles, tenantIdParams, ["admin"])
-  }, [classDay])
+  }, [classDay?.id])
 
   const isClassTeacher = useMemo(() => {
     return user.teachersClasses.some(x => x.classId == classDay?.classId);
-  }, [classDay])
+  }, [classDay?.id])
 
   const alreadyBooked = useMemo(() => {
     return classDay?.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === user.id)
-  }, [classDay])
+  }, [classDay?.bookings])
 
   const isClassStudent = useMemo(() => {
     return user.studentsClasses.some(x => x.classId == classDay?.classId);
-  }, [classDay, user.studentsClasses])
+  }, [classDay?.id])
 
   return (
     <View flex={1}>
