@@ -77,7 +77,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         const { user: userResponse, token, refresh_token } = data.data
         await storageAuthTokenSave({ token, refresh_token });
         tokenUpdate(token);
-        userUpdate(userResponse);
+        refreshUser()
       }
     } catch (err) {
       if (err instanceof AxiosError || err instanceof AppError || err instanceof ValidationError) {
@@ -101,27 +101,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   async function refreshUser() {
-    GetUserProfileService().then(({ data }) => {
-      if (data.data) {
-        userUpdate(data.data)
-      }
-    })
-  }
-
-  async function refreshTenant() {
-    GetTenantProfileService(tenant.id).then(({ data }) => {
-      if (data.data) {
-        tenantUpdate(data.data);
-      }
-    })
-  }
-
-  async function loadUserData() {
     try {
       setIsLoadingData(true);
       const { token } = await storageAuthTokenGet();
       if (token) {
-        await refreshUser()
+        GetUserProfileService().then(({ data }) => {
+          if (data.data) {
+            userUpdate(data.data)
+          }
+        })
       }
     } catch (error) {
       throw error
@@ -130,12 +118,16 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
-  async function loadTenantData() {
+  async function refreshTenant() {
     try {
       setIsLoadingData(true);
       const tenant = await storageTenantGet();
       if (tenant && tenant.id) {
-        await refreshTenant()
+        GetTenantProfileService(tenant.id).then(({ data }) => {
+          if (data.data) {
+            tenantUpdate(data.data);
+          }
+        })
       } else {
         signOutTenant()
       }
@@ -149,7 +141,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function loadTokenData() {
     try {
       setIsLoadingData(true);
-
       const { token } = await storageAuthTokenGet();
 
       if (token) {
@@ -189,11 +180,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function verifyAuthenticationType() {
     try {
       const authentication_type = await storageAuthenticationTypeGet();
-      loadUserData();
+      refreshUser();
       if (authentication_type && authentication_type == "tenant") {
         if (tenant.id) {
           authenticationTypeUpdate(authentication_type)
-          loadTenantData()
+          refreshTenant()
         } else {
           authenticationTypeUpdate("user")
         }

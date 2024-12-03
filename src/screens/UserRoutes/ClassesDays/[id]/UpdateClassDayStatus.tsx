@@ -1,5 +1,5 @@
 import { PageHeader } from "@components/PageHeader";
-import { Modal, Text, VStack, View } from "native-base";
+import { Divider, Modal, Text, VStack, View, Button as NativeBaseButton } from "native-base";
 import { Button } from "@components/Button";
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -38,7 +38,7 @@ export function UpdateClassDayStatus() {
       fireWarningToast('A observação seve conter no máximo 40 caracteres')
       return
     }
-    UpdateClassDayStatusService(tenantId, classDayId, EClassDayStatus.CONCLUDED, observation).then(({ data }) => {
+    UpdateClassDayStatusService(tenantId, classDayId, status, observation).then(({ data }) => {
       queryClient.invalidateQueries({
         queryKey: ['get-class-day-profile', tenantId, classDayId]
       })
@@ -83,24 +83,26 @@ export function UpdateClassDayStatus() {
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} safeAreaTop={true}>
         <Modal.Content maxWidth="350">
-          <Modal.Header>
+          <Modal.Header borderWidth={0}>
             <Text fontFamily="heading"> {status == EClassDayStatus.CONCLUDED ? 'Concluir' : 'Cancelar'} Aula </Text>
           </Modal.Header>
-          <Modal.Body justifyContent="center" py={6}>
+          <Modal.Body justifyContent="center" py={6} borderWidth={0}>
             <Text fontFamily="body" color="coolGray.600">
               Deseja atualizar o status da aula? Depois de realizada esta ação não poderá ser desfeita.
             </Text>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer borderWidth={0}>
             <VStack flex={1}>
               {
                 status == EClassDayStatus.CONCLUDED ? (
-                  <Button title="Concluir" variant="unstyled" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
+                  <Button title="Concluir" bgColor="green.600" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
                 ) : (
-                  <Button title="Cancelar" variant="unstyled" color="red.500" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
+                  <Button title="Cancelar" bgColor="red.500" isLoading={isLoading} onPress={handleUpdateClassDayStatus} />
                 )
               }
-              <Button title="Voltar" variant="unstyled" onPress={() => setIsModalOpen(false)} />
+              <NativeBaseButton mt={2} variant="unstyled" fontWeight="bold" color="coolGray.500" onPress={() => setIsModalOpen(false)}>
+                Voltar
+              </NativeBaseButton>
             </VStack>
           </Modal.Footer>
         </Modal.Content>

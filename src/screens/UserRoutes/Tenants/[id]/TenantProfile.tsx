@@ -143,11 +143,11 @@ export function TenantProfile() {
                   <HStack mt={6} space={2}>
                     {
                       tenantProfile.links && tenantProfile.links.length > 0 && (
-                        tenantProfile.links.map((ts) => {
+                        tenantProfile.links.map((link) => {
                           return (
-                            <TouchableOpacity>
-                              <Link href={getLinkHref(ts)}>
-                                <Icon as={tranformSocialIcon(ts.type)} color="coolGray.800" />
+                            <TouchableOpacity key={link.id}>
+                              <Link href={getLinkHref(link)}>
+                                <Icon as={tranformSocialIcon(link.type)} color="coolGray.800" />
                               </Link>
                             </TouchableOpacity>
                           )
