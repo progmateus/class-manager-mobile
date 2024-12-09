@@ -26,7 +26,7 @@ export function AddressesList() {
   })
 
   const handleClickCreate = () => {
-    navigation.navigate('createClass')
+    navigation.navigate('createAddress')
   }
 
   return (

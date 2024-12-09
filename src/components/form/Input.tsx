@@ -15,7 +15,7 @@ export function Input({ errorMessage = null, isInvalid = false, label, ...rest }
   const definedColor = color ? color : variant !== "filled" ? "coolGray.800" : "white"
 
   return (
-    <FormControl isInvalid={invalid}>
+    <FormControl isInvalid={invalid} flex={1}>
       <VStack space={1.5}>
         {label && (<Text fontSize="sm" fontWeight="medium" color="coolGray.700"> {label} </Text>)}
         <NativeBaseInput

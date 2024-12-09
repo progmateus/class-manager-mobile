@@ -34,6 +34,7 @@ import { ClassDayProfile } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayPr
 import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
 import { useAuth } from "@hooks/useAuth";
 import { CreateAddress } from "@screens/TenantRoutes/Addresses/CRUD/CreateAddress";
+import { AddressesList } from "@screens/TenantRoutes/Addresses/CRUD/AddressesList";
 
 
 export type TenantRoutes = {
@@ -299,7 +300,7 @@ export function TenantRoutes() {
 
       <Screen
         name="addressesList"
-        component={ClassesList}
+        component={AddressesList}
         options={{ tabBarButton: () => (null) }}
       />
 
