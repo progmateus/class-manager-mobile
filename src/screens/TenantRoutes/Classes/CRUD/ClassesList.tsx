@@ -4,6 +4,7 @@ import { PageHeader } from "@components/PageHeader"
 import { ClassItemSkeleton } from "@components/skeletons/Items/ClassItemSkeleton"
 import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/classes/IClassDTO"
+import { IClassPreviewDTO } from "@dtos/classes/IClassPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
@@ -20,7 +21,7 @@ export function ClassesList() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id;
 
-  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IClassDTO[]>({
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IClassPreviewDTO[]>({
     queryKey: ['get-classes', tenantId],
     queryFn: ({ pageParam }) => {
       return ListClassesService(tenantId, { page: Number(pageParam), search: "" }).then(({ data }) => {
@@ -86,11 +87,11 @@ export function ClassesList() {
                       <GenericItem.InfoSection>
                         <GenericItem.InfoContainer >
                           <GraduationCap size={18} color="#6b7280" />
-                          <GenericItem.InfoValue text="128" />
+                          <GenericItem.InfoValue text={String(item.studentsCount)} />
                         </GenericItem.InfoContainer>
                         <GenericItem.InfoContainer >
                           <IdentificationBadge size={18} color="#6b7280" />
-                          <GenericItem.InfoValue text="7" />
+                          <GenericItem.InfoValue text={String(item.teachersCount)} />
                         </GenericItem.InfoContainer>
                       </GenericItem.InfoSection>
                     </GenericItem.Root>
