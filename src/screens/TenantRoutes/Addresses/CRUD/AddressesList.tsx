@@ -7,15 +7,19 @@ import { useAuth } from "@hooks/useAuth"
 import { useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useQuery } from "@tanstack/react-query"
-import { FlatList, Text, View } from "native-base"
-import { Plus } from "phosphor-react-native"
+import { FlatList, HStack, Text, View, VStack } from "native-base"
+import { MapPin, Plus, TrashSimple } from "phosphor-react-native"
+import { TouchableOpacity } from "react-native"
 import { ListTenantAddressesService } from "src/services/addressService"
+import { THEME } from "src/theme"
 
 
 export function AddressesList() {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const { tenant } = useAuth()
   const tenantId = tenant?.id;
+
+  const { colors } = THEME
 
   const { data: addresses, isLoading } = useQuery<IAddressDTO[]>({
     queryKey: ['get-addresses', tenantId],
@@ -43,9 +47,19 @@ export function AddressesList() {
                 pb={20}
                 keyExtractor={address => address.id}
                 renderItem={({ item }) => (
-                  <View />
+                  <HStack space={4} borderWidth={0.3} borderColor="coolGray.500" borderRadius={7} py={2} px={4} alignItems="center">
+                    <MapPin color={colors.coolGray['600']} />
+                    <VStack space={1} flex={1}>
+                      <Text numberOfLines={1} fontFamily="body" fontSize="md" color="coolGray.800"> Rua {item.street} {item.number ? `, ${item.number}` : ''}</Text>
+                      <Text fontFamily="body" color="coolGray.500" mt={2}> CEP {item.zipCode ? `, ${item.zipCode}` : 'Nao informado'}</Text>
+                      <Text fontFamily="body" color="coolGray.500"> {item.city}, {<Text> {item.state}</Text>}</Text>
+                    </VStack>
+                    <TouchableOpacity>
+                      <TrashSimple color={colors.red['600']} size={24} />
+                    </TouchableOpacity>
+                  </HStack>
                 )}
-                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 ListEmptyComponent={
