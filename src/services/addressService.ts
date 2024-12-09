@@ -1,7 +1,7 @@
-import { IAddressDTO } from "@dtos/shared/IAdressDTO";
+import { IAddressDTO } from "@dtos/shared/IAddressDTO";
 import { api } from "./api";
 
-export function CreateTenantAddressService({ street, city, state, tenantId }: IAddressDTO) {
+export function CreateTenantAddressService({ street, city, state, tenantId }: Pick<IAddressDTO, "street" | "city" | "state" | "tenantId">) {
   return api({
     url: `${tenantId}/addresses`,
     method: 'post',

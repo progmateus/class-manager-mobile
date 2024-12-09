@@ -33,6 +33,7 @@ import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList
 import { ClassDayProfile } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayProfile";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
 import { useAuth } from "@hooks/useAuth";
+import { CreateAddress } from "@screens/TenantRoutes/Addresses/CRUD/CreateAddress";
 
 
 export type TenantRoutes = {
@@ -64,6 +65,7 @@ export type TenantRoutes = {
   classDayProfile: { tenantIdParams: string, classDayId: string };
   updateClassDayStatus: { tenantIdParams: string, classDayId: string };
   addressesList: undefined;
+  createAddress: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -298,6 +300,12 @@ export function TenantRoutes() {
       <Screen
         name="addressesList"
         component={ClassesList}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="createAddress"
+        component={CreateAddress}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

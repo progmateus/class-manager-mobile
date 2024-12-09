@@ -2,7 +2,7 @@ import { GenericItem } from "@components/Items/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
-import { IAddressDTO } from "@dtos/shared/IAdressDTO"
+import { IAddressDTO } from "@dtos/shared/IAddressDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
@@ -18,7 +18,7 @@ export function AddressesList() {
   const tenantId = tenant?.id;
 
   const { data: addresses, isLoading } = useQuery<IAddressDTO[]>({
-    queryKey: ['get-classes', tenantId],
+    queryKey: ['get-addresses', tenantId],
     queryFn: async () => {
       const { data } = await ListTenantAddressesService(tenantId)
       return data.data
