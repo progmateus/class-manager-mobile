@@ -35,6 +35,7 @@ import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/Updat
 import { useAuth } from "@hooks/useAuth";
 import { CreateAddress } from "@screens/TenantRoutes/Addresses/CRUD/CreateAddress";
 import { AddressesList } from "@screens/TenantRoutes/Addresses/CRUD/AddressesList";
+import { UpdateClassAddress } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassAddress";
 
 
 export type TenantRoutes = {
@@ -60,7 +61,8 @@ export type TenantRoutes = {
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateTenant: undefined;
-  updateClassTimeTable: { classId: string; timeTableIdExists: string; };
+  updateClassTimeTable: { classId: string; timeTableIdExists?: string; };
+  updateClassAddress: { classId: string; addressIdExists?: string; };
   createClassDay: undefined;
   classesDaysList: undefined;
   classDayProfile: { tenantIdParams: string, classDayId: string };
@@ -307,6 +309,12 @@ export function TenantRoutes() {
       <Screen
         name="createAddress"
         component={CreateAddress}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="updateClassAddress"
+        component={UpdateClassAddress}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

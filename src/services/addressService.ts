@@ -39,15 +39,12 @@ export function ListTenantAddressesService(tenantId: string) {
   })
 }
 
-export function UpdateClassAddressService(tenantId: string, classId: string, { street, city, state }: IAddressDTO,) {
+export function UpdateClassAddressService(tenantId: string, classId: string, addressId: string) {
   return api({
-    url: `${tenantId}/classes/${classId}/addresses`,
+    url: `${tenantId}/classes/${classId}/address`,
     method: 'patch',
     data: {
-      street,
-      city,
-      state,
-      tenantId
+      addressId
     }
   })
 }

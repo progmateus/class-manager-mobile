@@ -9,7 +9,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useQuery } from "@tanstack/react-query"
 import { HStack, Text, View, VStack } from "native-base"
-import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, CalendarBlank, ArrowsLeftRight } from "phosphor-react-native"
+import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, CalendarBlank, ArrowsLeftRight, MapPin } from "phosphor-react-native"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
 import { GetClassProfileService } from "src/services/classesService"
 
@@ -106,6 +106,14 @@ export function ClassProfile() {
                 <MenuItem.Root onPress={() => navigation.navigate('updateClassTimeTable', { classId, timeTableIdExists: infoProfile.classFound.timeTableId })}>
                   <MenuItem.Icon icon={Clock} />
                   <MenuItem.Content title="Configurar horários" description="Gerencie os horários das aulas" />
+                  <MenuItem.Actions>
+                    <MenuItem.Action icon={ArrowRight} />
+                  </MenuItem.Actions>
+                </MenuItem.Root>
+
+                <MenuItem.Root onPress={() => navigation.navigate('updateClassAddress', { classId, addressIdExists: infoProfile.classFound.addressId })}>
+                  <MenuItem.Icon icon={MapPin} />
+                  <MenuItem.Content title="alterar endereço" description="Altere a localização das aulas" />
                   <MenuItem.Actions>
                     <MenuItem.Action icon={ArrowRight} />
                   </MenuItem.Actions>
