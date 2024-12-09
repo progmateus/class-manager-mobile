@@ -136,12 +136,20 @@ const errors = [
     description: "Tabela de horários não encontrada"
   },
   {
+    message: "ERR_CHOOSE_ANOTHER_TIME_TABLE",
+    description: "Selecione uma tabela de horários diferente"
+  },
+  {
     message: "ERR_USERNAME_ALREADY_EXISTS",
     description: "Este nome de usuário já está sendo utilizado"
   },
   {
     message: "ERR_CLASS_DAY_TIME_EXPIRED",
     description: "A data desta aula já passou"
+  },
+  {
+    message: "ERR_CHOOSE_ANOTHER_ADDRESS",
+    description: "Selecione um endereço diferente"
   }
 ]
 export { errors }
