@@ -20,9 +20,9 @@ var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 const createAddressSchema = z.object({
-  street: z.string({ required_error: "Campo obrigatório" }).min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres'),
-  city: z.string({ required_error: "Campo obrigatório" }).min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres'),
-  state: z.string({ required_error: "Campo obrigatório" }).min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres'),
+  street: z.string({ required_error: "Campo obrigatório" }).min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres').trim(),
+  city: z.string({ required_error: "Campo obrigatório" }).min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres').trim(),
+  state: z.string({ required_error: "Campo obrigatório" }).min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres').trim(),
   number: z.string().optional().transform(e => e === "" ? undefined : e),
 });
 
