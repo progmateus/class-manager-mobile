@@ -75,24 +75,28 @@ export function UpdateUser() {
             <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
           </Center>
           <VStack space={6} mt={12}>
-            <HStack space={4} w={'48%'}>
-              <Controller
-                name="firstName"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Input label="Nome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.firstName?.message} />
-                )}
-              />
-              <Controller
-                name="lastName"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Input label="Sobrenome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.lastName?.message} />
-                )}
-              />
+            <HStack space={4}>
+              <View flex={1}>
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <Input label="Nome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.firstName?.message} />
+                  )}
+                />
+              </View>
 
-              <Input label="Sobrenome" variant="outline" />
+              <View flex={1}>
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <Input label="Sobrenome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.lastName?.message} />
+                  )}
+                />
+              </View>
             </HStack>
+
             <Controller
               name="email"
               control={control}
