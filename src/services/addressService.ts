@@ -22,10 +22,13 @@ export function DeleteAddressService(addressId: string) {
   })
 }
 
-export function UpdateUserAddressService(tenantId: string) {
+export function UpdateUserAddressService({ street, city, state, number }: Pick<IAddressDTO, "street" | "city" | "state" | "number">) {
   return api({
-    url: `${tenantId}/addresses`,
-    method: 'get'
+    url: 'users/address',
+    method: 'patch',
+    data: {
+      street, city, state, number
+    }
   })
 }
 
