@@ -83,7 +83,7 @@ export function ClassesList() {
                   <TouchableOpacity key={item.id} onPress={() => handleSelectClass(item.id)}>
                     <GenericItem.Root>
                       <GenericItem.Icon icon={BookBookmark} />
-                      <GenericItem.Content title={item.name} caption="" />
+                      <GenericItem.Content title={item.name} caption={item.description} />
                       <GenericItem.InfoSection>
                         <GenericItem.InfoContainer >
                           <GraduationCap size={18} color="#6b7280" />
