@@ -87,11 +87,11 @@ export function ClassesList() {
                       <GenericItem.InfoSection>
                         <GenericItem.InfoContainer >
                           <GraduationCap size={18} color="#6b7280" />
-                          <GenericItem.InfoValue text={String(item.studentsCount)} />
+                          <GenericItem.InfoValue text={String(item.studentsCount ?? 0)} />
                         </GenericItem.InfoContainer>
                         <GenericItem.InfoContainer >
                           <IdentificationBadge size={18} color="#6b7280" />
-                          <GenericItem.InfoValue text={String(item.teachersCount)} />
+                          <GenericItem.InfoValue text={String(item.teachersCount ?? 0)} />
                         </GenericItem.InfoContainer>
                       </GenericItem.InfoSection>
                     </GenericItem.Root>

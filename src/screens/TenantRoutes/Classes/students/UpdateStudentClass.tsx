@@ -3,6 +3,7 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/classes/IClassDTO"
+import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
@@ -10,13 +11,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { Text, View, VStack } from "native-base"
 import { BookBookmark, Check } from "phosphor-react-native"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
-import { ListClassesService, UpdateStudentClassService } from "src/services/classesService"
+import { ListClassesService, ListStudentClassesService, UpdateStudentClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
   tenantIdParams: string;
-  classIdExists: string;
   userId?: string;
   subscriptionId?: string;
 }
@@ -24,8 +24,9 @@ type RouteParamsProps = {
 export function UpdateStudentClass() {
   const [selectedClassId, setSelectedClassId] = useState("")
   const route = useRoute()
-  const { tenantIdParams, userId: userIdParam, classIdExists, subscriptionId } = route.params as RouteParamsProps;
+  const { tenantIdParams, userId: userIdParam, subscriptionId } = route.params as RouteParamsProps;
   const { tenant, authenticationType, user } = useAuth()
+  const [existentClasses, setExistentClasses] = useState<IStudentClassDTO[]>([])
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
@@ -46,8 +47,12 @@ export function UpdateStudentClass() {
     }
   }
 
+  useEffect(() => {
+    getStudentClasses()
+  }, [tenantId, userId])
+
   const { data: classes, isLoading } = useQuery<IClassDTO[]>({
-    queryKey: ['get-students-class', tenantId, tenant.id, classIdExists, userId],
+    queryKey: ['get-student-classes', tenantId, userId],
     queryFn: loadClasses
   })
 
@@ -74,10 +79,23 @@ export function UpdateStudentClass() {
     mutationFn: handleSave,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['get-students-class', tenantId, tenant.id, classIdExists, userId]
+        queryKey: ['get-student-classes', tenantId, userId]
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-profile', tenantId, selectedClassId]
       })
     }
   })
+
+
+  const getStudentClasses = async () => {
+    if (existentClasses && existentClasses.length > 0) {
+      return
+    }
+    const { data } = await ListStudentClassesService(tenant.id, userId)
+    setSelectedClassId(data?.data[0]?.classId ?? "")
+    setExistentClasses(data.data)
+  }
 
   return (
     <View flex={1}>

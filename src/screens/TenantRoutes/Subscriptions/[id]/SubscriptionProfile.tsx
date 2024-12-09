@@ -199,7 +199,7 @@ export function SubscriptionProfile() {
                     </MenuItem.Actions>
                   </MenuItem.Root>
 
-                  <MenuItem.Root onPress={() => tenantNavigation.navigate('updateStudentclass', { tenantIdParams: tenantId, userId: subscription.userId, classIdExists: subscription.user?.studentsClasses[0].class?.id as string, subscriptionId })}>
+                  <MenuItem.Root onPress={() => tenantNavigation.navigate('updateStudentclass', { tenantIdParams: tenantId, userId: subscription.userId, subscriptionId })}>
                     <MenuItem.Icon icon={BookBookmark} />
                     <MenuItem.Content title="Alterar turma" description="Altere a turma do aluno" />
                     <MenuItem.Actions>

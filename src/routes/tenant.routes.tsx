@@ -57,7 +57,7 @@ export type TenantRoutes = {
   addUserToClass: { classId: string; roleName: string; }
   teachersList: { roleName: string; }
   createUserRole: undefined;
-  updateStudentclass: { tenantIdParams: string; userId: string; classIdExists: string; subscriptionId?: string; }
+  updateStudentclass: { tenantIdParams: string; userId: string; subscriptionId?: string; }
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateTenant: undefined;

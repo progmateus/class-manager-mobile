@@ -38,7 +38,7 @@ type UserRoutes = {
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   createTenant: undefined
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
-  updateStudentclass: { tenantIdParams: string; classIdExists: string; subscriptionId?: string; }
+  updateStudentclass: { tenantIdParams: string; subscriptionId?: string; }
   updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateUserAddress: undefined;
 }

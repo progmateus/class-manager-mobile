@@ -30,7 +30,7 @@ export function StudentsClassList() {
   const queryClient = useQueryClient();
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IStudentClassDTO[]>({
-    queryKey: ['get-students-class', tenantId, classId],
+    queryKey: ['get-students-classes', tenantId, classId],
     queryFn: ({ pageParam }) => {
       return ListStudentsByClassService(tenantId, classId, { page: Number(pageParam) }).then(({ data }) => {
         return data.data
@@ -67,7 +67,7 @@ export function StudentsClassList() {
       await RemoveStudentFromClassService(tenantId, studentClassId, classId)
       fireInfoToast('Aluno removido com sucesso')
       queryClient.invalidateQueries({
-        queryKey: ['get-students-class', tenantId, classId]
+        queryKey: ['get-students-classes', tenantId, classId]
       })
       queryClient.invalidateQueries({
         queryKey: ['get-class-profile', tenantId, classId]

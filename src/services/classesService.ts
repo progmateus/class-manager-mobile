@@ -47,12 +47,32 @@ export function ListStudentsByClassService(tenantId: string, classId: string, { 
   })
 }
 
+export function ListStudentClassesService(tenantId: string, userId: string) {
+  return api({
+    url: `${tenantId}/students`,
+    method: 'get',
+    params: {
+      userId
+    }
+  })
+}
+
 export function ListTeachersByClassService(tenantId: string, classId: string, { page }: IPaginationDTO) {
   return api({
     url: `${tenantId}/classes/${classId}/teachers`,
     method: 'get',
     params: {
       page
+    }
+  })
+}
+
+export function ListTeacherClassesService(tenantId: string, userId: string) {
+  return api({
+    url: `${tenantId}/teachers`,
+    method: 'get',
+    params: {
+      userId
     }
   })
 }

@@ -78,7 +78,7 @@ export function AddUserToClass() {
     UpdateStudentClassService(tenantId, existentClassRolesIds, classId).then(() => {
       fireSuccesToast('Alunos adicionados com sucesso!')
       queryClient.invalidateQueries({
-        queryKey: ['get-students-class']
+        queryKey: ['get-students-classes']
       })
       queryClient.invalidateQueries({
         queryKey: ['get-class-profile', tenantId, classId]
