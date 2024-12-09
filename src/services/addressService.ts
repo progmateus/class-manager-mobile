@@ -16,21 +16,21 @@ export function CreateTenantAddressService({ street, city, state, tenantId }: IA
 
 export function DeleteAddressService(addressId: string) {
   return api({
-    url: `addresses${addressId}`,
+    url: `addresses/${addressId}`,
     method: 'delete'
   })
 }
 
 export function UpdateUserAddressService(tenantId: string) {
   return api({
-    url: `${tenantId}/address`,
+    url: `${tenantId}/addresses`,
     method: 'get'
   })
 }
 
 export function ListTenantAddressesService({ street, city, state }: IAddressDTO) {
   return api({
-    url: 'users/address',
+    url: 'users/addresses',
     method: 'patch',
     data: {
       street,
@@ -42,7 +42,7 @@ export function ListTenantAddressesService({ street, city, state }: IAddressDTO)
 
 export function UpdateClassAddressService(tenantId: string, classId: string, { street, city, state }: IAddressDTO,) {
   return api({
-    url: `${tenantId}/classes/${classId}/address`,
+    url: `${tenantId}/classes/${classId}/addresses`,
     method: 'patch',
     data: {
       street,
