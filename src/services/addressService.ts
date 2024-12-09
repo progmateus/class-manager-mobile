@@ -28,15 +28,10 @@ export function UpdateUserAddressService(tenantId: string) {
   })
 }
 
-export function ListTenantAddressesService({ street, city, state }: IAddressDTO) {
+export function ListTenantAddressesService(tenantId: string) {
   return api({
-    url: 'users/addresses',
-    method: 'patch',
-    data: {
-      street,
-      city,
-      state
-    }
+    url: `${tenantId}/addresses`,
+    method: 'get'
   })
 }
 

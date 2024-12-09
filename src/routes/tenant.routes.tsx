@@ -63,6 +63,7 @@ export type TenantRoutes = {
   classesDaysList: undefined;
   classDayProfile: { tenantIdParams: string, classDayId: string };
   updateClassDayStatus: { tenantIdParams: string, classDayId: string };
+  addressesList: undefined;
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -290,6 +291,12 @@ export function TenantRoutes() {
 
       <Screen
         name="classes"
+        component={ClassesList}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="addressesList"
         component={ClassesList}
         options={{ tabBarButton: () => (null) }}
       />
