@@ -27,17 +27,17 @@ const updateAddressSchema = z.object({
 
 type UpdateUserAddressProps = z.infer<typeof updateAddressSchema>
 
-export function CreateAddress() {
+export function UpdateUserAddress() {
   const [isLoading, setIsLoadig] = useState(false)
 
   const { user, userUpdate } = useAuth()
 
   const { control, handleSubmit, formState: { errors }, reset } = useForm<UpdateUserAddressProps>({
     defaultValues: {
-      street: user.address.street,
-      city: user.address.city,
-      state: user.address.state,
-      number: user.address.number,
+      street: user.address?.street,
+      city: user.address?.city,
+      state: user.address?.state,
+      number: user.address?.number,
     },
     resolver: zodResolver(updateAddressSchema)
   });

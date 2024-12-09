@@ -8,10 +8,11 @@ import { Check } from "phosphor-react-native"
 import { ScrollContainer } from "@components/ScrollContainer";
 import { useAuth } from "@hooks/useAuth";
 import { UpdateUserService } from "src/services/usersService";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { Avatar } from "@components/Avatar/Avatar";
 import { InputMask } from "@components/form/InputMask";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -31,7 +32,7 @@ export function UpdateUser() {
   const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuth();
 
-  const { control, handleSubmit, formState: { errors } } = useForm<updateUserProps>({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<updateUserProps>({
     defaultValues: {
       firstName: user.firstName,
       lastName: user.lastName,
@@ -51,6 +52,10 @@ export function UpdateUser() {
       setIsLoading(false)
     })
   }
+
+  useFocusEffect(useCallback(() => {
+    reset()
+  }, []))
 
   return (
     <View flex={1}>
