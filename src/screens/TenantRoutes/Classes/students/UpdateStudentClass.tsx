@@ -5,13 +5,13 @@ import { Viewcontainer } from "@components/ViewContainer"
 import { IClassDTO } from "@dtos/classes/IClassDTO"
 import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { Text, View, VStack } from "native-base"
 import { BookBookmark, Check } from "phosphor-react-native"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ListClassesService, ListStudentClassesService, UpdateOneStudentClassService } from "src/services/classesService"
 
@@ -47,9 +47,9 @@ export function UpdateStudentClass() {
     }
   }
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     getStudentClasses()
-  }, [tenantId, userId])
+  }, []))
 
   const { data: classes, isLoading } = useQuery<IClassDTO[]>({
     queryKey: ['get-student-classes', tenantId, userId],
