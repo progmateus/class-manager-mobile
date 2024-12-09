@@ -13,7 +13,7 @@ import { Text, View, VStack } from "native-base"
 import { BookBookmark, Check } from "phosphor-react-native"
 import { useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
-import { ListClassesService, ListStudentClassesService, UpdateStudentClassService } from "src/services/classesService"
+import { ListClassesService, ListStudentClassesService, UpdateOneStudentClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
   tenantIdParams: string;
@@ -67,7 +67,7 @@ export function UpdateStudentClass() {
     }
 
     try {
-      await UpdateStudentClassService(tenantId, [userId], selectedClassId)
+      await UpdateOneStudentClassService(tenantId, userId, selectedClassId)
       fireSuccesToast('Turma alterada com sucesso!')
       navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
     } catch (err) {

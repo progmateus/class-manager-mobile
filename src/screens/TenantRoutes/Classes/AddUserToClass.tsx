@@ -3,7 +3,7 @@ import { PageHeader } from "@components/PageHeader"
 import { UserItem } from "@components/Users/UserItem"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { Box, Checkbox, HStack, Icon, Text, View, VStack } from "native-base"
-import { ListStudentsByClassService, ListTeachersByClassService, UpdateStudentClassService, UpdateTeacherClassService } from "src/services/classesService"
+import { ListStudentsByClassService, ListTeachersByClassService, UpdateManyStudentsClassesService, UpdateTeacherClassService } from "src/services/classesService"
 import { fireSuccesToast } from "@utils/HelperNotifications"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
 import { useAuth } from "@hooks/useAuth"
@@ -75,7 +75,7 @@ export function AddUserToClass() {
   }
 
   const addStudent = () => {
-    UpdateStudentClassService(tenantId, existentClassRolesIds, classId).then(() => {
+    UpdateManyStudentsClassesService(tenantId, existentClassRolesIds, classId).then(() => {
       fireSuccesToast('Alunos adicionados com sucesso!')
       queryClient.invalidateQueries({
         queryKey: ['get-students-classes']
