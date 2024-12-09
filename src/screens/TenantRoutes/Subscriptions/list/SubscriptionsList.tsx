@@ -80,7 +80,7 @@ export function SubscriptionsList() {
                   renderItem={({ item }) => (
                     <SubscriptionItem subscription={item} />
                   )}
-                  ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                  ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                   onEndReached={onLoadMore}
                   onEndReachedThreshold={0.3}
                   showsVerticalScrollIndicator={false}
