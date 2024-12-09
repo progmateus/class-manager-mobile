@@ -6,11 +6,12 @@ import { IAddressDTO } from "@dtos/shared/IAddressDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { fireInfoToast } from "@utils/HelperNotifications"
 import { FlatList, HStack, Text, View, VStack } from "native-base"
 import { MapPin, Plus, TrashSimple } from "phosphor-react-native"
 import { TouchableOpacity } from "react-native"
-import { ListTenantAddressesService } from "src/services/addressService"
+import { DeleteAddressService, ListTenantAddressesService } from "src/services/addressService"
 import { THEME } from "src/theme"
 
 
@@ -19,7 +20,9 @@ export function AddressesList() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id;
 
-  const { colors } = THEME
+  const { colors } = THEME;
+
+  const queryClient = useQueryClient();
 
   const { data: addresses, isLoading } = useQuery<IAddressDTO[]>({
     queryKey: ['get-addresses', tenantId],
@@ -31,6 +34,15 @@ export function AddressesList() {
 
   const handleClickCreate = () => {
     navigation.navigate('createAddress')
+  }
+
+  const handleDeleteAddress = (addressId: string) => {
+    DeleteAddressService(addressId).then(async () => {
+      await queryClient.setQueryData(['get-addresses', tenantId], (oldData: IAddressDTO[]) => {
+        return oldData.filter(x => x.id != addressId)
+      })
+      fireInfoToast('Endereço deletado com sucesso')
+    })
   }
 
   return (
@@ -54,7 +66,7 @@ export function AddressesList() {
                       <Text fontFamily="body" color="coolGray.500" mt={2}> CEP {item.zipCode ? `, ${item.zipCode}` : 'Nao informado'}</Text>
                       <Text fontFamily="body" color="coolGray.500"> {item.city}, {<Text> {item.state}</Text>}</Text>
                     </VStack>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleDeleteAddress(item.id)}>
                       <TrashSimple color={colors.red['600']} size={24} />
                     </TouchableOpacity>
                   </HStack>
