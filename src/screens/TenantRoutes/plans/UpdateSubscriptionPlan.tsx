@@ -12,7 +12,7 @@ import { View, VStack } from "native-base"
 import { Barbell, Check, Money, SimCard } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
-import { UpdateSubscriptionService } from "src/services/subscriptionService"
+import { UpdateSubscriptionPlanService } from "src/services/subscriptionService"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
@@ -73,7 +73,7 @@ export function UpdateSubscriptionPlan() {
       return
     }
     setIsActing(true)
-    UpdateSubscriptionService(tenantId, subscriptionId, null, selectedPlanId).then(() => {
+    UpdateSubscriptionPlanService(tenantId, subscriptionId, selectedPlanId).then(() => {
       fireSuccesToast('Plano alterado com sucesso!')
       queryClient.invalidateQueries({
         queryKey: ['get-tenant-plans', tenant.id],

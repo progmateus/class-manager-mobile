@@ -13,7 +13,7 @@ import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCi
 import { useCallback, useMemo, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
-import { GetSubscriptionProfileService, UpdateSubscriptionService } from "src/services/subscriptionService"
+import { GetSubscriptionProfileService, UpdateSubscriptionStatusService } from "src/services/subscriptionService"
 import { HasRole } from "@utils/HasRole"
 import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/SubscriptionProfile"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
@@ -64,7 +64,7 @@ export function SubscriptionProfile() {
       if (isPending || !subscription || !subscriptionId) {
         return
       }
-      await UpdateSubscriptionService(tenantId, subscriptionId, status)
+      await UpdateSubscriptionStatusService(tenantId, subscriptionId, status)
     },
     onSuccess: (data: void, variables: ESubscriptionStatus, context: unknown) => {
       if (variables === ESubscriptionStatus.ACTIVE) {

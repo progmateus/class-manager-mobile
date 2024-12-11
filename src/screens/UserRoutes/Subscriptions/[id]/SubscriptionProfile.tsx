@@ -12,7 +12,7 @@ import { Actionsheet, Box, Center, Heading, HStack, Icon, Text, View, VStack } f
 import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard, Plus } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
-import { GetSubscriptionProfileService, UpdateSubscriptionService } from "src/services/subscriptionService"
+import { GetSubscriptionProfileService, UpdateSubscriptionStatusService } from "src/services/subscriptionService"
 import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/SubscriptionProfile"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
@@ -64,7 +64,7 @@ export function SubscriptionProfile() {
       if (isPending || !subscription || !subscriptionId) {
         return
       }
-      await UpdateSubscriptionService(tenantId, subscriptionId, status)
+      await UpdateSubscriptionStatusService(tenantId, subscriptionId, status)
     },
     onSuccess: (data: void, variables: ESubscriptionStatus, context: unknown) => {
       if (variables === ESubscriptionStatus.ACTIVE) {

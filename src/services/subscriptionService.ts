@@ -21,13 +21,22 @@ export function DeleteSubscriptionService(tenantId: string, subscriptionId: stri
   })
 }
 
-export function UpdateSubscriptionService(tenantId: string, subscriptionId: string, status?: ESubscriptionStatus | null, tenantPlanId?: string) {
+export function UpdateSubscriptionPlanService(tenantId: string, subscriptionId: string, tenantPlanId: string) {
   return api({
     url: `${tenantId}/subscriptions/${subscriptionId}`,
     method: 'put',
     data: {
-      status,
       tenantPlanId
+    }
+  })
+}
+
+export function UpdateSubscriptionStatusService(tenantId: string, subscriptionId: string, status: ESubscriptionStatus) {
+  return api({
+    url: `${tenantId}/subscriptions/${subscriptionId}`,
+    method: 'patch',
+    data: {
+      status
     }
   })
 }
