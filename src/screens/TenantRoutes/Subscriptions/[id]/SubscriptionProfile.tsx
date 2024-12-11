@@ -18,6 +18,7 @@ import { HasRole } from "@utils/HasRole"
 import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/SubscriptionProfile"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
+import { EAuthType } from "src/enums/EAuthType"
 
 
 type RouteParamsProps = {
@@ -80,7 +81,7 @@ export function SubscriptionProfile() {
   })
 
   const handleSubscribe = useCallback(() => {
-    if (authenticationType == "user") {
+    if (authenticationType == EAuthType.USER) {
       userNavigation.navigate('createSubscription', {
         tenantIdParams: tenantId
       })

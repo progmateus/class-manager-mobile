@@ -13,6 +13,7 @@ import { Text, View, VStack } from "native-base"
 import { BookBookmark, Check } from "phosphor-react-native"
 import { useCallback, useEffect, useState } from "react"
 import { TouchableOpacity } from "react-native"
+import { EAuthType } from "src/enums/EAuthType"
 import { ListClassesService, ListStudentClassesService, UpdateOneStudentClassService } from "src/services/classesService"
 
 type RouteParamsProps = {
@@ -34,7 +35,7 @@ export function UpdateStudentClass() {
 
   let userId = userIdParam ?? ""
 
-  if (authenticationType === "user") {
+  if (authenticationType === EAuthType.USER) {
     userId = user.id
   }
 

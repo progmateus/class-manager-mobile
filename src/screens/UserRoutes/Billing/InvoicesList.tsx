@@ -6,6 +6,7 @@ import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 import { useAuth } from "@hooks/useAuth";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FlatList, Text, View, VStack } from "native-base";
+import { EAuthType } from "src/enums/EAuthType";
 import { ListInvoicesService } from "src/services/invoiceService";
 
 export function InvoicesList() {
@@ -13,7 +14,7 @@ export function InvoicesList() {
 
   const loadInvoices = async (page: number) => {
     try {
-      const { data } = await ListInvoicesService({ page, userId: authenticationType == "user" ? user.id : undefined })
+      const { data } = await ListInvoicesService({ page, userId: authenticationType == EAuthType.USER ? user.id : undefined })
       return data.data
     } catch (err) {
       console.log(err)

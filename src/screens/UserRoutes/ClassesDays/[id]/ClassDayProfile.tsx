@@ -18,6 +18,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HasRole } from "@utils/HasRole";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { ClassDayHeader } from "@components/ClassDayPage/Info";
+import { EAuthType } from "src/enums/EAuthType";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -87,7 +88,7 @@ export function ClassDayProfile() {
 
 
   function handleClickUpdateStatus() {
-    if (authenticationType == "user") {
+    if (authenticationType == EAuthType.USER) {
       userNavigation.navigate('updateClassDayStatus', {
         tenantIdParams: tenantId,
         classDayId

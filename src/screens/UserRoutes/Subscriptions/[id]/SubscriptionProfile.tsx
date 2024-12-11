@@ -17,6 +17,7 @@ import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/Subsc
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
 import { TouchableOpacity } from "react-native"
+import { EAuthType } from "src/enums/EAuthType"
 
 
 type RouteParamsProps = {
@@ -33,7 +34,7 @@ export function SubscriptionProfile() {
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>()
   const userNavigation = useNavigation<UserNavigatorRoutesProps>()
 
-  const tenantId = authenticationType == "tenant" ? tenant?.id : tenantIdParams as string
+  const tenantId = authenticationType == EAuthType.TENANT ? tenant?.id : tenantIdParams as string
 
   const queryClient = useQueryClient();
 
@@ -80,7 +81,7 @@ export function SubscriptionProfile() {
   })
 
   const handleSubscribe = useCallback(() => {
-    if (authenticationType == "user") {
+    if (authenticationType == EAuthType.USER) {
       userNavigation.navigate('createSubscription', {
         tenantIdParams: tenantId
       })

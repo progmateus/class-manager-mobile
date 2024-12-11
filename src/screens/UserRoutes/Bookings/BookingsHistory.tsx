@@ -15,6 +15,7 @@ import { TouchableOpacity } from "react-native"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { transFormClassDayColor } from "@utils/StatusHelper"
+import { EAuthType } from "src/enums/EAuthType"
 
 type RouteParamsProps = {
   tenantIdParams?: string;
@@ -24,7 +25,7 @@ export function BookingsHistory() {
   const route = useRoute()
   const { tenantIdParams, userId } = route.params as RouteParamsProps;
   const { tenant, authenticationType, user } = useAuth()
-  const tenantId = authenticationType == "tenant" ? tenant?.id : tenantIdParams
+  const tenantId = authenticationType == EAuthType.TENANT ? tenant?.id : tenantIdParams
 
   const userNavigation = useNavigation<UserNavigatorRoutesProps>()
 
@@ -65,7 +66,7 @@ export function BookingsHistory() {
 
 
   const fetchBookings = (page: number) => {
-    if (authenticationType === "user") {
+    if (authenticationType === EAuthType.USER) {
       return loadUserBookings(page)
     } else {
       return loadTenantBookings(page)
@@ -83,7 +84,7 @@ export function BookingsHistory() {
   }
 
   const handleRedirectClassDay = (classDayId: string, tenantId: string) => {
-    if (authenticationType === "user") {
+    if (authenticationType === EAuthType.USER) {
       userNavigation.navigate('classDayProfile', {
         classDayId,
         tenantIdParams: tenantId

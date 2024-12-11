@@ -13,12 +13,13 @@ import { AxiosError } from "axios";
 import { AppError } from "@utils/errors/AppError";
 import { ValidationError } from "@utils/errors/ValidationError";
 import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import { EAuthType } from "src/enums/EAuthType";
 
 
 export type AuthContextDataProps = {
   user: IUserProfileDTO;
   tenant: ITenantProfileDTO;
-  authenticationType: "user" | "tenant";
+  authenticationType: EAuthType;
   isLoadingData: boolean;
   singIn: (email: string, password: string) => Promise<void>;
   userUpdate: (userUpdated: IUserProfileDTO) => Promise<void>;
@@ -41,7 +42,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const [user, setUser] = useState<IUserProfileDTO>({} as IUserProfileDTO);
   const [tenant, setTenant] = useState<ITenantProfileDTO>({} as ITenantProfileDTO);
-  const [authenticationType, setAuthenticationType] = useState<"user" | "tenant">("user");
+  const [authenticationType, setAuthenticationType] = useState<EAuthType>(EAuthType.USER);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   function tokenUpdate(token: string) {
@@ -63,7 +64,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     await storageTenantSave(tenant);
   }
 
-  async function authenticationTypeUpdate(type: "tenant" | "user") {
+  async function authenticationTypeUpdate(type: EAuthType) {
     setAuthenticationType(type)
     await storageAuthenticationTypeSave(type);
   }
@@ -95,7 +96,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     await Promise.all([
       storageUserRemove(),
       storageAuthTokenRemove(),
-      authenticationTypeUpdate("user")
+      authenticationTypeUpdate(EAuthType.USER)
     ])
     setIsLoadingData(false)
   }
@@ -159,7 +160,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       .then(async ({ data: { data } }) => {
         if (data.id) {
           tenantUpdate(data)
-          authenticationTypeUpdate("tenant")
+          authenticationTypeUpdate(EAuthType.TENANT)
         }
       }).catch((err) => {
         console.log('err: ', err)
@@ -171,7 +172,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function signOutTenant() {
     setIsLoadingData(true);
-    authenticationTypeUpdate("user")
+    authenticationTypeUpdate(EAuthType.USER)
     setTenant({} as ITenantProfileDTO);
     await storageTenantRemove()
     setIsLoadingData(false)
@@ -181,12 +182,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     try {
       const authentication_type = await storageAuthenticationTypeGet();
       refreshUser();
-      if (authentication_type && authentication_type == "tenant") {
+      if (authentication_type && authentication_type == EAuthType.TENANT) {
         if (tenant.id) {
           authenticationTypeUpdate(authentication_type)
           refreshTenant()
         } else {
-          authenticationTypeUpdate("user")
+          authenticationTypeUpdate(EAuthType.USER)
         }
       }
     } catch (error) {

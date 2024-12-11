@@ -18,6 +18,7 @@ import { THEME } from "src/theme";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
 import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import { EAuthType } from "src/enums/EAuthType";
 
 
 type RouteParamsProps = {
@@ -44,7 +45,7 @@ export function TenantProfile() {
   const { tenant, authenticationType } = useAuth();
   let tenantId = tenant?.id;
 
-  if (authenticationType == "user") {
+  if (authenticationType == EAuthType.USER) {
     const { tenantIdParams } = route.params as RouteParamsProps;
     tenantId = tenantIdParams;
   }

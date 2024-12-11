@@ -5,6 +5,7 @@ import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
 import { TenantRoutes } from "./tenant.routes";
 import { UserRoutes } from "./user.routes";
+import { EAuthType } from "src/enums/EAuthType";
 
 export function Routes() {
   const { colors } = useTheme();
@@ -21,9 +22,9 @@ export function Routes() {
     <Box flex={1} bg="white">
       <NavigationContainer>
         {
-          user.id && authenticationType === "user" ? (
+          user.id && authenticationType === EAuthType.USER ? (
             <UserRoutes />
-          ) : user.id && tenant.id && authenticationType === "tenant" ? (
+          ) : user.id && tenant.id && authenticationType === EAuthType.TENANT ? (
             <TenantRoutes />
           ) : (
             <GuestRoutes />
