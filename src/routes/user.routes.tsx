@@ -26,7 +26,7 @@ import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/Subscrip
 type UserRoutes = {
   tenantsList: undefined;
   profile: undefined;
-  invoicesList: { tenantIdParams?: string, subscriptionId?: string };
+  invoicesList: { tenantIdParams?: string; subscriptionId?: string, userId?: string; };
   tenantProfile: { tenantIdParams: string };
   classesDays: { tenantIdParams?: string };
   classDayProfile: { tenantIdParams: string, classDayId: string };
@@ -87,6 +87,7 @@ export function UserRoutes() {
       <Screen
         name="invoicesList"
         component={InvoicesList}
+        initialParams={{}}
         options={{
           tabBarIcon: ({ color }) => (
             <CurrencyDollar color={color} size={iconSize} />

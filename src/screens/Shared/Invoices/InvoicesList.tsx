@@ -35,7 +35,7 @@ export function InvoicesList() {
   }
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IInvoiceDTO[]>({
-    queryKey: ['get-invoices', user.id],
+    queryKey: ['get-invoices', user.id, tenantId, subscriptionId],
     queryFn: ({ pageParam }) => loadInvoices(Number(pageParam)),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam: any) => {

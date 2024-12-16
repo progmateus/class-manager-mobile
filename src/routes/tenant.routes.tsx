@@ -70,7 +70,7 @@ export type TenantRoutes = {
   updateClassDayStatus: { tenantIdParams: string, classDayId: string };
   addressesList: undefined;
   createAddress: undefined;
-  invoicesList: { subscriptionId?: string, userId?: string };
+  invoicesList: { tenantIdParams?: string; subscriptionId?: string, userId?: string; };
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -322,6 +322,7 @@ export function TenantRoutes() {
 
       <Screen
         name="invoicesList"
+        initialParams={{}}
         component={InvoicesList}
         options={{ tabBarButton: () => (null) }}
       />
