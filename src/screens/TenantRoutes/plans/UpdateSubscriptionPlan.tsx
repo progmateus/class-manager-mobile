@@ -100,8 +100,7 @@ export function UpdateSubscriptionPlan() {
                   >
                     <GenericItem.Root
                       key={plan.id}
-                      borderColor={plan.id === selectedPlanId ? 'brand.500' : 'coolGray.400'}
-                      borderWidth={plan.id === selectedPlanId ? 2 : 0.5}
+                      isSelected={plan.id === selectedPlanId}
                     >
                       <GenericItem.Icon icon={SimCard} color={plan.id === selectedPlanId ? 'brand.500' : 'coolGray.700'} />
                       <GenericItem.Content title={plan.name} caption={plan.description} />

@@ -118,8 +118,7 @@ export function UpdateStudentClass() {
                           onPress={() => handleSelectClass(classEntity.id)}
                         >
                           <GenericItem.Root
-                            borderColor={classEntity.id === selectedClassId ? 'brand.500' : 'coolGray.400'}
-                            borderWidth={classEntity.id === selectedClassId ? 2 : 0.5}
+                            isSelected={classEntity.id === selectedClassId}
                           >
                             <GenericItem.Icon icon={BookBookmark} color={classEntity.id === selectedClassId ? 'brand.500' : 'coolGray.700'} />
                             <GenericItem.Content title={classEntity.name} caption={classEntity.description} />

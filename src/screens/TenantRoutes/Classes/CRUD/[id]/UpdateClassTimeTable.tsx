@@ -79,8 +79,7 @@ export function UpdateClassTimeTable() {
                 <TouchableOpacity onPress={() => setSelectedTimeTable(item.id)} key={item.id}>
                   <GenericItem.Root
                     key={item.id}
-                    borderColor={item.id === selectedTimeTable ? 'brand.500' : 'coolGray.400'}
-                    borderWidth={item.id === selectedTimeTable ? 2 : 0.5}
+                    isSelected={item.id === selectedTimeTable}
                   >
                     <GenericItem.Icon icon={Calendar} color={item.id === selectedTimeTable ? 'brand.500' : 'coolGray.700'} />
                     <GenericItem.Content title={item.name} caption="" />
