@@ -9,7 +9,7 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { transformInvoiceColor, transformInvoiceStatus, transformSubscriptionColor, transformSubscriptionStatus } from "@utils/StatusHelper"
 import { Actionsheet, Box, Center, Heading, HStack, Icon, Text, View, VStack } from "native-base"
-import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard, Plus, Pause } from "phosphor-react-native"
+import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard, Plus, Pause, CurrencyDollar } from "phosphor-react-native"
 import { useCallback, useMemo, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
@@ -102,6 +102,17 @@ export function SubscriptionProfile() {
     return status.some(x => x == subscription.status)
   }
 
+  const handleNavigateToInvoicesList = () => {
+    if (!subscription) {
+      return
+    }
+    if (authenticationType == EAuthType.USER) {
+      userNavigation.navigate('invoicesList', { subscriptionId: subscription.id, tenantIdParams: tenantId })
+    } else {
+      tenantNavigation.navigate('invoicesList', { subscriptionId: subscription.id, userId: subscription.userId })
+    }
+  }
+
   return (
     <View flex={1}>
       <PageHeader title={
@@ -136,12 +147,12 @@ export function SubscriptionProfile() {
 
                     <HStack alignItems="center" space={1}>
                       <Icon as={IdentificationCard} />
-                      <Text fontSize="sm" > {subscription.user.document} </Text>
+                      <Text fontSize="sm" > {authenticationType == EAuthType.USER ? subscription?.tenant?.document : subscription?.user?.document ?? 'Não informado'} </Text>
                     </HStack>
 
                     <HStack alignItems="center" space={1}>
                       <Icon as={Phone} />
-                      <Text fontSize="sm"> {subscription.user?.phone ?? 'Não informado'} </Text>
+                      <Text fontSize="sm"> {authenticationType == EAuthType.USER ? subscription?.tenant?.phone : subscription?.user?.phone ?? 'Não informado'} </Text>
                     </HStack>
 
                     <HStack alignItems="center" space={1}>
@@ -156,10 +167,10 @@ export function SubscriptionProfile() {
                         w={24}
                         h={24}
                         alt="Foto de perfil"
-                        src={subscription.user.avatar}
-                        username={subscription.user.username}
+                        src={authenticationType == EAuthType.USER ? subscription?.tenant?.avatar : subscription?.user?.avatar}
+                        username={authenticationType == EAuthType.USER ? subscription?.tenant?.username : subscription?.user?.username}
                       />
-                      <Text fontSize="sm" mt={2} color="coolGray.400">{subscription.user.username}</Text>
+                      <Text fontSize="sm" mt={2} color="coolGray.500">@{authenticationType == EAuthType.USER ? subscription?.tenant?.username : subscription?.user?.username}</Text>
                     </Center>
                   </VStack>
                 </HStack>
@@ -229,6 +240,14 @@ export function SubscriptionProfile() {
                   <MenuItem.Root onPress={() => tenantNavigation.navigate('updateSubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.tenantPlanId, subscriptionId })}>
                     <MenuItem.Icon icon={SimCard} />
                     <MenuItem.Content title="Alterar plano" description="Altere o plano do aluno" />
+                    <MenuItem.Actions>
+                      <MenuItem.Action icon={ArrowRight} />
+                    </MenuItem.Actions>
+                  </MenuItem.Root>
+
+                  <MenuItem.Root onPress={handleNavigateToInvoicesList}>
+                    <MenuItem.Icon icon={CurrencyDollar} />
+                    <MenuItem.Content title="Gerenciar cobranças" description="Gerencie as cobranças da sua assinatura" />
                     <MenuItem.Actions>
                       <MenuItem.Action icon={ArrowRight} />
                     </MenuItem.Actions>

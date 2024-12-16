@@ -4,7 +4,6 @@ import {
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
 import { useTheme } from "native-base";
-import { InvoicesList } from "@screens/UserRoutes/Billing/InvoicesList";
 import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
 import { ClassDayProfile } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayProfile";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
@@ -14,20 +13,20 @@ import { Profile } from "@screens/UserRoutes/User/profile/UserProfile";
 import { UpdatePassword } from "@screens/UserRoutes/User/[id]/UpdatePassword";
 import { TenantsList } from "@screens/UserRoutes/Tenants/list/TenantsList";
 import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
-import { CreateClassDay } from "@screens/TenantRoutes/ClassesDays/CreateClassDay";
 import { CreateSubscription } from "@screens/UserRoutes/Subscriptions/CreateSubscription";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { CreateTenant } from "@screens/UserRoutes/Tenants/CreateTenant";
-import { SubscriptionProfile } from "@screens/UserRoutes/Subscriptions/[id]/SubscriptionProfile";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
 import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
 import { UpdateUserAddress } from "@screens/UserRoutes/User/[id]/UpdateUserAddress";
+import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
+import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/SubscriptionProfile";
 
 
 type UserRoutes = {
   tenantsList: undefined;
   profile: undefined;
-  bills: undefined;
+  invoicesList: { tenantIdParams?: string, subscriptionId?: string };
   tenantProfile: { tenantIdParams: string };
   classesDays: { tenantIdParams?: string };
   classDayProfile: { tenantIdParams: string, classDayId: string };
@@ -86,7 +85,7 @@ export function UserRoutes() {
       />
 
       <Screen
-        name="bills"
+        name="invoicesList"
         component={InvoicesList}
         options={{
           tabBarIcon: ({ color }) => (

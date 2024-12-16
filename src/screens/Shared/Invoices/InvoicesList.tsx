@@ -4,17 +4,30 @@ import { PageHeader } from "@components/PageHeader";
 import { Viewcontainer } from "@components/ViewContainer";
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 import { useAuth } from "@hooks/useAuth";
+import { useRoute } from "@react-navigation/native";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FlatList, Text, View, VStack } from "native-base";
 import { EAuthType } from "src/enums/EAuthType";
 import { ListInvoicesService } from "src/services/invoiceService";
 
+
+type RouteParamsProps = {
+  tenantIdParams?: string;
+  subscriptionId?: string;
+}
+
 export function InvoicesList() {
-  const { user, authenticationType } = useAuth();
+  const { user, authenticationType, tenant } = useAuth();
+
+  const route = useRoute()
+
+  const { tenantIdParams, subscriptionId } = route.params as RouteParamsProps;
+
+  const tenantId = tenant?.id ?? tenantIdParams
 
   const loadInvoices = async (page: number) => {
     try {
-      const { data } = await ListInvoicesService({ page, userId: authenticationType == EAuthType.USER ? user.id : undefined })
+      const { data } = await ListInvoicesService({ page, userId: authenticationType == EAuthType.USER ? user.id : undefined, subscriptionId, tenantId })
       return data.data
     } catch (err) {
       console.log(err)

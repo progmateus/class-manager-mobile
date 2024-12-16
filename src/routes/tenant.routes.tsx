@@ -8,7 +8,6 @@ import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/Subs
 import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
 import { BookBookmark, Buildings, Calendar, GraduationCap, House, UserCircle } from "phosphor-react-native";
-import { SubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/SubscriptionProfile";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
 import { CreateClass } from "@screens/TenantRoutes/Classes/CRUD/CreateClass";
@@ -36,6 +35,8 @@ import { useAuth } from "@hooks/useAuth";
 import { CreateAddress } from "@screens/TenantRoutes/Addresses/CRUD/CreateAddress";
 import { AddressesList } from "@screens/TenantRoutes/Addresses/CRUD/AddressesList";
 import { UpdateClassAddress } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassAddress";
+import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
+import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/SubscriptionProfile";
 
 
 export type TenantRoutes = {
@@ -69,6 +70,7 @@ export type TenantRoutes = {
   updateClassDayStatus: { tenantIdParams: string, classDayId: string };
   addressesList: undefined;
   createAddress: undefined;
+  invoicesList: { subscriptionId?: string, userId?: string };
 }
 export type TenantNavigatorRoutesProps = BottomTabNavigationProp<TenantRoutes>;
 
@@ -315,6 +317,12 @@ export function TenantRoutes() {
       <Screen
         name="updateClassAddress"
         component={UpdateClassAddress}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="invoicesList"
+        component={InvoicesList}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>
