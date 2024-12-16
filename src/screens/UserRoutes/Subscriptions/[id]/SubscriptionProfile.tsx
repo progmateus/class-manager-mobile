@@ -9,7 +9,7 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { transformInvoiceColor, transformInvoiceStatus, transformSubscriptionColor, transformSubscriptionStatus } from "@utils/StatusHelper"
 import { Actionsheet, Box, Center, Heading, HStack, Icon, Text, View, VStack } from "native-base"
-import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard, Plus } from "phosphor-react-native"
+import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard, Plus, Pause } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
 import { GetSubscriptionProfileService, UpdateSubscriptionStatusService } from "src/services/subscriptionService"
@@ -91,6 +91,14 @@ export function SubscriptionProfile() {
 
   }, [subscriptionId, tenantId])
 
+
+  const verifySubscriptionStatus = (status: ESubscriptionStatus[]) => {
+    if (!subscription) {
+      return false
+    }
+    return status.some(x => x == subscription.status)
+  }
+
   return (
     <View flex={1}>
       <PageHeader title={
@@ -114,7 +122,7 @@ export function SubscriptionProfile() {
                 }
 
                 {
-                  subscription.status == ESubscriptionStatus.INCOMPLETE_EXPIRED && (
+                  verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
                     <TouchableOpacity onPress={handleSubscribe}>
                       <View px={4} py={3} bgColor="red.400">
                         <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
@@ -233,7 +241,7 @@ export function SubscriptionProfile() {
                     </Heading>
                   </Box>
                   {
-                    subscription.status !== ESubscriptionStatus.ACTIVE && subscription.status === ESubscriptionStatus.CANCELED && (
+                    verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED, ESubscriptionStatus.CANCELED]) && (
                       <Actionsheet.Item onPress={handleSubscribe} startIcon={<Icon as={Plus} size="6" name="start" />}>
                         <Text fontSize="16"> Nova assinatura</Text>
                       </Actionsheet.Item>
@@ -241,7 +249,7 @@ export function SubscriptionProfile() {
                   }
 
                   {
-                    subscription.status !== ESubscriptionStatus.ACTIVE && subscription.status !== ESubscriptionStatus.CANCELED && (
+                    verifySubscriptionStatus([ESubscriptionStatus.PAUSED]) && (
                       <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.ACTIVE)} startIcon={<Icon as={Check} size="6" name="start" />}>
                         <Text fontSize="16"> Ativar assinatura</Text>
                       </Actionsheet.Item>
@@ -249,15 +257,15 @@ export function SubscriptionProfile() {
                   }
 
                   {
-                    subscription.status === ESubscriptionStatus.ACTIVE && (
-                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.PAUSED)} startIcon={<Icon as={Lock} size="6" name="pause" />}>
+                    verifySubscriptionStatus([ESubscriptionStatus.ACTIVE, ESubscriptionStatus.PAST_DUE, ESubscriptionStatus.UNPAID]) && (
+                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.PAUSED)} startIcon={<Icon as={Pause} size="6" name="pause" />}>
                         <Text fontSize="16"> Pausar assinatura</Text>
                       </Actionsheet.Item>
                     )
                   }
 
                   {
-                    subscription.status !== ESubscriptionStatus.CANCELED && (
+                    verifySubscriptionStatus([ESubscriptionStatus.ACTIVE, ESubscriptionStatus.PAST_DUE, ESubscriptionStatus.UNPAID]) && (
                       <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.CANCELED)} startIcon={<Icon as={X} size="6" name="cancel" color="red.600" />}>
                         <Text fontSize="16" color="red.600"> Cancelar assinatura</Text>
                       </Actionsheet.Item>
