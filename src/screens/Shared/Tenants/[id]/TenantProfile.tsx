@@ -19,6 +19,7 @@ import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
 import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 import { EAuthType } from "src/enums/EAuthType";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 
 
 type RouteParamsProps = {
@@ -41,6 +42,7 @@ export function TenantProfile() {
   const route = useRoute()
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
+  const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>();
 
   const { tenant, authenticationType } = useAuth();
   let tenantId = tenant?.id;
@@ -107,6 +109,10 @@ export function TenantProfile() {
     return !link.url.startsWith('https://') ? `https://${link.url}` : link.url
   }
 
+  const handlePressEditTenant = () => {
+    tenantNavigation.navigate('updateTenant')
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Perfil" />
@@ -132,15 +138,20 @@ export function TenantProfile() {
                   <Heading mt={4} fontSize="xl">{tenantProfile.name}</Heading>
                   <Text fontSize="sm">@{tenantProfile.username}</Text>
                   {
-                    subscriptionExists ?
-                      (
-                        <Button title="INSCRITO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleNavigateSubscription} />
+                    authenticationType == EAuthType.TENANT && tenantProfile.id == tenant?.id ? (
+                      <Button title="EDITAR PERFIL" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handlePressEditTenant} />
+                    ) : (
+                      subscriptionExists ?
+                        (
+                          <Button title="INSCRITO" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleNavigateSubscription} />
 
-                      ) :
-                      (
-                        <Button title="INSCREVA-SE" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleSubscribe} />
-                      )
+                        ) :
+                        (
+                          <Button title="INSCREVA-SE" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleSubscribe} />
+                        )
+                    )
                   }
+
                   <HStack mt={6} space={2}>
                     {
                       tenantProfile.links && tenantProfile.links.length > 0 && (

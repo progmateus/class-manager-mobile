@@ -20,7 +20,7 @@ import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
-import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
+import { TenantProfile } from "@screens/Shared/Tenants/[id]/TenantProfile";
 import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
 import { TimeTable } from "@screens/TenantRoutes/TimesTables/[id]/TimeTable";
 import { TimesTablesList } from "@screens/TenantRoutes/TimesTables/list/TimesTablesList";

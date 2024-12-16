@@ -4,7 +4,7 @@ import {
   createBottomTabNavigator
 } from "@react-navigation/bottom-tabs";
 import { useTheme } from "native-base";
-import { TenantProfile } from "@screens/UserRoutes/Tenants/[id]/TenantProfile";
+import { TenantProfile } from "@screens/Shared/Tenants/[id]/TenantProfile";
 import { ClassDayProfile } from "@screens/UserRoutes/ClassesDays/[id]/ClassDayProfile";
 import { UpdateClassDayStatus } from "@screens/UserRoutes/ClassesDays/[id]/UpdateClassDayStatus";
 import { UpdateUser } from "@screens/UserRoutes/User/[id]/UpdateUser";
