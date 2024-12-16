@@ -239,7 +239,7 @@ export function UpdateTenant() {
                   tenant.links && tenant.links.length > 0 && (
                     tenant.links.map((link) => {
                       return (
-                        <HStack key={link.id} alignItems="center" pr="20" space={2} >
+                        <HStack key={link.id} alignItems="center" space={2} >
                           <TouchableOpacity onPress={() => handleOpenSelectAction(link.id)}>
                             <Icon as={tranformSocialIcon(link.type)} />
                           </TouchableOpacity>
