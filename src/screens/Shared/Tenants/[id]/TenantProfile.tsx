@@ -20,6 +20,7 @@ import { ELinkType } from "src/enums/ELinkType";
 import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 import { EAuthType } from "src/enums/EAuthType";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { HasRole } from "@utils/HasRole";
 
 
 type RouteParamsProps = {
@@ -44,7 +45,7 @@ export function TenantProfile() {
   const navigation = useNavigation<UserNavigatorRoutesProps>();
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>();
 
-  const { tenant, authenticationType } = useAuth();
+  const { tenant, authenticationType, authenticateTenant } = useAuth();
   let tenantId = tenant?.id;
 
   if (authenticationType == EAuthType.USER) {
@@ -113,6 +114,28 @@ export function TenantProfile() {
     tenantNavigation.navigate('updateTenant')
   }
 
+  const isTenantLogged = useMemo(() => {
+    if (!tenantProfile) {
+      return
+    }
+    return authenticationType == EAuthType.TENANT && tenantProfile.id == tenant?.id
+  }, [tenantProfile])
+
+  const isTenantAdmin = useMemo(() => {
+    if (!tenantProfile) {
+      return false
+    }
+    return HasRole(user.usersRoles, tenantProfile.id, ["admin"])
+  }, [tenantProfile])
+
+
+  const handleSignInTenant = () => {
+    if (!tenantProfile) {
+      return
+    }
+    authenticateTenant(tenantProfile.id)
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Perfil" />
@@ -138,8 +161,10 @@ export function TenantProfile() {
                   <Heading mt={4} fontSize="xl">{tenantProfile.name}</Heading>
                   <Text fontSize="sm">@{tenantProfile.username}</Text>
                   {
-                    authenticationType == EAuthType.TENANT && tenantProfile.id == tenant?.id ? (
+                    isTenantLogged ? (
                       <Button title="EDITAR PERFIL" variant="outline" mt={6} w="1/2" h={10} fontSize="xs" onPress={handlePressEditTenant} />
+                    ) : isTenantAdmin ? (
+                      <Button title="ENTRAR" mt={6} w="1/2" h={10} fontSize="xs" onPress={handleSignInTenant} />
                     ) : (
                       subscriptionExists ?
                         (
