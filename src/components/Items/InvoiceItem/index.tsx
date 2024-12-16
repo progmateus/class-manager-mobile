@@ -4,8 +4,11 @@ import { CaretDown, CheckCircle, XCircle, Warning, CurrencyCircleDollar, CreditC
 import { Pressable, TouchableOpacity } from "react-native";
 import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
 import dayjs from "dayjs"
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { THEME } from 'src/theme'
+import { HasRole } from "@utils/HasRole";
+import { useAuth } from "@hooks/useAuth";
+import { EInvoiceType } from "src/enums/EInvoiceType";
 
 
 interface IProps {
@@ -16,6 +19,7 @@ export function InvoiceItem({ invoice }: IProps) {
 
   const [isOpen, setIsOpen] = useState(false)
   const { sizes, colors } = THEME;
+  const { user } = useAuth()
 
   const priceFormatted = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -61,16 +65,16 @@ export function InvoiceItem({ invoice }: IProps) {
   }
 
 
-  const handleClickInvoice = () => {
-    if (invoice.status == EInvoiceStatus.OPEN || invoice.status == EInvoiceStatus.UNPAID) {
-      setIsOpen(!isOpen)
-    }
-  }
-
-
-  const isInvoiceStatus = (status: EInvoiceStatus[]): boolean => {
+  const hasInvoiceStatus = (status: EInvoiceStatus[]): boolean => {
     return status.includes(invoice.status)
   }
+
+  const isInvoiceAdmin = useMemo(() => {
+    if (invoice.type != EInvoiceType.USER_SUBSCRIPTION) {
+      return false
+    }
+    return HasRole(user.usersRoles, invoice.tenantId, ["admin"])
+  }, [invoice.id])
 
   const color = convertBillStatus(invoice.status).color
 
@@ -87,7 +91,7 @@ export function InvoiceItem({ invoice }: IProps) {
           <Text color={color} fontSize="md" mr={2}>{priceFormatted(invoice.amount)}</Text>
 
           {
-            isInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
+            isInvoiceAdmin && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
               <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
                 <Icon as={CaretDown} color="coolGray.600" />
               </TouchableOpacity>
