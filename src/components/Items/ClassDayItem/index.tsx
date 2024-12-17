@@ -1,5 +1,5 @@
-import { Heading, HStack, Text, View, VStack } from "native-base";
-import { Clock } from "phosphor-react-native";
+import { Heading, HStack, Icon, Text, View, VStack } from "native-base";
+import { Clock, MapPin } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
@@ -7,6 +7,7 @@ import { Avatar } from "@components/Avatar/Avatar";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { THEME } from "src/theme";
+import { size } from "lodash";
 
 interface IProps {
   classDay: ICLassDayDTO
@@ -14,7 +15,7 @@ interface IProps {
 function ClassDayItem({ classDay }: IProps) {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
-  const { colors } = THEME;
+  const { colors, sizes } = THEME;
 
 
   function handleClickClassDay(classDayId: string, tenantId: string) {
@@ -47,9 +48,12 @@ function ClassDayItem({ classDay }: IProps) {
         <VStack space={0.5} flex={1}>
           <Heading fontSize="sm" fontFamily="heading">{classDay.class?.tenant?.name}</Heading>
           <Text fontSize="xs" fontWeight="light">{classDay.class.name}</Text>
-          <Text fontSize="xs" fontWeight="light" color="coolGray.500">Não informado</Text>
+          <Text fontSize="xs" fontWeight="light" color="coolGray.500" numberOfLines={1} >{`${classDay?.class?.address?.street ?? 'Não informado'}, ${classDay?.class?.address?.number ?? ''}`} </Text>
+
         </VStack>
         <HStack>
+
+
           {
             classDay.bookings && classDay.bookings.length > 0 && (
               classDay.bookings.map((booking, index) => {
