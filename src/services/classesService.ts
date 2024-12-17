@@ -37,12 +37,13 @@ export function GetClassProfileService(tenantId: string, classId: string,) {
   })
 }
 
-export function ListStudentsByClassService(tenantId: string, classId: string, { page }: IPaginationDTO) {
+export function ListStudentsByClassService(tenantId: string, classId: string, { page, search }: IPaginationDTO) {
   return api({
     url: `${tenantId}/classes/${classId}/students`,
     method: 'get',
     params: {
-      page
+      page,
+      search
     }
   })
 }
