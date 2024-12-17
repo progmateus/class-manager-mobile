@@ -150,6 +150,18 @@ const errors = [
   {
     message: "ERR_CHOOSE_ANOTHER_ADDRESS",
     description: "Selecione um endereço diferente"
+  },
+  {
+    message: "ERR_INVOICE_NOT_FOUND",
+    description: "Cobrança não encontrada"
+  },
+  {
+    message: "ERR_CANNOT_UPDATE_TENANT_INVOICE",
+    description: "Não é permitido atualizar cobranças da empresa"
+  },
+  {
+    message: "ERR_INVOICE_ALREADY_BEEN_PAID",
+    description: "Esta cobrança já foi paga"
   }
 ]
 export { errors }
