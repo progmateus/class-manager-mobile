@@ -1,5 +1,5 @@
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
-import { HStack, Heading, Icon, Link, Text, VStack, View } from "native-base";
+import { HStack, Heading, Icon, Link, Modal, Text, VStack, View, Button as NativeBaseButton, Divider } from "native-base";
 import { CaretDown, CheckCircle, XCircle, Warning, CurrencyCircleDollar, CreditCard, Check } from "phosphor-react-native";
 import { Pressable, TouchableOpacity } from "react-native";
 import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
@@ -12,6 +12,7 @@ import { EInvoiceType } from "src/enums/EInvoiceType";
 import { UpdateInvoiceStatusService } from "src/services/invoiceService";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { Loading } from "@components/Loading";
+import { Button } from "@components/Button";
 
 
 interface IProps {
@@ -21,6 +22,7 @@ interface IProps {
 export function InvoiceItem({ invoice }: IProps) {
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { sizes, colors } = THEME;
   const { user } = useAuth()
@@ -68,15 +70,16 @@ export function InvoiceItem({ invoice }: IProps) {
     return formatBillState[billState]
   }
 
-  const handleUpdateInvoiceStatus = async (status: EInvoiceStatus) => {
+  const handleUpdateInvoiceStatus = async () => {
     if (isLoading) return
     setIsLoading(true)
-    UpdateInvoiceStatusService(invoice.tenantId, invoice.id, status).then(() => {
+    UpdateInvoiceStatusService(invoice.tenantId, invoice.id, EInvoiceStatus.PAID).then(() => {
       fireSuccesToast('Cobrança atualizada!')
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
       setIsLoading(false)
+      setIsModalOpen(false)
     })
   }
 
@@ -107,7 +110,7 @@ export function InvoiceItem({ invoice }: IProps) {
           <Text color={color} fontSize="md" mr={2}>{priceFormatted(invoice.amount)}</Text>
 
           {
-            isInvoiceAdmin && (
+            isInvoiceAdmin && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
               <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
                 <Icon as={CaretDown} color="coolGray.600" />
               </TouchableOpacity>
@@ -116,19 +119,11 @@ export function InvoiceItem({ invoice }: IProps) {
 
         </HStack>
         {
-          isOpen && (
+          isOpen && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
             <VStack pt={6} pb={2}>
-              <TouchableOpacity onPress={() => handleUpdateInvoiceStatus(EInvoiceStatus.PAID)}>
+              <TouchableOpacity onPress={() => setIsModalOpen(!isModalOpen)}>
                 <HStack alignItems="center" space={4} ml={1}>
-                  {
-                    isLoading ? (
-                      <View w="6">
-                        <Loading />
-                      </View>
-                    ) : (
-                      <Check size={sizes["6"]} color={colors.blue[500]} />
-                    )
-                  }
+                  <Check size={sizes["6"]} color={colors.blue[500]} />
                   <Text fontSize="15" fontFamily="body" color="blue.500">
                     Informar pagamento
                   </Text>
@@ -137,6 +132,28 @@ export function InvoiceItem({ invoice }: IProps) {
             </VStack >
           )
         }
+
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} safeAreaTop={true}>
+          <Modal.Content maxWidth="350">
+            <Modal.Header borderBottomWidth={0}>
+              <Text fontFamily="heading"> Informar pagamento? </Text>
+            </Modal.Header>
+            <Modal.Body justifyContent="center" py={6} borderWidth={0}>
+              <Text fontFamily="body" color="coolGray.600">
+                Deseja informar que esta cobrança já foi paga? Após realizada, esta ação não poderá ser desfeita.
+              </Text>
+            </Modal.Body>
+            <Modal.Footer borderWidth={0} borderTopWidth={0}>
+              <VStack flex={1}>
+                <Button title="Confirmar" variant="unstyled" color="brand.600" isLoading={isLoading} onPress={handleUpdateInvoiceStatus} />
+                <Divider my={1} />
+                <NativeBaseButton mt={2} variant="unstyled" fontWeight="bold" color="coolGray.500" onPress={() => setIsModalOpen(false)}>
+                  Voltar
+                </NativeBaseButton>
+              </VStack>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
       </View >
     </Pressable >
   )
