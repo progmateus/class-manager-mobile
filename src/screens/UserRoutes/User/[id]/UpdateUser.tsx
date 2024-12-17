@@ -52,6 +52,9 @@ export function UpdateUser() {
         ...user,
         name, email, document, phone
       })
+      reset({
+        name, email, document, phone
+      })
       navigation.navigate('profile')
     }).finally(() => {
       setIsLoading(false)
