@@ -1,11 +1,14 @@
+import { ICreateUserDTO } from "@dtos/users/ICreateUserDTO";
 import { api } from "./api";
 import { IUpdateUserDTO } from "@dtos/users/IUpateUserDTO";
 
-export function CreateUserService(data: any) {
+export function CreateUserService({ name, email, document, password, phone, username }: ICreateUserDTO) {
   return api({
     url: '/users/',
     method: 'post',
-    data
+    data: {
+      name, email, document, password, phone, username
+    }
   })
 }
 
