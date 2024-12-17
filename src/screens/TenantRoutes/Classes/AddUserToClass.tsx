@@ -12,9 +12,11 @@ import { ScrollContainer } from "@components/ScrollContainer"
 import { ListUsersRolesService } from "src/services/rolesService"
 import { ITeacherClassDTO } from "@dtos/classes/TeacherClassDTO"
 import { IStudentClassDTO } from "@dtos/classes/IStudentClassDTO"
-import { useState } from "react"
-import { Check } from "phosphor-react-native"
+import { useCallback, useState } from "react"
+import { Check, MagnifyingGlass } from "phosphor-react-native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
+import { Input } from "@components/form/Input"
+import { debounce } from "lodash"
 
 
 type RouteParamsProps = {
@@ -25,6 +27,7 @@ type RouteParamsProps = {
 
 export function AddUserToClass() {
   const route = useRoute()
+  const [search, setSearch] = useState("")
   const { tenantIdParams, classId, roleName } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
   const [existentClassRolesIds, setExistentClassRolesIds] = useState<string[]>([])
@@ -36,7 +39,8 @@ export function AddUserToClass() {
 
   const loadUsersRoles = async () => {
     try {
-      const { data } = await ListUsersRolesService([roleName], { tenantId })
+      console.log(search)
+      const { data } = await ListUsersRolesService([roleName], { tenantId, search })
       return data.data
     } catch (err) {
       console.log(err)
@@ -57,7 +61,7 @@ export function AddUserToClass() {
   }
 
   const { data: usersRoles, isLoading } = useQuery<IUsersRolesDTO[]>({
-    queryKey: [`get-users-roles`, classId, tenantId, roleName],
+    queryKey: [`get-users-roles`, classId, tenantId, roleName, search],
     queryFn: loadUsersRoles
   })
 
@@ -108,10 +112,24 @@ export function AddUserToClass() {
     }
   }
 
+  const changeTextDebounced = (text: string) => {
+    setSearch(text)
+  }
+
+  const changeTextDebouncer = useCallback(debounce(changeTextDebounced, 250), []);
+
   return (
     <View flex={1}>
       <PageHeader title={`Atualizar ${roleName === 'student' ? 'alunos' : 'professores'}`} rightIcon={tenantId ? Check : null} rightAction={handleAddUsers} />
       <ScrollContainer>
+
+        <View h={20}>
+          <Input
+            onChangeText={changeTextDebouncer}
+            placeholder="Buscar"
+            InputLeftElement={<Icon as={MagnifyingGlass} style={{ marginLeft: 8 }} color="coolGray.400" />}
+          />
+        </View>
 
         {
           isLoading || isLoadingConflict ? (
