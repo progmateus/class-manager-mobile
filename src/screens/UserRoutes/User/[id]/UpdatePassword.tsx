@@ -29,13 +29,6 @@ export function UpdatePassword() {
     alert(data)
   }
 
-  const user = {
-    name: "John",
-    lastname: "Doe",
-    email: "johndoe@gmail.com",
-    avatar: "https://img.freepik.com/fotos-gratis/retrato-de-uma-jovem-bonita-em-pe-na-parede-cinza_231208-10760.jpg?ga=GA1.1.1603704743.1686338071&semt=sph",
-    document: "066.339.390-60"
-  }
   return (
     <View flex={1}>
       <PageHeader title="Alterar Senha" rightIcon={Check} rightAction={handleSubmit(handleUpdate)} />

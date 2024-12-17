@@ -48,7 +48,7 @@ export function Profile() {
             username={user.username}
           />
           <VStack alignItems="left" justifyContent="center">
-            <Heading fontFamily="heading">{user.firstName} {user.lastName}</Heading>
+            <Heading fontFamily="heading">{user.name}</Heading>
             <Text fontFamily="body"> @{user.username}</Text>
           </VStack>
         </HStack>

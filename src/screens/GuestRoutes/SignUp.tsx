@@ -22,8 +22,7 @@ const phoneRegex = /(\(?\d{2}\)?) ?(9{1})? ?(\d{4})-? ?(\d{4})/
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 
 const signUpSchema = z.object({
-  firstname: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
-  lastname: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres"),
+  name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(150, "Max 150 caracteres"),
   email: z.string().email("E-mail inválido"),
   username: z.string({ required_error: "Campo obrigatório", }).regex(usernameRegex, "Nome de usuário inválido").trim(),
   password: z.string({ required_error: "Campo obrigatório", }),
@@ -49,7 +48,7 @@ export function SignUp() {
     navigation.navigate('signIn');
   }
 
-  const handleSignUp = ({ firstname, lastname, document, email, password, username, phone }: signUpProps) => {
+  const handleSignUp = ({ name, document, email, password, username, phone }: signUpProps) => {
     if (isLoading) return
 
     if (!isValidCPF(document)) {
@@ -59,7 +58,7 @@ export function SignUp() {
 
     setIsLoading(true)
 
-    CreateUserService({ firstname, lastname, document, email, password, username, phone }).then(({ data }) => {
+    CreateUserService({ name, document, email, password, username, phone }).then(({ data }) => {
       fireSuccesToast("Usuário criado")
       singIn(email, password)
       navigation.navigate('signIn');
@@ -107,23 +106,14 @@ export function SignUp() {
           </Heading>
 
           <VStack space={6} w="full">
-            <HStack space={4} w={'48%'}>
-              <Controller
-                name="firstname"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Input placeholder="Nome" autoCapitalize="none" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.firstname?.message} />
-                )}
-              />
 
-              <Controller
-                name="lastname"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Input placeholder="Sobrenome" autoCapitalize="none" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.lastname?.message} />
-                )}
-              />
-            </HStack>
+            <Controller
+              name="name"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input placeholder="Nome" autoCapitalize="none" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.name?.message} />
+              )}
+            />
 
             <Controller
               name="email"

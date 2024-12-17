@@ -26,13 +26,12 @@ export function GetUserByUsernameService(username: string) {
   })
 }
 
-export function UpdateUserService({ firstName, lastName, email, document, phone }: IUpdateUserDTO) {
+export function UpdateUserService({ name, email, document, phone }: IUpdateUserDTO) {
   return api({
     url: '/users',
     method: 'put',
     data: {
-      firstName,
-      lastName,
+      name,
       email,
       document,
       phone

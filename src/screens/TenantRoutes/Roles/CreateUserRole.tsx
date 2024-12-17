@@ -72,7 +72,7 @@ export function CreateUserRole() {
                   <Actionsheet.Content>
                     <Box w="100%" h={60} px={4} justifyContent="center">
                       <Heading fontSize="16" color="coolGray.700" textAlign="center">
-                        {`${selectedUserRole?.user?.name.firstName} ${selectedUserRole?.user?.name.lastName}`}
+                        {selectedUserRole?.user?.name}
                       </Heading>
                     </Box>
                     <Actionsheet.Item onPress={handleRemoveTeacher} startIcon={<Icon as={TrashSimple} size="6" name="delete" />}>

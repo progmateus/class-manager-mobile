@@ -19,8 +19,7 @@ const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
 const phoneRegex = /(\(?\d{2}\)?) ?(9{1})? ?(\d{4})-? ?(\d{4})/
 
 const updateUserSchema = z.object({
-  firstName: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
-  lastName: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
+  name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(150, "Max 150 caracteres").trim(),
   email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
   document: z.string().regex(CPFRegex, "CPF Inválido").trim().optional(),
   phone: z.string().regex(phoneRegex, "Número inválido").trim().optional().transform((val) => val?.replaceAll(/\W/g, '')),
@@ -34,8 +33,7 @@ export function UpdateUser() {
 
   const { control, handleSubmit, formState: { errors }, reset } = useForm<updateUserProps>({
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
+      name: user.name,
       email: user.email,
       phone: user.phone,
       document: user.document
@@ -43,10 +41,10 @@ export function UpdateUser() {
     resolver: zodResolver(updateUserSchema)
   });
 
-  const handleUpdate = ({ firstName, lastName, email, document, phone }: updateUserProps) => {
+  const handleUpdate = ({ name, email, document, phone }: updateUserProps) => {
     if (!user.id || isLoading) return
     setIsLoading(true)
-    UpdateUserService({ firstName, lastName, email, document, phone }).then(() => {
+    UpdateUserService({ name, email, document, phone }).then(() => {
       fireSuccesToast('Infirmações atualizadas com sucesso!')
     }).finally(() => {
       setIsLoading(false)
@@ -75,27 +73,13 @@ export function UpdateUser() {
             <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
           </Center>
           <VStack space={6} mt={12}>
-            <HStack space={4}>
-              <View flex={1}>
-                <Controller
-                  name="firstName"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Input label="Nome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.firstName?.message} />
-                  )}
-                />
-              </View>
-
-              <View flex={1}>
-                <Controller
-                  name="lastName"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Input label="Sobrenome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.lastName?.message} />
-                  )}
-                />
-              </View>
-            </HStack>
+            <Controller
+              name="name"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input label="Nome" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.name?.message} />
+              )}
+            />
 
             <Controller
               name="email"
