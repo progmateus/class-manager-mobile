@@ -1,3 +1,4 @@
+import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
 import { api } from "./api";
 
 export function ListInvoicesService({ userId, tenantId, page, subscriptionId }: IUserAndTenantPaginationDTO) {
@@ -9,6 +10,16 @@ export function ListInvoicesService({ userId, tenantId, page, subscriptionId }: 
       userId,
       page,
       subscriptionId
+    }
+  })
+}
+
+export function UpdateInvoiceStatusService(tenantId: string, invoiceId: string, status: EInvoiceStatus) {
+  return api({
+    url: `${tenantId}/invoices/${invoiceId}/status`,
+    method: 'patch',
+    data: {
+      status
     }
   })
 }

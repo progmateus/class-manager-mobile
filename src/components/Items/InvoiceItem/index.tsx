@@ -1,6 +1,6 @@
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 import { HStack, Heading, Icon, Link, Text, VStack, View } from "native-base";
-import { CaretDown, CheckCircle, XCircle, Warning, CurrencyCircleDollar, CreditCard } from "phosphor-react-native";
+import { CaretDown, CheckCircle, XCircle, Warning, CurrencyCircleDollar, CreditCard, Check } from "phosphor-react-native";
 import { Pressable, TouchableOpacity } from "react-native";
 import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
 import dayjs from "dayjs"
@@ -9,6 +9,8 @@ import { THEME } from 'src/theme'
 import { HasRole } from "@utils/HasRole";
 import { useAuth } from "@hooks/useAuth";
 import { EInvoiceType } from "src/enums/EInvoiceType";
+import { UpdateInvoiceStatusService } from "src/services/invoiceService";
+import { fireSuccesToast } from "@utils/HelperNotifications";
 
 
 interface IProps {
@@ -18,6 +20,7 @@ interface IProps {
 export function InvoiceItem({ invoice }: IProps) {
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { sizes, colors } = THEME;
   const { user } = useAuth()
 
@@ -64,6 +67,16 @@ export function InvoiceItem({ invoice }: IProps) {
     return formatBillState[billState]
   }
 
+  const handleUpdateInvoiceStatus = async (EInvoiceStatus: EInvoiceStatus) => {
+    if (isLoading) return
+    setIsLoading(true)
+    UpdateInvoiceStatusService(invoice.tenantId, invoice.id, EInvoiceStatus).then(() => {
+      fireSuccesToast('Cobrança atualizada!')
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  }
+
 
   const hasInvoiceStatus = (status: EInvoiceStatus[]): boolean => {
     return status.includes(invoice.status)
@@ -102,15 +115,13 @@ export function InvoiceItem({ invoice }: IProps) {
         {
           isOpen && (
             <VStack pt={6} pb={2}>
-              <TouchableOpacity>
-                <Link href={invoice.stripeInvoiceUrl}>
-                  <HStack alignItems="center" space={4} ml={1}>
-                    <CreditCard size={sizes["6"]} color={colors.blue[500]} />
-                    <Text fontSize="15" fontFamily="body" color="blue.500">
-                      Pagar online
-                    </Text>
-                  </HStack>
-                </Link>
+              <TouchableOpacity onPress={() => handleUpdateInvoiceStatus(EInvoiceStatus.PAID)}>
+                <HStack alignItems="center" space={4} ml={1}>
+                  <Check size={sizes["6"]} color={colors.blue[500]} />
+                  <Text fontSize="15" fontFamily="body" color="blue.500">
+                    Informar pagamento
+                  </Text>
+                </HStack>
               </TouchableOpacity>
             </VStack >
           )
