@@ -71,7 +71,6 @@ export function InvoiceItem({ invoice }: IProps) {
   const handleUpdateInvoiceStatus = async (status: EInvoiceStatus) => {
     if (isLoading) return
     setIsLoading(true)
-    console.log(status)
     UpdateInvoiceStatusService(invoice.tenantId, invoice.id, status).then(() => {
       fireSuccesToast('Cobrança atualizada!')
     }).catch((err) => {

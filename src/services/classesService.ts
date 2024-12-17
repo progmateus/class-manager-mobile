@@ -58,12 +58,13 @@ export function ListStudentClassesService(tenantId: string, userId: string) {
   })
 }
 
-export function ListTeachersByClassService(tenantId: string, classId: string, { page }: IPaginationDTO) {
+export function ListTeachersByClassService(tenantId: string, classId: string, { page, search }: IPaginationDTO) {
   return api({
     url: `${tenantId}/classes/${classId}/teachers`,
     method: 'get',
     params: {
-      page
+      page,
+      search
     }
   })
 }

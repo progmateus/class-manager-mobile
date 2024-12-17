@@ -1,3 +1,4 @@
+import { Input } from "@components/form/Input"
 import { GenericItem } from "@components/Items/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
@@ -9,9 +10,10 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireInfoToast } from "@utils/HelperNotifications"
+import { debounce } from "lodash"
 import { Actionsheet, Box, Button, FlatList, Heading, Icon, Text, View } from "native-base"
-import { Plus, TrashSimple } from "phosphor-react-native"
-import { useState } from "react"
+import { MagnifyingGlass, Plus, TrashSimple } from "phosphor-react-native"
+import { useCallback, useState } from "react"
 import { TouchableOpacity, Vibration } from "react-native"
 import { ListTeachersByClassService, RemoveTeacherFromClassService } from "src/services/classesService"
 
@@ -22,6 +24,8 @@ type RouteParamsProps = {
 
 export function TeachersClassList() {
   const [isOpen, setIsOpen] = useState(false)
+  const [search, setSearch] = useState("")
+
   const route = useRoute()
   const { tenantIdParams, classId } = route.params as RouteParamsProps;
   const { tenant } = useAuth()
@@ -32,7 +36,7 @@ export function TeachersClassList() {
 
   const loadTeachersClass = async () => {
     try {
-      const { data } = await ListTeachersByClassService(tenantId, classId, {})
+      const { data } = await ListTeachersByClassService(tenantId, classId, { search })
       return data.data
     } catch (err) {
       console.log(err)
@@ -40,7 +44,7 @@ export function TeachersClassList() {
   }
 
   const { data: teachersClass, isLoading } = useQuery<IUserClassDTO[]>({
-    queryKey: ['get-teachers-class', tenantId, classId],
+    queryKey: ['get-teachers-class', tenantId, classId, search],
     queryFn: loadTeachersClass
   })
 
@@ -56,7 +60,7 @@ export function TeachersClassList() {
       await RemoveTeacherFromClassService(tenantId, teacherClassId, classId)
       fireInfoToast('Professor removido com sucesso!')
       queryClient.invalidateQueries({
-        queryKey: ['get-teachers-class', tenantId, classId]
+        queryKey: ['get-teachers-class']
       })
       queryClient.invalidateQueries({
         queryKey: ['get-class-profile', tenantId, classId]
@@ -68,10 +72,23 @@ export function TeachersClassList() {
     }
   }
 
+  const changeTextDebounced = (text: string) => {
+    setSearch(text)
+  }
+
+  const changeTextDebouncer = useCallback(debounce(changeTextDebounced, 250), []);
+
   return (
     <View flex={1}>
       <PageHeader title="Gerenciar professores" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
       <Viewcontainer>
+        <View h={20}>
+          <Input
+            onChangeText={changeTextDebouncer}
+            placeholder="Buscar"
+            InputLeftElement={<Icon as={MagnifyingGlass} style={{ marginLeft: 8 }} color="coolGray.400" />}
+          />
+        </View>
         {
           isLoading ? (<Loading />) : (
             <>

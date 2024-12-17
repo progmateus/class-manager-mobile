@@ -15,8 +15,6 @@ export function ListInvoicesService({ userId, tenantId, page, subscriptionId }: 
 }
 
 export function UpdateInvoiceStatusService(tenantId: string, invoiceId: string, status: EInvoiceStatus) {
-  console.log("ENTROUUUUUU")
-  console.log(status)
   return api({
     url: `${tenantId}/invoices/${invoiceId}/status`,
     method: 'patch',
