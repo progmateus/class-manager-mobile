@@ -102,6 +102,8 @@ api.registerInterceptTokenManager = singOut => {
       fireErrorToast("Ocorreu um erro!")
     }
 
+    console.log(requestError?.response)
+
     if (requestError.response && requestError.response.data.errors) {
       return Promise.reject(new ValidationError(requestError.response.data.message, requestError.response.data.errors))
     } else if (requestError.response && requestError.response.data) {
