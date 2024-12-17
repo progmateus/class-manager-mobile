@@ -11,6 +11,7 @@ import { useAuth } from "@hooks/useAuth";
 import { EInvoiceType } from "src/enums/EInvoiceType";
 import { UpdateInvoiceStatusService } from "src/services/invoiceService";
 import { fireSuccesToast } from "@utils/HelperNotifications";
+import { Loading } from "@components/Loading";
 
 
 interface IProps {
@@ -107,7 +108,7 @@ export function InvoiceItem({ invoice }: IProps) {
           <Text color={color} fontSize="md" mr={2}>{priceFormatted(invoice.amount)}</Text>
 
           {
-            isInvoiceAdmin && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
+            isInvoiceAdmin && (
               <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
                 <Icon as={CaretDown} color="coolGray.600" />
               </TouchableOpacity>
@@ -120,7 +121,15 @@ export function InvoiceItem({ invoice }: IProps) {
             <VStack pt={6} pb={2}>
               <TouchableOpacity onPress={() => handleUpdateInvoiceStatus(EInvoiceStatus.PAID)}>
                 <HStack alignItems="center" space={4} ml={1}>
-                  <Check size={sizes["6"]} color={colors.blue[500]} />
+                  {
+                    isLoading ? (
+                      <View w="6">
+                        <Loading />
+                      </View>
+                    ) : (
+                      <Check size={sizes["6"]} color={colors.blue[500]} />
+                    )
+                  }
                   <Text fontSize="15" fontFamily="body" color="blue.500">
                     Informar pagamento
                   </Text>
