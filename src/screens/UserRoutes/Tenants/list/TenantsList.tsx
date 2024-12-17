@@ -56,7 +56,6 @@ export function TenantsList() {
 
   const changeTextDebounced = (text: string) => {
     setSearch(text)
-    refetch()
   }
 
   const changeTextDebouncer = useCallback(debounce(changeTextDebounced, 250), []);
