@@ -150,15 +150,21 @@ export function SubscriptionProfile() {
                       <Text fontSize="sm" > {authenticationType == EAuthType.USER ? subscription?.tenant?.document : subscription?.user?.document ?? 'Não informado'} </Text>
                     </HStack>
 
-                    <HStack alignItems="center" space={1}>
-                      <Icon as={Phone} />
-                      <Text fontSize="sm"> {authenticationType == EAuthType.USER ? subscription?.tenant?.phone : subscription?.user?.phone ?? 'Não informado'} </Text>
+                    {
+                      authenticationType == EAuthType.TENANT && (
+                        <HStack alignItems="center" space={1}>
+                          <Icon as={Phone} />
+                          <Text fontSize="sm"> {subscription?.user?.phone && subscription.user.phone.length > 0 ? subscription.user.phone : 'Não informado'} </Text>
+                        </HStack>
+                      )
+                    }
+
+                    <HStack alignItems="center" space={1} maxWidth="56">
+                      <Icon as={MapPin} />
+                      <Text fontSize="sm" numberOfLines={1}>  {`${subscription?.user?.address?.street ?? 'Não informado'}, ${subscription?.user?.address?.number ?? 's/'}`} </Text>
+
                     </HStack>
 
-                    <HStack alignItems="center" space={1}>
-                      <Icon as={MapPin} />
-                      <Text fontSize="sm"> Não informado </Text>
-                    </HStack>
                   </VStack>
                   <VStack>
                     <Center>

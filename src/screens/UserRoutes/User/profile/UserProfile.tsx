@@ -111,9 +111,6 @@ export function Profile() {
               ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
-              ListEmptyComponent={
-                <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
-              }
             />
             <Actionsheet.Item onPress={() => navigation.navigate('createTenant')}>
               <HStack alignItems="center" justifyContent="center" space={4}>
