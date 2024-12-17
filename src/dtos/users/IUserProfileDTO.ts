@@ -6,9 +6,7 @@ import { IAddressDTO } from "@dtos/shared/IAddressDTO";
 
 interface IUserProfileDTO {
   id: string;
-  name?: string;
-  firstName?: string;
-  lastName?: string;
+  name: string;
   username: string;
   document?: string;
   email?: string

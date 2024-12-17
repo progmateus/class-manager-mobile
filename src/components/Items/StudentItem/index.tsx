@@ -17,7 +17,7 @@ export function StudentItem({ user, index }: IProps) {
       <HStack alignItems="center" rounded="md">
         <Avatar src={user?.avatar} alt="Foto de perfil do aluno" username={user?.username} />
         <VStack flex={1} ml={3}>
-          <Heading numberOfLines={1} fontFamily="heading" fontSize="sm">{`${user?.firstName} ${user?.lastName}`}</Heading>
+          <Heading numberOfLines={1} fontFamily="heading" fontSize="sm">{user.name}</Heading>
           <Text numberOfLines={1} color="gray.400" fontSize="xs">@{user?.username}</Text>
         </VStack>
       </HStack>

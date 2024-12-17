@@ -42,7 +42,7 @@ function SubscriptionItem({ subscription }: IProps) {
           username={subscription.user?.username}
         />
         <VStack flex={1}>
-          <Text fontSize="sm" color="coolGray.900" fontWeight="bold">{`${subscription.user?.firstName} ${subscription.user?.lastName}`}</Text>
+          <Text fontSize="sm" color="coolGray.900" fontWeight="bold">{subscription.user?.name}</Text>
           {/* <Text fontSize="sm" color="coolGray.500">{subscription.classes[0].name}</Text> */}
           <Text fontSize="sm" color="coolGray.500" fontWeight="semibold">{subscription.tenantPlan?.name}</Text>
         </VStack>

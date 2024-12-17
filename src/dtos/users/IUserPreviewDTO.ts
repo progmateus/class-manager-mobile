@@ -5,9 +5,7 @@ import { ITeacherClassDTO } from "@dtos/classes/TeacherClassDTO";
 
 interface IUserPreviewDTO {
   id: string;
-  name?: string;
-  firstName?: string;
-  lastName?: string;
+  name: string;
   username: string;
   document?: string;
   avatar?: string;

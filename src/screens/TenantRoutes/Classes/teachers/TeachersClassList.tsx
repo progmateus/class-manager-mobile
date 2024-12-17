@@ -83,7 +83,7 @@ export function TeachersClassList() {
                   <UserItem.Root key={item.id} onLongPress={() => handleRemoveTeacher(item.id)}>
                     <UserItem.Avatar url={item.user?.avatar ?? ""} alt="Foto de perfil do aluno " />
                     <UserItem.Content>
-                      <UserItem.Title title={`${item.user?.firstName} ${item.user?.lastName}`} />
+                      <UserItem.Title title={`${item.user?.name}`} />
                       <UserItem.Caption caption={`@${item.user?.username}`} />
                     </UserItem.Content>
                     <UserItem.Section>

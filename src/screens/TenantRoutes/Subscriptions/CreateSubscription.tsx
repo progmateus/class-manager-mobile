@@ -232,7 +232,7 @@ export function CreateSubscription() {
                 />
 
                 <VStack alignItems="center" justifyContent="center" mt={4}>
-                  <Heading fontFamily="heading" fontSize="md" color="coolGray.700">{`${userFound?.firstName} ${userFound?.lastName}`}</Heading>
+                  <Heading fontFamily="heading" fontSize="md" color="coolGray.700">{`userFound?.name`}</Heading>
                   <Text fontFamily="body" color="coolGray.600">@{userFound?.username}</Text>
                 </VStack>
               </View>

@@ -116,7 +116,7 @@ export function SubscriptionProfile() {
   return (
     <View flex={1}>
       <PageHeader title={
-        isLoading ? "" : `${subscription?.user?.firstName} ${subscription?.user?.lastName}`
+        isLoading ? "" : `${subscription?.user?.name}`
       } />
       {
         isLoading || !subscription ? (<SubscriptionProfileSkeleton />)

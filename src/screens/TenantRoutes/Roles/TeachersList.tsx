@@ -147,7 +147,7 @@ export function TeachersList() {
                   renderItem={({ item }) => (
                     <GenericItem.Root key={item.id}>
                       <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do usuário" username={item.user.username} />
-                      <GenericItem.Content title={`${item.user.firstName} ${item.user.lastName}`} caption={item.user.username} />
+                      <GenericItem.Content title={`${item.user.name}`} caption={item.user.username} />
                       <GenericItem.InfoSection>
                         <NativeBaseButton bg="red.500" size="xs" px={4} onPress={() => handleRemoveTeacher(item.id)}>
                           Remover
@@ -205,7 +205,7 @@ export function TeachersList() {
                         />
 
                         <VStack alignItems="center" justifyContent="center">
-                          <Heading fontFamily="heading" fontSize="2xl" color="coolGray.700">{`${userFound?.firstName} ${userFound?.lastName}`}</Heading>
+                          <Heading fontFamily="heading" fontSize="2xl" color="coolGray.700">{`${userFound?.name}`}</Heading>
                           <Text fontFamily="body" color="coolGray.600"> {userFound?.username}</Text>
                         </VStack>
                       </View>
