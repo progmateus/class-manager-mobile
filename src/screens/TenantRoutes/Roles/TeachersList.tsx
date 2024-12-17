@@ -8,7 +8,7 @@ import { useRoute } from "@react-navigation/native"
 import { fireInfoToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, FlatList, Heading, Icon, Modal, Text, View, VStack, Button as NativeBaseButton } from "native-base"
 import { MagnifyingGlass, Plus } from "phosphor-react-native"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { CreateUserRoleService, DeleteUserRoleService, ListUsersRolesService } from "src/services/rolesService"
 import { GetUserByUsernameService } from "src/services/usersService"
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO"
@@ -16,6 +16,7 @@ import { useAuth } from "@hooks/useAuth"
 import { Avatar } from "@components/Avatar/Avatar"
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO"
+import { debounce } from "lodash"
 
 type RouteParamsProps = {
   tenantIdParams: string;
@@ -28,6 +29,8 @@ export function TeachersList() {
   const [userFound, setUserFound] = useState<IUserPreviewDTO | null>(null)
   const [username, setUsername] = useState("")
   const [isOpen, setIsOpen] = useState(false)
+  const [search, setSearch] = useState("")
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isOpenAdd, setIsOpenAdd] = useState(false)
   const route = useRoute()
@@ -38,7 +41,7 @@ export function TeachersList() {
 
   const loadTeachers = async (page: number) => {
     try {
-      const { data } = await ListUsersRolesService([roleName], { page, tenantId })
+      const { data } = await ListUsersRolesService([roleName], { page, tenantId, search })
       return data.data
     } catch (err) {
       console.log(err)
@@ -46,7 +49,7 @@ export function TeachersList() {
   }
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<IUsersRolesDTO[]>({
-    queryKey: ['get-tenant-teachers', tenantId, roleName],
+    queryKey: ['get-tenant-teachers', tenantId, roleName, search],
     queryFn: ({ pageParam }) => loadTeachers(Number(pageParam)),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam: any) => {
@@ -127,11 +130,24 @@ export function TeachersList() {
     })
   }
 
+  const changeTextDebounced = (text: string) => {
+    setSearch(text)
+  }
+
+  const changeTextDebouncer = useCallback(debounce(changeTextDebounced, 250), []);
+
+
   return (
     <View flex={1}>
       <PageHeader title="Gerenciar professores" rightIcon={tenantId ? Plus : null} rightAction={() => setIsOpenAdd(true)} />
       <Viewcontainer>
-
+        <View h={20}>
+          <Input
+            onChangeText={changeTextDebouncer}
+            placeholder="Buscar"
+            InputLeftElement={<Icon as={MagnifyingGlass} style={{ marginLeft: 8 }} color="coolGray.400" />}
+          />
+        </View>
         {
           isLoading ? (
             <Loading />
