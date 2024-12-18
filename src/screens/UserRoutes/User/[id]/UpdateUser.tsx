@@ -14,6 +14,9 @@ import { Avatar } from "@components/Avatar/Avatar";
 import { InputMask } from "@components/form/InputMask";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { TouchableOpacity } from "react-native";
+import * as ImagePicker from "expo-image-picker"
+import * as FileSystem from "expo-file-system"
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -65,21 +68,51 @@ export function UpdateUser() {
     reset()
   }, []))
 
+  const handleSelectUserPhoto = async () => {
+    const photoSelected = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      aspect: [4, 4],
+      allowsEditing: true
+    })
+
+    if (photoSelected.canceled) return
+
+    if (photoSelected.assets[0].uri) {
+      const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
+    }
+  }
+
+
+  const handleUpdateUserAvatar = (image: ImagePicker.ImagePickerAsset) => {
+    const fileExtension = image.uri.split('.').pop()
+    const avatarFile = {
+      name: "name",
+      uri: image.uri,
+      type: `${image.type}/${fileExtension}`
+    } as any
+
+    const userAvatarUploadForm = new FormData();
+    userAvatarUploadForm.append('image', avatarFile)
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Dados Pessoais" rightIcon={Check} rightAction={handleSubmit(handleUpdate)} />
       <ScrollContainer>
         <VStack pb={20}>
           <Center>
-            <Avatar
-              rounded="full"
-              w={24}
-              h={24}
-              alt="Foto de perfil"
-              mr={4}
-              src={user.avatar}
-              username={user.username}
-            />
+            <TouchableOpacity>
+              <Avatar
+                rounded="full"
+                w={24}
+                h={24}
+                alt="Foto de perfil"
+                mr={4}
+                src={user.avatar}
+                username={user.username}
+              />
+            </TouchableOpacity>
             <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
           </Center>
           <VStack space={6} mt={12}>
