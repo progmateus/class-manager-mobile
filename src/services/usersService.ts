@@ -52,3 +52,16 @@ export function ListUserBookingsService({ page, tenantId }: IUserAndTenantPagina
     }
   })
 }
+
+export function UploadUserAvatar(image: FormData) {
+  return api({
+    url: '/users/avatar',
+    method: 'patch',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: {
+      image
+    }
+  })
+}
