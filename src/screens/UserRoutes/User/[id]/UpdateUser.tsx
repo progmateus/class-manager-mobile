@@ -9,7 +9,7 @@ import { ScrollContainer } from "@components/ScrollContainer";
 import { useAuth } from "@hooks/useAuth";
 import { UpdateUserService, UploadUserAvatarService } from "src/services/usersService";
 import { useCallback, useState } from "react";
-import { fireSuccesToast } from "@utils/HelperNotifications";
+import { fireErrorToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
 import { Avatar } from "@components/Avatar/Avatar";
 import { InputMask } from "@components/form/InputMask";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -124,8 +124,8 @@ export function UpdateUser() {
                 src={user.avatar}
                 username={user.username}
               />
+              <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
             </TouchableOpacity>
-            <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
           </Center>
           <VStack space={6} mt={12}>
             <Controller
