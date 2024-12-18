@@ -66,6 +66,7 @@ export function UpdateUser() {
   }
 
   useFocusEffect(useCallback(() => {
+    console.log(user.avatar)
     reset()
   }, []))
 
@@ -80,7 +81,7 @@ export function UpdateUser() {
     if (photoSelected.canceled) return
 
     if (photoSelected.assets[0].uri) {
-      const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
+      const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
       handleUpdateUserAvatar(photoSelected.assets[0])
     } else {
       return
