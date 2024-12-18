@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Check } from "phosphor-react-native"
 import { ScrollContainer } from "@components/ScrollContainer";
 import { useAuth } from "@hooks/useAuth";
-import { UpdateUserService } from "src/services/usersService";
+import { UpdateUserService, UploadUserAvatarService } from "src/services/usersService";
 import { useCallback, useState } from "react";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { Avatar } from "@components/Avatar/Avatar";
@@ -17,6 +17,7 @@ import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker"
 import * as FileSystem from "expo-file-system"
+import { AxiosError } from "axios";
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -70,7 +71,7 @@ export function UpdateUser() {
 
   const handleSelectUserPhoto = async () => {
     const photoSelected = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       quality: 1,
       aspect: [4, 4],
       allowsEditing: true
@@ -80,20 +81,31 @@ export function UpdateUser() {
 
     if (photoSelected.assets[0].uri) {
       const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
+      handleUpdateUserAvatar(photoSelected.assets[0])
+    } else {
+      return
     }
   }
 
 
-  const handleUpdateUserAvatar = (image: ImagePicker.ImagePickerAsset) => {
+  const handleUpdateUserAvatar = async (image: ImagePicker.ImagePickerAsset) => {
     const fileExtension = image.uri.split('.').pop()
     const avatarFile = {
-      name: "name",
+      name: `${user.name}.${fileExtension}`.toLowerCase(),
       uri: image.uri,
       type: `${image.type}/${fileExtension}`
     } as any
 
     const userAvatarUploadForm = new FormData();
     userAvatarUploadForm.append('image', avatarFile)
+
+    UploadUserAvatarService(userAvatarUploadForm).then(({ data }) => {
+      userUpdate({
+        ...user,
+        avatar: data.data.avatar
+      })
+      fireSuccesToast('Foto alterada com sucesso!')
+    })
   }
 
   return (
@@ -102,7 +114,7 @@ export function UpdateUser() {
       <ScrollContainer>
         <VStack pb={20}>
           <Center>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleSelectUserPhoto}>
               <Avatar
                 rounded="full"
                 w={24}
