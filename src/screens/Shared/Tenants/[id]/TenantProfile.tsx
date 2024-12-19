@@ -1,19 +1,19 @@
 import { Button } from "@components/Button";
 import { PageHeader } from "@components/PageHeader";
-import { Center, HStack, Heading, Icon, Image, Link, ScrollView, Text, VStack, View } from "native-base";
+import { Actionsheet, Box, Center, HStack, Heading, Icon, Image, Link, ScrollView, Text, VStack, View } from "native-base";
 import ImageSVG from "@assets/image-outline.svg"
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Vibration } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useMemo } from "react";
-import { CreateTenantImageService, GetTenantProfileService } from "src/services/tenantsService";
+import { useMemo, useState } from "react";
+import { CreateTenantImageService, DeleteTenantImageService, GetTenantProfileService } from "src/services/tenantsService";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useAuth } from "@hooks/useAuth";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { Avatar } from "@components/Avatar/Avatar";
 import { TenantProfileSkeleton } from "@components/skeletons/screens/TenantProfile";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { FacebookLogo, InstagramLogo, Plus, PlusCircle, WhatsappLogo } from "phosphor-react-native";
+import { dataTagSymbol, useQuery, useQueryClient } from "@tanstack/react-query";
+import { FacebookLogo, InstagramLogo, Plus, PlusCircle, TrashSimple, WhatsappLogo, X } from "phosphor-react-native";
 import { THEME } from "src/theme";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
@@ -23,7 +23,7 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { HasRole } from "@utils/HasRole";
 import * as ImagePicker from "expo-image-picker"
 import * as FileSystem from "expo-file-system"
-import { fireSuccesToast } from "@utils/HelperNotifications";
+import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
 
 
 type RouteParamsProps = {
@@ -57,13 +57,14 @@ export function TenantProfile() {
   }
 
   const { user } = useAuth()
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedImageId, setSelectedImageId] = useState("")
   const queryClient = useQueryClient();
   const { sizes } = THEME
 
   const loadTenantProfile = async () => {
     try {
       const { data } = await GetTenantProfileService(tenantId)
-      console.log(data.data.id)
       return data.data
     } catch (err) {
       console.log(err)
@@ -179,6 +180,25 @@ export function TenantProfile() {
     })
   }
 
+
+  const handleDeleteImage = () => {
+    DeleteTenantImageService(tenantId, selectedImageId).then(async () => {
+      fireInfoToast('Imagem deletada com sucesso')
+      setSelectedImageId("")
+      setIsOpen(false)
+      await queryClient.setQueryData(['get-tenant-profile', tenantId], (oldData: ITenantProfileDTO) => {
+        return { ...oldData, images: oldData.images.filter(x => x.id !== selectedImageId) }
+      })
+    })
+  }
+
+  const handleLongPressImage = (imageId: string) => {
+    if (!isTenantAdmin) return
+    Vibration.vibrate(100)
+    setSelectedImageId(imageId)
+    setIsOpen(true)
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Perfil" />
@@ -249,36 +269,51 @@ export function TenantProfile() {
                     <ImageSVG />
                   </Center>
                 </View>
-                <View flex={1} justifyContent="space-between" display="flex" flexDirection="row" flexWrap="wrap">
-                  {tenantProfile.images && tenantProfile.images.length > 0 && (
-                    tenantProfile.images.map((image) => {
-                      return (
-                        <TouchableOpacity key={image.id}>
-                          <Image
-                            w={32}
-                            h={32}
-                            alt="image profile"
-                            source={{
-                              uri: image.url,
-                            }}
-                            defaultSource={{ uri: image.url }}
-                            mt={1}
-                          />
-                        </TouchableOpacity>
+                <View flex={1} justifyContent="end" display="flex" flexDirection="row" flexWrap="wrap">
+                  {
+                    tenantProfile.images && tenantProfile.images.length > 0 && (
+                      tenantProfile.images.map((image) => {
+                        return (
+                          <TouchableOpacity key={image.id} onLongPress={() => handleLongPressImage(image.id)}>
+                            <Image
+                              w="32"
+                              h="32"
+                              alt="image profile"
+                              source={{
+                                uri: image.url,
+                              }}
+                              defaultSource={{ uri: image.url }}
+                              mt={0.5}
+                              ml={0.5}
+                            />
+                          </TouchableOpacity>
 
-                      )
-                    })
-                  )}
+                        )
+                      })
+                    )
+                  }
                   {
                     (!tenantProfile.images || tenantProfile.images.length < 9) && isTenantAdmin && (
                       <TouchableOpacity onPress={handleClickAddImage}>
-                        <View w={32} h={32} borderWidth={0.8} borderRadius={7} borderStyle="dashed" borderColor="brand.500" alignItems="center" justifyContent="center" mt={1}>
-                          <Icon as={<PlusCircle size={32} weight="light" />} color="brand.500" />
+                        <View w="32" h="32" alignItems="center" justifyContent="center" mt={0.5} ml={0.5} bgColor="muted.100">
+                          <Icon as={<PlusCircle size={40} weight="light" />} color="brand.500" />
                         </View>
                       </TouchableOpacity>
                     )
                   }
                 </View>
+                <Actionsheet isOpen={isOpen} size="full" onClose={() => setIsOpen(false)}>
+                  <Actionsheet.Content>
+                    <Box w="100%" h={60} px={4} justifyContent="center">
+                      <Heading fontSize="16" color="coolGray.600" textAlign="center">
+                        Gerenciar imagem
+                      </Heading>
+                    </Box>
+                    <Actionsheet.Item onPress={handleDeleteImage} startIcon={<Icon as={TrashSimple} size="6" name="cancel" color="red.600" />}>
+                      <Text fontSize="16" color="red.600"> Excluir imagem</Text>
+                    </Actionsheet.Item>
+                  </Actionsheet.Content>
+                </Actionsheet>
               </VStack >
             )
         }
