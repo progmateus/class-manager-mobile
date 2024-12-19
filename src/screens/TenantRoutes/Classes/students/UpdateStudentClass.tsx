@@ -28,6 +28,9 @@ export function UpdateStudentClass() {
   const { tenantIdParams, userId: userIdParam, subscriptionId } = route.params as RouteParamsProps;
   const { tenant, authenticationType, user } = useAuth()
   const [existentClasses, setExistentClasses] = useState<IStudentClassDTO[]>([])
+
+  const [isActing, setIsActing] = useState(false)
+
   const tenantId = tenant?.id ?? tenantIdParams
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
 
@@ -63,9 +66,10 @@ export function UpdateStudentClass() {
   }
 
   const handleSave = async () => {
-    if (!selectedClassId || !subscriptionId) {
+    if (!selectedClassId || !subscriptionId || isActing) {
       return
     }
+    setIsActing(true)
 
     try {
       await UpdateOneStudentClassService(tenantId, userId, selectedClassId)
@@ -73,6 +77,8 @@ export function UpdateStudentClass() {
       navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
     } catch (err) {
       console.log('err')
+    } finally {
+      setIsActing(false)
     }
   }
 

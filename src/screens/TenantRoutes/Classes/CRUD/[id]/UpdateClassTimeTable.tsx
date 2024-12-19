@@ -33,6 +33,8 @@ export function UpdateClassTimeTable() {
   const { timeTableIdExists, classId } = route.params as RouteParamsProps;
 
   const [selectedTimeTable, setSelectedTimeTable] = useState("")
+  const [isActing, setIsActing] = useState(false)
+
 
   useFocusEffect(useCallback(() => {
     setSelectedTimeTable(timeTableIdExists)
@@ -53,6 +55,10 @@ export function UpdateClassTimeTable() {
   })
 
   const handleUpdateClassTimeTable = async () => {
+
+    if (isActing || !selectedTimeTable) return
+    setIsActing(true)
+
     await UpdateClasstimeTableService(tenant.id, classId, selectedTimeTable).then(() => {
       fireSuccesToast("Horário atualizado")
       queryClient.invalidateQueries({
@@ -62,6 +68,8 @@ export function UpdateClassTimeTable() {
       })
     }).catch(err => {
       console.log(err)
+    }).finally(() => {
+      setIsActing(false)
     })
   }
 

@@ -31,6 +31,8 @@ export function UpdateClassAddress() {
   const { addressIdExists, classId } = route.params as RouteParamsProps;
 
   const [selectedAddressId, setSelectedAddressId] = useState("")
+  const [isActing, setIsActing] = useState(false)
+
 
   const { colors } = THEME;
 
@@ -53,6 +55,11 @@ export function UpdateClassAddress() {
   })
 
   const handleUpdateClassAddress = async () => {
+
+    if (isActing || !selectedAddressId) return;
+
+    setIsActing(true)
+
     await UpdateClassAddressService(tenant.id, classId, selectedAddressId).then(() => {
       fireSuccesToast("Endereço atualizado")
       queryClient.invalidateQueries({
@@ -62,6 +69,8 @@ export function UpdateClassAddress() {
       })
     }).catch(err => {
       console.log(err)
+    }).finally(() => {
+      setIsActing(false)
     })
   }
 
