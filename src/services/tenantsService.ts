@@ -75,3 +75,21 @@ export function UploadtenantAvatarService(form: FormData) {
   })
 }
 
+export function CreateTenantImageService(tenantId: string, form: FormData) {
+  return api({
+    url: `/tenants/${tenantId}/images`,
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: form
+  })
+}
+
+export function DeleteTenantImageService(tenantId: string, imageId: string) {
+  return api({
+    url: `/tenants/${tenantId}/images/${imageId}`,
+    method: 'delete'
+  })
+}
+

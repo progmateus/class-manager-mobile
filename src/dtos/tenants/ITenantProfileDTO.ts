@@ -2,6 +2,7 @@ import { EdocumentType } from "src/enums/EDocumentType";
 import { ETenantStatus } from "src/enums/ETenantStatus";
 import { ILinkDTO } from "./ILinkDTO";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
+import { IImageDTO } from "./IImageDTO";
 
 interface ITenantProfileDTO {
   id: string;
@@ -14,6 +15,7 @@ interface ITenantProfileDTO {
   username: string;
   avatar: string;
   links: ILinkDTO[];
+  images: IImageDTO[];
   description?: string;
   stripeChargesEnabled: boolean;
   stripeOnboardUrl: string;

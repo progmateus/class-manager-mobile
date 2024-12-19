@@ -5,15 +5,15 @@ import ImageSVG from "@assets/image-outline.svg"
 import { TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useMemo } from "react";
-import { GetTenantProfileService } from "src/services/tenantsService";
+import { CreateTenantImageService, GetTenantProfileService } from "src/services/tenantsService";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useAuth } from "@hooks/useAuth";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { Avatar } from "@components/Avatar/Avatar";
 import { TenantProfileSkeleton } from "@components/skeletons/screens/TenantProfile";
-import { useQuery } from "@tanstack/react-query";
-import { FacebookLogo, InstagramLogo, WhatsappLogo } from "phosphor-react-native";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { FacebookLogo, InstagramLogo, Plus, PlusCircle, WhatsappLogo } from "phosphor-react-native";
 import { THEME } from "src/theme";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
@@ -21,6 +21,9 @@ import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 import { EAuthType } from "src/enums/EAuthType";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { HasRole } from "@utils/HasRole";
+import * as ImagePicker from "expo-image-picker"
+import * as FileSystem from "expo-file-system"
+import { fireSuccesToast } from "@utils/HelperNotifications";
 
 
 type RouteParamsProps = {
@@ -54,11 +57,13 @@ export function TenantProfile() {
   }
 
   const { user } = useAuth()
+  const queryClient = useQueryClient();
   const { sizes } = THEME
 
   const loadTenantProfile = async () => {
     try {
       const { data } = await GetTenantProfileService(tenantId)
+      console.log(data.data.id)
       return data.data
     } catch (err) {
       console.log(err)
@@ -66,7 +71,7 @@ export function TenantProfile() {
   }
 
   const { data: tenantProfile, isLoading } = useQuery<ITenantProfileDTO>({
-    queryKey: ['get-tenant-profile', tenantId, user.id],
+    queryKey: ['get-tenant-profile', tenantId],
     queryFn: loadTenantProfile
   })
 
@@ -134,6 +139,44 @@ export function TenantProfile() {
       return
     }
     authenticateTenant(tenantProfile.id)
+  }
+
+  const handleClickAddImage = async () => {
+    const photoSelected = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      quality: 1,
+      aspect: [4, 4],
+      allowsEditing: true
+    })
+
+    if (photoSelected.canceled) return
+
+    if (photoSelected.assets[0].uri) {
+      const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
+      handleAddImage(photoSelected.assets[0])
+    } else {
+      return
+    }
+  }
+
+
+  const handleAddImage = async (image: ImagePicker.ImagePickerAsset) => {
+    const fileExtension = image.uri.split('.').pop()
+    const avatarFile = {
+      name: `${tenant.name}.${fileExtension}`.toLowerCase(),
+      uri: image.uri,
+      type: `${image.type}/${fileExtension}`
+    } as any
+
+    const userAvatarUploadForm = new FormData();
+    userAvatarUploadForm.append('image', avatarFile)
+
+    CreateTenantImageService(tenantId, userAvatarUploadForm).then(async ({ data }) => {
+      await queryClient.setQueryData(['get-tenant-profile', tenantId], (oldData: ITenantProfileDTO) => {
+        return { ...oldData, images: oldData.images.push(data.data) }
+      })
+      fireSuccesToast('Imagem adicionada com sucesso!')
+    })
   }
 
   return (
@@ -207,10 +250,10 @@ export function TenantProfile() {
                   </Center>
                 </View>
                 <View flex={1} justifyContent="space-between" display="flex" flexDirection="row" flexWrap="wrap">
-                  {images && images.length > 0 && (
-                    images.map((image) => {
+                  {tenantProfile.images && tenantProfile.images.length > 0 && (
+                    tenantProfile.images.map((image) => {
                       return (
-                        <TouchableOpacity key={image.url}>
+                        <TouchableOpacity key={image.id}>
                           <Image
                             w={32}
                             h={32}
@@ -219,12 +262,22 @@ export function TenantProfile() {
                               uri: image.url,
                             }}
                             defaultSource={{ uri: image.url }}
+                            mt={1}
                           />
                         </TouchableOpacity>
 
                       )
                     })
                   )}
+                  {
+                    (!tenantProfile.images || tenantProfile.images.length < 9) && isTenantAdmin && (
+                      <TouchableOpacity onPress={handleClickAddImage}>
+                        <View w={32} h={32} borderWidth={0.8} borderRadius={7} borderStyle="dashed" borderColor="brand.500" alignItems="center" justifyContent="center" mt={1}>
+                          <Icon as={<PlusCircle size={32} weight="light" />} color="brand.500" />
+                        </View>
+                      </TouchableOpacity>
+                    )
+                  }
                 </View>
               </VStack >
             )
