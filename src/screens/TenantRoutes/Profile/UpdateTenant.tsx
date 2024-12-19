@@ -183,14 +183,14 @@ export function UpdateTenant() {
 
     if (photoSelected.assets[0].uri) {
       const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
-      handleUpdateUserAvatar(photoSelected.assets[0])
+      handleUpdateTenantAvatar(photoSelected.assets[0])
     } else {
       return
     }
   }
 
 
-  const handleUpdateUserAvatar = async (image: ImagePicker.ImagePickerAsset) => {
+  const handleUpdateTenantAvatar = async (image: ImagePicker.ImagePickerAsset) => {
     const fileExtension = image.uri.split('.').pop()
     const avatarFile = {
       name: `${tenant.name}.${fileExtension}`.toLowerCase(),
@@ -201,12 +201,14 @@ export function UpdateTenant() {
     const userAvatarUploadForm = new FormData();
     userAvatarUploadForm.append('image', avatarFile)
 
-    UploadtenantAvatarService(userAvatarUploadForm).then(({ data }) => {
+    UploadtenantAvatarService(tenant.id, userAvatarUploadForm).then(({ data }) => {
       tenantUpdate({
         ...tenantcontext,
         avatar: data.data.avatar
       })
       fireSuccesToast('Foto alterada com sucesso!')
+    }).catch((err) => {
+      console.log('err: ', err)
     })
   }
 
@@ -227,9 +229,8 @@ export function UpdateTenant() {
                   mr={4}
                   src={tenant.avatar}
                 />
+                < Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600" > Alterar foto de perfil </Text>
               </Center>
-
-              < Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600" > Alterar foto de perfil </Text>
             </TouchableOpacity>
           </Center>
 

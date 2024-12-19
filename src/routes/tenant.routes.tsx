@@ -85,6 +85,7 @@ export function TenantRoutes() {
   return (
     <Navigator
       backBehavior="history"
+      initialRouteName="tenantProfile"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,

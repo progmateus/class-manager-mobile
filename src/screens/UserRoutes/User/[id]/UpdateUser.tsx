@@ -121,13 +121,12 @@ export function UpdateUser() {
                   w={24}
                   h={24}
                   alt="Foto de perfil"
-                  mr={4}
                   src={user.avatar}
                   username={user.username}
                 />
+                <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
               </Center>
 
-              <Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600">Alterar foto de perfil</Text>
             </TouchableOpacity>
           </Center>
           <VStack space={6} mt={12}>
