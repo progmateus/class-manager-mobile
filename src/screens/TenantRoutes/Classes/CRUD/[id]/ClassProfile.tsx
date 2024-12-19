@@ -127,7 +127,7 @@ export function ClassProfile() {
                   </MenuItem.Actions>
                 </MenuItem.Root>
 
-                <MenuItem.Root>
+                <MenuItem.Root onPress={() => navigation.navigate('transferClassStudents', { classId })}>
                   <MenuItem.Icon icon={ArrowsLeftRight} />
                   <MenuItem.Content title="Transferir alunos" description="Transfira todos os alunos para outra turma" />
                   <MenuItem.Actions>

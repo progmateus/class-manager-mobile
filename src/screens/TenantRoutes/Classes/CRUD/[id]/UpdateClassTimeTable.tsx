@@ -67,7 +67,7 @@ export function UpdateClassTimeTable() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Horários" rightIcon={Check} rightAction={handleUpdateClassTimeTable} />
+      <PageHeader title="Selecione um horário" rightIcon={Check} rightAction={handleUpdateClassTimeTable} />
       <Viewcontainer>
         {
           isLoading ? (<Loading />) : (
