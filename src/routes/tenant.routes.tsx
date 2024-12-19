@@ -37,6 +37,7 @@ import { AddressesList } from "@screens/TenantRoutes/Addresses/CRUD/AddressesLis
 import { UpdateClassAddress } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassAddress";
 import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
 import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/SubscriptionProfile";
+import { TransferClassStudents } from "@screens/TenantRoutes/Classes/CRUD/[id]/TransferClassStudents";
 
 
 export type TenantRoutes = {
@@ -63,6 +64,7 @@ export type TenantRoutes = {
   updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateTenant: undefined;
   updateClassTimeTable: { classId: string; timeTableIdExists?: string; };
+  transferClassStudents: { classId: string; };
   updateClassAddress: { classId: string; addressIdExists?: string; };
   createClassDay: undefined;
   classesDaysList: undefined;
@@ -324,6 +326,13 @@ export function TenantRoutes() {
         name="invoicesList"
         initialParams={{}}
         component={InvoicesList}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="transferClassStudents"
+        initialParams={{}}
+        component={TransferClassStudents}
         options={{ tabBarButton: () => (null) }}
       />
     </Navigator>

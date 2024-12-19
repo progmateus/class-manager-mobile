@@ -1,20 +1,18 @@
 import { GenericItem } from "@components/Items/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
-import { ScrollContainer } from "@components/ScrollContainer"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireSuccesToast } from "@utils/HelperNotifications"
-import { Center, FlatList, Text, View, VStack } from "native-base"
-import { BookBookmark, Calendar, Check, Plus } from "phosphor-react-native"
-import { useCallback, useState } from "react"
+import { FlatList, Text, View } from "native-base"
+import { BookBookmark, Check } from "phosphor-react-native"
+import { useState } from "react"
 import { TouchableOpacity } from "react-native"
-import { ListClassesService, UpdateClasstimeTableService } from "src/services/classesService"
-import { ListTimesTablesService } from "src/services/timeTablesService"
+import { ListClassesService, TransferClassStudentsService } from "src/services/classesService"
 
 
 type RouteParamsProps = {
@@ -22,7 +20,7 @@ type RouteParamsProps = {
 }
 
 
-export function TransferStudentsClass() {
+export function TransferClassStudents() {
 
   const { tenant } = useAuth()
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
@@ -49,8 +47,8 @@ export function TransferStudentsClass() {
   })
 
   const handleUpdateClassTimeTable = async () => {
-    await UpdateClasstimeTableService(tenant.id, classId, selectedTimeTable).then(() => {
-      fireSuccesToast("Horário atualizado")
+    await TransferClassStudentsService(tenant.id, classId, selectedNewClassId).then(() => {
+      fireSuccesToast("Alunos transferidos")
       queryClient.invalidateQueries({
         queryKey: ['get-class-profile', tenant.id, classId],
       }).then(() => {
@@ -63,7 +61,7 @@ export function TransferStudentsClass() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Horários" rightIcon={Check} rightAction={handleUpdateClassTimeTable} />
+      <PageHeader title="Selecione uma turma" rightIcon={Check} rightAction={handleUpdateClassTimeTable} />
       <Viewcontainer>
         {
           isLoading ? (<Loading />) : (
