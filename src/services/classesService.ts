@@ -144,3 +144,13 @@ export function UpdateClasstimeTableService(tenantId: string, classId: string, t
     }
   })
 }
+
+export function TransferStudentsClassService(tenantId: string, currentClassId: string, newclassId: string) {
+  return api({
+    url: `${tenantId}/classes/${currentClassId}/students/transfer`,
+    method: 'patch',
+    data: {
+      toId: newclassId
+    }
+  })
+}
