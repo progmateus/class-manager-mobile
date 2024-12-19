@@ -64,3 +64,14 @@ export function RefreshTenantSubscriptionService(tenantId: string) {
   })
 }
 
+export function UploadtenantAvatarService(form: FormData) {
+  return api({
+    url: '/tenants/avatar',
+    method: 'patch',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: form
+  })
+}
+

@@ -10,7 +10,7 @@ import { useAuth } from "@hooks/useAuth";
 import { useCallback, useState } from "react";
 import { fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
 import { TextArea } from "@components/form/TextArea";
-import { UpdateTenantSertvice } from "src/services/tenantsService";
+import { UpdateTenantSertvice, UploadtenantAvatarService } from "src/services/tenantsService";
 import { Avatar } from "@components/Avatar/Avatar";
 import { InputMask } from "@components/form/InputMask";
 import { THEME } from "src/theme";
@@ -20,6 +20,8 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
 import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import * as ImagePicker from "expo-image-picker"
+import * as FileSystem from "expo-file-system"
 
 const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
@@ -42,7 +44,7 @@ export function UpdateTenant() {
   const [tenant, setTenant] = useState<ITenantProfileDTO>({} as ITenantProfileDTO)
 
 
-  const { tenant: tenantcontext, refreshTenant } = useAuth();
+  const { tenant: tenantcontext, refreshTenant, tenantUpdate } = useAuth();
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   const { colors, sizes } = THEME
@@ -169,22 +171,68 @@ export function UpdateTenant() {
     })
   }
 
+  const handleSelectAvatarPhoto = async () => {
+    const photoSelected = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      quality: 1,
+      aspect: [4, 4],
+      allowsEditing: true
+    })
+
+    if (photoSelected.canceled) return
+
+    if (photoSelected.assets[0].uri) {
+      const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
+      handleUpdateUserAvatar(photoSelected.assets[0])
+    } else {
+      return
+    }
+  }
+
+
+  const handleUpdateUserAvatar = async (image: ImagePicker.ImagePickerAsset) => {
+    const fileExtension = image.uri.split('.').pop()
+    const avatarFile = {
+      name: `${tenant.name}.${fileExtension}`.toLowerCase(),
+      uri: image.uri,
+      type: `${image.type}/${fileExtension}`
+    } as any
+
+    const userAvatarUploadForm = new FormData();
+    userAvatarUploadForm.append('image', avatarFile)
+
+    UploadtenantAvatarService(userAvatarUploadForm).then(({ data }) => {
+      tenantUpdate({
+        ...tenantcontext,
+        avatar: data.data.avatar
+      })
+      fireSuccesToast('Foto alterada com sucesso!')
+    })
+  }
+
   return (
     <View flex={1} >
       <PageHeader title="Alterar Empresa" rightIcon={Check} rightAction={handleSubmit(handleUpdate)} />
       <ScrollContainer>
         <VStack pb={20}>
           <Center>
-            <Avatar
-              rounded="full"
-              w={24}
-              h={24}
-              alt="Foto de perfil"
-              mr={4}
-              src={tenant.avatar}
-            />
-            < Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600" > Alterar foto de perfil </Text>
+            <TouchableOpacity onPress={handleSelectAvatarPhoto}>
+              <Center>
+                <Avatar
+                  rounded="full"
+                  type="tenant"
+                  w={24}
+                  h={24}
+                  alt="Foto de perfil"
+                  mr={4}
+                  src={tenant.avatar}
+                />
+              </Center>
+
+              < Text fontSize="md" mt={4} textAlign="center" fontWeight="bold" color="brand.600" > Alterar foto de perfil </Text>
+            </TouchableOpacity>
           </Center>
+
           <VStack space={6} mt={12} >
             <Controller
               name="name"
