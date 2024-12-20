@@ -59,7 +59,7 @@ export function CreateUserRole() {
                   renderItem={({ item }) => (
                     <TouchableOpacity key={item.user.id} onLongPress={() => handleSelectUserRole(item)}>
                       <GenericItem.Root>
-                        <GenericItem.Avatar url={item.user.avatar} alt={item.user.avatar} username={item.user.username} />
+                        <GenericItem.Avatar url={item.user.avatar} alt={item.user.avatar} />
                         <GenericItem.Content title={`${item.user.name}`} caption="@username" />
                       </GenericItem.Root>
                     </TouchableOpacity>

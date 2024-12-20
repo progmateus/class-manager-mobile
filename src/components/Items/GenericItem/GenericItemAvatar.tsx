@@ -1,13 +1,10 @@
 import { Avatar } from "@components/Avatar/Avatar";
-import { Image } from "native-base";
-import { UserCircle } from "phosphor-react-native";
 
 type IProps = {
   url?: string;
   alt?: string;
-  username: string;
 }
-export function GenericItemAvatar({ url, alt = "Imagem", username }: IProps) {
+export function GenericItemAvatar({ url, alt = "Imagem" }: IProps) {
   return (
     <Avatar
       rounded="full"

@@ -162,7 +162,7 @@ export function TeachersList() {
                   keyExtractor={teacher => teacher.id}
                   renderItem={({ item }) => (
                     <GenericItem.Root key={item.id}>
-                      <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do usuário" username={item.user.username} />
+                      <GenericItem.Avatar url={item.user?.avatar} alt="Foto de perfil do usuário" />
                       <GenericItem.Content title={`${item.user.name}`} caption={item.user.username} />
                       <GenericItem.InfoSection>
                         <NativeBaseButton bg="red.500" size="xs" px={4} onPress={() => handleRemoveTeacher(item.id)}>
