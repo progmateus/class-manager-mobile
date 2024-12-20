@@ -221,7 +221,7 @@ export function TeachersList() {
                         />
 
                         <VStack alignItems="center" justifyContent="center">
-                          <Heading fontFamily="heading" fontSize="2xl" color="coolGray.700">{`${userFound?.name}`}</Heading>
+                          <Heading fontFamily="heading" fontSize="2xl" color="coolGray.700">{userFound?.name}</Heading>
                           <Text fontFamily="body" color="coolGray.600"> {userFound?.username}</Text>
                         </VStack>
                       </View>
