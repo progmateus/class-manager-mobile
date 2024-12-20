@@ -23,8 +23,8 @@ export function DeleteSubscriptionService(tenantId: string, subscriptionId: stri
 
 export function UpdateSubscriptionPlanService(tenantId: string, subscriptionId: string, tenantPlanId: string) {
   return api({
-    url: `${tenantId}/subscriptions/${subscriptionId}`,
-    method: 'put',
+    url: `${tenantId}/subscriptions/${subscriptionId}/plan`,
+    method: 'patch',
     data: {
       tenantPlanId
     }
@@ -33,7 +33,7 @@ export function UpdateSubscriptionPlanService(tenantId: string, subscriptionId: 
 
 export function UpdateSubscriptionStatusService(tenantId: string, subscriptionId: string, status: ESubscriptionStatus) {
   return api({
-    url: `${tenantId}/subscriptions/${subscriptionId}`,
+    url: `${tenantId}/subscriptions/${subscriptionId}/status`,
     method: 'patch',
     data: {
       status
