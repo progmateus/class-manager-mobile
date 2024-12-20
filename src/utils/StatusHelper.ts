@@ -2,7 +2,11 @@ import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { THEME } from "src/theme";
 
-export const transformInvoiceStatus = (status: EInvoiceStatus) => {
+export const transformInvoiceStatus = (status?: EInvoiceStatus) => {
+  if (!status) {
+    return "Indisponível"
+  }
+
   const situations: any = {
     1: "Pendente",
     2: "Pago",
@@ -14,8 +18,12 @@ export const transformInvoiceStatus = (status: EInvoiceStatus) => {
 }
 
 
-export const transformInvoiceColor = (status: EInvoiceStatus) => {
+export const transformInvoiceColor = (status?: EInvoiceStatus) => {
   const { colors } = THEME;
+
+  if (!status) {
+    return colors.coolGray['400']
+  }
 
   const situations: any = {
     1: colors.yellow['500'],

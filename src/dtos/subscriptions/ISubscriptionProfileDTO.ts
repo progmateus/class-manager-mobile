@@ -7,10 +7,12 @@ export interface ISubscriptionProfileDTO {
   id: string;
   userId: string;
   tenantPlanId: string;
+  latestInvoiceId?: string;
   tenantId: string;
   status: ESubscriptionStatus;
   user: Omit<IUserProfileDTO, "password">;
   tenantPlan: ITenantPlanDTO;
+  latestInvoice?: IInvoiceDTO;
   invoices: IInvoiceDTO[];
   tenant: any;
   expiresDate: Date;
