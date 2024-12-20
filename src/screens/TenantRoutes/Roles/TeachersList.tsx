@@ -217,7 +217,6 @@ export function TeachersList() {
                           h={24}
                           alt="Foto de perfil"
                           src={userFound?.avatar}
-                          username={userFound?.username}
                         />
 
                         <VStack alignItems="center" justifyContent="center">

@@ -186,7 +186,6 @@ export function SubscriptionProfile() {
                         h={24}
                         alt="Foto de perfil"
                         src={authenticationType == EAuthType.USER ? subscription?.tenant?.avatar : subscription?.user?.avatar}
-                        username={authenticationType == EAuthType.USER ? subscription?.tenant?.username : subscription?.user?.username}
                       />
                       <Text fontSize="sm" mt={2} color="coolGray.500">@{authenticationType == EAuthType.USER ? subscription?.tenant?.username : subscription?.user?.username}</Text>
                     </Center>

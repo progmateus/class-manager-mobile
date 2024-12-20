@@ -10,11 +10,10 @@ type IProps = IImageProps & {
   src?: string;
   alt?: string;
   type?: "user" | "tenant"
-  username?: string;
 }
 
 
-export function Avatar({ src, alt = "Imagem", type = "user", username, ...rest }: IProps) {
+export function Avatar({ src, alt = "Imagem", type = "user", ...rest }: IProps) {
   const imageRef = useRef<InterfaceImageProps>({} as InterfaceImageProps)
   let finalSrc = "";
   let localSrc = ReactImage.resolveAssetSource(BlankProfileImage).uri

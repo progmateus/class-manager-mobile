@@ -16,7 +16,6 @@ export function GenericItemAvatar({ url, alt = "Imagem", username }: IProps) {
       alt={alt}
       mr={4}
       src={url}
-      username={username}
     />
   )
 }

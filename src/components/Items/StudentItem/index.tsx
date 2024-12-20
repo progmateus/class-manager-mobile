@@ -15,7 +15,7 @@ export function StudentItem({ user, index }: IProps) {
   return (
     <TouchableOpacity key={user.id}>
       <HStack alignItems="center" rounded="md">
-        <Avatar src={user?.avatar} alt="Foto de perfil do aluno" username={user?.username} />
+        <Avatar src={user?.avatar} alt="Foto de perfil do aluno" />
         <VStack flex={1} ml={3}>
           <Heading numberOfLines={1} fontFamily="heading" fontSize="sm">{user.name}</Heading>
           <Text numberOfLines={1} color="gray.400" fontSize="xs">@{user?.username}</Text>

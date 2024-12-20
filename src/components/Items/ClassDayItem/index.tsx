@@ -67,7 +67,6 @@ function ClassDayItem({ classDay }: IProps) {
                         h={9}
                         alt="image profile"
                         src={booking.user.avatar}
-                        username={booking.user.username}
                       />
                     </View>
                   )
