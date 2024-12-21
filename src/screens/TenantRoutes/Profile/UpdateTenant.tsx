@@ -160,7 +160,7 @@ export function UpdateTenant() {
     UpdateTenantSertvice({ name, description, email, document, links: tenant.links }, tenant.id).then(() => {
       fireSuccesToast("Empresa atualizada!")
       refreshTenant()
-      navigation.navigate('dashboard')
+      navigation.navigate('tenantProfile', { tenantIdParams: tenant.id })
     }).catch((err) => {
       console.log("errrrr: ", err)
       if (err.message && err.message === "ERR_VALIDATION") {
@@ -207,6 +207,7 @@ export function UpdateTenant() {
         avatar: data.data.avatar
       })
       fireSuccesToast('Foto alterada com sucesso!')
+      navigation.navigate('tenantProfile', { tenantIdParams: tenant.id })
     }).catch((err) => {
       console.log('err: ', err)
     })
