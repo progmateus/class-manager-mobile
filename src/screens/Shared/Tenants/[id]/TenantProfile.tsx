@@ -173,8 +173,8 @@ export function TenantProfile() {
     userAvatarUploadForm.append('image', avatarFile)
 
     CreateTenantImageService(tenantId, userAvatarUploadForm).then(async ({ data }) => {
-      await queryClient.setQueryData(['get-tenant-profile', tenantId], (oldData: ITenantProfileDTO) => {
-        return { ...oldData, images: oldData.images.push(data.data) }
+      await queryClient.invalidateQueries({
+        queryKey: ['get-tenant-profile', tenantId]
       })
       fireSuccesToast('Imagem adicionada com sucesso!')
     })
@@ -183,7 +183,7 @@ export function TenantProfile() {
 
   const handleDeleteImage = () => {
     DeleteTenantImageService(tenantId, selectedImageId).then(async () => {
-      fireInfoToast('Imagem deletada com sucesso')
+      fireInfoToast('Imagem removida com sucesso')
       setSelectedImageId("")
       setIsOpen(false)
       await queryClient.setQueryData(['get-tenant-profile', tenantId], (oldData: ITenantProfileDTO) => {
