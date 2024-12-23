@@ -58,7 +58,7 @@ export function TimeTable() {
     })
   }
 
-  const handleAddScheduleDay = useCallback((dayOfWeek: number, hourStart: string, hourEnd: string) => {
+  const handleAddScheduleDay = useCallback((dayOfWeek: number, name: string, hourStart: string, hourEnd: string) => {
     setTimeTable(prevState => (
       {
         ...prevState,
@@ -66,8 +66,10 @@ export function TimeTable() {
           ...prevState.schedulesDays,
           {
             id: String(Math.floor(Math.random() * 100)),
+            name: name,
             weekDay: dayOfWeek,
-            hourStart, hourEnd
+            hourStart,
+            hourEnd
           }
         ]
       }

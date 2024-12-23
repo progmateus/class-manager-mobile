@@ -108,13 +108,14 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, addScheduleDayFn, re
                   schedulesDays && schedulesDays.length > 0 && (
                     schedulesDays.map((scheduleDay: any) => {
                       return (
-                        <HStack key={scheduleDay.id} alignItems="center" justifyContent="space-evenly">
-                          <Text fontSize="lg">{scheduleDay.name}</Text>
-                          <Text fontSize="lg">{`${scheduleDay.hourStart} - ${scheduleDay.hourEnd}`}</Text>
+                        <HStack key={scheduleDay.id} borderWidth={0.5} borderColor="coolGray.400" borderRadius={7} py={2} px={4} alignItems="center">
+                          <VStack flex={1} space={1}>
+                            <Text fontSize="sm" numberOfLines={1} maxW="56">{scheduleDay.name ?? "Não informado"}</Text>
+                            <Text fontSize="xs" color="coolGray.700">{`${scheduleDay.hourStart} - ${scheduleDay.hourEnd}`}</Text>
+                          </VStack>
                           <TouchableOpacity onPress={() => handleRemove(scheduleDay.id)}>
-                            <TrashSimple size={24} />
+                            <Icon as={<TrashSimple size={24} />} color="coolGray.500" />
                           </TouchableOpacity>
-
                         </HStack>
                       )
                     })
