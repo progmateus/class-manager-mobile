@@ -21,8 +21,7 @@ dayjs.extend(customParseFormat);
 
 const createClassSchema = z.object({
   name: z.string().min(3, 'Min 3 caracteres').max(80, 'Max 80 caracteres'),
-  description: z.string(),
-  businessHour: z.string()
+  description: z.string()
 });
 
 type CreateClassProps = z.infer<typeof createClassSchema>
@@ -50,7 +49,7 @@ export function CreateClass() {
     if (isLoading) return;
     setIsLoadig(true)
 
-    CreateClassService(tenantId, data.name, data.description, data.businessHour).then(async ({ data }) => {
+    CreateClassService(tenantId, data.name, data.description).then(async ({ data }) => {
       fireSuccesToast('Turma criada')
       await queryClient.invalidateQueries({
         queryKey: ['get-classes', tenantId]
@@ -86,14 +85,6 @@ export function CreateClass() {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Input label="Descrição" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.description?.message} />
-            )}
-          />
-
-          <Controller
-            name="businessHour"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Input label="Horário" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.businessHour?.message} />
             )}
           />
         </VStack>
