@@ -17,7 +17,7 @@ import Animated from "react-native-reanimated";
 import { orderBy } from "lodash";
 import { ClassDayItemSkeleton } from "@components/skeletons/Items/ClassDayItemSkeleton";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
-import { ClassDayItem } from "@components/Items/ClassDayItem";
+import { ClassDayItem } from "@components/Items/ClassDayItem/ClassDayItem";
 
 const TouchableOpacityAnimated = Animated.createAnimatedComponent(TouchableOpacity)
 

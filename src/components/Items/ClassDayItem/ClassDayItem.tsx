@@ -46,8 +46,8 @@ function ClassDayItem({ classDay }: IProps) {
           <Text fontWeight="bold" color={statusColor}> {getHours(classDay.date)}</Text>
         </VStack>
         <VStack space={0.5} flex={1}>
-          <Heading fontSize="sm" fontFamily="heading">{classDay.class?.tenant?.name}</Heading>
-          <Text fontSize="xs" fontWeight="light">{classDay.class.name}</Text>
+          <Heading fontSize="sm" fontFamily="heading">{classDay.name ?? "Não informado"}</Heading>
+          <Text fontSize="xs" fontWeight="light">{classDay.class?.tenant?.name}</Text>
           <Text fontSize="xs" fontWeight="light" color="coolGray.500" numberOfLines={1} >{`${classDay?.class?.address?.street ?? 'Não informado'}, ${classDay?.class?.address?.number ?? ''}`} </Text>
 
         </VStack>

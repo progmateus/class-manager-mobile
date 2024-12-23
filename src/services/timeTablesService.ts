@@ -1,3 +1,4 @@
+import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { api } from "./api";
 
 export function CreateTimeTableService(name: string, tenantId: string) {
@@ -10,7 +11,7 @@ export function CreateTimeTableService(name: string, tenantId: string) {
   })
 }
 
-export function UpdateTimeTableService(data: any, tenantId: string, timeTableId: string) {
+export function UpdateTimeTableService(data: ITimeTableDTO, tenantId: string, timeTableId: string) {
   return api({
     url: `${tenantId}/times-tables/${timeTableId}`,
     method: 'put',

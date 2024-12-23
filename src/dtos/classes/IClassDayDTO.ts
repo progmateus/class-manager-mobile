@@ -5,6 +5,7 @@ import { IBookingDTO } from "@dtos/bookings/IBookingDTO"
 export type ICLassDayDTO = {
   id: string,
   date: Date,
+  name: string,
   hourStart: string,
   hourEnd: string,
   status: EClassDayStatus,
