@@ -16,12 +16,14 @@ import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { useAuth } from "@hooks/useAuth";
 import { InputMask } from "@components/form/InputMask";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { Input } from "@components/form/Input";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 const createClassDaySchema = z.object({
+  name: z.string().min(3, "min 3 characters").max(80, "max 80 characters"),
   date: z.string(),
   hourStart: z.string(),
   hourEnd: z.string(),
@@ -58,14 +60,13 @@ export function CreateClassDay() {
     reset(defaultValues)
   }, []))
 
-  const handleCreateClassDay = (data: createclassDayProps) => {
+  const handleCreateClassDay = ({ name, date, classId, hourEnd, hourStart }: createclassDayProps) => {
     if (isLoading) return;
     setIsLoadig(true)
-    const { hourStart, hourEnd, date, classId } = data
 
     const fullDate = dayjs(`${date} ${hourStart}`, "DD/MM/YYYY HH:mm").toISOString();
 
-    CreateClassDayService(tenantId, hourStart, hourEnd, fullDate, classId).then(({ data }) => {
+    CreateClassDayService(tenantId, name, hourStart, hourEnd, fullDate, classId).then(({ data }) => {
       fireSuccesToast('Aula criada com sucesso!')
       reset(defaultValues)
       navigation.navigate('classDayProfile', {
@@ -86,6 +87,14 @@ export function CreateClassDay() {
       <ScrollContainer>
         <VStack space={6} mt={4}>
           <Controller
+            name="name"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Input label="Nome" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.name?.message} />
+            )}
+          />
+
+          <Controller
             name="date"
             control={control}
             render={({ field: { onChange, value } }) => (
@@ -99,39 +108,35 @@ export function CreateClassDay() {
             )}
           />
           <HStack space={4} w={'48%'}>
-            <VStack space={4} w={'100%'}>
-              <Controller
-                name="hourStart"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <InputMask
-                    label="Horário de inicio:"
-                    type="datetime"
-                    options={{
-                      format: 'HH:mm'
-                    }}
-                    onChangeText={onChange} value={value} errorMessage={errors.hourStart?.message}
-                  />
-                )}
-              />
-            </VStack>
+            <Controller
+              name="hourStart"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <InputMask
+                  label="Horário de inicio:"
+                  type="datetime"
+                  options={{
+                    format: 'HH:mm'
+                  }}
+                  onChangeText={onChange} value={value} errorMessage={errors.hourStart?.message}
+                />
+              )}
+            />
 
-            <VStack space={4} w={'100%'}>
-              <Controller
-                name="hourEnd"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <InputMask
-                    label="Horário de término:"
-                    type="datetime"
-                    options={{
-                      format: 'HH:mm'
-                    }}
-                    onChangeText={onChange} value={value} errorMessage={errors.hourEnd?.message}
-                  />
-                )}
-              />
-            </VStack>
+            <Controller
+              name="hourEnd"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <InputMask
+                  label="Horário de término:"
+                  type="datetime"
+                  options={{
+                    format: 'HH:mm'
+                  }}
+                  onChangeText={onChange} value={value} errorMessage={errors.hourEnd?.message}
+                />
+              )}
+            />
 
           </HStack>
 
