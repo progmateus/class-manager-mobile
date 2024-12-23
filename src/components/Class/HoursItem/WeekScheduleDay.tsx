@@ -1,28 +1,44 @@
+import { Input } from "@components/form/Input"
+import { InputMask } from "@components/form/InputMask"
 import { Label } from "@components/form/Label"
 import { ISCheduleDayDTO } from "@dtos/timeTables/IScheduleDayDTO"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { fireErrorToast } from "@utils/HelperNotifications"
 import { Actionsheet, Box, Button, Heading, HStack, Icon, PresenceTransition, Stack, Text, View, VStack } from "native-base"
 import { CaretDown, Plus, TrashSimple } from "phosphor-react-native"
 import { useState } from "react"
+import { Controller, useForm } from "react-hook-form"
 import { TouchableOpacity } from "react-native"
 import { TextInputMask } from "react-native-masked-text"
 import { THEME } from "src/theme"
+import { z } from "zod"
 
 interface IProps {
   dayOfWeek: number;
-  addScheduleDayFn: (dayOfWeek: number, hourStart: string, hourEnd: string) => void;
+  addScheduleDayFn: (dayOfWeek: number, name: string, startHour: string, endHour: string) => void;
   removeScheduleDayFn: (id: string) => void
   schedulesDays: ISCheduleDayDTO[]
 }
 
 const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
 
+const createScheduleDateSchema = z.object({
+  startHour: z.string().regex(timeRegex, "Horário inválido"),
+  endHour: z.string().regex(timeRegex, "Horário inválido"),
+  name: z.string().min(3, "min 3 caracteres").max(80, "max 80 caracteres")
+});
+
+type createScheduleDateProps = z.infer<typeof createScheduleDateSchema>
+
+
 export function WeekScheduleDay({ dayOfWeek, schedulesDays, addScheduleDayFn, removeScheduleDayFn }: IProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [selectedWeekDay, setSelectedWeekDay] = useState(0)
-  const [hourStart, setHourStart] = useState("")
-  const [hourEnd, setHourEnd] = useState("")
+
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<createScheduleDateProps>({
+    resolver: zodResolver(createScheduleDateSchema)
+  });
 
   const transforWeekDay = (dayOfWeek: string | number) => {
     const objTransform: any = {
@@ -38,24 +54,22 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, addScheduleDayFn, re
     return objTransform[String(dayOfWeek)]
   }
 
-  const { colors, sizes } = THEME;
-
   const handleOpenActions = (weekDay: number) => {
     setSelectedWeekDay(weekDay)
     setIsAddOpen(true)
   }
 
-  const handleAdd = () => {
-    if (!hourStart || !hourEnd) {
+  const handleAdd = ({ name, startHour, endHour }: createScheduleDateProps) => {
+    if (!startHour || !endHour) {
       fireErrorToast("Horário inválido")
       return
     }
 
-    if (!hourStart.match(timeRegex) || !hourEnd.match(timeRegex)) {
+    if (!startHour.match(timeRegex) || !endHour.match(timeRegex)) {
       fireErrorToast("Horário inválido")
       return
     }
-    addScheduleDayFn(dayOfWeek, hourStart, hourEnd)
+    addScheduleDayFn(selectedWeekDay, name, startHour, endHour)
     onClose()
   }
 
@@ -66,8 +80,7 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, addScheduleDayFn, re
 
   const onClose = () => {
     setIsAddOpen(false)
-    setHourStart("")
-    setHourEnd("")
+    reset()
   }
 
   return (
@@ -93,9 +106,10 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, addScheduleDayFn, re
               <VStack px={8} space={4} my={6}>
                 {
                   schedulesDays && schedulesDays.length > 0 && (
-                    schedulesDays.map((scheduleDay: any, index) => {
+                    schedulesDays.map((scheduleDay: any) => {
                       return (
                         <HStack key={scheduleDay.id} alignItems="center" justifyContent="space-evenly">
+                          <Text fontSize="lg">{scheduleDay.name}</Text>
                           <Text fontSize="lg">{`${scheduleDay.hourStart} - ${scheduleDay.hourEnd}`}</Text>
                           <TouchableOpacity onPress={() => handleRemove(scheduleDay.id)}>
                             <TrashSimple size={24} />
@@ -115,65 +129,60 @@ export function WeekScheduleDay({ dayOfWeek, schedulesDays, addScheduleDayFn, re
           )
         }
       </VStack>
-      <Actionsheet isOpen={isAddOpen} size="full" onClose={onClose}>
+      <Actionsheet isOpen={isAddOpen} onClose={onClose}>
         <Actionsheet.Content>
-          <VStack h="full" space={8}>
+          <VStack space={8} px={4}>
             <Box w="100%" minH={60} px={4} justifyContent="center" alignSelf="center">
               <Heading fontSize="16" color="coolGray.700" textAlign="center">
                 {transforWeekDay(selectedWeekDay)}
               </Heading>
             </Box>
-            <HStack space={4} w="100%" px={4} alignContent="center" justifyContent="center">
-              <VStack flex={1} space={2}>
-                <Label text="Início:" />
-                <TextInputMask
-                  onChangeText={setHourStart}
-                  value={hourStart}
-                  style={{
-                    width: '100%',
-                    borderBottomColor: 'red',
-                    color: colors.coolGray[700],
-                    height: sizes[10],
-                    borderColor: colors.coolGray[300],
-                    borderWidth: 0.8,
-                    borderRadius: 4,
-                    paddingLeft: sizes[4]
-                  }}
-                  type={'datetime'}
-                  options={{
-                    format: 'HH:mm'
-                  }}
-                />
-              </VStack>
 
-              <VStack flex={1} space={2}>
-                <Label text="Fim:" />
-                <TextInputMask
-                  onChangeText={setHourEnd}
-                  value={hourEnd}
-                  style={{
-                    width: '100%',
-                    borderBottomColor: 'red',
-                    color: colors.coolGray[700],
-                    height: sizes[10],
-                    borderColor: colors.coolGray[300],
-                    borderWidth: 0.8,
-                    borderRadius: 4,
-                    paddingLeft: sizes[4]
-                  }}
-                  type={'datetime'}
-                  options={{
-                    format: 'HH:mm'
-                  }}
-                />
-              </VStack>
+            <Box h="20">
+              <Controller
+                name="name"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Input label="Nome" variant="outline" autoCapitalize="none" onChangeText={onChange} value={value} errorMessage={errors.name?.message} />
+                )}
+              />
+            </Box>
+
+            <HStack space={4}>
+              <Controller
+                name="startHour"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputMask
+                    label="Início:"
+                    type="datetime"
+                    options={{
+                      format: 'HH:mm'
+                    }}
+                    onChangeText={onChange} value={value} errorMessage={errors.startHour?.message} />
+                )}
+              />
+
+              <Controller
+                name="endHour"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputMask
+                    label="Fim:"
+                    type="datetime"
+                    options={{
+                      format: 'HH:mm'
+                    }}
+                    onChangeText={onChange} value={value} errorMessage={errors.endHour?.message} />
+                )}
+              />
             </HStack>
-            <Actionsheet.Item alignSelf="center">
-              <Button onPress={handleAdd} color="brand.700" px={8} rounded="full"> Adicionar </Button>
+            <Actionsheet.Item alignSelf="center" mb="10">
+              <Button onPress={handleSubmit(handleAdd)} color="brand.700" px={8} rounded="full"> Adicionar </Button>
             </Actionsheet.Item>
           </VStack>
-        </Actionsheet.Content>
-      </Actionsheet>
-    </VStack>
+        </Actionsheet.Content >
+      </Actionsheet >
+    </VStack >
   )
 }

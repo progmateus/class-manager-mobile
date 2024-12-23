@@ -26,7 +26,7 @@ export function InputMask({ errorMessage = null, isInvalid = false, label, ...re
   }
 
   return (
-    <FormControl isInvalid={invalid}>
+    <FormControl isInvalid={invalid} flex={1}>
       <VStack space={1.5}>
         {label && (<Text fontSize="sm" fontWeight="medium" color="coolGray.700"> {label} </Text>)}
         <TextInputMask
