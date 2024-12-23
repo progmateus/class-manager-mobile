@@ -70,12 +70,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   async function singIn(email: string, password: string): Promise<void> {
-    setIsLoadingData(true);
-
     try {
       const { data } = await SignInService(email, password)
       if (data.data.id) {
-        const { user: userResponse, token, refresh_token } = data.data
+        const { token, refresh_token } = data.data
         await storageAuthTokenSave({ token, refresh_token });
         tokenUpdate(token);
         refreshUser()
@@ -85,8 +83,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         throw new Error(err.message)
       }
       throw new Error('Internal server error')
-    } finally {
-      setIsLoadingData(false);
     }
   }
 
@@ -115,7 +111,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     } catch (error) {
       throw error
     } finally {
-      setIsLoadingData(false);
+      setTimeout(() => {
+        setIsLoadingData(false);
+      }, 250)
     }
   }
 
@@ -135,7 +133,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     } catch (error) {
       throw error
     } finally {
-      setIsLoadingData(false);
+      setTimeout(() => {
+        setIsLoadingData(false);
+      }, 250)
     }
   }
 
@@ -146,6 +146,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
       if (token) {
         tokenUpdate(token);
+        verifyAuthenticationType()
       }
     } catch (error) {
       throw error
@@ -181,14 +182,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function verifyAuthenticationType() {
     try {
       const authentication_type = await storageAuthenticationTypeGet();
-      refreshUser();
-      if (authentication_type && authentication_type == EAuthType.TENANT) {
-        if (tenant.id) {
-          authenticationTypeUpdate(authentication_type)
-          refreshTenant()
-        } else {
-          authenticationTypeUpdate(EAuthType.USER)
-        }
+
+      if (authentication_type == EAuthType.TENANT && tenant.id) {
+        refreshTenant()
+      } else {
+        authenticationTypeUpdate(EAuthType.USER)
+        refreshUser();
       }
     } catch (error) {
       throw error
@@ -208,9 +207,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }, [])
 
 
-  useEffect(() => {
-    verifyAuthenticationType()
-  }, [])
 
   return (
     <AuthContext.Provider value={{

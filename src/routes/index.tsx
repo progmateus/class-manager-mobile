@@ -22,10 +22,10 @@ export function Routes() {
     <Box flex={1} bg="white">
       <NavigationContainer>
         {
-          user.id && authenticationType === EAuthType.USER ? (
-            <UserRoutes />
-          ) : user.id && tenant.id && authenticationType === EAuthType.TENANT ? (
+          user.id && tenant.id && authenticationType === EAuthType.TENANT ? (
             <TenantRoutes />
+          ) : user.id ? (
+            <UserRoutes />
           ) : (
             <GuestRoutes />
           )

@@ -6,6 +6,7 @@ import { AppError } from "@utils/errors/AppError";
 import { ValidationError } from "@utils/errors/ValidationError";
 import { errors } from "src/helpers/errors";
 import { fireErrorToast } from "@utils/HelperNotifications";
+import { signOut } from "@utils/signOut";
 
 type SignOut = () => void;
 
@@ -76,7 +77,6 @@ api.registerInterceptTokenManager = singOut => {
             failedQueued.forEach(request => {
               request.onFailure(error);
             })
-
             singOut();
             reject(error);
           } finally {
@@ -86,9 +86,7 @@ api.registerInterceptTokenManager = singOut => {
         })
 
       }
-
-      singOut();
-
+      /*  signOut() */
     }
 
     if (requestError?.response?.data?.message) {

@@ -1,4 +1,4 @@
-import { Center, Heading, Text, VStack, ScrollView, Image, Icon } from "native-base";
+import { Center, Heading, Text, VStack, ScrollView } from "native-base";
 import { Input } from "@components/form/Input";
 import { Button } from "@components/Button";
 import LogoSVG from "@assets/logo.svg"
@@ -10,8 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@hooks/useAuth";
 import { useState } from "react";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { fireErrorToast } from "@utils/HelperNotifications";
-
 
 const signInSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -24,12 +22,12 @@ type signInProps = z.infer<typeof signInSchema>
 export function SignIn() {
   const navigation = useNavigation<CompositeNavigationProp<UserNavigatorRoutesProps, GuestNavigatorRoutesProps>>();
 
-  const { control, handleSubmit, formState: { errors }, setError } = useForm<signInProps>({
+  const { control, handleSubmit } = useForm<signInProps>({
     resolver: zodResolver(signInSchema)
   });
 
   const [isLoading, setIsLoading] = useState(false)
-  const { singIn, user } = useAuth()
+  const { singIn } = useAuth()
 
   function handleClickSignUp() {
     navigation.navigate('signUp');
