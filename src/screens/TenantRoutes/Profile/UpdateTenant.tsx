@@ -23,15 +23,14 @@ import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 import * as ImagePicker from "expo-image-picker"
 import * as FileSystem from "expo-file-system"
 
-const CPFRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/
-const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/
+const DocumentRegex = /([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})/
 const phoneRegex = /(\(?\d{2}\)?) ?(9{1})? ?(\d{4})-? ?(\d{4})/
 
 const updateTenantSchema = z.object({
   name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
   description: z.string().max(200, "Max 80 caracteres").trim().optional(),
   email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
-  document: z.string().regex(CPFRegex, "CPF Inválido").trim().transform((val) => val.replaceAll('.', '').replaceAll('-', '')),
+  document: z.string().regex(DocumentRegex, "Documento Inválido").trim().transform((val) => val?.replaceAll(/\W/g, '')),
   phone: z.string().regex(phoneRegex, "Número inválido").trim().transform((val) => val?.replaceAll(/\W/g, '')),
 });
 

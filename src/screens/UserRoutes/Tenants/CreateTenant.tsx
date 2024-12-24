@@ -19,8 +19,7 @@ import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 import { useQueryClient } from "@tanstack/react-query";
 import { TextArea } from "@components/form/TextArea";
 
-const cpfRegex = /(^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$)/
-const documentRegex = /(^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$)|(^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$)/gi
+const documentRegex = /([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})/
 const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm
 const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
 
@@ -137,8 +136,8 @@ export function CreateTenant() {
       return false
     }
 
-    if (getValues("document").match(cpfRegex)) {
-      if (!isValidCPF(getValues("document"))) {
+    if (getValues("document").match(documentRegex)) {
+      if (!isValidCPF(getValues("document")) && !isValidCNPJ(getValues("document"))) {
         setError("document", {
           message: "Documeno inválido"
         })
