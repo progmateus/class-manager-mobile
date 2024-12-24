@@ -38,23 +38,23 @@ type CreateTenantProps = z.infer<typeof createTenantSchema>
 export function CreateTenant() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubimiting, setIsSubmiting] = useState(false)
-  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)
-  const [tab, setTab] = useState(0)
+  const [percentage, setPercentage] = useState("25")
+  const [tab, setTab] = useState("")
   const [plans, setPlans] = useState<any[]>([])
 
-  const { user, userUpdate, tenant } = useAuth()
+  const { user, userUpdate } = useAuth()
 
   const queryClient = useQueryClient();
 
 
   const navigation = useNavigation<UserNavigatorRoutesProps>();
-  const { control, handleSubmit, formState: { errors }, getValues, setError, trigger, getFieldState, reset } = useForm<CreateTenantProps>({
+  const { control, formState: { errors }, getValues, setError, trigger, getFieldState, reset } = useForm<CreateTenantProps>({
     resolver: zodResolver(createTenantSchema)
   });
 
   useFocusEffect(useCallback(() => {
     setIsLoading(true)
-    setTab(0)
+    setTab("username")
     reset()
     ListAppPlansService().then(({ data }) => {
       setPlans(data.data)
@@ -168,20 +168,20 @@ export function CreateTenant() {
   const handleContinue = async () => {
     if (isSubimiting) return
     setIsSubmiting(true)
-    if (tab === 0) {
+    if (tab === "username") {
       if (!await verifyUsernameTab()) {
         setIsSubmiting(false)
         return
       }
     }
-    if (tab === 1) {
+    if (tab === "data") {
       if (! await verifyDataTab()) {
         setIsSubmiting(false)
         return
       }
     }
     setIsSubmiting(false)
-    setTab(tab + 1)
+    handleNextTab()
   }
 
   const checkErrors = (errors: any[]) => {
@@ -189,44 +189,75 @@ export function CreateTenant() {
       setError("document", {
         message: "Documeno inválido"
       })
-      setTab(1)
+      setTab("data")
     }
 
     if (errors.find((e) => e.message == "Document already exists")) {
       setError("document", {
         message: "Este documento já está sendo utilizado"
       })
-      setTab(1)
+      setTab("data")
     }
 
     if (errors.find((e) => e.message == "E-mail already exists")) {
       setError("email", {
         message: "Este E-mail já esta sendo utilizado"
       })
-      setTab(1)
+      setTab("data")
     }
 
     if (errors.find((e) => e.message == "Username already exists")) {
       setError("username", {
         message: "Este nome de usuário já esta sendo utilizado"
       })
-      setTab(0)
+      setTab("username")
     }
 
 
   }
 
-  // tab 0 = username
-  // tab 1 = data info
-  // tab 2 = description
-  // tab 3 = plan
+
+  const handleNextTab = () => {
+    if (tab == "username") {
+      setPercentage("50")
+      setTab("data")
+    }
+    if (tab == "data") {
+      setPercentage("75")
+      setTab("description")
+    }
+
+    if (tab == "description") {
+      setPercentage("100")
+      setTab("plan")
+    }
+  }
+
+  const handlePreviousTab = () => {
+    if (tab == "plan") {
+      setPercentage("75")
+      setTab("description")
+    }
+    if (tab == "description") {
+      setPercentage("50")
+      setTab("data")
+    }
+    if (tab == "data") {
+      setPercentage("25")
+      setTab("username")
+    }
+  }
 
   return (
     <View flex={1}>
       <PageHeader title="Criar Empresa" />
       <ScrollContainer>
+        <View bgColor="coolGray.100" h={2} borderRadius={100} mb={12}>
+          <View bgColor="success.600" w={`${percentage}%`} h={2} borderRadius={100}>
+          </View>
+        </View>
         {
-          tab === 0 ? (
+          tab === "username" ? (
             <VStack pb={20} flex={1}>
               <Heading fontFamily="heading" textAlign="center" fontSize="md" mb={8}> Escolha um nome de usuário </Heading>
               <Controller
@@ -237,7 +268,7 @@ export function CreateTenant() {
                 )}
               />
             </VStack>
-          ) : tab === 1 ? (
+          ) : tab === "data" ? (
             <VStack pb={20}>
               <Heading fontFamily="heading" textAlign="center" fontSize="md" mb={4}> Informe os dados da empresa </Heading>
               <VStack space={6} mt={12}>
@@ -275,7 +306,7 @@ export function CreateTenant() {
               </VStack>
             </VStack>
           )
-            : tab == 2 ? (
+            : tab === "description" ? (
               <View>
                 <Heading fontFamily="heading" textAlign="center" fontSize="md" mb={8}> Descreva a sua empresa </Heading>
                 <Controller
@@ -336,15 +367,15 @@ export function CreateTenant() {
                 )
               )
         }
-        <HStack justifyContent={tab !== 0 ? "space-between" : "flex-end"} pb={20} pt={4}>
+        <HStack justifyContent={tab !== "username" ? "space-between" : "flex-end"} pb={20} pt={4}>
           {
-            tab != 0 && (
-              <Button size="md" variant="ghost" onPress={() => setTab(tab - 1)} startIcon={<Icon as={CaretLeft} name="cloud-download-outline" size="sm" />}> Voltar </Button>
+            tab !== "username" && (
+              <Button size="md" variant="ghost" onPress={handlePreviousTab} startIcon={<Icon as={CaretLeft} name="cloud-download-outline" size="sm" />}> Voltar </Button>
             )
           }
 
           {
-            tab != 3 && (
+            tab !== "plan" && (
               <Button size="md" variant="ghost" onPress={handleContinue} endIcon={<Icon as={CaretRight} name="cloud-download-outline" size="sm" />}> Continuar </Button>
             )
           }
