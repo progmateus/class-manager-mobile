@@ -102,12 +102,12 @@ export function InvoiceItem({ invoice }: IProps) {
       <View borderWidth={0.2} borderColor="coolGray.600" p={4} borderRadius={4}>
         <HStack space={2} alignItems="center" >
           <Icon as={invoice.status === EInvoiceStatus.OPEN ? Warning : invoice.status === EInvoiceStatus.UNPAID ? XCircle : CheckCircle} color={color} />
-          <VStack flex={1} space={1} ml={2}>
+          <VStack flex={1} ml={2}>
             <Heading fontFamily="heading" fontSize="sm">{formatDate(invoice.expiresAt)}</Heading>
-            <Text color="coolGray.600" fontSize="sm" fontWeight="light">{invoice.tenant?.name} </Text>
+            <Text color="coolGray.500" fontSize="sm" fontWeight="light">{invoice.tenant?.name} </Text>
             <Text color={color} fontSize="sm" fontWeight="light">{convertBillStatus(invoice.status).label} </Text>
           </VStack>
-          <Text color={color} fontSize="md" mr={2}>{priceFormatted(invoice.amount)}</Text>
+          <Text color={color} fontSize="sm" mr={2}>{priceFormatted(invoice.amount)}</Text>
 
           {
             isInvoiceAdmin && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
