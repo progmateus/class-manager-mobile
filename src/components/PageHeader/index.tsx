@@ -34,7 +34,7 @@ export function PageHeader({ title, rightIcon, rightAction, rightIconColor = "su
         <Icon as={ArrowLeft} />
       </TouchableOpacity>
       <Heading
-        flex={1} textAlign="center" fontFamily="heading" fontSize="2xl"> {title} </Heading>
+        flex={1} px={4} textAlign="center" fontFamily="heading" fontSize="2xl" numberOfLines={1}> {title} </Heading>
       <View w={28}>
         {
           rightIcon && (
