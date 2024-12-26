@@ -23,7 +23,7 @@ var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 const createClassDaySchema = z.object({
-  name: z.string().min(3, "min 3 characters").max(80, "max 80 characters"),
+  name: z.string().min(3, "min 3 caracteres").max(80, "max 80 caracteres"),
   date: z.string(),
   hourStart: z.string(),
   hourEnd: z.string(),
