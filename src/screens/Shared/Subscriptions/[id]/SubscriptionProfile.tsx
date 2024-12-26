@@ -19,6 +19,7 @@ import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/Subsc
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
 import { EAuthType } from "src/enums/EAuthType"
+import { EdocumentType } from "src/enums/EDocumentType"
 
 
 type RouteParamsProps = {
@@ -91,6 +92,21 @@ export function SubscriptionProfile() {
 
   }, [subscriptionId, tenantId])
 
+  const replaceDocument = (): string => {
+    const cpfRegex = /^(\d{3})(\d{3})(\d{3})(\d{2})$/g;
+    const cnpjRegex = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/g;
+
+    if (authenticationType == EAuthType.USER) {
+      return subscription?.user.document?.replaceAll(cpfRegex, "$1.$2.$3-$4") ?? "Não informado"
+    } else {
+      if (subscription?.tenant.documentType == EdocumentType.CPF) {
+        return subscription?.tenant.document?.replaceAll(cpfRegex, "$1.$2.$3-$4") ?? "Não informado"
+      } else {
+        return subscription?.tenant.document?.replaceAll(cnpjRegex, "$1.$2.$3/$4-$5") ?? "Não informado"
+      }
+    }
+  }
+
   const isAdmin = useMemo(() => {
     return HasRole(user.usersRoles, tenantId, ["admin"])
   }, [tenantId, subscriptionId])
@@ -150,30 +166,30 @@ export function SubscriptionProfile() {
                   <VStack space={1}>
                     <HStack alignItems="center" space={1}>
                       <Icon as={CurrencyCircleDollar} />
-                      <Text fontSize="sm" textTransform="capitalize"> {subscription.tenantPlan.name} </Text>
+                      <Text fontSize="sm" textTransform="capitalize">{subscription.tenantPlan.name} </Text>
                     </HStack>
                     <HStack alignItems="center" space={1}>
                       <Icon as={BookBookmark} />
-                      <Text fontSize="sm" textTransform="capitalize"> {subscription.user?.studentsClasses[0]?.class?.name} </Text>
+                      <Text fontSize="sm" textTransform="capitalize">{subscription.user?.studentsClasses[0]?.class?.name} </Text>
                     </HStack>
 
                     <HStack alignItems="center" space={1}>
                       <Icon as={IdentificationCard} />
-                      <Text fontSize="sm" > {authenticationType == EAuthType.USER ? subscription?.tenant?.document : subscription?.user?.document ?? 'Não informado'} </Text>
+                      <Text fontSize="sm" >{replaceDocument()} </Text>
                     </HStack>
 
                     {
                       authenticationType == EAuthType.TENANT && (
                         <HStack alignItems="center" space={1}>
                           <Icon as={Phone} />
-                          <Text fontSize="sm"> {subscription?.user?.phone && subscription.user.phone.length > 0 ? subscription.user.phone : 'Não informado'} </Text>
+                          <Text fontSize="sm">{subscription?.user?.phone && subscription.user.phone.length > 0 ? subscription.user.phone : 'Não informado'}</Text>
                         </HStack>
                       )
                     }
 
                     <HStack alignItems="center" space={1} maxWidth="56">
                       <Icon as={MapPin} />
-                      <Text fontSize="sm" numberOfLines={1}>  {`${subscription?.user?.address?.street ?? 'Não informado'}, ${subscription?.user?.address?.number ?? 's/'}`} </Text>
+                      <Text fontSize="sm" numberOfLines={1}>{`${subscription?.user?.address?.street ?? 'Não informado'}${subscription?.user?.address?.street && subscription?.user?.address?.number ? `, ${subscription?.user?.address?.number}` : ''}`}</Text>
 
                     </HStack>
 
