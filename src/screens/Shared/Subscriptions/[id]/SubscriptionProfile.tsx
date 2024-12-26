@@ -153,7 +153,7 @@ export function SubscriptionProfile() {
 
                 {
                   verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE]) && (
-                    <TouchableOpacity onPress={handleSubscribe}>
+                    <TouchableOpacity>
                       <View px={4} py={3} bgColor="yellow.400">
                         <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
                           Efetue o pagamento dentro das primeiras 24 horas para que a assinatura seja ativada.
