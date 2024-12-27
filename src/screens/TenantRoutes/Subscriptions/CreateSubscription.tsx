@@ -115,7 +115,7 @@ export function CreateSubscription() {
       fireSuccesToast('Assinatura realizada com sucesso!')
       setIsModalOpen(false)
       await queryClient.invalidateQueries({
-        queryKey: ['get-subscriptions', tenantId]
+        queryKey: ['get-subscriptions']
       })
       navigation.navigate('subscriptionProfile', { subscriptionId: data.data.id })
     }).catch((err) => {

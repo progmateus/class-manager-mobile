@@ -81,7 +81,7 @@ export function InvoiceItem({ invoice }: IProps) {
         queryKey: ['get-subscription-profile', invoice.subscriptionId]
       })
       queryClient.invalidateQueries({
-        queryKey: ['get-subscriptions', invoice.tenantId]
+        queryKey: ['get-subscriptions']
       })
       queryClient.invalidateQueries({
         queryKey: ['get-invoices']
