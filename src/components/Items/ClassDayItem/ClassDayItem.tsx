@@ -48,7 +48,9 @@ function ClassDayItem({ classDay }: IProps) {
         <VStack space={0.5} flex={1}>
           <Heading fontSize="sm" fontFamily="heading">{classDay.name ?? "Não informado"}</Heading>
           <Text fontSize="xs" fontWeight="light">{classDay.class?.tenant?.name}</Text>
-          <Text fontSize="xs" fontWeight="light" color="coolGray.500" numberOfLines={1} >{`${classDay?.class?.address?.street ?? 'Não informado'}, ${classDay?.class?.address?.number ?? ''}`} </Text>
+          <Text fontSize="xs" fontWeight="light" color="coolGray.500" numberOfLines={1} >{
+            `${classDay.class?.address?.street ?? 'Não informado'}${classDay.class?.address?.street && classDay.class?.address?.number ? `, ${classDay.class?.address?.number}` : ''}`
+          } </Text>
 
         </VStack>
         <HStack>
