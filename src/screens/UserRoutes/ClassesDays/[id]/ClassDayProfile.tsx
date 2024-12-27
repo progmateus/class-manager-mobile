@@ -149,7 +149,7 @@ export function ClassDayProfile() {
                 classDay.status === EClassDayStatus.PENDING && (
                   <VStack space={4} px={4} mt={4}>
                     {
-                      isClassStudent && (
+                      isClassStudent && new Date(classDay.date) > new Date() && (
                         alreadyBooked ? (
                           <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={() => cancelBookMutate()} variant="outline" color="brand.600" isLoading={cancelIsPending} />
                         ) : (
