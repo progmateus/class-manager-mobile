@@ -262,13 +262,17 @@ export function SubscriptionProfile() {
                     </MenuItem.Actions>
                   </MenuItem.Root>
 
-                  <MenuItem.Root onPress={() => tenantNavigation.navigate('updateStudentclass', { tenantIdParams: tenantId, userId: subscription.userId, subscriptionId })}>
-                    <MenuItem.Icon icon={BookBookmark} />
-                    <MenuItem.Content title="Alterar turma" description="Altere a turma do aluno" />
-                    <MenuItem.Actions>
-                      <MenuItem.Action icon={ArrowRight} />
-                    </MenuItem.Actions>
-                  </MenuItem.Root>
+                  {
+                    authenticationType == EAuthType.TENANT && (
+                      <MenuItem.Root onPress={() => tenantNavigation.navigate('updateStudentclass', { tenantIdParams: tenantId, userId: subscription.userId, subscriptionId })}>
+                        <MenuItem.Icon icon={BookBookmark} />
+                        <MenuItem.Content title="Alterar turma" description="Altere a turma do aluno" />
+                        <MenuItem.Actions>
+                          <MenuItem.Action icon={ArrowRight} />
+                        </MenuItem.Actions>
+                      </MenuItem.Root>
+                    )
+                  }
 
                   <MenuItem.Root onPress={() => tenantNavigation.navigate('updateSubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.tenantPlanId, subscriptionId })}>
                     <MenuItem.Icon icon={SimCard} />

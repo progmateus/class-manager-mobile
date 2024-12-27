@@ -100,7 +100,6 @@ export function UpdateStudentClass() {
       return
     }
     const { data } = await ListStudentClassesService(tenantId, userId)
-    console.log(data.data)
     setSelectedClassId(data?.data[0]?.classId ?? "")
     setExistentClasses(data.data)
   }
