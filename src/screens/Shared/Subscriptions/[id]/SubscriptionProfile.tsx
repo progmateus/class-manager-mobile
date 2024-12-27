@@ -319,16 +319,16 @@ export function SubscriptionProfile() {
                     )
                   }
 
-                  {
+                  {/*                   {
                     verifySubscriptionStatus([ESubscriptionStatus.ACTIVE, ESubscriptionStatus.PAST_DUE, ESubscriptionStatus.UNPAID]) && (
                       <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.PAUSED)} startIcon={<Icon as={Pause} size="6" name="pause" />}>
                         <Text fontSize="16"> Pausar assinatura</Text>
                       </Actionsheet.Item>
                     )
-                  }
+                  } */}
 
                   {
-                    verifySubscriptionStatus([ESubscriptionStatus.ACTIVE, ESubscriptionStatus.PAST_DUE, ESubscriptionStatus.UNPAID]) && (
+                    verifySubscriptionStatus([ESubscriptionStatus.ACTIVE, ESubscriptionStatus.PAST_DUE, ESubscriptionStatus.UNPAID, ESubscriptionStatus.INCOMPLETE]) && (
                       <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.CANCELED)} startIcon={<Icon as={X} size="6" name="cancel" color="red.600" />}>
                         <Text fontSize="16" color="red.600"> Cancelar assinatura</Text>
                       </Actionsheet.Item>
