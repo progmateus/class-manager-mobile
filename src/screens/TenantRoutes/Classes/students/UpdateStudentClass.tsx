@@ -99,7 +99,8 @@ export function UpdateStudentClass() {
     if (existentClasses && existentClasses.length > 0) {
       return
     }
-    const { data } = await ListStudentClassesService(tenant.id, userId)
+    const { data } = await ListStudentClassesService(tenantId, userId)
+    console.log(data.data)
     setSelectedClassId(data?.data[0]?.classId ?? "")
     setExistentClasses(data.data)
   }

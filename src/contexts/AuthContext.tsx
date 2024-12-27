@@ -14,6 +14,7 @@ import { AppError } from "@utils/errors/AppError";
 import { ValidationError } from "@utils/errors/ValidationError";
 import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 import { EAuthType } from "src/enums/EAuthType";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export type AuthContextDataProps = {
@@ -44,6 +45,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [tenant, setTenant] = useState<ITenantProfileDTO>({} as ITenantProfileDTO);
   const [authenticationType, setAuthenticationType] = useState<EAuthType>(EAuthType.USER);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const queryClient = useQueryClient()
 
   function tokenUpdate(token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -88,6 +90,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function signOut() {
     setIsLoadingData(true);
+    queryClient.clear();
     setUser({} as IUserProfileDTO);
     await Promise.all([
       storageUserRemove(),
