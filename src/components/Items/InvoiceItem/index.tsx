@@ -13,6 +13,7 @@ import { UpdateInvoiceStatusService } from "src/services/invoiceService";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { Loading } from "@components/Loading";
 import { Button } from "@components/Button";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 interface IProps {
@@ -26,6 +27,8 @@ export function InvoiceItem({ invoice }: IProps) {
   const [isLoading, setIsLoading] = useState(false)
   const { sizes, colors } = THEME;
   const { user } = useAuth()
+
+  const queryClient = useQueryClient();
 
   const priceFormatted = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -74,6 +77,15 @@ export function InvoiceItem({ invoice }: IProps) {
     if (isLoading) return
     setIsLoading(true)
     UpdateInvoiceStatusService(invoice.tenantId, invoice.id, EInvoiceStatus.PAID).then(() => {
+      queryClient.invalidateQueries({
+        queryKey: ['get-subscription-profile', invoice.subscriptionId]
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['get-subscriptions', invoice.tenantId]
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['get-invoices']
+      })
       fireSuccesToast('Cobrança atualizada!')
     }).catch((err) => {
       console.log(err)
@@ -146,7 +158,7 @@ export function InvoiceItem({ invoice }: IProps) {
             <Modal.Footer borderWidth={0} borderTopWidth={0}>
               <VStack flex={1}>
                 <Button title="Confirmar" variant="unstyled" color="brand.600" isLoading={isLoading} onPress={handleUpdateInvoiceStatus} />
-                <Divider my={1} />
+                <Divider my={1} bgColor="coolGray.300" />
                 <NativeBaseButton mt={2} variant="unstyled" fontWeight="bold" color="coolGray.500" onPress={() => setIsModalOpen(false)}>
                   Voltar
                 </NativeBaseButton>
