@@ -1,12 +1,7 @@
-import { HStack, Text, VStack } from "native-base"
-import CalendarSVG from "@assets/calendar.svg"
-import ClockSVG from "@assets/clock-outline.svg"
-import MapSVG from "@assets/map-marker-outline.svg"
-import PersonSVG from "@assets/person-outline.svg"
-import { TouchableOpacity } from "react-native";
+import { HStack, Icon, Text, VStack } from "native-base"
 import dayjs from "dayjs"
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO"
-import { Cloud } from "phosphor-react-native"
+import { BookBookmark, BookmarkSimple, Calendar, Clock, Cloud, Info, MapPin, User } from "phosphor-react-native"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
 
 interface IProps {
@@ -31,29 +26,36 @@ export function ClassDayHeader({ classDay }: IProps) {
   return (
     <VStack space={2}>
       <HStack alignItems="center" space={1}>
-        <CalendarSVG width={24} height={24} />
+        <Icon as={<Calendar size={22} />} />
         <Text fontSize="sm" textTransform="capitalize"> {getDate(classDay.date)} </Text>
       </HStack>
 
       <HStack alignItems="center" space={1}>
-        <ClockSVG width={24} height={24} />
+        <Icon as={<Clock size={22} />} />
         <Text fontSize="sm" > {classDay.hourStart} </Text>
         <Text fontSize="sm"> - </Text>
         <Text fontSize="sm"> {classDay.hourEnd} </Text>
       </HStack>
 
       <HStack alignItems="center" space={1}>
-        <MapSVG width={24} height={24} />
-        <Text fontSize="sm"> Praia da bica </Text>
+        <Icon as={<MapPin size={22} />} />
+        <Text fontSize="sm"> {
+          `${classDay.class?.address?.street ?? 'Não informado'}${classDay.class?.address?.street && classDay.class?.address?.number ? `, ${classDay.class?.address?.number}` : ''}`
+        } </Text>
       </HStack>
 
       <HStack alignItems="center" space={1}>
-        <PersonSVG width={24} height={24} />
+        <Icon as={<BookBookmark size={22} />} />
+        <Text fontSize="sm"> {classDay.class.name ?? "Não informado"} </Text>
+      </HStack>
+
+      <HStack alignItems="center" space={1}>
+        <Icon as={<User size={22} />} />
         <Text fontSize="sm"> {classDay.class?.teachersClasses[0]?.user?.name ?? 'Não informado'} </Text>
       </HStack>
 
       <HStack alignItems="center" space={2}>
-        <Cloud size={24} />
+        <Icon as={<Info size={22} />} />
         <Text
           fontSize="sm"
           color={classDay.status == EClassDayStatus.PENDING ? 'warning.400' : classDay.status == EClassDayStatus.CANCELED ? 'red.500' : 'green.600'}>

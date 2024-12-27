@@ -187,11 +187,15 @@ export function SubscriptionProfile() {
                       )
                     }
 
-                    <HStack alignItems="center" space={1} maxWidth="56">
-                      <Icon as={MapPin} />
-                      <Text fontSize="sm" numberOfLines={1}>{`${subscription?.user?.address?.street ?? 'Não informado'}${subscription?.user?.address?.street && subscription?.user?.address?.number ? `, ${subscription?.user?.address?.number}` : ''}`}</Text>
+                    {
+                      authenticationType == EAuthType.TENANT && (
+                        <HStack alignItems="center" space={1} maxWidth="56">
+                          <Icon as={MapPin} />
+                          <Text fontSize="sm" numberOfLines={1}>{`${subscription?.user?.address?.street ?? 'Não informado'}${subscription?.user?.address?.street && subscription?.user?.address?.number ? `, ${subscription?.user?.address?.number}` : ''}`}</Text>
+                        </HStack>
+                      )
+                    }
 
-                    </HStack>
 
                   </VStack>
                   <VStack>
