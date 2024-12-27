@@ -162,6 +162,14 @@ const errors = [
   {
     message: "ERR_INVOICE_ALREADY_BEEN_PAID",
     description: "Esta cobrança já foi paga"
+  },
+  {
+    message: "ERR_INVALID_STATUS",
+    description: "A situação da assinatura não pode ser alterada"
+  },
+  {
+    message: "ERR_ONLY_UPDATE_THE_LATEST_SUBSCRIPTION",
+    description: "Só é possivel alterar a assinatura atual do usuário"
   }
 ]
 export { errors }

@@ -50,36 +50,31 @@ export function SubscriptionProfile() {
   }
 
   const { data: subscription, isLoading } = useQuery<ISubscriptionProfileDTO>({
-    queryKey: ['get-subscription-profile', tenantId, subscriptionId],
+    queryKey: ['get-subscription-profile', subscriptionId],
     queryFn: loadSubscriptionProfile
   })
 
 
-  const payments = [
-    {
-      status: 1
+  const handleUpdateSubscriptionStatus = (status: ESubscriptionStatus) => {
+    if (!subscription || !subscriptionId) {
+      return
     }
-  ]
-
-  const { mutate: updateSubscriptionMutate, isPending } = useMutation({
-    mutationFn: async (status: ESubscriptionStatus) => {
-      if (isPending || !subscription || !subscriptionId) {
-        return
-      }
-      await UpdateSubscriptionStatusService(tenantId, subscriptionId, status)
-    },
-    onSuccess: (data: void, variables: ESubscriptionStatus, context: unknown) => {
-      if (variables === ESubscriptionStatus.ACTIVE) {
+    UpdateSubscriptionStatusService(tenantId, subscriptionId, status).then(async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['get-subscription-profile', subscriptionId]
+      })
+      if (status === ESubscriptionStatus.ACTIVE) {
         fireSuccesToast('Assinatura ativada com sucesso')
       } else {
         fireInfoToast('Assinatura atualizada com sucesso')
       }
+    }).catch((err) => {
+      console.log('err: ', err)
+    }).finally(() => {
       setIsOpen(false)
-      queryClient.invalidateQueries({
-        queryKey: ['get-subscription-profile', tenantId, subscriptionId]
-      })
-    }
-  })
+
+    })
+  }
 
   const handleSubscribe = useCallback(() => {
     if (authenticationType == EAuthType.USER) {
@@ -96,7 +91,7 @@ export function SubscriptionProfile() {
     const cpfRegex = /^(\d{3})(\d{3})(\d{3})(\d{2})$/g;
     const cnpjRegex = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/g;
 
-    if (authenticationType == EAuthType.USER) {
+    if (authenticationType == EAuthType.TENANT) {
       return subscription?.user.document?.replaceAll(cpfRegex, "$1.$2.$3-$4") ?? "Não informado"
     } else {
       if (subscription?.tenant.documentType == EdocumentType.CPF) {
@@ -321,7 +316,7 @@ export function SubscriptionProfile() {
 
                   {
                     verifySubscriptionStatus([ESubscriptionStatus.PAUSED]) && (
-                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.ACTIVE)} startIcon={<Icon as={Check} size="6" name="start" />}>
+                      <Actionsheet.Item onPress={() => handleUpdateSubscriptionStatus(ESubscriptionStatus.ACTIVE)} startIcon={<Icon as={Check} size="6" name="start" />}>
                         <Text fontSize="16"> Ativar assinatura</Text>
                       </Actionsheet.Item>
                     )
@@ -329,7 +324,7 @@ export function SubscriptionProfile() {
 
                   {/*                   {
                     verifySubscriptionStatus([ESubscriptionStatus.ACTIVE, ESubscriptionStatus.PAST_DUE, ESubscriptionStatus.UNPAID]) && (
-                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.PAUSED)} startIcon={<Icon as={Pause} size="6" name="pause" />}>
+                      <Actionsheet.Item onPress={() => handleUpdateSubscriptionStatus(ESubscriptionStatus.PAUSED)} startIcon={<Icon as={Pause} size="6" name="pause" />}>
                         <Text fontSize="16"> Pausar assinatura</Text>
                       </Actionsheet.Item>
                     )
@@ -337,7 +332,7 @@ export function SubscriptionProfile() {
 
                   {
                     verifySubscriptionStatus([ESubscriptionStatus.ACTIVE, ESubscriptionStatus.PAST_DUE, ESubscriptionStatus.UNPAID, ESubscriptionStatus.INCOMPLETE]) && (
-                      <Actionsheet.Item onPress={() => updateSubscriptionMutate(ESubscriptionStatus.CANCELED)} startIcon={<Icon as={X} size="6" name="cancel" color="red.600" />}>
+                      <Actionsheet.Item onPress={() => handleUpdateSubscriptionStatus(ESubscriptionStatus.CANCELED)} startIcon={<Icon as={X} size="6" name="cancel" color="red.600" />}>
                         <Text fontSize="16" color="red.600"> Cancelar assinatura</Text>
                       </Actionsheet.Item>
                     )
