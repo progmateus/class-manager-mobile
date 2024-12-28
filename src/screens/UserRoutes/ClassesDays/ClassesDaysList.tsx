@@ -27,7 +27,7 @@ export function ClassesDaysList() {
   const userNavigation = useNavigation<UserNavigatorRoutesProps>();
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>();
 
-  const [selectedWeekDay, setSelectedWeekDay] = useState(dayjs().toDate())
+  const [selectedWeekDay, setSelectedWeekDay] = useState(dayjs().hour(0).toDate())
   const { tenant } = useAuth()
   const tenantId = tenant?.id
 
@@ -61,14 +61,14 @@ export function ClassesDaysList() {
 
 
   const weekDays = [
-    dayjs().day(0).toDate(),
-    dayjs().day(1).toDate(),
-    dayjs().day(2).toDate(),
-    dayjs().day(3).toDate(),
-    dayjs().day(4).toDate(),
-    dayjs().day(5).toDate(),
-    dayjs().day(6).toDate(),
-    dayjs().day(7).toDate()
+    dayjs().hour(0).day(0).toDate(),
+    dayjs().hour(0).day(1).toDate(),
+    dayjs().hour(0).day(2).toDate(),
+    dayjs().hour(0).day(3).toDate(),
+    dayjs().hour(0).day(4).toDate(),
+    dayjs().hour(0).day(5).toDate(),
+    dayjs().hour(0).day(6).toDate(),
+    dayjs().hour(0).day(7).toDate()
   ]
 
   function handleClickClassDay(classDayId: string, tenantId: string) {
