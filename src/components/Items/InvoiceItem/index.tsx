@@ -83,7 +83,7 @@ export function InvoiceItem({ invoice }: IProps) {
       await queryClient.cancelQueries({
         queryKey: ['get-subscriptions']
       })
-      await queryClient.invalidateQueries({
+      await queryClient.cancelQueries({
         queryKey: ['get-invoices']
       })
       fireSuccesToast('Cobrança atualizada!')
