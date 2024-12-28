@@ -27,6 +27,10 @@ import { useQueryClient } from "@tanstack/react-query";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
+type RouteParamsProps = {
+  userId?: string;
+}
+
 const createSubscriptionSchema = z.object({
   planId: z.string({ required_error: 'Campo obrigatório' }).min(1, 'Campo obrigatório'),
   classId: z.string({ required_error: 'Campo obrigatório' }).min(1, 'Campo obrigatório'),
@@ -50,6 +54,13 @@ export function CreateSubscription() {
   const [userFound, setUserFound] = useState<IUserPreviewDTO>({} as IUserPreviewDTO)
 
 
+  const route = useRoute()
+
+  const params = route.params as RouteParamsProps;
+
+  const { userId } = params
+
+
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
   const { tenant, user } = useAuth()
 
@@ -59,7 +70,7 @@ export function CreateSubscription() {
 
   const tenantId = tenant?.id
 
-  const { control, handleSubmit, formState: { errors, isValid }, reset, getValues, resetField } = useForm<CreateSubscriptionProps>({
+  const { control, handleSubmit, formState: { errors, isValid }, reset, getValues, resetField, trigger } = useForm<CreateSubscriptionProps>({
     resolver: zodResolver(createSubscriptionSchema)
   });
 
@@ -93,16 +104,17 @@ export function CreateSubscription() {
     })
   }
 
-  const handleCreateSubscription = () => {
+  const handleCreateSubscription = async (userId?: string) => {
     if (isLoading) return
-
-    if (!isValid || !userFound.id) {
+    var targetId = userId ?? userFound.id
+    await trigger()
+    if (!isValid || !targetId) {
       fireErrorToast('Dados inválidos')
       setIsModalOpen(false)
       return
     }
 
-    if (user.id === userFound.id) {
+    if (user.id === targetId) {
       fireErrorToast('Você não pode criar uma assinatura para si mesmo')
       resetField('username')
       setIsModalOpen(false)
@@ -111,7 +123,7 @@ export function CreateSubscription() {
 
     errors.root
     setIsLoadig(true)
-    CreateSubscriptionService(tenantId, getValues("planId"), getValues("classId"), userFound.id).then(async ({ data }) => {
+    CreateSubscriptionService(tenantId, getValues("planId"), getValues("classId"), targetId).then(async ({ data }) => {
       fireSuccesToast('Assinatura realizada com sucesso!')
       setIsModalOpen(false)
       await queryClient.invalidateQueries({
@@ -197,22 +209,33 @@ export function CreateSubscription() {
             {errors.planId?.message && (<Text color="red.500" ml={1}>{errors.planId?.message}</Text>)}
           </VStack>
 
-          <Controller
-            name="username"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Input
-                variant="outline"
-                value={value}
-                onChangeText={onChange}
-                label="Nome de usuário do aluno"
-                InputLeftElement={<Icon as={At} style={{ marginLeft: 8 }} color="coolGray.400" />}
-                errorMessage={errors.username?.message}
+          {
+            !userId && (
+              <Controller
+                name="username"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Input
+                    variant="outline"
+                    value={value}
+                    onChangeText={onChange}
+                    label="Nome de usuário do aluno"
+                    InputLeftElement={<Icon as={At} style={{ marginLeft: 8 }} color="coolGray.400" />}
+                    errorMessage={errors.username?.message}
+                  />
+                )}
               />
-            )}
-          />
+            )
+          }
 
-          <Button title="Continuar" onPress={handleSubmit(handleContinue)} isLoading={isSearching} />
+          {
+            !userId ? (
+              <Button title="Continuar" onPress={handleSubmit(handleContinue)} isLoading={isSearching} />
+            ) : (
+              <Button title="Criar" onPress={() => handleCreateSubscription(userId)} isLoading={isLoading} />
+            )
+          }
+
         </VStack>
 
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} safeAreaTop={true}>
@@ -238,7 +261,7 @@ export function CreateSubscription() {
             </Modal.Body>
             <Modal.Footer>
               <VStack space={2} flex={1}>
-                <Button title="Criar" isLoading={isLoading} onPress={handleCreateSubscription} />
+                <Button title="Criar" isLoading={isLoading} onPress={() => handleCreateSubscription()} />
                 <Button title="Cancelar" variant="outline" onPress={() => setIsModalOpen(false)} />
               </VStack>
             </Modal.Footer>

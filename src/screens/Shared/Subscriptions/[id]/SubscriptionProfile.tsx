@@ -72,16 +72,20 @@ export function SubscriptionProfile() {
     })
   }
 
-  const handleSubscribe = useCallback(() => {
+  const handleNavigateToSubscribePage = () => {
+    if (!subscription) {
+      return
+    }
+
     if (authenticationType == EAuthType.USER) {
       userNavigation.navigate('createSubscription', {
         tenantIdParams: tenantId
       })
     } else {
-      tenantNavigation.navigate('createSubscription')
+      tenantNavigation.navigate('createSubscription', { userId: subscription.userId })
     }
 
-  }, [subscriptionId, tenantId])
+  }
 
   const replaceDocument = (): string => {
     const cpfRegex = /^(\d{3})(\d{3})(\d{3})(\d{2})$/g;
@@ -109,7 +113,7 @@ export function SubscriptionProfile() {
     return status.some(x => x == subscription.status)
   }
 
-  const handleNavigateToInvoicesList = () => {
+  const handleNavigateToInvoicesPage = () => {
     if (!subscription) {
       return
     }
@@ -132,7 +136,7 @@ export function SubscriptionProfile() {
               <VStack space={8}>
                 {
                   verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
-                    <TouchableOpacity onPress={handleSubscribe}>
+                    <TouchableOpacity onPress={handleNavigateToSubscribePage}>
                       <View px={4} py={3} bgColor="red.400">
                         <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
                           A assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura.
@@ -277,7 +281,7 @@ export function SubscriptionProfile() {
                     </MenuItem.Actions>
                   </MenuItem.Root>
 
-                  <MenuItem.Root onPress={handleNavigateToInvoicesList}>
+                  <MenuItem.Root onPress={handleNavigateToInvoicesPage}>
                     <MenuItem.Icon icon={CurrencyDollar} />
                     <MenuItem.Content title="Gerenciar cobranças" description="Gerencie as cobranças da sua assinatura" />
                     <MenuItem.Actions>
@@ -304,7 +308,7 @@ export function SubscriptionProfile() {
                   </Box>
                   {
                     verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED, ESubscriptionStatus.CANCELED]) && (
-                      <Actionsheet.Item onPress={handleSubscribe} startIcon={<Icon as={Plus} size="6" name="start" />}>
+                      <Actionsheet.Item onPress={handleNavigateToSubscribePage} startIcon={<Icon as={Plus} size="6" name="start" />}>
                         <Text fontSize="16"> Nova assinatura</Text>
                       </Actionsheet.Item>
                     )
