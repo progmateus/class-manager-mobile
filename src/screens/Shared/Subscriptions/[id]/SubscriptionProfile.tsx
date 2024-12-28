@@ -42,7 +42,6 @@ export function SubscriptionProfile() {
 
   const loadSubscriptionProfile = async () => {
     try {
-      console.log("loadSubscriptionProfile")
       const { data } = await GetSubscriptionProfileService(tenantId, subscriptionId)
       return data.data
     } catch (err) {
