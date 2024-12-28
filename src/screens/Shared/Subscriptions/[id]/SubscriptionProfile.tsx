@@ -124,6 +124,12 @@ export function SubscriptionProfile() {
     }
   }
 
+  const onRefresh = async () => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-subscription-profile', subscriptionId]
+    })
+  }
+
   return (
     <View flex={1}>
       <PageHeader title={
@@ -132,7 +138,7 @@ export function SubscriptionProfile() {
       {
         isLoading || !subscription ? (<SubscriptionProfileSkeleton />)
           : (
-            <ScrollContainer>
+            <ScrollContainer onRefresh={onRefresh} isRefreshing={isLoading}>
               <VStack space={8}>
                 {
                   verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
