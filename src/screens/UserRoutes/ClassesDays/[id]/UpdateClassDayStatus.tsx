@@ -40,7 +40,7 @@ export function UpdateClassDayStatus() {
     }
     UpdateClassDayStatusService(tenantId, classDayId, status, observation).then(({ data }) => {
       queryClient.invalidateQueries({
-        queryKey: ['get-class-day-profile', tenantId, classDayId]
+        queryKey: ['get-class-day-profile', classDayId]
       })
       queryClient.invalidateQueries({
         queryKey: ['get-classes-days']

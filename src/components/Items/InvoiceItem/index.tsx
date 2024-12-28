@@ -77,13 +77,13 @@ export function InvoiceItem({ invoice }: IProps) {
     if (isLoading) return
     setIsLoading(true)
     UpdateInvoiceStatusService(invoice.tenantId, invoice.id, EInvoiceStatus.PAID).then(async () => {
-      await queryClient.invalidateQueries({
+      queryClient.cancelQueries({
         queryKey: ['get-subscription-profile', invoice.subscriptionId]
       })
-      await queryClient.invalidateQueries({
+      queryClient.cancelQueries({
         queryKey: ['get-subscriptions']
       })
-      await queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['get-invoices']
       })
       fireSuccesToast('Cobrança atualizada!')

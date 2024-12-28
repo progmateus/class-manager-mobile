@@ -258,8 +258,8 @@ export function TenantProfile() {
                 </Center>
                 {
                   tenantProfile.description && (
-                    <View px={4} mt={2}>
-                      <Text color="coolGray.500" fontSize="md" mb={2}> Bio </Text>
+                    <View px={4} mt={4}>
+                      {/* <Text color="coolGray.500" fontSize="md" mb={2}>Bio</Text> */}
                       <Text>{tenantProfile.description}</Text>
                     </View>
                   )

@@ -42,6 +42,7 @@ export function SubscriptionProfile() {
 
   const loadSubscriptionProfile = async () => {
     try {
+      console.log("loadSubscriptionProfile")
       const { data } = await GetSubscriptionProfileService(tenantId, subscriptionId)
       return data.data
     } catch (err) {
@@ -60,14 +61,10 @@ export function SubscriptionProfile() {
       return
     }
     UpdateSubscriptionStatusService(tenantId, subscriptionId, status).then(async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['get-subscription-profile', subscriptionId]
+      await queryClient.setQueryData(['get-subscription-profile', subscriptionId], (oldData: ISubscriptionProfileDTO) => {
+        return { ...oldData, status: status }
       })
-      if (status === ESubscriptionStatus.ACTIVE) {
-        fireSuccesToast('Assinatura ativada com sucesso')
-      } else {
-        fireInfoToast('Assinatura atualizada com sucesso')
-      }
+      fireInfoToast('Assinatura atualizada com sucesso')
     }).catch((err) => {
       console.log('err: ', err)
     }).finally(() => {

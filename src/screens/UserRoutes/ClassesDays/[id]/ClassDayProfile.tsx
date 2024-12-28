@@ -50,7 +50,7 @@ export function ClassDayProfile() {
   }
 
   const { data: classDay, isLoading } = useQuery<ICLassDayDTO>({
-    queryKey: ['get-class-day-profile', tenantId, classDayId],
+    queryKey: ['get-class-day-profile', classDayId],
     queryFn: loadClassDayProfile
   })
 
@@ -65,7 +65,7 @@ export function ClassDayProfile() {
     onSuccess: () => {
       fireSuccesToast("Aula agendada")
       queryClient.invalidateQueries({
-        queryKey: ['get-class-day-profile', tenantId, classDayId]
+        queryKey: ['get-class-day-profile', classDayId]
       })
     }
   })
@@ -81,7 +81,7 @@ export function ClassDayProfile() {
     onSuccess: () => {
       fireInfoToast("Aula cancelada")
       queryClient.invalidateQueries({
-        queryKey: ['get-class-day-profile', tenantId, classDayId]
+        queryKey: ['get-class-day-profile', classDayId]
       })
     }
   })
