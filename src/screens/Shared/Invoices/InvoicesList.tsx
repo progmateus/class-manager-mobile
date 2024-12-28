@@ -5,8 +5,9 @@ import { Viewcontainer } from "@components/ViewContainer";
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 import { useAuth } from "@hooks/useAuth";
 import { useRoute } from "@react-navigation/native";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { FlatList, Text, View, VStack } from "native-base";
+import { useState } from "react";
 import { EAuthType } from "src/enums/EAuthType";
 import { ListInvoicesService } from "src/services/invoiceService";
 
@@ -17,9 +18,12 @@ type RouteParamsProps = {
 }
 
 export function InvoicesList() {
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const { user, authenticationType, tenant } = useAuth();
 
   const route = useRoute()
+
+  const queryClient = useQueryClient()
 
   const { tenantIdParams, subscriptionId } = route.params as RouteParamsProps;
 
@@ -52,6 +56,12 @@ export function InvoicesList() {
     }
   }
 
+  const onRefresh = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: ['get-invoices']
+    })
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Cobranças" />
@@ -81,6 +91,8 @@ export function InvoicesList() {
                 ListEmptyComponent={
                   <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                 }
+                refreshing={isLoading}
+                onRefresh={onRefresh}
               >
               </FlatList>
             )
