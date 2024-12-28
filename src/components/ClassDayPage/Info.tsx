@@ -32,9 +32,9 @@ export function ClassDayHeader({ classDay }: IProps) {
 
       <HStack alignItems="center" space={1}>
         <Icon as={<Clock size={22} />} />
-        <Text fontSize="sm" > {classDay.hourStart} </Text>
+        <Text fontSize="sm" > {classDay.hourStart}</Text>
         <Text fontSize="sm"> - </Text>
-        <Text fontSize="sm"> {classDay.hourEnd} </Text>
+        <Text fontSize="sm">{classDay.hourEnd}</Text>
       </HStack>
 
       <HStack alignItems="center" space={1}>

@@ -118,6 +118,7 @@ export function ClassDayProfile() {
     return user.studentsClasses.some(x => x.classId == classDay?.classId);
   }, [classDay?.id])
 
+
   return (
     <View flex={1}>
       <PageHeader title="Detalhes da aula" />
