@@ -62,14 +62,13 @@ export function TenantsList() {
 
   return (
     <VStack flex={1} mt={statusBarHeight + 12}>
-      <View px={4}>
+      <View px="4" mt="4" h="8">
         <Input
           onChangeText={changeTextDebouncer}
           placeholder="Buscar"
           InputLeftElement={<Icon as={MagnifyingGlass} style={{ marginLeft: 8 }} color="coolGray.400" />}
         />
       </View>
-
       <View flex={1}>
         <Heading mt={8} mx={4} fontFamily="heading" fontSize="sm"> Resultados </Heading>
         <View px={6} pb="16">
