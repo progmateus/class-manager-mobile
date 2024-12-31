@@ -17,7 +17,7 @@ export function Input({ errorMessage = null, isInvalid = false, label, ...rest }
   return (
     <FormControl isInvalid={invalid} flex={1}>
       <VStack space={1.5}>
-        {label && (<Text fontSize="sm" fontWeight="medium" color="coolGray.700"> {label} </Text>)}
+        {label && (<Text fontSize="sm" fontWeight="medium" color="coolGray.500"> {label} </Text>)}
         <NativeBaseInput
           bg={definedBg}
           h={10}
