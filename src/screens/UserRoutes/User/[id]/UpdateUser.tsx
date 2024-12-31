@@ -26,7 +26,7 @@ const phoneRegex = /(\(?\d{2}\)?) ?(9{1})? ?(\d{4})-? ?(\d{4})/
 const updateUserSchema = z.object({
   name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(150, "Max 150 caracteres").trim(),
   email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
-  document: z.string().regex(CPFRegex, "CPF Inválido").trim().optional(),
+  document: z.string().regex(CPFRegex, "CPF Inválido").trim().optional().transform((val) => val?.replaceAll(/\W/g, '')),
   phone: z.string().regex(phoneRegex, "Número inválido").trim().optional().transform((val) => val?.replaceAll(/\W/g, '')),
 });
 
@@ -149,7 +149,7 @@ export function UpdateUser() {
               name="document"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input label="CPF" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.document?.message} />
+                <InputMask label="CPF" type="cpf" onChangeText={onChange} value={value} errorMessage={errors.document?.message} />
               )}
             />
 
