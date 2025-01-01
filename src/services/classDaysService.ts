@@ -45,7 +45,7 @@ export function ListClassDaysService(date: Date, { tenantId, page }: IUserAndTen
   })
 }
 
-export function GetClassDayBookingsService(classDayId: string, { tenantId, page }: IUserAndTenantPaginationDTO) {
+export function ListClassDayBookingsService(classDayId: string, { tenantId, page }: IUserAndTenantPaginationDTO) {
   return api({
     url: `${tenantId}/class-days/${classDayId}/bookings`,
     method: 'get',

@@ -1,11 +1,11 @@
 import { PageHeader } from "@components/PageHeader";
-import { FlatList, Heading, Text, VStack, View } from "native-base";
+import { Heading, Text, VStack, View } from "native-base";
 import { Button } from "@components/Button";
 import { StudentItem } from "@components/Items/StudentItem";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { GetClassDayService } from "src/services/classDaysService";
+import { useMemo } from "react";
+import { GetClassDayService, ListClassDayBookingsService } from "src/services/classDaysService";
 import { CreatebookingService, DeleteBookingService } from "src/services/bookingsService";
 import { useAuth } from "@hooks/useAuth";
 import { Viewcontainer } from "@components/ViewContainer";
@@ -14,11 +14,13 @@ import { orderBy } from "lodash";
 import Animated from "react-native-reanimated";
 import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ClassDayProfileSkeleton } from "@components/skeletons/screens/ClassDayProfile/ClassDayProfileSkeleton";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HasRole } from "@utils/HasRole";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { ClassDayHeader } from "@components/ClassDayPage/Info";
 import { EAuthType } from "src/enums/EAuthType";
+import { IBookingDTO } from "@dtos/bookings/IBookingDTO";
+import { StudentItemSkeleton } from "@components/skeletons/Items/StudentItemSkeleton";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -49,7 +51,7 @@ export function ClassDayProfile() {
     }
   }
 
-  const { data: classDay, isLoading } = useQuery<ICLassDayDTO>({
+  const { data: classDay, isLoading: isLoadingProfile } = useQuery<ICLassDayDTO>({
     queryKey: ['get-class-day-profile', classDayId],
     queryFn: loadClassDayProfile
   })
@@ -67,12 +69,15 @@ export function ClassDayProfile() {
       queryClient.invalidateQueries({
         queryKey: ['get-class-day-profile', classDayId]
       })
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-day-bookings', classDayId]
+      })
     }
   })
 
   const { mutate: cancelBookMutate, isPending: cancelIsPending } = useMutation({
     mutationFn: async () => {
-      if (!classDay || cancelIsPending || !classDayId) {
+      if (!classDay || cancelIsPending || !classDayId || (!isTenantAdmin && !isClassTeacher && !isClassStudent)) {
         return
       }
       const index = classDay.bookings.findIndex((b) => b.userId === user.id)
@@ -82,6 +87,9 @@ export function ClassDayProfile() {
       fireInfoToast("Aula cancelada")
       queryClient.invalidateQueries({
         queryKey: ['get-class-day-profile', classDayId]
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['get-class-day-bookings', classDayId]
       })
     }
   })
@@ -100,6 +108,42 @@ export function ClassDayProfile() {
       });
     }
 
+  }
+
+  const loadBookings = async (page: number) => {
+    try {
+      const { data } = await ListClassDayBookingsService(classDayId, { page, tenantId })
+      return data.data
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const { data: resultBookings, isLoading: isLoadingBookings, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IBookingDTO[]>({
+    queryKey: ['get-class-day-bookings', classDayId],
+    queryFn: ({ pageParam }) => loadBookings(Number(pageParam)),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages, lastPageParam: any) => {
+      if (lastPage.length === 0) {
+        return undefined
+      }
+      return lastPageParam + 1
+    }
+  })
+
+  function onLoadMore() {
+    if (!isLoadingProfile && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  }
+
+  const onRefresh = async () => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-class-day-profile', classDayId]
+    })
+    queryClient.invalidateQueries({
+      queryKey: ['get-class-day-bookings', classDayId]
+    })
   }
 
   const isTenantAdmin = useMemo(() => {
@@ -123,7 +167,7 @@ export function ClassDayProfile() {
     <View flex={1}>
       <PageHeader title="Detalhes da aula" />
       {
-        isLoading || !classDay ?
+        isLoadingProfile || !classDay ?
           (
             <ClassDayProfileSkeleton />
           )
@@ -133,17 +177,35 @@ export function ClassDayProfile() {
               <ClassDayHeader classDay={classDay} />
               <View flex={1} px={2}>
                 <Heading fontFamily="heading" fontSize="md" mt={8} mb={4}> Lista de presença</Heading>
-                <Animated.FlatList
-                  data={orderBy(classDay.bookings, (obj) => obj.user.name, ['asc'])}
-                  keyExtractor={booking => booking.id}
-                  refreshing={isLoading}
-                  renderItem={({ item, index }) => (
-                    <StudentItem key={item.id} user={item.user} index={index} />
-                  )}
-                  ItemSeparatorComponent={() => <View style={{ height: 18 }} />}
-                  ListEmptyComponent={<Text fontFamily="body" textAlign="center" mt={8}> Nenhuma presença confirmada </Text>}
-                >
-                </Animated.FlatList>
+                {
+
+                  isLoadingBookings ? (
+                    <VStack>
+                      <StudentItemSkeleton />
+                      <StudentItemSkeleton />
+                      <StudentItemSkeleton />
+                      <StudentItemSkeleton />
+                    </VStack>
+                  ) : (
+                    <Animated.FlatList
+                      data={orderBy(resultBookings?.pages.map(page => page).flat(), (obj) => obj.user.name, ['asc'])}
+                      keyExtractor={booking => booking.id}
+                      refreshing={isLoadingBookings}
+                      renderItem={({ item, index }) => (
+                        <StudentItem key={item.id} user={item.user} index={index} />
+                      )}
+                      ItemSeparatorComponent={() => <View style={{ height: 18 }} />}
+                      ListEmptyComponent={<Text fontFamily="body" textAlign="center" mt={8}> Nenhuma presença confirmada </Text>}
+                      onEndReached={onLoadMore}
+                      onEndReachedThreshold={0.5}
+                      showsVerticalScrollIndicator={false}
+                      showsHorizontalScrollIndicator={false}
+                      onRefresh={onRefresh}
+                    >
+                    </Animated.FlatList>
+                  )
+                }
+
               </View>
 
               {
