@@ -9,7 +9,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useQuery } from "@tanstack/react-query"
 import { HStack, Text, View, VStack } from "native-base"
-import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, CalendarBlank, ArrowsLeftRight, MapPin } from "phosphor-react-native"
+import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, CalendarBlank, ArrowsLeftRight, MapPin, CalendarPlus } from "phosphor-react-native"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
 import { GetClassProfileService } from "src/services/classesService"
 
@@ -120,7 +120,7 @@ export function ClassProfile() {
                 </MenuItem.Root>
 
                 <MenuItem.Root>
-                  <MenuItem.Icon icon={CalendarBlank} />
+                  <MenuItem.Icon icon={CalendarPlus} />
                   <MenuItem.Content title="Criar aula" description="Crie aulas manualmente" />
                   <MenuItem.Actions>
                     <MenuItem.Action icon={ArrowRight} />
