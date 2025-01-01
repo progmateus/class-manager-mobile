@@ -9,6 +9,7 @@ import { useAuth } from "@hooks/useAuth";
 import { CreateTimeTableService } from "src/services/timeTablesService";
 import { Button } from "@components/Button";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 
@@ -16,6 +17,8 @@ export function CreateTimeTable() {
   const [isLoading, setIsLoading] = useState(false)
   const [name, setName] = useState("")
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
+
+  const queryClient = useQueryClient();
 
   useFocusEffect(useCallback(() => {
     setName("")
@@ -30,9 +33,12 @@ export function CreateTimeTable() {
       fireErrorToast('Nome invialido')
       return
     }
-    CreateTimeTableService(name, tenant.id).then(({ data }) => {
+    CreateTimeTableService(name, tenant.id).then(async ({ data }) => {
       setIsLoading(true)
       fireSuccesToast('Tabela criada com sucesso!')
+      await queryClient.invalidateQueries({
+        queryKey: ['get-times-tables', tenant.id]
+      })
       navigation.navigate('timeTable', { timeTableId: data.data.id })
     }).catch((err) => {
       console.log(err)

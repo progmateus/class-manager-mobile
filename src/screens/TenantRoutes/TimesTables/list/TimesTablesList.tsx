@@ -25,9 +25,10 @@ export function TimesTablesList() {
       const { data } = await ListTimesTablesService(tenant.id, { page })
       return data.data
     } catch (err) {
-      console.log(err)
+      console.log('err: ', err)
     }
   }
+
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<ITimeTableDTO[]>({
     queryKey: ['get-times-tables', tenant.id],
@@ -48,11 +49,13 @@ export function TimesTablesList() {
   }
 
   const handleAdd = () => {
+    navigation.navigate('createTimeTable')
+  }
+
+  const onRefresh = () => {
     queryClient.invalidateQueries({
       queryKey: ['get-times-tables', tenant.id]
     })
-
-    navigation.navigate('createTimeTable')
   }
 
   return (
@@ -66,7 +69,7 @@ export function TimesTablesList() {
                 data={results?.pages.map(page => page).flat()}
                 pb={20}
                 keyExtractor={timeTable => timeTable.id}
-                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                 onEndReached={onLoadMore}
                 onEndReachedThreshold={0.3}
                 showsVerticalScrollIndicator={false}
@@ -85,6 +88,8 @@ export function TimesTablesList() {
                 ListEmptyComponent={
                   <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                 }
+                refreshing={isLoading}
+                onRefresh={onRefresh}
               >
               </FlatList>
             )
