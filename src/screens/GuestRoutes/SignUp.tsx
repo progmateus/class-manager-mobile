@@ -19,7 +19,7 @@ import { InputMask } from "@components/form/InputMask";
 
 const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm
 const phoneRegex = /(\(?\d{2}\)?) ?(9{1})? ?(\d{4})-? ?(\d{4})/
-const CPFRegex = /(^d{3}.?d{3}.?d{3}-?d{2}$)/
+const CPFRegex = /(^\d{3}.?\d{3}.?\d{3}-?\d{2}$)/
 
 const signUpSchema = z.object({
   name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(150, "Max 150 caracteres"),

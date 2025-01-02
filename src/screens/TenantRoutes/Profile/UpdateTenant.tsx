@@ -23,7 +23,7 @@ import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
 import * as ImagePicker from "expo-image-picker"
 import * as FileSystem from "expo-file-system"
 
-const DocumentRegex = /([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})/
+const DocumentRegex = /([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})/igm
 const phoneRegex = /(\(?\d{2}\)?) ?(9{1})? ?(\d{4})-? ?(\d{4})/
 
 const updateTenantSchema = z.object({
@@ -156,6 +156,9 @@ export function UpdateTenant() {
 
 
     setIsLoading(true)
+    console.log({
+      name, description, email, document, links: tenant.links
+    })
     UpdateTenantSertvice({ name, description, email, document, links: tenant.links }, tenant.id).then(() => {
       fireSuccesToast("Empresa atualizada!")
       refreshTenant()

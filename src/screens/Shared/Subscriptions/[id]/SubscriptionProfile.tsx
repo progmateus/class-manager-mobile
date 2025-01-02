@@ -166,7 +166,7 @@ export function SubscriptionProfile() {
                 <HStack justifyContent="space-between">
                   <VStack space={1}>
                     <HStack alignItems="center" space={1}>
-                      <Icon as={CurrencyCircleDollar} />
+                      <Icon as={SimCard} />
                       <Text fontSize="sm" textTransform="capitalize">{subscription.tenantPlan.name} </Text>
                     </HStack>
                     <HStack alignItems="center" space={1}>
