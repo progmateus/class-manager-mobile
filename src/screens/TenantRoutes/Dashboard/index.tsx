@@ -4,7 +4,7 @@ import { Viewcontainer } from "@components/ViewContainer";
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { Link, SimpleGrid, Text, View, VStack } from "native-base";
-import { BookBookmark, Clock, GraduationCap, IdentificationBadge, MapPin, SimCard } from "phosphor-react-native";
+import { BookBookmark, Clock, CurrencyDollar, GraduationCap, IdentificationBadge, MapPin, Money, SimCard } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
 import { TouchableOpacity } from "react-native";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
@@ -82,6 +82,7 @@ export function Dashboard() {
           <DashboardOption text="Jornadas" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('timesTablesList')} />
           <DashboardOption text="Editar" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('updateTenant')} />
           <DashboardOption text="Endereços" icon={<MapPin size={size} color={color} />} onPress={() => navigation.navigate('addressesList')} />
+          <DashboardOption text="Cobranças" icon={<CurrencyDollar size={size} color={color} />} onPress={() => navigation.navigate('invoicesList', { tenantIdParams: tenant.id })} />
         </SimpleGrid>
       </Viewcontainer>
     </View >
