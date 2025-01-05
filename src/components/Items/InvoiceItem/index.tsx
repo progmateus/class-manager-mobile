@@ -14,6 +14,7 @@ import { fireSuccesToast } from "@utils/HelperNotifications";
 import { Loading } from "@components/Loading";
 import { Button } from "@components/Button";
 import { useQueryClient } from "@tanstack/react-query";
+import { ETargetType } from "src/enums/ETargetType";
 
 
 interface IProps {
@@ -131,7 +132,7 @@ export function InvoiceItem({ invoice }: IProps) {
 
         </HStack>
         {
-          isOpen && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
+          isOpen && isInvoiceAdmin && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && invoice.targetType == ETargetType.USER && (
             <VStack pt={6} pb={2}>
               <TouchableOpacity onPress={() => setIsModalOpen(!isModalOpen)}>
                 <HStack alignItems="center" space={4} ml={1}>

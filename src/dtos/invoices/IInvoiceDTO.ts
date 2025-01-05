@@ -3,7 +3,7 @@ import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO";
 import { ITenantPreviewDTO } from "@dtos/tenants/ITenantPreviewDTO";
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
 import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
-import { EInvoiceTargetType } from "src/enums/EInvoiceTargetType";
+import { ETargetType } from "src/enums/ETargetType";
 import { EInvoiceType } from "src/enums/EInvoiceType";
 
 export type IInvoiceDTO = {
@@ -15,7 +15,7 @@ export type IInvoiceDTO = {
     planId?: string;
     amount: number;
     status: EInvoiceStatus;
-    targetType: EInvoiceTargetType;
+    targetType: ETargetType;
     stripeInvoiceUrl: string;
     type: EInvoiceType;
     expiresAt: Date;
