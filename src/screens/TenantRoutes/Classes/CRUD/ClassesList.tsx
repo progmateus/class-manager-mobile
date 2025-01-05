@@ -60,7 +60,7 @@ export function ClassesList() {
   }
 
   const onRefresh = () => {
-    queryClient.cancelQueries({
+    queryClient.invalidateQueries({
       queryKey: ['get-classes', tenantId]
     })
   }

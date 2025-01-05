@@ -130,6 +130,12 @@ export function TeachersList() {
     })
   }
 
+  const onRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-tenant-teachers', tenantId, roleName]
+    })
+  }
+
   const changeTextDebounced = (text: string) => {
     setSearch(text)
   }
@@ -182,6 +188,8 @@ export function TeachersList() {
                   ListEmptyComponent={
                     <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                   }
+                  refreshing={isLoading}
+                  onRefresh={onRefresh}
                 />
 
                 <Actionsheet isOpen={isOpenAdd} onClose={() => setIsOpenAdd(false)} size="full">

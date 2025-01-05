@@ -53,7 +53,7 @@ export function TimesTablesList() {
   }
 
   const onRefresh = () => {
-    queryClient.cancelQueries({
+    queryClient.invalidateQueries({
       queryKey: ['get-times-tables', tenant.id]
     })
   }
