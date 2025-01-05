@@ -19,10 +19,6 @@ export function Avatar({ src, alt = "Imagem", type = "user", ...rest }: IProps) 
   let localSrc = ReactImage.resolveAssetSource(BlankProfileImage).uri
   finalSrc = src ? `http://192.168.15.9:5062/images/${src}` : localSrc;
 
-  /*   if (type === "user" && !src && username) {
-      finalSrc = `https://raw.githubusercontent.com/progmateus/avatars/refs/heads/main/assets/${username}.png`
-    } */
-
 
   return (
     <Image
