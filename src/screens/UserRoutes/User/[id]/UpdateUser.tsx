@@ -1,7 +1,7 @@
 import { Input } from "@components/form/Input";
 import { PageHeader } from "@components/PageHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Center, HStack, Image, Text, VStack, View } from "native-base";
+import { Center, Text, VStack, View } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Check } from "phosphor-react-native"
@@ -9,7 +9,7 @@ import { ScrollContainer } from "@components/ScrollContainer";
 import { useAuth } from "@hooks/useAuth";
 import { UpdateUserService, UploadUserAvatarService } from "src/services/usersService";
 import { useCallback, useState } from "react";
-import { fireErrorToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
+import { fireSuccesToast } from "@utils/HelperNotifications";
 import { Avatar } from "@components/Avatar/Avatar";
 import { InputMask } from "@components/form/InputMask";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -17,7 +17,6 @@ import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker"
 import * as FileSystem from "expo-file-system"
-import { AxiosError } from "axios";
 
 const CPFRegex = /(^\d{3}.?\d{3}.?\d{3}-?\d{2}$)/igm
 const CNPJRegex = /[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/

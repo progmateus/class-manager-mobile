@@ -31,7 +31,6 @@ const updateTenantSchema = z.object({
   description: z.string().max(200, "Max 80 caracteres").trim().optional(),
   email: z.string({ required_error: "Campo obrigatório", }).email("E-mail inválido").trim(),
   document: z.string().regex(DocumentRegex, "Documento Inválido").trim().transform((val) => val?.replaceAll(/\W/g, '')),
-  phone: z.string().regex(phoneRegex, "Número inválido").trim().transform((val) => val?.replaceAll(/\W/g, '')),
 });
 
 type UpdateTenantProps = z.infer<typeof updateTenantSchema>
@@ -57,7 +56,6 @@ export function UpdateTenant() {
       name: tenantcontext.name,
       email: tenantcontext.email,
       description: tenantcontext.description,
-      phone: '2140028922',
       document: tenantcontext.document
     },
     resolver: zodResolver(updateTenantSchema)
@@ -267,14 +265,6 @@ export function UpdateTenant() {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Input label="CPF / CNPJ" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.document?.message} />
-              )}
-            />
-
-            <Controller
-              name="phone"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <InputMask label="Telefone" type="cel-phone" onChangeText={onChange} value={value} errorMessage={errors.phone?.message} />
               )}
             />
 

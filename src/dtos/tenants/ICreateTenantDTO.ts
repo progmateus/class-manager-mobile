@@ -2,7 +2,7 @@ interface ICreatetenantDTO {
   name: string;
   username: string;
   email: string;
-  number: string;
+  phone: string;
   description?: string;
   document: string;
   planId: string;

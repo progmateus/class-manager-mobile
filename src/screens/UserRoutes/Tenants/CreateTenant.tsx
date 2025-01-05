@@ -25,7 +25,7 @@ const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
 
 const createTenantSchema = z.object({
   name: z.string({ required_error: "Campo obrigatório", }).min(3, "Min 3 caracteres").max(80, "Max 80 caracteres").trim(),
-  number: z.string({ required_error: "Campo obrigatório", }).regex(phoneRegex, "Telefone inválido").trim(),
+  phone: z.string({ required_error: "Campo obrigatório", }).regex(phoneRegex, "Telefone inválido").trim(),
   email: z.string({ required_error: "Campo obrigatório", }).email().trim(),
   document: z.string({ required_error: "Campo obrigatório", }).regex(documentRegex, "Documento inválido").trim(),
   username: z.string({ required_error: "Campo obrigatório", }).regex(usernameRegex, "Nome de usuário inválido").trim(),
@@ -73,7 +73,7 @@ export function CreateTenant() {
       document: getValues('document'),
       username: getValues('username'),
       email: getValues('email'),
-      number: getValues('number'),
+      phone: getValues('phone'),
       description: getValues('description'),
       planId
     }).then(({ data }) => {
@@ -127,11 +127,11 @@ export function CreateTenant() {
   }
 
   const verifyDataTab = async () => {
-    await trigger(["name", "document", "email", "number"])
+    await trigger(["name", "document", "email", "phone"])
     const nameState = getFieldState("name")
     const documentState = getFieldState("document")
     const emailState = getFieldState("document")
-    const phoneState = getFieldState("document")
+    const phoneState = getFieldState("phone")
     if (nameState.invalid || documentState.invalid || emailState.invalid || phoneState.invalid) {
       return false
     }
@@ -288,10 +288,10 @@ export function CreateTenant() {
                 />
 
                 <Controller
-                  name="number"
+                  name="phone"
                   control={control}
                   render={({ field: { onChange, value } }) => (
-                    <Input label="Telefone" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.number?.message} />
+                    <Input label="Telefone" variant="outline" onChangeText={onChange} value={value} errorMessage={errors.phone?.message} />
                   )}
                 />
 
