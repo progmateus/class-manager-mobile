@@ -73,6 +73,12 @@ export function UpdateClassTimeTable() {
     })
   }
 
+  const onRefresh = () => {
+    queryClient.cancelQueries({
+      queryKey: ['get-times-tables', tenant.id]
+    })
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Selecione um horário" rightIcon={Check} rightAction={handleUpdateClassTimeTable} />
@@ -96,6 +102,8 @@ export function UpdateClassTimeTable() {
               )}
               ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
               ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+              refreshing={isLoading}
+              onRefresh={onRefresh}
             />
           )
         }

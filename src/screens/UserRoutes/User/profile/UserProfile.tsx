@@ -107,7 +107,7 @@ export function Profile() {
                   </HStack>
                 </Actionsheet.Item>
               )}
-              ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+              ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             />

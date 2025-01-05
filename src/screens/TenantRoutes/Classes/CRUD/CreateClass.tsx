@@ -51,7 +51,7 @@ export function CreateClass() {
 
     CreateClassService(tenantId, data.name, data.description).then(async ({ data }) => {
       fireSuccesToast('Turma criada')
-      await queryClient.invalidateQueries({
+      await queryClient.cancelQueries({
         queryKey: ['get-classes', tenantId]
       })
       navigation.navigate('classProfile', {

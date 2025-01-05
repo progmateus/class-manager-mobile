@@ -8,7 +8,7 @@ import { IClassPreviewDTO } from "@dtos/classes/IClassPreviewDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { FlatList, Text, View, VStack } from "native-base"
 import { BookBookmark, GraduationCap, IdentificationBadge, Plus } from "phosphor-react-native"
 import { useCallback } from "react"
@@ -19,6 +19,7 @@ import { ListClassesService } from "src/services/classesService"
 export function ClassesList() {
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const { tenant } = useAuth()
+  const queryClient = useQueryClient();
   const tenantId = tenant?.id;
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IClassPreviewDTO[]>({
@@ -55,6 +56,12 @@ export function ClassesList() {
     navigation.navigate('classProfile', {
       tenantIdParams: tenantId,
       classId
+    })
+  }
+
+  const onRefresh = () => {
+    queryClient.cancelQueries({
+      queryKey: ['get-classes', tenantId]
     })
   }
 
@@ -97,7 +104,7 @@ export function ClassesList() {
                     </GenericItem.Root>
                   </TouchableOpacity>
                 )}
-                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                 ListFooterComponent={
                   isFetchingNextPage ? <Loading /> : <></>
                 }
@@ -108,6 +115,8 @@ export function ClassesList() {
                 ListEmptyComponent={
                   <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                 }
+                refreshing={isLoading}
+                onRefresh={onRefresh}
               />
             )
         }

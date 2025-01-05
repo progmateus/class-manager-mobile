@@ -36,7 +36,7 @@ export function CreateTimeTable() {
     CreateTimeTableService(name, tenant.id).then(async ({ data }) => {
       setIsLoading(true)
       fireSuccesToast('Tabela criada com sucesso!')
-      await queryClient.invalidateQueries({
+      await queryClient.cancelQueries({
         queryKey: ['get-times-tables', tenant.id]
       })
       navigation.navigate('timeTable', { timeTableId: data.data.id })

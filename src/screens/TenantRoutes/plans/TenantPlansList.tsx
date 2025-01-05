@@ -68,7 +68,7 @@ export function TenantPlansList() {
                 pb={20}
                 keyExtractor={plan => plan.id}
 
-                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+                ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                 onEndReached={onLoadMore}
                 onEndReachedThreshold={0.3}
                 showsVerticalScrollIndicator={false}
