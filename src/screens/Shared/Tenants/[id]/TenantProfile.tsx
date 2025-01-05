@@ -1,7 +1,6 @@
 import { Button } from "@components/Button";
 import { PageHeader } from "@components/PageHeader";
 import { Actionsheet, Box, Center, HStack, Heading, Icon, Image, Link, ScrollView, Text, VStack, View } from "native-base";
-import ImageSVG from "@assets/image-outline.svg"
 import { TouchableOpacity, Vibration } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useMemo, useState } from "react";
@@ -13,7 +12,7 @@ import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPrevie
 import { Avatar } from "@components/Avatar/Avatar";
 import { TenantProfileSkeleton } from "@components/skeletons/screens/TenantProfile";
 import { dataTagSymbol, useQuery, useQueryClient } from "@tanstack/react-query";
-import { FacebookLogo, InstagramLogo, Plus, PlusCircle, TrashSimple, WhatsappLogo, X } from "phosphor-react-native";
+import { FacebookLogo, Images, InstagramLogo, Plus, PlusCircle, TrashSimple, WhatsappLogo, X } from "phosphor-react-native";
 import { THEME } from "src/theme";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
@@ -266,7 +265,7 @@ export function TenantProfile() {
                 }
                 <View mt={2} py={4} borderBottomWidth={0.5} borderBottomColor="coolGray.400">
                   <Center>
-                    <ImageSVG />
+                    <Icon as={<Images size={18} />} />
                   </Center>
                 </View>
                 <View flex={1} justifyContent="end" display="flex" flexDirection="row" flexWrap="wrap">

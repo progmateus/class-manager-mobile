@@ -1,4 +1,4 @@
-import { IAvatarProps, IImageProps, Image, Avatar as NativeBaseAvatar } from "native-base";
+import { IImageProps, Image } from "native-base";
 import BlankProfileImage from "@assets/blank-profile.png"
 import { Image as ReactImage } from "react-native";
 import { useRef } from "react";
