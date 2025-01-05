@@ -70,6 +70,13 @@ export function StudentsClassList() {
     setSearch(text)
   }
 
+  const onRefresh = () => {
+    queryClient.cancelQueries({
+      queryKey: ['get-students-classes', tenantId, classId, search],
+      exact: true
+    })
+  }
+
   const changeTextDebouncer = useCallback(debounce(changeTextDebounced, 250), []);
 
   const handleRemveStudentFromClass = async (studentClassId: string) => {
@@ -134,6 +141,8 @@ export function StudentsClassList() {
                 ListEmptyComponent={
                   <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                 }
+                refreshing={isLoading}
+                onRefresh={onRefresh}
               >
               </FlatList>
             </>

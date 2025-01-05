@@ -132,7 +132,8 @@ export function TeachersList() {
 
   const onRefresh = () => {
     queryClient.invalidateQueries({
-      queryKey: ['get-tenant-teachers', tenantId, roleName]
+      queryKey: ['get-tenant-teachers', tenantId, roleName, search],
+      exact: true
     })
   }
 

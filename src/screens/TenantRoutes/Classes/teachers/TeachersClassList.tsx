@@ -76,6 +76,12 @@ export function TeachersClassList() {
     setSearch(text)
   }
 
+  const onRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-teachers-class', tenantId, classId, search]
+    })
+  }
+
   const changeTextDebouncer = useCallback(debounce(changeTextDebounced, 250), []);
 
   return (
@@ -110,8 +116,10 @@ export function TeachersClassList() {
                     </UserItem.Section>
                   </UserItem.Root>
                 )}
-                ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
+                ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                 ListEmptyComponent={<Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>}
+                refreshing={isLoading}
+                onRefresh={onRefresh}
               >
               </FlatList>
             </>

@@ -10,7 +10,7 @@ import { FlatList, Icon, ScrollView, Text, View, VStack } from "native-base"
 import { MagnifyingGlass, Plus } from "phosphor-react-native"
 import { ListSubscriptionsService } from "src/services/subscriptionService"
 import { SubscriptionItemSkeleton } from "@components/skeletons/Items/SubscriptionItemSkeleton"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useState } from "react"
 import { Input } from "@components/form/Input"
 import { debounce } from "lodash"
@@ -18,6 +18,7 @@ import { debounce } from "lodash"
 export function SubscriptionsList() {
   const { tenant } = useAuth()
   const [search, setSearch] = useState("")
+  const queryClient = useQueryClient();
 
   const tenantId = tenant?.id
 
@@ -66,6 +67,13 @@ export function SubscriptionsList() {
 
   const changeTextDebouncer = useCallback(debounce(changeTextDebounced, 250), []);
 
+  const onRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-subscriptions', tenantId, search],
+      exact: true
+    })
+  }
+
   return (
     <View flex={1}>
       <PageHeader title="Alunos" rightAction={handleAdd} rightIcon={Plus} />
@@ -106,6 +114,8 @@ export function SubscriptionsList() {
                   ListEmptyComponent={
                     <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                   }
+                  refreshing={isLoading}
+                  onRefresh={onRefresh}
                 >
                 </FlatList>
               </View>
