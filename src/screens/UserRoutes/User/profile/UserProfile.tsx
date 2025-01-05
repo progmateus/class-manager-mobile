@@ -11,7 +11,7 @@ import { MenuOption } from "@components/Items/MenuOption/Index";
 import { SubscriptionOption } from "@components/Items/SubscriptionOption";
 import { useNavigation } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { ArrowsLeftRight, MapPin, Plus } from "phosphor-react-native";
+import { ArrowsLeftRight, ClockClockwise, IdentificationCard, Lock, MapPin, Plus, SignOut } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { useAuth } from "@hooks/useAuth";
 import { IUsersRolesDTO } from "@dtos/roles/IUsersRolesDTO";
@@ -74,13 +74,13 @@ export function Profile() {
         }
 
         <View pb="8" mt={!hasSubscriptions ? '16' : 8}>
-          <MenuOption icon={<CardSVG width={22} height={22} />} title="Dados Pessoais" onPress={() => navigation.navigate('updateUser')} />
-          <MenuOption icon={<ShieldSVG width={22} height={22} />} title="Alterar Senha" onPress={() => navigation.navigate('updatePassword')} />
-          <MenuOption icon={<MapPin size={22} weight="bold" />} title="Alterar Endereço" onPress={() => navigation.navigate('updateUserAddress')} />
-          <MenuOption icon={<HistorySVG width={22} height={22} />} title="Histórico de Aulas" onPress={() => navigation.navigate('bookingsHistory', {})} />
-          <MenuOption icon={<SubscriptionsSVG width={22} height={22} />} title="Gerenciar Inscrições" onPress={() => navigation.navigate('updateUser')} />
-          <MenuOption icon={<ArrowsLeftRight />} title="Empresas" onPress={() => setIsOpen(true)} />
-          <MenuOption icon={<LogoutSVG width={22} height={22} />} title="Sair" onPress={signOut} />
+          <MenuOption icon={<IdentificationCard size={24} />} title="Dados Pessoais" onPress={() => navigation.navigate('updateUser')} />
+          <MenuOption icon={<Lock size={24} />} title="Alterar Senha" onPress={() => navigation.navigate('updatePassword')} />
+          <MenuOption icon={<MapPin size={24} />} title="Alterar Endereço" onPress={() => navigation.navigate('updateUserAddress')} />
+          <MenuOption icon={<ClockClockwise size={24} />} title="Histórico de Aulas" onPress={() => navigation.navigate('bookingsHistory', {})} />
+          {/* <MenuOption icon={<SubscriptionsSVG width={22} />} title="Gerenciar Inscrições" onPress={() => navigation.navigate('updateUser')} /> */}
+          <MenuOption icon={<ArrowsLeftRight size={24} />} title="Empresas" onPress={() => setIsOpen(true)} />
+          <MenuOption icon={<SignOut size={22} />} title="Sair" onPress={signOut} />
         </View>
 
         <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
