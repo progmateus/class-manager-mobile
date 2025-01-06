@@ -42,11 +42,12 @@ export function UpdateUserService({ name, email, document, phone }: IUpdateUserD
   })
 }
 
-export function ListUserBookingsService({ page, tenantId }: IUserAndTenantPaginationDTO) {
+export function ListUserBookingsService({ page, tenantId, userId }: IUserAndTenantPaginationDTO) {
   return api({
     url: '/users/bookings',
     method: 'get',
     params: {
+      userId,
       tenantId,
       page
     }

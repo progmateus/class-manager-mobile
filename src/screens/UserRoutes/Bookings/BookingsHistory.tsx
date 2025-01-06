@@ -45,8 +45,8 @@ export function BookingsHistory() {
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IBookingDTO[]>({
     queryKey: ['get-bookings', tenantId, userId, user.id],
     queryFn: ({ pageParam }) => {
-      return fetchBookings(Number(pageParam)).then(({ data }) => {
-        return data.data
+      return fetchBookings(Number(pageParam)).then((bookings) => {
+        return bookings
       })
     },
     initialPageParam: 1,
@@ -65,7 +65,7 @@ export function BookingsHistory() {
   }
 
 
-  const fetchBookings = (page: number) => {
+  const fetchBookings = async (page: number): Promise<IBookingDTO[]> => {
     if (authenticationType === EAuthType.USER) {
       return loadUserBookings(page)
     } else {
@@ -73,13 +73,13 @@ export function BookingsHistory() {
     }
   }
 
-  const loadTenantBookings = async (page: number) => {
+  const loadTenantBookings = async (page: number): Promise<IBookingDTO[]> => {
     const { data } = await ListBookingsService({ tenantId, userId, page })
     return data.data
   }
 
-  const loadUserBookings = async (page: number) => {
-    const { data } = await ListUserBookingsService({ tenantId, page })
+  const loadUserBookings = async (page: number): Promise<IBookingDTO[]> => {
+    const { data } = await ListUserBookingsService({ page })
     return data.data
   }
 
@@ -133,8 +133,8 @@ export function BookingsHistory() {
                   <TouchableOpacity key={item.id} onPress={() => handleRedirectClassDay(item.classDay.id, item.classDay.class.tenantId)}>
                     <GenericItem.Root >
                       <GenericItem.InfoSection>
-                        <Icon as={Clock} mr={4} />
-                        <Text mr={4}>{item.classDay.hourStart}</Text>
+                        <Icon as={<Clock size={22} />} mr={4} />
+                        <Text fontSize={14} mr={4}>{item.classDay.hourStart}</Text>
                       </GenericItem.InfoSection>
                       <GenericItem.Content title={formatDate(item.classDay.date)} caption={item.classDay.class.name} />
                       <GenericItem.InfoSection>
