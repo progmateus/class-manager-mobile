@@ -102,7 +102,7 @@ export function InvoiceItem({ invoice }: IProps) {
   }
 
   const isInvoiceAdmin = useMemo(() => {
-    if (invoice.type != EInvoiceType.USER_SUBSCRIPTION) {
+    if (invoice.type != EInvoiceType.SUBSCRIPTION) {
       return false
     }
     return HasRole(user.usersRoles, invoice.tenantId, ["admin"])

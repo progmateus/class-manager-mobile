@@ -9,6 +9,7 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { FlatList, Text, View, VStack } from "native-base";
 import { useState } from "react";
 import { EAuthType } from "src/enums/EAuthType";
+import { ETargetType } from "src/enums/ETargetType";
 import { ListInvoicesService } from "src/services/invoiceService";
 
 
@@ -30,8 +31,24 @@ export function InvoicesList() {
   const tenantId = tenant?.id ?? tenantIdParams
 
   const loadInvoices = async (page: number) => {
+    const targetTypes = [];
+
+    if (subscriptionId) {
+      targetTypes.push(ETargetType.USER)
+    }
+
+    if (authenticationType == EAuthType.TENANT && !subscriptionId) {
+      targetTypes.push(ETargetType.TENANT)
+    }
+
     try {
-      const { data } = await ListInvoicesService({ page, userId: authenticationType == EAuthType.USER ? user.id : undefined, subscriptionId, tenantId })
+      const { data } = await ListInvoicesService({
+        page,
+        userId: authenticationType == EAuthType.USER ? user.id : undefined,
+        subscriptionId,
+        tenantId,
+        targetTypes
+      })
       return data.data
     } catch (err) {
       console.log(err)
