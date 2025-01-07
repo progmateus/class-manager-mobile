@@ -4,7 +4,7 @@ import { Viewcontainer } from "@components/ViewContainer";
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { HStack, Link, SimpleGrid, Text, View, VStack } from "native-base";
-import { BookBookmark, Clock, CurrencyDollar, GraduationCap, IdentificationBadge, MapPin, Money, SimCard } from "phosphor-react-native";
+import { BookBookmark, Clock, CurrencyDollar, GraduationCap, IdentificationBadge, MapPin, Money, Pencil, SimCard } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
 import { TouchableOpacity } from "react-native";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
@@ -34,7 +34,7 @@ export function Dashboard() {
   }
 
   return (
-    <View flex={1}>
+    <View flex={1} bgColor="brand.600">
       <TenantHeader />
       <VStack space={1}>
         {
@@ -75,21 +75,23 @@ export function Dashboard() {
           )
         }
       </VStack>
-      <Viewcontainer>
-        <VStack px="8" space="14">
-          <HStack justifyContent="space-between">
-            <DashboardOption text="Turmas" icon={<BookBookmark size={size} color={color} />} onPress={() => navigation.navigate('classes')} />
-            <DashboardOption text="Planos" icon={<SimCard size={size} color={color} />} onPress={() => navigation.navigate('tenantPlansList')} />
-            <DashboardOption text="Professores" icon={<IdentificationBadge size={size} color={color} />} onPress={() => navigation.navigate('teachersList', { roleName: 'teacher' })} />
-          </HStack>
-          <HStack justifyContent="space-between">]
-            <DashboardOption text="Editar informações" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('updateTenant')} />
-            <DashboardOption text="Jornadas" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('timesTablesList')} />
-            <DashboardOption text="Endereços" icon={<MapPin size={size} color={color} />} onPress={() => navigation.navigate('addressesList')} />
-          </HStack>
-        </VStack>
-        {/* <DashboardOption text="Inscrições" icon={<Receipt size={size} color={color} />} onPress={() => navigation.navigate('subscriptionProfile')} /> */}
-      </Viewcontainer>
+      <View bgColor="white" flex={1} borderTopRadius={30}>
+        <Viewcontainer>
+          <VStack px="8" space="14">
+            <HStack justifyContent="space-between">
+              <DashboardOption text="Turmas" icon={<BookBookmark size={size} color={color} />} onPress={() => navigation.navigate('classes')} />
+              <DashboardOption text="Planos" icon={<SimCard size={size} color={color} />} onPress={() => navigation.navigate('tenantPlansList')} />
+              <DashboardOption text="Professores" icon={<IdentificationBadge size={size} color={color} />} onPress={() => navigation.navigate('teachersList', { roleName: 'teacher' })} />
+            </HStack>
+            <HStack justifyContent="space-between">
+              <DashboardOption text="Editar informações" icon={<Pencil size={size} color={color} />} onPress={() => navigation.navigate('updateTenant')} />
+              <DashboardOption text="Jornadas" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('timesTablesList')} />
+              <DashboardOption text="Endereços" icon={<MapPin size={size} color={color} />} onPress={() => navigation.navigate('addressesList')} />
+            </HStack>
+          </VStack>
+          {/* <DashboardOption text="Inscrições" icon={<Receipt size={size} color={color} />} onPress={() => navigation.navigate('subscriptionProfile')} /> */}
+        </Viewcontainer>
+      </View>
     </View >
   )
 }

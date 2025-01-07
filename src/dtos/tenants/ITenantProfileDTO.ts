@@ -11,6 +11,8 @@ interface ITenantProfileDTO {
   documentType: EdocumentType;
   status: ETenantStatus;
   subscriptionStatus: ESubscriptionStatus;
+  StripeOnboardUrl?: number;
+  AvailableBalance?: number;
   email: string;
   username: string;
   avatar: string;

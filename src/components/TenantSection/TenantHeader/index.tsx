@@ -1,33 +1,37 @@
-import { Button, FlatList, HStack, Heading, Image, Text, VStack, useTheme } from "native-base";
+import { HStack, Heading, Text, VStack } from "native-base";
 import { SignOut } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
 import { useAuth } from "@hooks/useAuth";
 import { Avatar } from "@components/Avatar/Avatar";
 
-
-type Props = {
-  image: string
-  name: string;
-  description: string;
-  categories: string[];
-}
-
 export function TenantHeader() {
-  const { colors } = useTheme();
   const { tenant, signOutTenant } = useAuth()
   const statusBarHeight = Constants.statusBarHeight;
 
+  const balanceFormatted = () => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2
+    }).format(tenant.AvailableBalance ?? 0)
+  }
+
   return (
-    <HStack mt={statusBarHeight} pb={4} pt={6} px={4} alignItems="center" borderColor="gray.300" borderBottomWidth={0.5}>
-      <Avatar src={tenant.avatar} alt="Foto de perfil da empresa" type="tenant" />
-      <HStack flex={1}>
-        <Text ml={2}>Olá,</Text>
-        <Heading fontFamily="heading" fontSize="md"> {tenant.name}</Heading>
+    <VStack space={6} pb={10}>
+      <HStack mt={statusBarHeight} pb={4} pt={8} px={6} alignItems="center" space={2}>
+        <Avatar src={tenant.avatar} alt="Foto de perfil da empresa" type="tenant" />
+        <VStack flex={1} ml={2}>
+          <Text color="white" opacity={0.8}>Olá</Text>
+          <Text fontFamily="Text" fontSize="md" color="white">{tenant.name}</Text>
+        </VStack>
+        <TouchableOpacity onPress={signOutTenant}>
+          <SignOut color="white" />
+        </TouchableOpacity>
       </HStack>
-      <TouchableOpacity onPress={signOutTenant}>
-        <SignOut color={colors.coolGray['500']} />
-      </TouchableOpacity>
-    </HStack>
+      <HStack justifyContent="center" alignItems="center">
+        <Heading fontSize={34} textAlign="center" fontWeight="bold" color="white"> {balanceFormatted(1750.00)}  </Heading>
+      </HStack>
+    </VStack>
   );
 }
