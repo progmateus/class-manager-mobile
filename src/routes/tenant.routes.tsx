@@ -43,7 +43,7 @@ import { TransferClassStudents } from "@screens/TenantRoutes/Classes/CRUD/[id]/T
 export type TenantRoutes = {
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
   createSubscription: { userId?: string },
-  students: { tenantIdParams: string };
+  students: undefined;
   classes: undefined;
   classProfile: { classId: string, tenantIdParams: string };
   tenantProfile: { tenantIdParams?: string };

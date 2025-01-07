@@ -3,6 +3,7 @@ import { ETargetType } from "src/enums/ETargetType";
 interface IPaginationDTO {
   search?: string;
   page?: number;
+  limit?: string;
 }
 
 

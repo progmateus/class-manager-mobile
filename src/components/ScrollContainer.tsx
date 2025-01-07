@@ -8,14 +8,14 @@ interface IProps {
   isRefreshing?: boolean;
 }
 
-export function ScrollContainer({ children, isRefreshing, onRefresh }: IProps) {
+export function ScrollContainer({ children, isRefreshing = false, onRefresh }: IProps) {
   return (
     <ScrollView
       flex={1}
       px={4}
       py={8}
       refreshControl={
-        <RefreshControl refreshing={isRefreshing ?? false} onRefresh={onRefresh} />
+        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
       }
     >
       {children}

@@ -1,5 +1,6 @@
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { api } from "./api";
+import { IPaginationDTO } from "@dtos/shared/IPaginationDTO";
 
 export function CreateSubscriptionService(tenantId: string, tenantPlanId: string, classId: string, userId?: string) {
   return api({
@@ -41,13 +42,14 @@ export function UpdateSubscriptionStatusService(tenantId: string, subscriptionId
   })
 }
 
-export function ListSubscriptionsService(tenantId: string, { page = 1, search = "" }: IPaginationDTO) {
+export function ListSubscriptionsService(tenantId: string, { page = 1, search = "", limit }: IPaginationDTO) {
   return api({
     url: `${tenantId}/subscriptions/`,
     method: 'get',
     params: {
       page,
-      search
+      search,
+      limit
     }
   })
 }

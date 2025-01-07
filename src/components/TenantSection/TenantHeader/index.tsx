@@ -30,7 +30,7 @@ export function TenantHeader() {
         </TouchableOpacity>
       </HStack>
       <HStack justifyContent="center" alignItems="center">
-        <Heading fontSize={34} textAlign="center" fontWeight="bold" color="white"> {balanceFormatted(1750.00)}  </Heading>
+        <Heading fontSize={34} textAlign="center" fontWeight="bold" color="white"> {balanceFormatted()}  </Heading>
       </HStack>
     </VStack>
   );
