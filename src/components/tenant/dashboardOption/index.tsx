@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { HStack, Text, useTheme, View } from "native-base";
+import { HStack, Text, useTheme, View, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 
 
@@ -11,12 +11,12 @@ interface IProps {
 export function DashboardOption({ icon, text, onPress }: IProps) {
   return (
     <TouchableOpacity onPress={onPress}>
-      <HStack bgColor="brand.600" py={5} w="40" pl={6} alignItems="center" rounded="md">
-        <View p={1} bgColor="brand.500" rounded="full" mr={4}>
+      <VStack alignItems="center" justifyContent="center" w="20" space={3}>
+        <View bgColor="coolGray.100" rounded="full" p={4}>
           {icon}
         </View>
-        <Text color="white">{text}</Text>
-      </HStack>
+        <Text color="black" textAlign="center" maxWidth="24" fontSize={12}>{text}</Text>
+      </VStack>
     </TouchableOpacity>
   )
 }

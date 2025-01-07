@@ -3,20 +3,23 @@ import { DashboardOption } from "@components/tenant/dashboardOption";
 import { Viewcontainer } from "@components/ViewContainer";
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
-import { Link, SimpleGrid, Text, View, VStack } from "native-base";
+import { HStack, Link, SimpleGrid, Text, View, VStack } from "native-base";
 import { BookBookmark, Clock, CurrencyDollar, GraduationCap, IdentificationBadge, MapPin, Money, SimCard } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
 import { TouchableOpacity } from "react-native";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { RefreshTenantSubscriptionService } from "src/services/tenantsService";
 import { fireSuccesToast } from "@utils/HelperNotifications";
+import { THEME } from "src/theme";
 
 
 export function Dashboard() {
   const { tenant, tenantUpdate } = useAuth()
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
-  const size = 18
-  const color = "white"
+  const size = 24
+
+  const { colors } = THEME;
+  const color = colors.brand['600']
 
 
 
@@ -73,17 +76,19 @@ export function Dashboard() {
         }
       </VStack>
       <Viewcontainer>
-        <SimpleGrid columns={2} spacingX={4} spacingY={2} flex={1} pl={3}>
-          <DashboardOption text="Alunos" icon={<GraduationCap size={size} color={color} />} onPress={() => navigation.navigate('students', { tenantIdParams: tenant.id })} />
-          <DashboardOption text="Turmas" icon={<BookBookmark size={size} color={color} />} onPress={() => navigation.navigate('classes')} />
-          <DashboardOption text="Professores" icon={<IdentificationBadge size={size} color={color} />} onPress={() => navigation.navigate('teachersList', { roleName: 'teacher' })} />
-          {/* <DashboardOption text="Inscrições" icon={<Receipt size={size} color={color} />} onPress={() => navigation.navigate('subscriptionProfile')} /> */}
-          <DashboardOption text="Planos" icon={<SimCard size={size} color={color} />} onPress={() => navigation.navigate('tenantPlansList')} />
-          <DashboardOption text="Jornadas" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('timesTablesList')} />
-          <DashboardOption text="Editar" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('updateTenant')} />
-          <DashboardOption text="Endereços" icon={<MapPin size={size} color={color} />} onPress={() => navigation.navigate('addressesList')} />
-          <DashboardOption text="Cobranças" icon={<CurrencyDollar size={size} color={color} />} onPress={() => navigation.navigate('invoicesList', { tenantIdParams: tenant.id })} />
-        </SimpleGrid>
+        <VStack px="8" space="14">
+          <HStack justifyContent="space-between">
+            <DashboardOption text="Turmas" icon={<BookBookmark size={size} color={color} />} onPress={() => navigation.navigate('classes')} />
+            <DashboardOption text="Planos" icon={<SimCard size={size} color={color} />} onPress={() => navigation.navigate('tenantPlansList')} />
+            <DashboardOption text="Professores" icon={<IdentificationBadge size={size} color={color} />} onPress={() => navigation.navigate('teachersList', { roleName: 'teacher' })} />
+          </HStack>
+          <HStack justifyContent="space-between">]
+            <DashboardOption text="Editar informações" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('updateTenant')} />
+            <DashboardOption text="Jornadas" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('timesTablesList')} />
+            <DashboardOption text="Endereços" icon={<MapPin size={size} color={color} />} onPress={() => navigation.navigate('addressesList')} />
+          </HStack>
+        </VStack>
+        {/* <DashboardOption text="Inscrições" icon={<Receipt size={size} color={color} />} onPress={() => navigation.navigate('subscriptionProfile')} /> */}
       </Viewcontainer>
     </View >
   )
