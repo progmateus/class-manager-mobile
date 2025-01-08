@@ -75,10 +75,10 @@ export function UpdateSubscriptionPlan() {
     setIsActing(true)
     UpdateSubscriptionPlanService(tenantId, subscriptionId, selectedPlanId).then(() => {
       fireSuccesToast('Plano alterado com sucesso!')
-      queryClient.cancelQueries({
+      queryClient.invalidateQueries({
         queryKey: ['get-subscription-profile', subscriptionId],
       })
-      queryClient.cancelQueries({
+      queryClient.invalidateQueries({
         queryKey: ['get-tenant-plans', tenant.id],
       }).then(() => {
         navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })

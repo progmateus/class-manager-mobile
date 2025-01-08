@@ -74,7 +74,7 @@ export function UpdateClassTimeTable() {
   }
 
   const onRefresh = () => {
-    queryClient.cancelQueries({
+    queryClient.invalidateQueries({
       queryKey: ['get-times-tables', tenant.id]
     })
   }

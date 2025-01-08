@@ -71,7 +71,7 @@ export function StudentsClassList() {
   }
 
   const onRefresh = () => {
-    queryClient.cancelQueries({
+    queryClient.invalidateQueries({
       queryKey: ['get-students-classes', tenantId, classId, search],
       exact: true
     })
