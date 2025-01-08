@@ -1,17 +1,12 @@
 import { TenantHeader } from "@components/TenantSection/TenantHeader";
 import { DashboardOption } from "@components/tenant/dashboardOption";
-import { Viewcontainer } from "@components/ViewContainer";
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
-import { Center, Heading, HStack, Link, ScrollView, SimpleGrid, Text, View, VStack } from "native-base";
-import { BookBookmark, CaretRight, Clock, CurrencyDollar, GraduationCap, IdentificationBadge, MapPin, Money, Pencil, SimCard } from "phosphor-react-native";
+import { Center, Heading, HStack, Link, ScrollView, Text, View, VStack } from "native-base";
+import { BookBookmark, CaretRight, Clock, IdentificationBadge, MapPin, Pencil, SimCard } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
 import { RefreshControl, TouchableOpacity } from "react-native";
-import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
-import { RefreshTenantSubscriptionService } from "src/services/tenantsService";
-import { fireSuccesToast } from "@utils/HelperNotifications";
 import { THEME } from "src/theme";
-import { ScrollContainer } from "@components/ScrollContainer";
 import { ListSubscriptionsService } from "src/services/subscriptionService";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
@@ -19,7 +14,6 @@ import { ListInvoicesService } from "src/services/invoiceService";
 import { ETargetType } from "src/enums/ETargetType";
 import { Avatar } from "@components/Avatar/Avatar";
 import { Loading } from "@components/Loading";
-import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
 import { InvoiceItem } from "@components/Items/InvoiceItem";
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 import Constants from "expo-constants";
@@ -133,7 +127,7 @@ export function Dashboard() {
 
                     )
                       : (
-                        <Center>
+                        <Center flex={1}>
                           <Text> Nenhum resultado encontrado</Text>
                         </Center>
                       )
@@ -172,7 +166,7 @@ export function Dashboard() {
                       </VStack>
                     )
                       : (
-                        <Center>
+                        <Center flex={1}>
                           <Text> Nenhum resultado encontrado</Text>
                         </Center>
                       )
