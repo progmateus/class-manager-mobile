@@ -6,14 +6,14 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { Center, Heading, HStack, Link, ScrollView, SimpleGrid, Text, View, VStack } from "native-base";
 import { BookBookmark, CaretRight, Clock, CurrencyDollar, GraduationCap, IdentificationBadge, MapPin, Money, Pencil, SimCard } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
-import { TouchableOpacity } from "react-native";
+import { RefreshControl, TouchableOpacity } from "react-native";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { RefreshTenantSubscriptionService } from "src/services/tenantsService";
 import { fireSuccesToast } from "@utils/HelperNotifications";
 import { THEME } from "src/theme";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { ListSubscriptionsService } from "src/services/subscriptionService";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { ListInvoicesService } from "src/services/invoiceService";
 import { ETargetType } from "src/enums/ETargetType";
@@ -22,27 +22,19 @@ import { Loading } from "@components/Loading";
 import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
 import { InvoiceItem } from "@components/Items/InvoiceItem";
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
+import Constants from "expo-constants";
 
 
 export function Dashboard() {
-  const { tenant, tenantUpdate } = useAuth()
+  const { tenant, refreshTenant } = useAuth()
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
   const size = 24
 
   const { colors } = THEME;
   const color = colors.brand['600']
+  const statusBarHeight = Constants.statusBarHeight;
 
-
-
-  const handleRefreshTenantsubscription = async () => {
-    try {
-      const { data } = await RefreshTenantSubscriptionService(tenant.id)
-      tenantUpdate({ ...tenant, subscriptionStatus: data.data.subscriptionStatus })
-      fireSuccesToast('Assinatura gerada com sucesso')
-    } catch (err) {
-      console.log('err: ', err)
-    }
-  }
+  const queryClient = useQueryClient();
 
   const loadSubscriptions = async () => {
     try {
@@ -71,54 +63,29 @@ export function Dashboard() {
     }
   }
 
-  const { data: invoicesPreviews, isLoading: isLoadingInvoices, } = useQuery<IInvoiceDTO[]>({
+  const { data: invoicesPreviews, isLoading: isLoadingInvoices } = useQuery<IInvoiceDTO[]>({
     queryKey: ['get-invoices-preview', tenant.id],
     queryFn: loadInvoices,
   })
 
+  const onRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-subscriptions-preview', tenant.id]
+    })
+    queryClient.invalidateQueries({
+      queryKey: ['get-invoices-preview', tenant.id]
+    })
+    refreshTenant()
+  }
+
 
 
   return (
-    <ScrollView flex={1} bgColor="brand.600">
+    <ScrollView flex={1} bgColor="brand.600" refreshControl={
+      <RefreshControl refreshing={isLoadingSubscriptions && isLoadingInvoices} onRefresh={onRefresh} />
+    }>
       <TenantHeader />
       <VStack space={1}>
-        {
-          !tenant.stripeChargesEnabled && (
-            <TouchableOpacity>
-              <Link href={tenant.stripeOnboardUrl} px={4} py={3} bgColor="yellow.400">
-                <Text fontSize="sm" fontFamily="body" color="coolGray.700">
-                  Confirme a sua identidade para começar a receber pagamentos.
-                </Text>
-              </Link>
-            </TouchableOpacity>
-          )
-        }
-
-        {
-          tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE_EXPIRED && (
-            <TouchableOpacity onPress={handleRefreshTenantsubscription}>
-              <View px={4} py={3} bgColor="red.400">
-                <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                  sua assinatura expirou. Clique aqui para gerar uma nova assinatura.
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )
-        }
-
-
-        {
-          tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE && (
-            <TouchableOpacity>
-              <View px={4} py={3} bgColor="brand.200">
-                <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                  Pague a primeira cobrança em até 24 horas para que a sua assinatura seja ativada.
-                </Text>
-              </View>
-
-            </TouchableOpacity>
-          )
-        }
       </VStack>
       <View bgColor="white" flex={1} borderTopRadius={30} px={4} pt={10}>
         <VStack px="8" space="14">
