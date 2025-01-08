@@ -19,7 +19,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import * as ImagePicker from "expo-image-picker"
 import * as FileSystem from "expo-file-system"
 
@@ -39,7 +39,7 @@ export function UpdateTenant() {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedSocialOptionId, setSelectedSocialOptionId] = useState("")
   const [isSelectSocialOpen, setIsSelectSocialOpen] = useState(false)
-  const [tenant, setTenant] = useState<ITenantProfileDTO>({} as ITenantProfileDTO)
+  const [tenant, setTenant] = useState<ITenantDTO>({} as ITenantDTO)
 
 
   const { tenant: tenantcontext, refreshTenant, tenantUpdate } = useAuth();

@@ -2,7 +2,7 @@ import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { ITenantPlanDTO } from "../tenants/ITenantPlanDTO";
 import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO";
 import { ETargetType } from "src/enums/ETargetType";
 
 export interface ISubscriptionProfileDTO {

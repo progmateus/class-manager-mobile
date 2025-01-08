@@ -16,7 +16,7 @@ import { FacebookLogo, Images, InstagramLogo, Plus, PlusCircle, TrashSimple, Wha
 import { THEME } from "src/theme";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO";
 import { EAuthType } from "src/enums/EAuthType";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { HasRole } from "@utils/HasRole";

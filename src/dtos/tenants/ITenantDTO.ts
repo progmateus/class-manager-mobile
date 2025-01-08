@@ -3,8 +3,9 @@ import { ETenantStatus } from "src/enums/ETenantStatus";
 import { ILinkDTO } from "./ILinkDTO";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { IImageDTO } from "./IImageDTO";
+import { IExternalBankAccountDTO } from "./IExternalBankAccountDTO";
 
-interface ITenantProfileDTO {
+interface ITenantDTO {
   id: string;
   name: string;
   document: string;
@@ -18,6 +19,7 @@ interface ITenantProfileDTO {
   avatar: string;
   links: ILinkDTO[];
   images: IImageDTO[];
+  externalsBanksAccounts: IExternalBankAccountDTO[];
   description?: string;
   stripeChargesEnabled: boolean;
   stripeOnboardUrl: string;
@@ -25,4 +27,4 @@ interface ITenantProfileDTO {
   updatedAt?: string;
 }
 
-export { ITenantProfileDTO }
+export { ITenantDTO }

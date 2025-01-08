@@ -1,4 +1,4 @@
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO"
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO"
 import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 
 export type IAddressDTO = {

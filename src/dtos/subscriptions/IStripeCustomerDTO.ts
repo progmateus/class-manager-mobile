@@ -1,5 +1,5 @@
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
-import { ITenantPreviewDTO } from "@dtos/tenants/ITenantPreviewDTO";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { EStripeCustomerType } from "src/enums/EStripeCustomerType";
 import { ETargetType } from "src/enums/ETargetType";
 
@@ -9,7 +9,7 @@ export interface ISubscriptionPreviewDTO {
   tenantId: string;
   targetType: ETargetType;
   user?: IUserPreviewDTO;
-  tenant?: ITenantPreviewDTO;
+  tenant?: ITenantDTO;
   createdAt: Date;
   updatedAt: Date;
 }

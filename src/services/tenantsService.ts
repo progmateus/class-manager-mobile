@@ -1,6 +1,6 @@
 import { ICreatetenantDTO } from "@dtos/tenants/ICreateTenantDTO";
 import { api } from "./api";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO";
 
 export function CreateTenantservice({ name, username, document, email, phone, planId, description }: ICreatetenantDTO) {
   return api({

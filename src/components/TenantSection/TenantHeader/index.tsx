@@ -32,43 +32,45 @@ export function TenantHeader() {
 
   return (
     <VStack space={6} pb={10} mt={statusBarHeight + 14}>
-      {
-        !tenant.stripeChargesEnabled && (
-          <TouchableOpacity>
-            <Link href={tenant.stripeOnboardUrl} px={4} py={3} bgColor="yellow.400">
-              <Text fontSize="sm" fontFamily="body" color="coolGray.700">
-                Confirme a sua identidade para começar a receber pagamentos.
-              </Text>
-            </Link>
-          </TouchableOpacity>
-        )
-      }
+      <VStack space={1}>
+        {
+          !tenant.stripeChargesEnabled && (
+            <TouchableOpacity>
+              <Link href={tenant.stripeOnboardUrl} px={4} py={3} bgColor="yellow.400">
+                <Text fontSize="sm" fontFamily="body" color="coolGray.700">
+                  Confirme a sua identidade para começar a receber pagamentos.
+                </Text>
+              </Link>
+            </TouchableOpacity>
+          )
+        }
 
-      {
-        tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE_EXPIRED && (
-          <TouchableOpacity onPress={handleRefreshTenantsubscription}>
-            <View px={4} py={3} bgColor="red.400">
-              <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                sua assinatura expirou. Clique aqui para gerar uma nova assinatura.
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )
-      }
+        {
+          tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE_EXPIRED && (
+            <TouchableOpacity onPress={handleRefreshTenantsubscription}>
+              <View px={4} py={3} bgColor="red.400">
+                <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                  sua assinatura expirou. Clique aqui para gerar uma nova assinatura.
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )
+        }
 
 
-      {
-        tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE && (
-          <TouchableOpacity>
-            <View px={4} py={3} bgColor="brand.200">
-              <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                Pague a primeira cobrança em até 24 horas para que a sua assinatura seja ativada.
-              </Text>
-            </View>
+        {
+          tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE && (
+            <TouchableOpacity>
+              <View px={4} py={3} bgColor="brand.200">
+                <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                  Pague a primeira cobrança em até 24 horas para que a sua assinatura seja ativada.
+                </Text>
+              </View>
 
-          </TouchableOpacity>
-        )
-      }
+            </TouchableOpacity>
+          )
+        }
+      </VStack>
       <HStack pb={4} px={6} alignItems="center" space={2}>
         <Avatar src={tenant.avatar} alt="Foto de perfil da empresa" type="tenant" />
         <VStack flex={1} ml={2}>

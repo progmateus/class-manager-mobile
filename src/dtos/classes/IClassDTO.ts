@@ -1,13 +1,13 @@
 import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { ITeacherClassDTO } from "./TeacherClassDTO";
-import { ITenantPreviewDTO } from "@dtos/tenants/ITenantPreviewDTO";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { IAddressDTO } from "@dtos/shared/IAddressDTO";
 
 export interface IClassDTO {
   id: string;
   name: string;
   tenantId: string;
-  tenant?: ITenantPreviewDTO;
+  tenant?: ITenantDTO;
   timeTableId?: string;
   addressId?: string;
   teachersClasses: ITeacherClassDTO[];

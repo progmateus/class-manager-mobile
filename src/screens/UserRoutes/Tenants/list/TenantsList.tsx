@@ -10,7 +10,7 @@ import { ListTenantsService } from "src/services/tenantsService";
 import { debounce } from "lodash";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { TenantItemSkeleton } from "@components/skeletons/Items/TenantItemSkeleton";
-import { ITenantPreviewDTO } from "@dtos/tenants/ITenantPreviewDTO";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { Loading } from "@components/Loading";
 
 const statusBarHeight = Constants.statusBarHeight;
@@ -28,7 +28,7 @@ export function TenantsList() {
     }
   }
 
-  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<ITenantPreviewDTO[]>({
+  const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<ITenantDTO[]>({
     queryKey: ['get-tenants', search],
     queryFn: ({ pageParam }) => loadTenants(pageParam),
     initialPageParam: 1,

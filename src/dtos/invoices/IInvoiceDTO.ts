@@ -1,6 +1,6 @@
 import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPreviewDTO";
 import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO";
-import { ITenantPreviewDTO } from "@dtos/tenants/ITenantPreviewDTO";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
 import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
 import { ETargetType } from "src/enums/ETargetType";
@@ -22,7 +22,7 @@ export type IInvoiceDTO = {
     user?: IUserPreviewDTO;
     tenantPlan?: ITenantPlanDTO;
     subscription?: ISubscriptionPreviewDTO;
-    tenant?: ITenantPreviewDTO;
+    tenant?: ITenantDTO;
     createdAt: Date;
     updatedAt: Date;
 }

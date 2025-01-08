@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TENANT_STORAGE } from "./storageConfig";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO";
 
 
 export async function storageTenantSave(tenant: ITenantProfileDTO) {

@@ -1,6 +1,6 @@
 import { IRoleDTO } from "./IRoleDTO";
 import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
-import { ITenantPreviewDTO } from "@dtos/tenants/ITenantPreviewDTO";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 
 interface IUsersRolesDTO {
   id: string;
@@ -9,6 +9,6 @@ interface IUsersRolesDTO {
   tenantId: string;
   user: IUserPreviewDTO;
   role: IRoleDTO;
-  tenant: ITenantPreviewDTO;
+  tenant: ITenantDTO;
 }
 export { IUsersRolesDTO }

@@ -12,7 +12,7 @@ import { storageTenantGet, storageTenantRemove, storageTenantSave } from "@stora
 import { AxiosError } from "axios";
 import { AppError } from "@utils/errors/AppError";
 import { ValidationError } from "@utils/errors/ValidationError";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantProfileDTO";
+import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO";
 import { EAuthType } from "src/enums/EAuthType";
 import { useQueryClient } from "@tanstack/react-query";
 
