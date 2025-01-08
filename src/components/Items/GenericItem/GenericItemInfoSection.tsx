@@ -8,7 +8,7 @@ type IProps = {
 
 export function GenericItemInfoSection({ children }: IProps) {
   return (
-    <VStack alignItems="center" space={1}>
+    <VStack space={1}>
       {children}
     </VStack>
   )

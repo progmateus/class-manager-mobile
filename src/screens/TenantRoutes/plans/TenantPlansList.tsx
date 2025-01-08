@@ -6,9 +6,9 @@ import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query"
 import { FlatList, Text, View } from "native-base"
-import { Barbell, Money, Plus, SimCard } from "phosphor-react-native"
+import { Barbell, Lightning, Money, Plus, SimCard } from "phosphor-react-native"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
@@ -16,6 +16,7 @@ export function TenantPlansList() {
   const { tenant } = useAuth()
   const tenantId = tenant?.id
   const navigation = useNavigation<TenantNavigatorRoutesProps>();
+  const queryClient = useQueryClient()
 
   const loadTenantPlans = async (page: number) => {
     try {
@@ -55,6 +56,13 @@ export function TenantPlansList() {
   const handleClickPlus = () => {
     navigation.navigate('createTenantPlan')
   }
+
+  const onRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['get-tenant-plans', tenantId],
+      exact: true
+    })
+  }
   return (
     <View flex={1}>
       <PageHeader title="Planos" rightIcon={tenantId ? Plus : null} rightAction={handleClickPlus} />
@@ -79,8 +87,8 @@ export function TenantPlansList() {
                     <GenericItem.Content title={item.name} caption={item.description} />
                     <GenericItem.InfoSection>
                       <GenericItem.InfoContainer >
-                        <Barbell size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text="7" />
+                        <Lightning size={18} color="#6b7280" />
+                        <GenericItem.InfoValue text={String(item.timesOfweek)} />
                       </GenericItem.InfoContainer>
                       <GenericItem.InfoContainer >
                         <Money size={18} color="#6b7280" />
@@ -95,6 +103,8 @@ export function TenantPlansList() {
                 ListEmptyComponent={
                   <Text fontFamily="body" textAlign="center"> Nenhum resultado encontrado </Text>
                 }
+                refreshing={isLoading}
+                onRefresh={onRefresh}
               >
               </FlatList>
             )

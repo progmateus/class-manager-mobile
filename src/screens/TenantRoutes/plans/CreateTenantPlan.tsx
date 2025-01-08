@@ -55,8 +55,9 @@ export function CreateTenantPlan() {
     const { name, description, price, timesOfweek } = data;
     CreateTenantPlanService(tenantId, name, description, Number(timesOfweek), price.replaceAll(/[A-z\$\.\-\,]/g, "").replace(/([0-9]+)([0-9]{2})/, '$1.$2')).then(async () => {
       fireSuccesToast('Plano criado')
-      await queryClient.cancelQueries({
-        queryKey: ['get-tenant-plans', tenantId]
+      await queryClient.invalidateQueries({
+        queryKey: ['get-tenant-plans', tenantId],
+        exact: true
       })
       navigation.navigate('tenantPlansList')
       reset()

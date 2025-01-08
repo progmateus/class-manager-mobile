@@ -117,10 +117,12 @@ export function Dashboard() {
                         flex={1}>
                         {
                           subscriptionsPreviews.map((subscription) => (
-                            <VStack alignItems="center" space={1} w="24" key={subscription.id}>
-                              <Avatar w={12} h={12} src={subscription.user?.avatar} />
-                              <Text textAlign="center" fontSize={12}>{subscription.user?.name}</Text>
-                            </VStack>
+                            <TouchableOpacity onPress={() => navigation.navigate('subscriptionProfile', { subscriptionId: subscription.id, tenantIdParams: subscription.tenantId })}>
+                              <VStack key={subscription.id} alignItems="center" space={1} w="24">
+                                <Avatar w={12} h={12} src={subscription.user?.avatar} />
+                                <Text textAlign="center" fontSize={12}>{subscription.user?.name}</Text>
+                              </VStack>
+                            </TouchableOpacity>
                           ))
                         }
                       </HStack>
@@ -155,7 +157,7 @@ export function Dashboard() {
                 <VStack flex={1} space={2}>
                   {
                     tenant.externalsBanksAccounts.map((bankAccount) => (
-                      <HStack alignItems="center" px={4} py={3} borderRadius={7} borderWidth={0.7} borderColor="coolGray.300">
+                      <HStack key={bankAccount.id} alignItems="center" px={4} py={3} borderRadius={7} borderWidth={0.7} borderColor="coolGray.300">
                         <View bgColor="coolGray.200" p={2} borderRadius={7}>
                           <Bank />
                         </View>

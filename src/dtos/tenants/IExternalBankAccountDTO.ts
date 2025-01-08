@@ -2,6 +2,7 @@ import { EExternalBankAccountStatus } from "src/enums/EExternalBankAccountStatus
 import { ITenantDTO } from "./ITenantDTO";
 
 interface IExternalBankAccountDTO {
+  id: string;
   stripeExternalBankAccountId: string;
   name: string;
   country: string;
