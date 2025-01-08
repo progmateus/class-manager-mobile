@@ -82,7 +82,7 @@ export function Dashboard() {
       <VStack space={1}>
       </VStack>
       <View bgColor="white" flex={1} borderTopRadius={30} px={4} pt={10}>
-        <VStack px="8" space="14">
+        <VStack px="8" space="10">
           <HStack justifyContent="space-between">
             <DashboardOption text="Turmas" icon={<BookBookmark size={size} color={color} />} onPress={() => navigation.navigate('classes')} />
             <DashboardOption text="Planos" icon={<SimCard size={size} color={color} />} onPress={() => navigation.navigate('tenantPlansList')} />
@@ -117,8 +117,8 @@ export function Dashboard() {
                         flex={1}>
                         {
                           subscriptionsPreviews.map((subscription) => (
-                            <TouchableOpacity onPress={() => navigation.navigate('subscriptionProfile', { subscriptionId: subscription.id, tenantIdParams: subscription.tenantId })}>
-                              <VStack key={subscription.id} alignItems="center" space={1} w="24">
+                            <TouchableOpacity key={subscription.id} onPress={() => navigation.navigate('subscriptionProfile', { subscriptionId: subscription.id, tenantIdParams: subscription.tenantId })}>
+                              <VStack alignItems="center" space={1} w="24">
                                 <Avatar w={12} h={12} src={subscription.user?.avatar} />
                                 <Text textAlign="center" fontSize={12}>{subscription.user?.name}</Text>
                               </VStack>
