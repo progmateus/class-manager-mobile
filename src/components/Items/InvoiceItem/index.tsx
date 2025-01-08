@@ -128,7 +128,7 @@ export function InvoiceItem({ invoice }: IProps) {
           <Text color={color} fontSize="sm" mr={2}>{priceFormatted(invoice.amount)}</Text>
 
           {
-            isInvoiceAdmin && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && (
+            isInvoiceAdmin && hasInvoiceStatus([EInvoiceStatus.OPEN, EInvoiceStatus.UNPAID]) && invoice.targetType == ETargetType.USER && (
               <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
                 <Icon as={CaretDown} color="coolGray.600" />
               </TouchableOpacity>
