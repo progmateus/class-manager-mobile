@@ -3,7 +3,7 @@ import { DashboardOption } from "@components/tenant/dashboardOption";
 import { useNavigation } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { Center, Heading, HStack, Link, ScrollView, Text, View, VStack } from "native-base";
-import { BookBookmark, CaretRight, Clock, IdentificationBadge, MapPin, Pencil, SimCard } from "phosphor-react-native";
+import { Bank, BookBookmark, CaretRight, Clock, IdentificationBadge, MapPin, Pencil, SimCard } from "phosphor-react-native";
 import { useAuth } from "@hooks/useAuth";
 import { RefreshControl, TouchableOpacity } from "react-native";
 import { THEME } from "src/theme";
@@ -95,7 +95,7 @@ export function Dashboard() {
           </HStack>
         </VStack>
         <VStack mt={8}>
-          <Heading fontFamily="heading" mb={4} fontSize="md"> Alunos</Heading>
+          <Heading fontFamily="heading" mb={4} fontSize="md">Alunos</Heading>
           <HStack>
             {
               isLoadingSubscriptions ? (
@@ -128,7 +128,7 @@ export function Dashboard() {
                     )
                       : (
                         <Center flex={1}>
-                          <Text> Nenhum resultado encontrado</Text>
+                          <Text>Nenhum resultado encontrado</Text>
                         </Center>
                       )
                   }
@@ -142,13 +142,45 @@ export function Dashboard() {
                     <CaretRight size={23} />
                   </Center>
                 </View>
-                <Text textAlign="center" fontSize={12}> Ver mais</Text>
+                <Text textAlign="center" fontSize={12}>Ver mais</Text>
               </VStack>
             </TouchableOpacity>
           </HStack>
         </VStack>
-        <VStack pb={20} mt={8}>
-          <Heading fontFamily="heading" mb={4} fontSize="md"> Ultima cobrança</Heading>
+        <VStack mt={8}>
+          <Heading fontFamily="heading" mb={4} fontSize="md">Conta bancaria</Heading>
+          <HStack>
+            {
+              tenant.externalsBanksAccounts && tenant.externalsBanksAccounts.length > 0 ? (
+                <VStack flex={1} space={2}>
+                  {
+                    tenant.externalsBanksAccounts.map((bankAccount) => (
+                      <HStack alignItems="center" px={4} py={3} borderRadius={7} borderWidth={0.7} borderColor="coolGray.300">
+                        <View bgColor="coolGray.200" p={2} borderRadius={7}>
+                          <Bank />
+                        </View>
+                        <VStack flex={1} ml={4} space={1.5}>
+                          <Text> {bankAccount.name} </Text>
+                          <HStack space={4}>
+                            <Text color="coolGray.500" fontSize={14}>• {bankAccount.routingNumber}</Text>
+                            <Text color="coolGray.500" fontSize={14}>• ***{bankAccount.last4} </Text>
+                          </HStack>
+                        </VStack>
+                      </HStack>
+                    ))
+                  }
+                </VStack>
+              )
+                : (
+                  <Center flex={1} py={8}>
+                    <Text>Nenhum resultado encontrado</Text>
+                  </Center>
+                )
+            }
+          </HStack>
+        </VStack>
+        <VStack mt={8} pb={20}>
+          <Heading fontFamily="heading" mb={4} fontSize="md">Ultima cobrança</Heading>
           <HStack>
             {
               isLoadingInvoices ? (
@@ -166,7 +198,7 @@ export function Dashboard() {
                       </VStack>
                     )
                       : (
-                        <Center flex={1}>
+                        <Center flex={1} py={8}>
                           <Text> Nenhum resultado encontrado</Text>
                         </Center>
                       )

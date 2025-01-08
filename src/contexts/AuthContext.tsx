@@ -12,19 +12,19 @@ import { storageTenantGet, storageTenantRemove, storageTenantSave } from "@stora
 import { AxiosError } from "axios";
 import { AppError } from "@utils/errors/AppError";
 import { ValidationError } from "@utils/errors/ValidationError";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO";
 import { EAuthType } from "src/enums/EAuthType";
 import { useQueryClient } from "@tanstack/react-query";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 
 
 export type AuthContextDataProps = {
   user: IUserProfileDTO;
-  tenant: ITenantProfileDTO;
+  tenant: ITenantDTO;
   authenticationType: EAuthType;
   isLoadingData: boolean;
   singIn: (email: string, password: string) => Promise<void>;
   userUpdate: (userUpdated: IUserProfileDTO) => Promise<void>;
-  tenantUpdate: (tenantData: ITenantProfileDTO) => Promise<void>;
+  tenantUpdate: (tenantData: ITenantDTO) => Promise<void>;
   signOut: () => Promise<void>;
   authenticateTenant: (tenantId: string) => Promise<void>;
   signOutTenant: () => Promise<void>
@@ -42,7 +42,7 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const [user, setUser] = useState<IUserProfileDTO>({} as IUserProfileDTO);
-  const [tenant, setTenant] = useState<ITenantProfileDTO>({} as ITenantProfileDTO);
+  const [tenant, setTenant] = useState<ITenantDTO>({} as ITenantDTO);
   const [authenticationType, setAuthenticationType] = useState<EAuthType>(EAuthType.USER);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const queryClient = useQueryClient()
@@ -61,7 +61,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     await storageUserSave(user);
   }
 
-  async function tenantUpdate(tenantData: Partial<ITenantProfileDTO>) {
+  async function tenantUpdate(tenantData: Partial<ITenantDTO>) {
     setTenant(prevState => { return { ...prevState, ...tenantData } });
     await storageTenantSave(tenant);
   }
@@ -177,7 +177,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function signOutTenant() {
     setIsLoadingData(true);
     authenticationTypeUpdate(EAuthType.USER)
-    setTenant({} as ITenantProfileDTO);
+    setTenant({} as ITenantDTO);
     await storageTenantRemove()
     setIsLoadingData(false)
   }

@@ -1,6 +1,6 @@
 import { ICreatetenantDTO } from "@dtos/tenants/ICreateTenantDTO";
 import { api } from "./api";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 
 export function CreateTenantservice({ name, username, document, email, phone, planId, description }: ICreatetenantDTO) {
   return api({
@@ -43,7 +43,7 @@ export function GetTenantService(tenantId: string) {
   })
 }
 
-export function UpdateTenantSertvice({ name, description, email, document, links }: Pick<ITenantProfileDTO, "name" | "description" | "email" | "document" | "links">, tenantId: string) {
+export function UpdateTenantSertvice({ name, description, email, document, links }: Pick<ITenantDTO, "name" | "description" | "email" | "document" | "links">, tenantId: string) {
   return api({
     url: `/tenants/${tenantId}`,
     method: 'put',

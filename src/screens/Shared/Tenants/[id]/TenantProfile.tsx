@@ -16,7 +16,7 @@ import { FacebookLogo, Images, InstagramLogo, Plus, PlusCircle, TrashSimple, Wha
 import { THEME } from "src/theme";
 import { ILinkDTO } from "@dtos/tenants/ILinkDTO";
 import { ELinkType } from "src/enums/ELinkType";
-import { ITenantProfileDTO } from "@dtos/tenants/ITenantDTO";
+import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { EAuthType } from "src/enums/EAuthType";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { HasRole } from "@utils/HasRole";
@@ -59,7 +59,7 @@ export function TenantProfile() {
     }
   }
 
-  const { data: tenantProfile, isLoading } = useQuery<ITenantProfileDTO>({
+  const { data: tenantProfile, isLoading } = useQuery<ITenantDTO>({
     queryKey: ['get-tenant-profile', tenantId],
     queryFn: loadTenantProfile
   })
@@ -174,7 +174,7 @@ export function TenantProfile() {
       fireInfoToast('Imagem removida com sucesso')
       setSelectedImageId("")
       setIsOpen(false)
-      await queryClient.setQueryData(['get-tenant-profile', tenantId], (oldData: ITenantProfileDTO) => {
+      await queryClient.setQueryData(['get-tenant-profile', tenantId], (oldData: ITenantDTO) => {
         return { ...oldData, images: oldData.images.filter(x => x.id !== selectedImageId) }
       })
     })
