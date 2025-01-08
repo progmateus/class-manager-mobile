@@ -1,3 +1,4 @@
+import { EExternalBankAccountStatus } from "src/enums/EExternalBankAccountStatus";
 import { ITenantDTO } from "./ITenantDTO";
 
 interface IExternalBankAccountDTO {
@@ -7,7 +8,7 @@ interface IExternalBankAccountDTO {
   currency: string;
   last4: string;
   routingNumber: string;
-  status: number
+  status: EExternalBankAccountStatus
   tenant?: ITenantDTO;
   createdAt: Date
   updatedAt: Date

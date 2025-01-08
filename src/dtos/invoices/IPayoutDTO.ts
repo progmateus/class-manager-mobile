@@ -1,4 +1,5 @@
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
+import { EPayoutStatus } from "src/enums/EPayoutStatus";
 
 export type IPayoutDTO = {
   id: string;
@@ -6,7 +7,7 @@ export type IPayoutDTO = {
   amount: number;
   currency: string;
   tenantId: string;
-  status: number;
+  status: EPayoutStatus;
   tenant?: ITenantDTO;
   createdAt: Date;
   updatedAt: Date;
