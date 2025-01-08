@@ -7,7 +7,7 @@ import { useTheme } from "native-base";
 import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/SubscriptionsList";
 import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
-import { BookBookmark, Buildings, Calendar, GraduationCap, House, UserCircle } from "phosphor-react-native";
+import { BookBookmark, Buildings, Calendar, GraduationCap, House, Receipt, UserCircle } from "phosphor-react-native";
 import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
 import { CreateClass } from "@screens/TenantRoutes/Classes/CRUD/CreateClass";
@@ -118,11 +118,12 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="students"
-        component={SubscriptionsList}
+        name="invoicesList"
+        initialParams={{}}
+        component={InvoicesList}
         options={{
           tabBarIcon: ({ color }) => (
-            <GraduationCap color={color} size={iconSize} />
+            <Receipt color={color} size={iconSize} />
           )
         }}
       />
@@ -135,6 +136,14 @@ export function TenantRoutes() {
           tabBarIcon: ({ color }) => (
             <Buildings color={color} size={iconSize} />
           )
+        }}
+      />
+
+      <Screen
+        name="students"
+        component={SubscriptionsList}
+        options={{
+          tabBarButton: () => (null)
         }}
       />
 
@@ -319,13 +328,6 @@ export function TenantRoutes() {
       <Screen
         name="updateClassAddress"
         component={UpdateClassAddress}
-        options={{ tabBarButton: () => (null) }}
-      />
-
-      <Screen
-        name="invoicesList"
-        initialParams={{}}
-        component={InvoicesList}
         options={{ tabBarButton: () => (null) }}
       />
 
