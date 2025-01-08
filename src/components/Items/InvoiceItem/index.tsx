@@ -15,6 +15,7 @@ import { Loading } from "@components/Loading";
 import { Button } from "@components/Button";
 import { useQueryClient } from "@tanstack/react-query";
 import { ETargetType } from "src/enums/ETargetType";
+import { EAuthType } from "src/enums/EAuthType";
 
 
 interface IProps {
@@ -27,7 +28,7 @@ export function InvoiceItem({ invoice }: IProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { sizes, colors } = THEME;
-  const { user } = useAuth()
+  const { user, authenticationType } = useAuth()
 
   const queryClient = useQueryClient();
 
@@ -117,7 +118,11 @@ export function InvoiceItem({ invoice }: IProps) {
           <Icon as={invoice.status === EInvoiceStatus.OPEN ? Warning : invoice.status === EInvoiceStatus.UNPAID ? XCircle : CheckCircle} color={color} />
           <VStack flex={1} ml={2}>
             <Heading fontFamily="heading" fontSize="sm">{formatDate(invoice.expiresAt)}</Heading>
-            <Text color="coolGray.500" fontSize="sm" fontWeight="light">{invoice.tenant?.name} </Text>
+            {
+              authenticationType == EAuthType.USER && (
+                <Text color="coolGray.500" fontSize="sm" fontWeight="light">{invoice.tenant?.name} </Text>
+              )
+            }
             <Text color={color} fontSize="sm" fontWeight="light">{convertBillStatus(invoice.status).label} </Text>
           </VStack>
           <Text color={color} fontSize="sm" mr={2}>{priceFormatted(invoice.amount)}</Text>
