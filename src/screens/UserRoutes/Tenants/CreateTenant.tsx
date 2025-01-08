@@ -18,8 +18,9 @@ import { useAuth } from "@hooks/useAuth";
 import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 import { useQueryClient } from "@tanstack/react-query";
 import { TextArea } from "@components/form/TextArea";
+import { isValidCNPJ } from "@utils/isValidCNPJ";
 
-const documentRegex = /([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})/igm
+const documentRegex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/igm
 const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm
 const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
 
@@ -126,7 +127,7 @@ export function CreateTenant() {
     }).format(price)
   }
 
-  const verifyDataTab = async () => {
+  const verifyDataTab = async (): Promise<boolean> => {
     await trigger(["name", "document", "email", "phone"])
     const nameState = getFieldState("name")
     const documentState = getFieldState("document")
@@ -147,7 +148,7 @@ export function CreateTenant() {
     return true
   }
 
-  const verifyUsernameTab = async () => {
+  const verifyUsernameTab = async (): Promise<boolean> => {
     await trigger("username")
     const isValiUserName = getFieldState("username")
     if (isValiUserName.invalid) {
@@ -165,7 +166,9 @@ export function CreateTenant() {
   }
 
   const handleContinue = async () => {
-    if (isSubimiting) return
+    if (isSubimiting) {
+      return
+    }
     setIsSubmiting(true)
     if (tab === "username") {
       if (!await verifyUsernameTab()) {
@@ -211,12 +214,11 @@ export function CreateTenant() {
       })
       setTab("username")
     }
-
-
   }
 
 
   const handleNextTab = () => {
+    console.log('handleNextTab')
     if (tab == "username") {
       setPercentage("50")
       setTab("data")

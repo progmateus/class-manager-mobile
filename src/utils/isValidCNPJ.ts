@@ -1,5 +1,4 @@
-function isValidCNPJ(cnpj: any) {
-
+export const isValidCNPJ = (cnpj: any) => {
   cnpj = cnpj.replace(/[^\d]+/g, '');
 
   if (cnpj == '') return false;
@@ -49,5 +48,4 @@ function isValidCNPJ(cnpj: any) {
     return false;
 
   return true;
-
 }
