@@ -18,6 +18,10 @@ import { ISubscriptionPreviewDTO } from "@dtos/subscriptions/ISubscriptionPrevie
 import { ListInvoicesService } from "src/services/invoiceService";
 import { ETargetType } from "src/enums/ETargetType";
 import { Avatar } from "@components/Avatar/Avatar";
+import { Loading } from "@components/Loading";
+import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
+import { InvoiceItem } from "@components/Items/InvoiceItem";
+import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 
 
 export function Dashboard() {
@@ -58,7 +62,8 @@ export function Dashboard() {
     try {
       const { data } = await ListInvoicesService({
         tenantId: tenant.id,
-        targetTypes: [ETargetType.TENANT]
+        targetTypes: [ETargetType.TENANT],
+        limit: "1"
       })
       return data.data
     } catch (err) {
@@ -66,7 +71,7 @@ export function Dashboard() {
     }
   }
 
-  const { data: invoicesPreviews, isLoading: isLoadingInvoices, } = useQuery<ISubscriptionPreviewDTO[]>({
+  const { data: invoicesPreviews, isLoading: isLoadingInvoices, } = useQuery<IInvoiceDTO[]>({
     queryKey: ['get-invoices-preview', tenant.id],
     queryFn: loadInvoices,
   })
@@ -136,8 +141,8 @@ export function Dashboard() {
                 isLoadingSubscriptions ? (
                   <HStack justifyContent="space-evenly" flex={1}>
                     {
-                      [1, 2, 3].map(() => (
-                        <VStack justifyContent="center" alignItems="center" space={1}>
+                      [1, 2, 3].map((item) => (
+                        <VStack justifyContent="center" alignItems="center" space={1} key={item}>
                           <Avatar w={12} h={12} />
                           <View w="16" h="3" bgColor="coolGray.300" rounded="xs" />
                         </VStack>
@@ -152,7 +157,7 @@ export function Dashboard() {
                           flex={1}>
                           {
                             subscriptionsPreviews.map((subscription) => (
-                              <VStack alignItems="center" space={1} w="24">
+                              <VStack alignItems="center" space={1} w="24" key={subscription.id}>
                                 <Avatar w={12} h={12} src={subscription.user?.avatar} />
                                 <Text textAlign="center" fontSize={12}>{subscription.user?.name}</Text>
                               </VStack>
@@ -182,7 +187,36 @@ export function Dashboard() {
               </TouchableOpacity>
             </HStack>
           </VStack>
-          {/* <DashboardOption text="Inscrições" icon={<Receipt size={size} color={color} />} onPress={() => navigation.navigate('subscriptionProfile')} /> */}
+          <VStack pb={8}>
+            <Heading fontFamily="heading" mb={4} fontSize="md"> Ultimas cobranças</Heading>
+            <HStack>
+              {
+                isLoadingInvoices ? (
+                  <Loading />
+                ) : (
+                  <>
+                    {
+                      invoicesPreviews && invoicesPreviews.length > 0 ? (
+                        <VStack flex={1} space={2}>
+                          {
+                            invoicesPreviews.map((invoice) => (
+                              <InvoiceItem key={invoice.id} invoice={invoice} />
+                            ))
+                          }
+                        </VStack>
+
+                      )
+                        : (
+                          <Center>
+                            <Text> Nenhum resultado encontrado</Text>
+                          </Center>
+                        )
+                    }
+                  </>
+                )
+              }
+            </HStack>
+          </VStack>
         </ScrollContainer>
       </View>
     </View >
