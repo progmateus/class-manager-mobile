@@ -42,18 +42,6 @@ export function UpdateUserService({ name, email, document, phone }: IUpdateUserD
   })
 }
 
-export function ListUserBookingsService({ page, tenantId, userId }: IUserAndTenantPaginationDTO) {
-  return api({
-    url: '/users/bookings',
-    method: 'get',
-    params: {
-      userId,
-      tenantId,
-      page
-    }
-  })
-}
-
 export function UploadUserAvatarService(form: FormData) {
   return api({
     url: '/users/avatar',

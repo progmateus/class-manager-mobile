@@ -1,4 +1,10 @@
+import { IUserAndTenantPaginationDTO } from "@dtos/shared/IPaginationDTO";
 import { api } from "./api";
+
+
+interface IListBookingsQuery extends IUserAndTenantPaginationDTO {
+  classDayId?: string;
+}
 
 export function CreatebookingService(tenantId: string, classDayId: string, userId?: string) {
   return api({
@@ -23,14 +29,15 @@ export function DeleteBookingService(tenantId: string, bookingId: string, userId
 }
 
 
-export function ListBookingsService({ page, userId, tenantId }: IUserAndTenantPaginationDTO) {
+export function ListBookingsService({ page, userId, tenantId, classDayId }: IListBookingsQuery) {
   return api({
     url: 'bookings',
     method: 'get',
     params: {
       page,
       userId,
-      tenantId
+      tenantId,
+      classDayId
     }
   })
 }

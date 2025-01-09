@@ -1,3 +1,4 @@
+import { IUserAndTenantPaginationDTO } from "@dtos/shared/IPaginationDTO";
 import { api } from "./api";
 
 export function ListUsersRolesService(rolesNames: string[], { tenantId, page, search }: IUserAndTenantPaginationDTO) {

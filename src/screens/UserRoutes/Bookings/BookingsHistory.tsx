@@ -8,7 +8,6 @@ import { FlatList, Icon, Text, View } from "native-base"
 import { CheckCircle, Clock, ClockClockwise, XCircle } from "phosphor-react-native"
 import { ListBookingsService } from "src/services/bookingsService"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
-import { ListUserBookingsService } from "src/services/usersService"
 import { IBookingDTO } from "@dtos/bookings/IBookingDTO"
 import { useAuth } from "@hooks/useAuth"
 import { TouchableOpacity } from "react-native"
@@ -79,7 +78,7 @@ export function BookingsHistory() {
   }
 
   const loadUserBookings = async (page: number): Promise<IBookingDTO[]> => {
-    const { data } = await ListUserBookingsService({ page })
+    const { data } = await ListBookingsService({ page })
     return data.data
   }
 

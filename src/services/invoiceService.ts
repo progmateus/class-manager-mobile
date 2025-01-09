@@ -2,7 +2,11 @@ import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
 import { api } from "./api";
 import { IUserAndTenantPaginationDTO } from "@dtos/shared/IPaginationDTO";
 
-export function ListInvoicesService({ userId, tenantId, page, subscriptionId, targetTypes, limit }: IUserAndTenantPaginationDTO) {
+interface IListInvoicesQuery extends IUserAndTenantPaginationDTO {
+  subscriptionId?: string;
+}
+
+export function ListInvoicesService({ userId, tenantId, page, subscriptionId, targetTypes, limit }: IListInvoicesQuery) {
   return api({
     url: 'invoices/',
     method: 'get',

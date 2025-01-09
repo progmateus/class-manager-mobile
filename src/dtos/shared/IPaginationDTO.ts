@@ -10,7 +10,6 @@ interface IPaginationDTO {
 interface IUserAndTenantPaginationDTO extends IPaginationDTO {
   userId?: string;
   tenantId?: string;
-  subscriptionId?: string;
   targetTypes?: ETargetType[];
 }
 

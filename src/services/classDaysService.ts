@@ -1,5 +1,6 @@
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { api } from "./api";
+import { IUserAndTenantPaginationDTO } from "@dtos/shared/IPaginationDTO";
 
 export function GetClassDayService(tenantId: string, classDayId: string) {
   return api({
