@@ -2,9 +2,9 @@ import { PageHeader } from "@components/PageHeader";
 import { Divider, Heading, Modal, Text, VStack, View, Button as NativeBaseButton } from "native-base";
 import { Button } from "@components/Button";
 import { StudentItem } from "@components/Items/StudentItem";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { DeleteClassDayService, GetClassDayService, ListClassDayBookingsService } from "src/services/classDaysService";
 import { CreatebookingService, DeleteBookingService, ListBookingsService } from "src/services/bookingsService";
 import { useAuth } from "@hooks/useAuth";
@@ -36,6 +36,7 @@ export function ClassDayProfile() {
   const { user, authenticationType } = useAuth()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [existentBookingId, setExistentBookingId] = useState("");
   const userNavigation = useNavigation<UserNavigatorRoutesProps>();
   const tenantNavigation = useNavigation<UserNavigatorRoutesProps>();
 
@@ -49,6 +50,11 @@ export function ClassDayProfile() {
   const { colors } = THEME
 
   const tenantId = tenant?.id ?? tenantIdParams
+
+
+  useFocusEffect(useCallback(() => {
+    loadAlreadyBooked()
+  }, []))
 
   const loadClassDayProfile = async () => {
     try {
@@ -95,27 +101,44 @@ export function ClassDayProfile() {
     },
     onSuccess: () => {
       fireSuccesToast("Aula agendada")
+      loadAlreadyBooked()
       queryClient.invalidateQueries({
-        queryKey: ['get-class-day-profile', classDayId]
+        queryKey: ['get-class-day-bookings', classDayId],
+        exact: true
       })
+    },
+    onError: (err) => {
+      console.log(err)
     }
   })
 
   const { mutate: cancelBookMutate, isPending: cancelIsPending } = useMutation({
     mutationFn: async () => {
-      if (!classDay || cancelIsPending || !classDayId || (!isTenantAdmin && !isClassTeacher && !isClassStudent)) {
+      if (!existentBookingId || !classDay || cancelIsPending || !classDayId || (!isTenantAdmin && !isClassTeacher && !isClassStudent)) {
         return
       }
-      const index = classDay.bookings.findIndex((b) => b.userId === user.id)
-      await DeleteBookingService(tenantId, classDay.bookings[index].id, user.id)
+      await DeleteBookingService(tenantId, existentBookingId)
     },
     onSuccess: () => {
-      fireInfoToast("Aula cancelada")
+      fireInfoToast("Agendamento cancelado")
+      loadAlreadyBooked()
       queryClient.invalidateQueries({
-        queryKey: ['get-class-day-profile', classDayId]
+        queryKey: ['get-class-day-bookings', classDayId],
+        exact: true
       })
     }
   })
+
+
+  const loadAlreadyBooked = () => {
+    ListBookingsService({ tenantId, classDayId, userId: user.id }).then(({ data }) => {
+      if (data.data.length > 0) {
+        setExistentBookingId(data.data[0].id)
+      } else {
+        setExistentBookingId("")
+      }
+    })
+  }
 
 
   function handleClickUpdateStatus() {
@@ -148,7 +171,8 @@ export function ClassDayProfile() {
 
   const onRefresh = async () => {
     queryClient.invalidateQueries({
-      queryKey: ['get-class-day-profile', classDayId]
+      queryKey: ['get-class-day-profile', classDayId],
+      exact: true
     })
     queryClient.invalidateQueries({
       queryKey: ['get-class-day-bookings', classDayId],
@@ -170,10 +194,6 @@ export function ClassDayProfile() {
   const isClassTeacher = useMemo(() => {
     return user.teachersClasses.some(x => x.classId == classDay?.classId);
   }, [classDay?.id])
-
-  const alreadyBooked = useMemo(() => {
-    return classDay?.bookings && classDay.bookings.length > 0 && classDay.bookings.find((b) => b.user.id === user.id)
-  }, [classDay?.bookings])
 
   const isClassStudent = useMemo(() => {
     return user.studentsClasses.some(x => x.classId == classDay?.classId);
@@ -221,7 +241,7 @@ export function ClassDayProfile() {
                   <VStack space={4} px={4} mt={4}>
                     {
                       isClassStudent && new Date(classDay.date) > new Date() && (
-                        alreadyBooked ? (
+                        existentBookingId ? (
                           <Button title="DESMARCAR" h={10} fontSize="xs" rounded="md" onPress={() => cancelBookMutate()} variant="outline" color="brand.600" isLoading={cancelIsPending} />
                         ) : (
                           <Button title="PARTICIPAR" h={10} fontSize="xs" rounded="md" onPress={() => createBookMutate()} isLoading={createIsPending} />

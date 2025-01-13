@@ -65,7 +65,7 @@ const errors = [
   },
   {
     message: "ERR_BOOKING_NOT_FOUND",
-    description: "Aula não encontrada"
+    description: "Agendamento não encontrado"
   },
   {
     message: "ERR_CLASS_DAY_ALREADY_CONCLUDED",
