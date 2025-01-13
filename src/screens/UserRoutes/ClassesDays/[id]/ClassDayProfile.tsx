@@ -5,20 +5,23 @@ import { StudentItem } from "@components/Items/StudentItem";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
 import { useMemo } from "react";
-import { GetClassDayService, ListClassDayBookingsService } from "src/services/classDaysService";
+import { DeleteClassDayService, GetClassDayService, ListClassDayBookingsService } from "src/services/classDaysService";
 import { CreatebookingService, DeleteBookingService } from "src/services/bookingsService";
 import { useAuth } from "@hooks/useAuth";
 import { Viewcontainer } from "@components/ViewContainer";
 import { ICLassDayDTO } from "@dtos/classes/IClassDayDTO";
 import { orderBy } from "lodash";
 import Animated from "react-native-reanimated";
-import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
+import { fireErrorToast, fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ClassDayProfileSkeleton } from "@components/skeletons/screens/ClassDayProfile/ClassDayProfileSkeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HasRole } from "@utils/HasRole";
 import { EClassDayStatus } from "src/enums/EClassDayStatus";
 import { ClassDayHeader } from "@components/ClassDayPage/Info";
 import { EAuthType } from "src/enums/EAuthType";
+import { TrashSimple } from "phosphor-react-native";
+import { THEME } from "src/theme";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 
 type RouteParamsProps = {
   classDayId: string;
@@ -35,8 +38,11 @@ export function ClassDayProfile() {
   const route = useRoute()
 
   const queryClient = useQueryClient();
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   const { classDayId, tenantIdParams } = route.params as RouteParamsProps;
+
+  const { colors } = THEME
 
   const tenantId = tenant?.id ?? tenantIdParams
 
@@ -99,7 +105,16 @@ export function ClassDayProfile() {
         classDayId
       });
     }
+  }
 
+  const handleDeleteClassDay = () => {
+    DeleteClassDayService(tenantId, classDayId).then(async () => {
+      fireErrorToast("Aula deletada")
+      await queryClient.invalidateQueries({
+        queryKey: ['get-classes-days']
+      })
+      navigation.navigate('dashboard')
+    })
   }
 
   const onRefresh = async () => {
@@ -127,7 +142,7 @@ export function ClassDayProfile() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Detalhes da aula" />
+      <PageHeader title="Detalhes da aula" rightIcon={TrashSimple} rightAction={handleDeleteClassDay} rightIconColor={colors.red['400']} />
       {
         isLoadingProfile || !classDay ?
           (

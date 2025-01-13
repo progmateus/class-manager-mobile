@@ -90,7 +90,7 @@ export function Dashboard() {
           </HStack>
           <HStack justifyContent="space-between">
             <DashboardOption text="Editar informações" icon={<Pencil size={size} color={color} />} onPress={() => navigation.navigate('updateTenant')} />
-            <DashboardOption text="Jornadas" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('timesTablesList')} />
+            <DashboardOption text="Horários" icon={<Clock size={size} color={color} />} onPress={() => navigation.navigate('timesTablesList')} />
             <DashboardOption text="Endereços" icon={<MapPin size={size} color={color} />} onPress={() => navigation.navigate('addressesList')} />
           </HStack>
         </VStack>
