@@ -107,7 +107,7 @@ export function CreateClassDay() {
                 onChangeText={onChange} value={value} errorMessage={errors.date?.message} />
             )}
           />
-          <HStack space={4} w={'48%'}>
+          <HStack space={4}>
             <Controller
               name="hourStart"
               control={control}
