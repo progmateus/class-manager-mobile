@@ -32,9 +32,9 @@ export function GetTenantPlanService(tenantId: string, tenantPlanId: string) {
   })
 }
 
-export function UpdatetenantPlanService(tenantId: string, name: string, description: string, timesOfweek: number, price: string) {
+export function UpdatetenantPlanService(tenantId: string, tenantPlanId: string, name: string, description: string, timesOfweek: number, price: string) {
   return api({
-    url: `${tenantId}/tenant-plans/`,
+    url: `${tenantId}/tenant-plans/${tenantPlanId}`,
     method: 'put',
     data: {
       name,

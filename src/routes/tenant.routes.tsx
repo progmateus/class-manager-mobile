@@ -38,6 +38,7 @@ import { UpdateClassAddress } from "@screens/TenantRoutes/Classes/CRUD/[id]/Upda
 import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
 import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/SubscriptionProfile";
 import { TransferClassStudents } from "@screens/TenantRoutes/Classes/CRUD/[id]/TransferClassStudents";
+import { UpdateTenantPlan } from "@screens/TenantRoutes/plans/[id]/UpdateTenantPlan";
 
 
 export type TenantRoutes = {
@@ -53,6 +54,7 @@ export type TenantRoutes = {
   tenantPlansList: undefined;
   createTimeTable: undefined;
   createTenantPlan: undefined;
+  updateTenantPlan: { tenantPlanId: string }
   createClass: undefined;
   listStudentsClass: { tenantIdParams: string; classId: string; }
   listTeachersClass: { tenantIdParams: string; classId: string; }
@@ -190,6 +192,14 @@ export function TenantRoutes() {
       <Screen
         name="createTenantPlan"
         component={CreateTenantPlan}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="updateTenantPlan"
+        component={UpdateTenantPlan}
         options={{
           tabBarButton: () => (null)
         }}

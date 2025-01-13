@@ -9,6 +9,7 @@ import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query"
 import { FlatList, Text, View } from "native-base"
 import { Barbell, Lightning, Money, Plus, SimCard } from "phosphor-react-native"
+import { TouchableOpacity } from "react-native"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
 
@@ -82,20 +83,22 @@ export function TenantPlansList() {
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
-                  <GenericItem.Root key={item.id}>
-                    <GenericItem.Icon icon={SimCard} />
-                    <GenericItem.Content title={item.name} caption={item.description} />
-                    <GenericItem.InfoSection>
-                      <GenericItem.InfoContainer >
-                        <Lightning size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text={String(item.timesOfweek)} />
-                      </GenericItem.InfoContainer>
-                      <GenericItem.InfoContainer >
-                        <Money size={18} color="#6b7280" />
-                        <GenericItem.InfoValue text={priceFormatted(item.price).replace('R$', '')} />
-                      </GenericItem.InfoContainer>
-                    </GenericItem.InfoSection>
-                  </GenericItem.Root>
+                  <TouchableOpacity key={item.id} onPress={() => navigation.navigate('updateTenantPlan', { tenantPlanId: item.id })}>
+                    <GenericItem.Root >
+                      <GenericItem.Icon icon={SimCard} />
+                      <GenericItem.Content title={item.name} caption={item.description} />
+                      <GenericItem.InfoSection>
+                        <GenericItem.InfoContainer >
+                          <Lightning size={18} color="#6b7280" />
+                          <GenericItem.InfoValue text={String(item.timesOfweek)} />
+                        </GenericItem.InfoContainer>
+                        <GenericItem.InfoContainer >
+                          <Money size={18} color="#6b7280" />
+                          <GenericItem.InfoValue text={priceFormatted(item.price).replace('R$', '')} />
+                        </GenericItem.InfoContainer>
+                      </GenericItem.InfoSection>
+                    </GenericItem.Root>
+                  </TouchableOpacity>
                 )}
                 ListFooterComponent={
                   isFetchingNextPage ? <Loading /> : <></>

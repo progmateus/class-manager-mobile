@@ -16,6 +16,7 @@ import { useAuth } from "@hooks/useAuth";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 import { useQueryClient } from "@tanstack/react-query";
 import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO";
+import { InputMask } from "@components/form/InputMask";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -62,7 +63,7 @@ export function UpdateTenantPlan() {
       const defaultValues = {
         name,
         description,
-        price: String(price),
+        price: String(price * 100),
         timesOfweek: String(timesOfweek)
       }
       reset(defaultValues)
@@ -73,7 +74,7 @@ export function UpdateTenantPlan() {
     if (isLoading || !tenantId || !tenantPlanId) return;
     setIsLoadig(true)
 
-    UpdatetenantPlanService(tenantId, name, description, Number(timesOfweek), price.replaceAll(/[A-z\$\.\-\,]/g, "").replace(/([0-9]+)([0-9]{2})/, '$1.$2')).then(async () => {
+    UpdatetenantPlanService(tenantId, tenantPlanId, name, description, Number(timesOfweek), price.replaceAll(/[A-z\$\.\-\,]/g, "").replace(/([0-9]+)([0-9]{2})/, '$1.$2')).then(async () => {
       fireSuccesToast('Plano atualizado')
       await queryClient.invalidateQueries({
         queryKey: ['get-tenant-plans', tenantId],
@@ -128,26 +129,11 @@ export function UpdateTenantPlan() {
             name="price"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <TextInputMask
-                style={{
-                  width: '100%',
-                  borderBottomColor: 'red',
-                  color: colors.coolGray[700],
-                  height: sizes[10],
-                  borderColor: colors.coolGray[300],
-                  borderWidth: 0.8,
-                  borderRadius: 4,
-                  paddingLeft: sizes[4]
-                }}
-                type={'money'}
-                options={{
-                  precision: 2,
-                  separator: ',',
-                  delimiter: '.',
-                  suffixUnit: ''
-                }} onChangeText={onChange} value={value}
+              <InputMask
+                placeholder="price"
+                type="money"
+                onChangeText={onChange} value={value} errorMessage={errors.price?.message}
               />
-
             )}
           />
         </VStack>
