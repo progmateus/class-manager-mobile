@@ -39,6 +39,7 @@ import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
 import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/SubscriptionProfile";
 import { TransferClassStudents } from "@screens/TenantRoutes/Classes/CRUD/[id]/TransferClassStudents";
 import { UpdateTenantPlan } from "@screens/TenantRoutes/plans/[id]/UpdateTenantPlan";
+import { UpdateClassData } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassData";
 
 
 export type TenantRoutes = {
@@ -47,6 +48,10 @@ export type TenantRoutes = {
   students: undefined;
   classes: undefined;
   classProfile: { classId: string, tenantIdParams: string };
+  createClass: undefined;
+  listStudentsClass: { tenantIdParams: string; classId: string; }
+  listTeachersClass: { tenantIdParams: string; classId: string; }
+  addUserToClass: { classId: string; roleName: string; }
   tenantProfile: { tenantIdParams?: string };
   dashboard: undefined;
   timeTable: { timeTableId: string };
@@ -55,19 +60,16 @@ export type TenantRoutes = {
   createTimeTable: undefined;
   createTenantPlan: undefined;
   updateTenantPlan: { tenantPlanId: string }
-  createClass: undefined;
-  listStudentsClass: { tenantIdParams: string; classId: string; }
-  listTeachersClass: { tenantIdParams: string; classId: string; }
-  addUserToClass: { classId: string; roleName: string; }
-  teachersList: { roleName: string; }
-  createUserRole: undefined;
-  updateStudentclass: { tenantIdParams: string; userId: string; subscriptionId?: string; }
-  bookingsHistory: { tenantIdParams?: string; userId?: string; };
-  updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
-  updateTenant: undefined;
   updateClassTimeTable: { classId: string; timeTableIdExists?: string; };
   transferClassStudents: { classId: string; };
   updateClassAddress: { classId: string; addressIdExists?: string; };
+  updateStudentclass: { tenantIdParams: string; userId: string; subscriptionId?: string; }
+  updateClassData: { classId: string; }
+  teachersList: { roleName: string; }
+  createUserRole: undefined;
+  bookingsHistory: { tenantIdParams?: string; userId?: string; };
+  updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
+  updateTenant: undefined;
   createClassDay: undefined;
   classesDaysList: undefined;
   classDayProfile: { tenantIdParams: string, classDayId: string };
@@ -152,6 +154,14 @@ export function TenantRoutes() {
       <Screen
         name="classProfile"
         component={ClassProfile}
+        options={{
+          tabBarButton: () => (null)
+        }}
+      />
+
+      <Screen
+        name="updateClassData"
+        component={UpdateClassData}
         options={{
           tabBarButton: () => (null)
         }}
