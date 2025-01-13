@@ -58,7 +58,7 @@ export function BookingsHistory() {
   })
 
   function onLoadMore() {
-    if (hasNextPage && !isLoading) {
+    if (hasNextPage && !isLoading && !isFetchingNextPage) {
       fetchNextPage();
     }
   }

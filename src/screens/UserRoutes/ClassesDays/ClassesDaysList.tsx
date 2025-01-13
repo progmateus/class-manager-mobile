@@ -49,7 +49,7 @@ export function ClassesDaysList() {
   })
 
   function onLoadMore() {
-    if (hasNextPage && !isLoading) {
+    if (hasNextPage && !isLoading && !isFetchingNextPage) {
       fetchNextPage();
     }
   }

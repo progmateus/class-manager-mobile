@@ -43,7 +43,7 @@ export function TimesTablesList() {
   })
 
   function onLoadMore() {
-    if (hasNextPage && !isLoading) {
+    if (hasNextPage && !isLoading && !isFetchingNextPage) {
       fetchNextPage();
     }
   }
