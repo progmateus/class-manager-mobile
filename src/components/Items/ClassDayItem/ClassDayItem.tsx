@@ -28,6 +28,9 @@ function ClassDayItem({ classDay }: IProps) {
   const statusColor = classDay.status == EClassDayStatus.PENDING ? colors.coolGray['700'] : classDay.status == EClassDayStatus.CANCELED ? colors.red['500'] : colors.green['500']
 
   const getHours = (date: Date) => {
+    if (!date) {
+      return ""
+    }
     return new Intl.DateTimeFormat('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',

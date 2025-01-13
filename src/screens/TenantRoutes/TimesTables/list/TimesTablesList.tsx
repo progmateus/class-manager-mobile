@@ -52,8 +52,8 @@ export function TimesTablesList() {
     navigation.navigate('createTimeTable')
   }
 
-  const onRefresh = () => {
-    queryClient.invalidateQueries({
+  const onRefresh = async () => {
+    await queryClient.invalidateQueries({
       queryKey: ['get-times-tables', tenant.id]
     })
   }
