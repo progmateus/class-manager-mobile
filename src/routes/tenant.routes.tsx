@@ -22,7 +22,7 @@ import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
 import { TenantProfile } from "@screens/Shared/Tenants/[id]/TenantProfile";
 import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
-import { TimeTable } from "@screens/TenantRoutes/TimesTables/[id]/TimeTable";
+import { UpdateTimeTable } from "@screens/TenantRoutes/TimesTables/[id]/UpdateTimeTable";
 import { TimesTablesList } from "@screens/TenantRoutes/TimesTables/list/TimesTablesList";
 import { CreateTimeTable } from "@screens/TenantRoutes/TimesTables/CreateTimeTable";
 import { CreateSubscription } from "@screens/TenantRoutes/Subscriptions/CreateSubscription";
@@ -159,7 +159,7 @@ export function TenantRoutes() {
 
       <Screen
         name="timeTable"
-        component={TimeTable}
+        component={UpdateTimeTable}
         options={{
           tabBarButton: () => (null)
         }}

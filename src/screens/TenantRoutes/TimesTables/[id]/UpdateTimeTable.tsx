@@ -1,4 +1,5 @@
 import { WeekScheduleDay } from "@components/Class/HoursItem/WeekScheduleDay";
+import { Input } from "@components/form/Input";
 import { Loading } from "@components/Loading";
 import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
@@ -6,9 +7,9 @@ import { ITimeTableDTO } from "@dtos/timeTables/ITimeTableDTO";
 import { useAuth } from "@hooks/useAuth";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fireSuccesToast } from "@utils/HelperNotifications";
-import { HStack, Text, View } from "native-base";
+import { useQueryClient } from "@tanstack/react-query";
+import { fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
+import { HStack, Text, View, VStack } from "native-base";
 import { Check, Info } from "phosphor-react-native";
 import { useCallback, useState } from "react";
 import { GetTimeTableService, UpdateTimeTableService } from "src/services/timeTablesService";
@@ -18,16 +19,18 @@ type RouteParamsProps = {
   timeTableId: string;
 }
 
-export function TimeTable() {
+export function UpdateTimeTable() {
   const route = useRoute()
   const { tenant } = useAuth()
 
   const { timeTableId } = route.params as RouteParamsProps;
   const [isLoading, setIsLoading] = useState(false)
   const [timeTable, setTimeTable] = useState<ITimeTableDTO>({} as ITimeTableDTO)
+  const [name, setName] = useState("")
   const [isActing, setIsActing] = useState(false)
 
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
+  const queryClient = useQueryClient()
 
   useFocusEffect(useCallback(() => {
     loadTimeTable()
@@ -38,6 +41,7 @@ export function TimeTable() {
   const loadTimeTable = async () => {
     setIsLoading(true)
     GetTimeTableService(timeTableId, tenant.id).then(({ data }) => {
+      setName(data.data.name)
       setTimeTable(data.data)
     }).catch((err) => {
       console.log(err)
@@ -47,8 +51,16 @@ export function TimeTable() {
   }
   const handleSave = async () => {
     if (isActing) return
+
+    if (!timeTable.name) {
+      fireWarningToast("Informe o nome da tabela")
+      return
+    }
     setIsActing(true)
     UpdateTimeTableService(timeTable, tenant.id, timeTableId).then(() => {
+      queryClient.invalidateQueries({
+        queryKey: ['get-times-tables', tenant.id]
+      })
       fireSuccesToast('Table de horários atualizada!')
       navigation.navigate('timesTablesList')
     }).catch((err) => {
@@ -90,9 +102,12 @@ export function TimeTable() {
             <>
               <PageHeader title={timeTable.name ?? ''} rightIcon={Check} rightAction={handleSave} />
               <ScrollContainer >
+                <View mb={12}>
+                  <Input label="Nome" variant="outline" autoCapitalize="none" onChangeText={(text) => setTimeTable(prev => ({ ...prev, name: text }))} value={timeTable.name} />
+                </View>
                 {
-
-                  <>
+                  <VStack>
+                    <Text fontFamily="body" color="coolGray.500" mb={4}>Horários</Text>
                     {
                       weeksDays.map((wd) => (
                         <WeekScheduleDay
@@ -104,7 +119,8 @@ export function TimeTable() {
                         />
                       ))
                     }
-                  </>
+                  </VStack>
+
                 }
                 < HStack mt={2}
                   alignItems="center" space={2}
