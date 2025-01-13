@@ -55,7 +55,7 @@ export function ClassProfile() {
           <Loading />
         ) : (
           <>
-            <PageHeader title={`Turma: ${infoProfile?.classFound?.name}`} />
+            <PageHeader title={infoProfile?.classFound?.name ?? ''} />
 
             <ScrollContainer>
               <View>

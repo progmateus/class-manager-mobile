@@ -59,13 +59,18 @@ export function UpdateClassData() {
   }
 
   const handleUpdateClass = ({ name, description }: UpdateClassProps) => {
-    if (isLoading || !tenantId || classId) return;
+    if (isLoading || !tenantId || !classId) return;
     setIsLoadig(true)
 
     UpdateClassDataService(tenantId, classId, name, description).then(async () => {
       fireSuccesToast('Turma atualizada')
       await queryClient.invalidateQueries({
         queryKey: ['get-classes', tenantId],
+        exact: true
+      })
+
+      await queryClient.invalidateQueries({
+        queryKey: ['get-class-profile', tenantId, classId],
         exact: true
       })
       navigation.navigate('classProfile', { classId, tenantIdParams: tenantId })
