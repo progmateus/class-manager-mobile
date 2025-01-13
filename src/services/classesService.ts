@@ -1,3 +1,4 @@
+import { IPaginationDTO } from "@dtos/shared/IPaginationDTO";
 import { api } from "./api";
 
 export function ListClassesService(tenantId: string, { page = 1, search = "" }: IPaginationDTO) {
@@ -22,10 +23,21 @@ export function CreateClassService(tenantId: string, name: string, description: 
   })
 }
 
-export function GetClassService(tenantId: string, classId: string,) {
+export function GetClassService(tenantId: string, classId: string) {
   return api({
     url: `${tenantId}/classes/${classId}`,
     method: 'get'
+  })
+}
+
+export function UpdateClassDataService(tenantId: string, classId: string, name: string, description: string) {
+  return api({
+    url: `${tenantId}/classes/${classId}`,
+    method: 'put',
+    data: {
+      name,
+      description
+    }
   })
 }
 
