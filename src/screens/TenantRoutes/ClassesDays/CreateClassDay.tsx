@@ -146,7 +146,7 @@ export function CreateClassDay() {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select accessibilityLabel="Selecione a turma" selectedValue={value} variant="outline" mt={-2} onValueChange={onChange}>
-                <Select.Item label="Selecione" value="" />
+                <Select.Item label="Selecione" value="" disabled />
                 {
                   classes && classes.length > 0 && (
                     classes.map((c: IClassDTO) => {
