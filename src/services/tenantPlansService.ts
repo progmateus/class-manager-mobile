@@ -1,3 +1,4 @@
+import { IPaginationDTO } from "@dtos/shared/IPaginationDTO";
 import { api } from "./api";
 
 export function ListTenantPlansService(tenantId: string, { search = "", page = 1 }: IPaginationDTO) {
@@ -20,6 +21,26 @@ export function CreateTenantPlanService(tenantId: string, name: string, descript
       description,
       timesOfweek,
       price: price
+    }
+  })
+}
+
+export function GetTenantPlanService(tenantId: string, tenantPlanId: string) {
+  return api({
+    url: `${tenantId}/tenant-plans/${tenantPlanId}`,
+    method: 'get',
+  })
+}
+
+export function UpdatetenantPlanService(tenantId: string, name: string, description: string, timesOfweek: number, price: string) {
+  return api({
+    url: `${tenantId}/tenant-plans/`,
+    method: 'put',
+    data: {
+      name,
+      description,
+      timesOfweek,
+      price
     }
   })
 }
