@@ -9,7 +9,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useQuery } from "@tanstack/react-query"
 import { HStack, Text, View, VStack } from "native-base"
-import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, CalendarBlank, ArrowsLeftRight, MapPin, CalendarPlus } from "phosphor-react-native"
+import { GraduationCap, ArrowRight, IdentificationBadge, LinkSimple, Clock, CalendarBlank, ArrowsLeftRight, MapPin, CalendarPlus, Pencil } from "phosphor-react-native"
 import { EClassDayStatus } from "src/enums/EClassDayStatus"
 import { GetClassProfileService } from "src/services/classesService"
 
@@ -78,6 +78,15 @@ export function ClassProfile() {
 
               <VStack space={4} pb={20}>
                 <Text color="coolGray.400" fontSize="md" mb={-2}> Ações</Text>
+
+                <MenuItem.Root onPress={() => navigation.navigate('updateClassData', { classId })} >
+                  <MenuItem.Icon icon={Pencil} />
+                  <MenuItem.Content title="Editar informações" description="Atualize os detalhes da turma" />
+                  <MenuItem.Actions>
+                    <MenuItem.Action icon={ArrowRight} />
+                  </MenuItem.Actions>
+                </MenuItem.Root>
+
                 <MenuItem.Root onPress={() => navigation.navigate('listStudentsClass', { tenantIdParams: tenantId, classId })} >
                   <MenuItem.Icon icon={GraduationCap} />
                   <MenuItem.Content title="Gerenciar alunos" description="Gerencie os alunos manualmente" />
@@ -97,7 +106,7 @@ export function ClassProfile() {
 
                 <MenuItem.Root>
                   <MenuItem.Icon icon={LinkSimple} />
-                  <MenuItem.Content title="Gerar link de convite" description="Adiocone alunos automaticamnete" />
+                  <MenuItem.Content title="Gerar link de convite" description="Adicione alunos automaticamnete" />
                   <MenuItem.Actions>
                     <MenuItem.Action icon={ArrowRight} />
                   </MenuItem.Actions>
@@ -113,7 +122,7 @@ export function ClassProfile() {
 
                 <MenuItem.Root onPress={() => navigation.navigate('updateClassAddress', { classId, addressIdExists: infoProfile.classFound.addressId })}>
                   <MenuItem.Icon icon={MapPin} />
-                  <MenuItem.Content title="alterar endereço" description="Altere a localização das aulas" />
+                  <MenuItem.Content title="Alterar endereço" description="Altere a localização das aulas" />
                   <MenuItem.Actions>
                     <MenuItem.Action icon={ArrowRight} />
                   </MenuItem.Actions>
