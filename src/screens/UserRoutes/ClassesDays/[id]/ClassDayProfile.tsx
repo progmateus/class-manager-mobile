@@ -1,10 +1,10 @@
 import { PageHeader } from "@components/PageHeader";
-import { Heading, Text, VStack, View } from "native-base";
+import { Divider, Heading, Modal, Text, VStack, View, Button as NativeBaseButton } from "native-base";
 import { Button } from "@components/Button";
 import { StudentItem } from "@components/Items/StudentItem";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { DeleteClassDayService, GetClassDayService, ListClassDayBookingsService } from "src/services/classDaysService";
 import { CreatebookingService, DeleteBookingService } from "src/services/bookingsService";
 import { useAuth } from "@hooks/useAuth";
@@ -32,6 +32,8 @@ export function ClassDayProfile() {
 
   const { tenant } = useAuth()
   const { user, authenticationType } = useAuth()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const userNavigation = useNavigation<UserNavigatorRoutesProps>();
   const tenantNavigation = useNavigation<UserNavigatorRoutesProps>();
 
@@ -108,6 +110,8 @@ export function ClassDayProfile() {
   }
 
   const handleDeleteClassDay = () => {
+    if (isDeleting) return
+    setIsDeleting(true)
     DeleteClassDayService(tenantId, classDayId).then(async () => {
       fireErrorToast("Aula deletada")
       await queryClient.invalidateQueries({
@@ -142,7 +146,7 @@ export function ClassDayProfile() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Detalhes da aula" rightIcon={TrashSimple} rightAction={handleDeleteClassDay} rightIconColor={colors.red['400']} />
+      <PageHeader title="Detalhes da aula" rightIcon={TrashSimple} rightAction={() => setIsModalOpen(true)} rightIconColor={colors.red['400']} />
       {
         isLoadingProfile || !classDay ?
           (
@@ -195,6 +199,28 @@ export function ClassDayProfile() {
                   </VStack>
                 )
               }
+
+              <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} safeAreaTop={true}>
+                <Modal.Content maxWidth="350">
+                  <Modal.Header borderBottomWidth={0}>
+                    <Text fontFamily="heading"> Excluir aula </Text>
+                  </Modal.Header>
+                  <Modal.Body justifyContent="center" py={6} borderWidth={0}>
+                    <Text fontFamily="body" color="coolGray.600">
+                      Deseja deletar a aula? Após realizada, esta ação não poderá ser desfeita.
+                    </Text>
+                  </Modal.Body>
+                  <Modal.Footer borderWidth={0} borderTopWidth={0}>
+                    <VStack flex={1}>
+                      <Button title="Deletar" variant="unstyled" color="red.600" isLoading={isDeleting} onPress={handleDeleteClassDay} />
+                      <Divider my={1} bgColor="coolGray.300" />
+                      <NativeBaseButton mt={2} variant="unstyled" fontWeight="bold" color="coolGray.500" onPress={() => setIsModalOpen(false)}>
+                        Voltar
+                      </NativeBaseButton>
+                    </VStack>
+                  </Modal.Footer>
+                </Modal.Content>
+              </Modal>
             </Viewcontainer>
           )
       }
