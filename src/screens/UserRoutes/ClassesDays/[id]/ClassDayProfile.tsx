@@ -118,6 +118,8 @@ export function ClassDayProfile() {
         queryKey: ['get-classes-days']
       })
       navigation.navigate('dashboard')
+    }).finally(() => {
+      setIsModalOpen(false)
     })
   }
 
