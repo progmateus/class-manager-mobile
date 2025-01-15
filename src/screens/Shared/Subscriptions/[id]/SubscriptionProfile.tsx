@@ -6,14 +6,14 @@ import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfil
 import { useAuth } from "@hooks/useAuth"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
-import { fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
+import { fireErrorToast, fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { transformInvoiceColor, transformInvoiceStatus, transformSubscriptionColor, transformSubscriptionStatus } from "@utils/StatusHelper"
 import { Actionsheet, Box, Center, Heading, HStack, Icon, Text, View, VStack } from "native-base"
 import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, CurrencyCircleDollar, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Lock, Check, X, SimCard, Plus, Pause, CurrencyDollar } from "phosphor-react-native"
 import { useCallback, useMemo, useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
-import { GetSubscriptionProfileService, UpdateSubscriptionStatusService } from "src/services/subscriptionService"
+import { GetSubscriptionProfileService, RefreshUserSubscriptionService, UpdateSubscriptionStatusService } from "src/services/subscriptionService"
 import { HasRole } from "@utils/HasRole"
 import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/SubscriptionProfile"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
@@ -69,6 +69,31 @@ export function SubscriptionProfile() {
     }).finally(() => {
       setIsOpen(false)
 
+    })
+  }
+
+  const handleRefeshUserSubscription = () => {
+    if (!subscription || isActing) {
+      return
+    }
+    setIsActing(true)
+    RefreshUserSubscriptionService(subscription?.tenantId, subscription.id).then(({ data }) => {
+      fireSuccesToast('Assinatura realizada')
+      if (authenticationType == EAuthType.USER) {
+        userNavigation.navigate('subscriptionProfile', {
+          tenantIdParams: tenantId,
+          subscriptionId: data.data.id
+        })
+      } else {
+        tenantNavigation.navigate('subscriptionProfile', {
+          tenantIdParams: tenantId,
+          subscriptionId: data.data.id
+        })
+      }
+    }).catch(() => {
+      fireErrorToast('Ocorreu um erro')
+    }).finally(() => {
+      setIsActing(false)
     })
   }
 
@@ -142,7 +167,7 @@ export function SubscriptionProfile() {
               <VStack space={8}>
                 {
                   verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
-                    <TouchableOpacity onPress={handleNavigateToSubscribePage}>
+                    <TouchableOpacity onPress={handleRefeshUserSubscription}>
                       <View px={4} py={3} bgColor="red.400">
                         <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
                           A assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura.

@@ -61,3 +61,10 @@ export function GetSubscriptionProfileService(tenantId: string, subscriptionId: 
     method: 'get'
   })
 }
+
+export function RefreshUserSubscriptionService(tenantId: string, subscriptionId: string) {
+  return api({
+    url: `${tenantId}/subscriptions/${subscriptionId}/refresh`,
+    method: 'post'
+  })
+}
