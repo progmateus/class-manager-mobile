@@ -1,6 +1,7 @@
 import { GenericItem } from "@components/Items/GenericItem"
 import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
+import { ScrollContainer } from "@components/ScrollContainer"
 import { Viewcontainer } from "@components/ViewContainer"
 import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
 import { useAuth } from "@hooks/useAuth"
@@ -8,10 +9,11 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { fireSuccesToast } from "@utils/HelperNotifications"
-import { View, VStack } from "native-base"
+import { Button, Divider, Heading, HStack, Icon, Text, View, VStack } from "native-base"
 import { Barbell, Check, Money, SimCard } from "phosphor-react-native"
 import { useCallback, useState } from "react"
 import { TouchableOpacity } from "react-native"
+import { ListAppPlansService } from "src/services/appServices"
 import { UpdateSubscriptionPlanService } from "src/services/subscriptionService"
 import { ListTenantPlansService } from "src/services/tenantPlansService"
 
@@ -22,7 +24,7 @@ type RouteParamsProps = {
   planIdExists: string;
 }
 
-export function UpdateSubscriptionPlan() {
+export function UpdateTenantSubscriptionPlan() {
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const [isActing, setIsActing] = useState(false)
 
@@ -43,14 +45,14 @@ export function UpdateSubscriptionPlan() {
 
   const loadTenantPlans = async () => {
     try {
-      const { data } = await ListTenantPlansService(tenantId, { page: 1, search: "" })
+      const { data } = await ListAppPlansService()
       return data.data
     } catch (err) {
       console.log(err)
     }
   }
 
-  const { data: plans, isLoading } = useQuery<ITenantPlanDTO[]>({
+  const { data: plans, isLoading } = useQuery<any[]>({
     queryKey: ['get-tenant-plans', tenant.id, subscriptionId],
     queryFn: loadTenantPlans
   })
@@ -68,12 +70,12 @@ export function UpdateSubscriptionPlan() {
     setSelectedPlanId(planId)
   }
 
-  const handleSave = () => {
+  const handleSave = (planId: string) => {
     if (!selectedPlanId || !subscriptionId || isActing) {
       return
     }
     setIsActing(true)
-    UpdateSubscriptionPlanService(tenantId, subscriptionId, selectedPlanId).then(() => {
+    UpdateSubscriptionPlanService(tenantId, subscriptionId, undefined, planId).then(() => {
       fireSuccesToast('Plano alterado com sucesso!')
       queryClient.invalidateQueries({
         queryKey: ['get-subscription-profile', subscriptionId],
@@ -90,35 +92,51 @@ export function UpdateSubscriptionPlan() {
 
   return (
     <View flex={1}>
-      <PageHeader title="Alterar plano" rightIcon={Check} rightAction={handleSave} />
-      <Viewcontainer>
-        <VStack space={4}>
+      <PageHeader title="Alterar plano" />
+      <ScrollContainer>
+        <VStack space={4} pb={20}>
           {
             plans && plans.length ? (
-              plans.map((plan: ITenantPlanDTO) => {
+              plans.map((plan: any) => {
                 return (
-                  <TouchableOpacity
-                    key={plan.id}
-                    onPress={() => handleSelectPlan(plan.id)}
-                  >
-                    <GenericItem.Root
-                      key={plan.id}
-                      isSelected={plan.id === selectedPlanId}
-                    >
-                      <GenericItem.Icon icon={SimCard} color={plan.id === selectedPlanId ? 'brand.500' : 'coolGray.700'} />
-                      <GenericItem.Content title={plan.name} caption={plan.description} />
-                      <GenericItem.InfoSection>
-                        <GenericItem.InfoContainer >
-                          <Barbell size={18} color="#6b7280" />
-                          <GenericItem.InfoValue text="7" />
-                        </GenericItem.InfoContainer>
-                        <GenericItem.InfoContainer >
-                          <Money size={18} color="#6b7280" />
-                          <GenericItem.InfoValue text={priceFormatted(plan.price).replace('R$', '')} />
-                        </GenericItem.InfoContainer>
-                      </GenericItem.InfoSection>
-                    </GenericItem.Root>
-                  </TouchableOpacity>
+                  <VStack key={plan.id} borderWidth={0.4} borderColor="coolGray.700" py={6} px={4} rounded="lg">
+                    <View>
+                      <Heading textAlign="center" color="brand.800"> {plan.name}</Heading>
+                      <Divider my={4} />
+                      <VStack space={4}>
+                        <Text> {plan.description}</Text>
+                        <HStack>
+                          <Icon as={Check} color="green.500" />
+                          <Text> Cobranças automáticas</Text>
+                        </HStack>
+
+                        <HStack>
+                          <Icon as={Check} color="green.500" />
+                          <Text> Cobranças automáticas</Text>
+                        </HStack>
+
+                        <HStack>
+                          <Icon as={Check} color="green.500" />
+                          <Text> Limite de {plan.studentsLimit} alunos </Text>
+                        </HStack>
+
+                        <HStack>
+                          <Icon as={Check} color="green.500" />
+                          <Text> Limite de {plan.classesLimit} turmas </Text>
+                        </HStack>
+                      </VStack>
+                    </View>
+                    <Heading fontSize="xl" textAlign="center" my={8} color="brand.800">  {priceFormatted(plan.price)}/mês</Heading>
+                    <View alignItems="center" justifyContent="center">
+                      {
+                        planIdExists == plan.id ? (
+                          <Text fontSize={16}>Plano atual</Text>
+                        ) : (
+                          <Button w="48" colorScheme="brand.500" rounded="lg" isLoading={isActing} onPress={() => handleSave(plan.id)}>Selecionar</Button>
+                        )
+                      }
+                    </View>
+                  </VStack>
                 )
               })
             )
@@ -127,7 +145,7 @@ export function UpdateSubscriptionPlan() {
               )
           }
         </VStack>
-      </Viewcontainer>
+      </ScrollContainer>
     </View>
   )
 }

@@ -22,12 +22,13 @@ export function DeleteSubscriptionService(tenantId: string, subscriptionId: stri
   })
 }
 
-export function UpdateSubscriptionPlanService(tenantId: string, subscriptionId: string, tenantPlanId: string) {
+export function UpdateSubscriptionPlanService(tenantId: string, subscriptionId: string, tenantPlanId?: string, planId?: string) {
   return api({
     url: `${tenantId}/subscriptions/${subscriptionId}/plan`,
     method: 'patch',
     data: {
-      tenantPlanId
+      tenantPlanId,
+      planId
     }
   })
 }

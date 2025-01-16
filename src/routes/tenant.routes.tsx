@@ -8,8 +8,8 @@ import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/Subs
 import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
 import { BookBookmark, Buildings, Calendar, GraduationCap, House, Receipt, UserCircle } from "phosphor-react-native";
-import { TenantPlansList } from "@screens/TenantRoutes/plans/TenantPlansList";
-import { CreateTenantPlan } from "@screens/TenantRoutes/plans/CreateTenantPlan";
+import { TenantPlansList } from "@screens/TenantRoutes/tenantPlans/TenantPlansList";
+import { CreateTenantPlan } from "@screens/TenantRoutes/tenantPlans/CreateTenantPlan";
 import { CreateClass } from "@screens/TenantRoutes/Classes/CRUD/CreateClass";
 import { ClassProfile } from "@screens/TenantRoutes/Classes/CRUD/[id]/ClassProfile";
 import { StudentsClassList } from "@screens/TenantRoutes/Classes/students/StudentsClassList";
@@ -19,7 +19,7 @@ import { TeachersList } from "@screens/TenantRoutes/Roles/TeachersList";
 import { CreateUserRole } from "@screens/TenantRoutes/Roles/CreateUserRole";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
-import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
+import { UpdateUserSubscriptionPlan } from "@screens/TenantRoutes/tenantPlans/UpdateUserSubscriptionPlan";
 import { TenantProfile } from "@screens/Shared/Tenants/[id]/TenantProfile";
 import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
 import { UpdateTimeTable } from "@screens/TenantRoutes/TimesTables/[id]/UpdateTimeTable";
@@ -38,9 +38,10 @@ import { UpdateClassAddress } from "@screens/TenantRoutes/Classes/CRUD/[id]/Upda
 import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
 import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/SubscriptionProfile";
 import { TransferClassStudents } from "@screens/TenantRoutes/Classes/CRUD/[id]/TransferClassStudents";
-import { UpdateTenantPlan } from "@screens/TenantRoutes/plans/[id]/UpdateTenantPlan";
+import { UpdateTenantPlan } from "@screens/TenantRoutes/tenantPlans/[id]/UpdateTenantPlan";
 import { UpdateClassData } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassData";
 import { TenantSubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/TenantSubscriptionProfile";
+import { UpdateTenantSubscriptionPlan } from "@screens/TenantRoutes/Subscriptions/UpdateTenantSubscriptionPlan";
 
 
 export type TenantRoutes = {
@@ -70,7 +71,8 @@ export type TenantRoutes = {
   teachersList: { roleName: string; }
   createUserRole: undefined;
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
-  updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
+  updateUserSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
+  updateTenantsubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateTenant: undefined;
   createClassDay: undefined;
   classesDaysList: undefined;
@@ -290,8 +292,14 @@ export function TenantRoutes() {
       />
 
       <Screen
-        name="updateSubscriptionPlan"
-        component={UpdateSubscriptionPlan}
+        name="updateUserSubscriptionPlan"
+        component={UpdateUserSubscriptionPlan}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="updateTenantsubscriptionPlan"
+        component={UpdateTenantSubscriptionPlan}
         options={{ tabBarButton: () => (null) }}
       />
 

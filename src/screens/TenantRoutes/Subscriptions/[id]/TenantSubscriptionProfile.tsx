@@ -171,7 +171,7 @@ export function TenantSubscriptionProfile() {
                   subscription.nextPlanId && (
                     <View mt={-8} mx={-4} px={4} py={3} bgColor="blue.500">
                       <Text fontSize="sm" fontFamily="body" color="coolGray.100" >
-                        {`Seu plano será alterado para o ${subscription.plan.name} ao final do ciclo atual`}
+                        {`Seu plano será alterado para o ${subscription.nextPlan?.name} ao final do ciclo de cobrança atual`}
                       </Text>
                     </View>
                   )
@@ -254,7 +254,7 @@ export function TenantSubscriptionProfile() {
                     </MenuItem.Actions>
                   </MenuItem.Root>
 
-                  <MenuItem.Root onPress={() => tenantNavigation.navigate('updateSubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.planId, subscriptionId: subscription?.id })}>
+                  <MenuItem.Root onPress={() => tenantNavigation.navigate('updateTenantsubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.planId, subscriptionId: subscription?.id })}>
                     <MenuItem.Icon icon={SimCard} />
                     <MenuItem.Content title="Alterar plano" description="Altere o plano da sua assinatura" />
                     <MenuItem.Actions>

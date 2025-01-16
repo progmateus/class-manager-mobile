@@ -304,7 +304,7 @@ export function SubscriptionProfile() {
                     )
                   }
 
-                  <MenuItem.Root onPress={() => tenantNavigation.navigate('updateSubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.tenantPlanId, subscriptionId })}>
+                  <MenuItem.Root onPress={() => tenantNavigation.navigate('updateUserSubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.tenantPlanId, subscriptionId })}>
                     <MenuItem.Icon icon={SimCard} />
                     <MenuItem.Content title="Alterar plano" description="Altere o plano do aluno" />
                     <MenuItem.Actions>

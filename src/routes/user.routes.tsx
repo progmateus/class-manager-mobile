@@ -17,7 +17,7 @@ import { CreateSubscription } from "@screens/UserRoutes/Subscriptions/CreateSubs
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { CreateTenant } from "@screens/UserRoutes/Tenants/CreateTenant";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
-import { UpdateSubscriptionPlan } from "@screens/TenantRoutes/plans/UpdateSubscriptionPlan";
+import { UpdateUserSubscriptionPlan } from "@screens/TenantRoutes/tenantPlans/UpdateUserSubscriptionPlan";
 import { UpdateUserAddress } from "@screens/UserRoutes/User/[id]/UpdateUserAddress";
 import { InvoicesList } from "@screens/Shared/Invoices/InvoicesList";
 import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/SubscriptionProfile";
@@ -38,7 +38,7 @@ type UserRoutes = {
   createTenant: undefined
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
   updateStudentclass: { tenantIdParams: string; subscriptionId?: string; }
-  updateSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
+  updateUserSubscriptionPlan: { tenantIdParams: string; planIdExists: string; subscriptionId?: string; }
   updateUserAddress: undefined;
 }
 export type UserNavigatorRoutesProps = BottomTabNavigationProp<UserRoutes>;
@@ -171,8 +171,8 @@ export function UserRoutes() {
       />
 
       <Screen
-        name="updateSubscriptionPlan"
-        component={UpdateSubscriptionPlan}
+        name="updateUserSubscriptionPlan"
+        component={UpdateUserSubscriptionPlan}
         options={{ tabBarButton: () => (null) }}
       />
 
