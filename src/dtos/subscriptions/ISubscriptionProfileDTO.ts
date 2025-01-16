@@ -4,6 +4,7 @@ import { IUserProfileDTO } from "@dtos/users/IUserProfileDTO";
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 import { ITenantDTO } from "@dtos/tenants/ITenantDTO";
 import { ETargetType } from "src/enums/ETargetType";
+import { IPlanDTO } from "./IPlanDTO";
 
 export interface ISubscriptionProfileDTO {
   id: string;
@@ -20,8 +21,8 @@ export interface ISubscriptionProfileDTO {
   currentPeriodEnd: Date;
   user: Omit<IUserProfileDTO, "password">;
   tenantPlan: ITenantPlanDTO;
-  plan: any;
-  nextPlan: any;
+  plan: IPlanDTO;
+  nextPlan: IPlanDTO;
   nextTenantPlan: ITenantPlanDTO;
   latestInvoice?: IInvoiceDTO;
   invoices: IInvoiceDTO[];

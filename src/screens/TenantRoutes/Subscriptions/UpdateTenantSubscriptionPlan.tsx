@@ -3,6 +3,7 @@ import { Loading } from "@components/Loading"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { Viewcontainer } from "@components/ViewContainer"
+import { IPlanDTO } from "@dtos/subscriptions/IPlanDTO"
 import { ITenantPlanDTO } from "@dtos/tenants/ITenantPlanDTO"
 import { useAuth } from "@hooks/useAuth"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
@@ -52,7 +53,7 @@ export function UpdateTenantSubscriptionPlan() {
     }
   }
 
-  const { data: plans, isLoading } = useQuery<any[]>({
+  const { data: plans, isLoading } = useQuery<IPlanDTO[]>({
     queryKey: ['get-tenant-plans', tenant.id, subscriptionId],
     queryFn: loadTenantPlans
   })
@@ -97,7 +98,7 @@ export function UpdateTenantSubscriptionPlan() {
         <VStack space={4} pb={20}>
           {
             plans && plans.length ? (
-              plans.map((plan: any) => {
+              plans.map((plan: IPlanDTO) => {
                 return (
                   <VStack key={plan.id} borderWidth={0.4} borderColor="coolGray.700" py={6} px={4} rounded="lg">
                     <View>
