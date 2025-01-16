@@ -1,5 +1,5 @@
 import { HStack, Heading, Link, Text, VStack, View } from "native-base";
-import { SignOut } from "phosphor-react-native";
+import { Crosshair, SignOut } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
 import { useAuth } from "@hooks/useAuth";
@@ -7,10 +7,14 @@ import { Avatar } from "@components/Avatar/Avatar";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { RefreshTenantSubscriptionService } from "src/services/tenantsService";
 import { fireSuccesToast } from "@utils/HelperNotifications";
+import { useNavigation } from "@react-navigation/native";
+import { TenantNavigatorRoutesProps } from "@routes/tenant.routes";
 
 export function TenantHeader() {
   const { tenant, signOutTenant, tenantUpdate } = useAuth()
   const statusBarHeight = Constants.statusBarHeight;
+
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
 
   const balanceFormatted = () => {
     return new Intl.NumberFormat('pt-BR', {
@@ -77,9 +81,14 @@ export function TenantHeader() {
           <Text color="white" opacity={0.8}>Olá</Text>
           <Text fontFamily="Text" fontSize="md" color="white">{tenant.name}</Text>
         </VStack>
-        <TouchableOpacity onPress={signOutTenant}>
-          <SignOut color="white" />
-        </TouchableOpacity>
+        <HStack space={4}>
+          <TouchableOpacity onPress={() => navigation.navigate('tenantSubscriptionProfile')}>
+            <Crosshair color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={signOutTenant}>
+            <SignOut color="white" />
+          </TouchableOpacity>
+        </HStack>
       </HStack>
       <HStack justifyContent="center" alignItems="center">
         <Heading fontSize={34} textAlign="center" fontWeight="bold" color="white"> {balanceFormatted()}  </Heading>

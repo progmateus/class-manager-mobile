@@ -40,6 +40,7 @@ import { SubscriptionProfile } from "@screens/Shared/Subscriptions/[id]/Subscrip
 import { TransferClassStudents } from "@screens/TenantRoutes/Classes/CRUD/[id]/TransferClassStudents";
 import { UpdateTenantPlan } from "@screens/TenantRoutes/plans/[id]/UpdateTenantPlan";
 import { UpdateClassData } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassData";
+import { TenantSubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/TenantSubscriptionProfile";
 
 
 export type TenantRoutes = {
@@ -53,6 +54,7 @@ export type TenantRoutes = {
   listTeachersClass: { tenantIdParams: string; classId: string; }
   addUserToClass: { classId: string; roleName: string; }
   tenantProfile: { tenantIdParams?: string };
+  tenantSubscriptionProfile: undefined;
   dashboard: undefined;
   timeTable: { timeTableId: string };
   timesTablesList: undefined;
@@ -136,6 +138,16 @@ export function TenantRoutes() {
       <Screen
         name="tenantProfile"
         component={TenantProfile}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Buildings color={color} size={iconSize} />
+          )
+        }}
+      />
+
+      <Screen
+        name="tenantSubscriptionProfile"
+        component={TenantSubscriptionProfile}
         options={{
           tabBarIcon: ({ color }) => (
             <Buildings color={color} size={iconSize} />

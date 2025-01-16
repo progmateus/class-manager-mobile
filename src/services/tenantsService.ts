@@ -65,6 +65,13 @@ export function RefreshTenantSubscriptionService(tenantId: string) {
   })
 }
 
+export function GetTenantSubscriptionProfileService(tenantId: string) {
+  return api({
+    url: `/tenants/${tenantId}/subscriptions/profile`,
+    method: 'get',
+  })
+}
+
 export function UploadtenantAvatarService(tenantId: string, form: FormData) {
   return api({
     url: `/tenants/${tenantId}/avatar`,
