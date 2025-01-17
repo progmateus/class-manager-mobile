@@ -13,7 +13,7 @@ import { Profile } from "@screens/UserRoutes/User/profile/UserProfile";
 import { UpdatePassword } from "@screens/UserRoutes/User/[id]/UpdatePassword";
 import { TenantsList } from "@screens/UserRoutes/Tenants/list/TenantsList";
 import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
-import { CreateSubscription } from "@screens/UserRoutes/Subscriptions/CreateSubscription";
+import { CreateUserSubscription } from "@screens/UserRoutes/Subscriptions/CreateUserSubscription";
 import { BookingsHistory } from "@screens/UserRoutes/Bookings/BookingsHistory";
 import { CreateTenant } from "@screens/UserRoutes/Tenants/CreateTenant";
 import { UpdateStudentClass } from "@screens/TenantRoutes/Classes/students/UpdateStudentClass";
@@ -33,7 +33,7 @@ type UserRoutes = {
   updateClassDayStatus: { tenantIdParams: string, classDayId: string };
   updateUser: undefined;
   updatePassword: undefined;
-  createSubscription: { tenantIdParams: string };
+  createUserSubscription: { tenantIdParams: string };
   bookingsHistory: { tenantIdParams?: string; userId?: string; };
   createTenant: undefined
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
@@ -136,8 +136,8 @@ export function UserRoutes() {
       />
 
       <Screen
-        name="createSubscription"
-        component={CreateSubscription}
+        name="createUserSubscription"
+        component={CreateUserSubscription}
         options={{ tabBarButton: () => (null) }}
       />
 

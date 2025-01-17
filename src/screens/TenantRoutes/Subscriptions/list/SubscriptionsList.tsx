@@ -58,7 +58,7 @@ export function SubscriptionsList() {
 
 
   const handleAdd = () => {
-    navigation.navigate('createSubscription', {})
+    navigation.navigate('createUserSubscription', {})
   }
 
   const changeTextDebounced = (text: string) => {

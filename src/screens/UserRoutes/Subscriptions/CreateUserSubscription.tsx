@@ -12,9 +12,9 @@ import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast } from "@utils/HelperNotifications";
 import { ListTenantPlansService } from "src/services/tenantPlansService";
 import { IClassDTO } from "@dtos/classes/IClassDTO";
-import { CreateSubscriptionService } from "src/services/subscriptionService";
 import { useAuth } from "@hooks/useAuth";
 import { UserNavigatorRoutesProps } from "@routes/user.routes";
+import { CreateUserSubscriptionService } from "src/services/subscriptionService";
 
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -36,7 +36,7 @@ const defaultValues = {
 
 type CreateSubscriptionProps = z.infer<typeof createSubscriptionSchema>
 
-export function CreateSubscription() {
+export function CreateUserSubscription() {
   const [classes, setClasses] = useState([])
   const [plans, setPlans] = useState([])
   const [isLoading, setIsLoadig] = useState(false)
@@ -90,7 +90,7 @@ export function CreateSubscription() {
     if (!tenantId || isLoading) return
     setIsLoadig(true)
     const { planId, classId } = data
-    CreateSubscriptionService(tenantId, planId, classId).then(({ data }) => {
+    CreateUserSubscriptionService(tenantId, planId, classId).then(({ data }) => {
       if (!user.subscriptions) user.subscriptions = []
       userUpdate({
         ...user,

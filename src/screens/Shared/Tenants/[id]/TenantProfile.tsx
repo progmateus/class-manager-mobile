@@ -65,7 +65,7 @@ export function TenantProfile() {
   })
 
   const handleSubscribe = () => {
-    navigation.navigate('createSubscription', {
+    navigation.navigate('createUserSubscription', {
       tenantIdParams: tenantId
     })
   }

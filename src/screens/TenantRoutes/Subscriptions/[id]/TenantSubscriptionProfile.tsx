@@ -98,11 +98,11 @@ export function TenantSubscriptionProfile() {
     }
 
     if (authenticationType == EAuthType.USER) {
-      userNavigation.navigate('createSubscription', {
+      userNavigation.navigate('createUserSubscription', {
         tenantIdParams: tenantId
       })
     } else {
-      tenantNavigation.navigate('createSubscription', { userId: subscription.userId })
+      tenantNavigation.navigate('createUserSubscription', { userId: subscription.userId })
     }
 
   }

@@ -2,7 +2,7 @@ import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { api } from "./api";
 import { IPaginationDTO } from "@dtos/shared/IPaginationDTO";
 
-export function CreateSubscriptionService(tenantId: string, tenantPlanId: string, classId: string, userId?: string) {
+export function CreateUserSubscriptionService(tenantId: string, tenantPlanId: string, classId: string, userId?: string) {
   return api({
     url: `${tenantId}/subscriptions/`,
     method: 'post',
@@ -11,6 +11,17 @@ export function CreateSubscriptionService(tenantId: string, tenantPlanId: string
       tenantPlanId,
       classId,
       userId
+    }
+  })
+}
+
+export function CreateTenantsubscriptionService(tenantId: string, planId: string, classId: string, userId?: string) {
+  return api({
+    url: `tenants/${tenantId}/subscriptions`,
+    method: 'post',
+    data: {
+      tenantId,
+      planId
     }
   })
 }

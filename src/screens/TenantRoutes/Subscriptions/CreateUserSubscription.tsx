@@ -3,9 +3,9 @@ import { PageHeader } from "@components/PageHeader";
 import { ScrollContainer } from "@components/ScrollContainer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import { Heading, Icon, Modal, Select, Text, useTheme, View, VStack } from "native-base";
-import { At, Check } from "phosphor-react-native";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Heading, Icon, Modal, Select, Text, View, VStack } from "native-base";
+import { At } from "phosphor-react-native";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ListClassesService } from "src/services/classesService";
 import { z } from "zod";
@@ -13,7 +13,7 @@ import dayjs from "dayjs"
 import { fireErrorToast, fireSuccesToast, fireWarningToast } from "@utils/HelperNotifications";
 import { ListTenantPlansService } from "src/services/tenantPlansService";
 import { IClassDTO } from "@dtos/classes/IClassDTO";
-import { CreateSubscriptionService } from "src/services/subscriptionService";
+import { CreateUserSubscriptionService } from "src/services/subscriptionService";
 import { useAuth } from "@hooks/useAuth";
 import { Avatar } from "@components/Avatar/Avatar";
 import { GetUserByUsernameService } from "src/services/usersService";
@@ -45,7 +45,7 @@ const defaultValues = {
 
 type CreateSubscriptionProps = z.infer<typeof createSubscriptionSchema>
 
-export function CreateSubscription() {
+export function CreateUserSubscription() {
   const [classes, setClasses] = useState<IClassDTO[]>([])
   const [plans, setPlans] = useState<ITenantPlanDTO[]>([])
   const [isLoading, setIsLoadig] = useState(false)
@@ -123,7 +123,7 @@ export function CreateSubscription() {
 
     errors.root
     setIsLoadig(true)
-    CreateSubscriptionService(tenantId, getValues("planId"), getValues("classId"), targetId).then(async ({ data }) => {
+    CreateUserSubscriptionService(tenantId, getValues("planId"), getValues("classId"), targetId).then(async ({ data }) => {
       fireSuccesToast('Assinatura realizada com sucesso!')
       setIsModalOpen(false)
       await queryClient.invalidateQueries({

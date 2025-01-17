@@ -25,7 +25,7 @@ import { UpdateTenant } from "@screens/TenantRoutes/Profile/UpdateTenant";
 import { UpdateTimeTable } from "@screens/TenantRoutes/TimesTables/[id]/UpdateTimeTable";
 import { TimesTablesList } from "@screens/TenantRoutes/TimesTables/list/TimesTablesList";
 import { CreateTimeTable } from "@screens/TenantRoutes/TimesTables/CreateTimeTable";
-import { CreateSubscription } from "@screens/TenantRoutes/Subscriptions/CreateSubscription";
+import { CreateUserSubscription } from "@screens/TenantRoutes/Subscriptions/CreateUserSubscription";
 import { UpdateClassTimeTable } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassTimeTable";
 import { CreateClassDay } from "@screens/TenantRoutes/ClassesDays/CreateClassDay";
 import { ClassesDaysList } from "@screens/UserRoutes/ClassesDays/ClassesDaysList";
@@ -46,7 +46,7 @@ import { UpdateTenantSubscriptionPlan } from "@screens/TenantRoutes/Subscription
 
 export type TenantRoutes = {
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
-  createSubscription: { userId?: string },
+  createUserSubscription: { userId?: string },
   students: undefined;
   classes: undefined;
   classProfile: { classId: string, tenantIdParams: string };
@@ -311,8 +311,8 @@ export function TenantRoutes() {
 
 
       <Screen
-        name="createSubscription"
-        component={CreateSubscription}
+        name="createUserSubscription"
+        component={CreateUserSubscription}
         options={{ tabBarButton: () => (null) }}
       />
 
