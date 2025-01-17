@@ -1,35 +1,31 @@
-import { Avatar } from "@components/Avatar/Avatar"
 import { MenuItem } from "@components/Items/MenuItem"
 import { PageHeader } from "@components/PageHeader"
 import { ScrollContainer } from "@components/ScrollContainer"
 import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfileDTO"
 import { useAuth } from "@hooks/useAuth"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { TenantNavigatorRoutesProps } from "@routes/tenant.routes"
 import { fireErrorToast, fireInfoToast, fireSuccesToast } from "@utils/HelperNotifications"
 import { transformInvoiceColor, transformInvoiceStatus, transformSubscriptionColor, transformSubscriptionStatus } from "@utils/StatusHelper"
-import { Actionsheet, Box, Center, Divider, Heading, HStack, Icon, Text, View, VStack } from "native-base"
-import { ArrowRight, IdentificationCard, BookBookmark, MapPin, Phone, Target, CheckCircle, LockKey, Money, ClockCounterClockwise, Check, X, SimCard, Plus, CurrencyDollar } from "phosphor-react-native"
-import { useMemo, useState } from "react"
+import { Actionsheet, Box, Divider, Heading, HStack, Icon, Text, View, VStack } from "native-base"
+import { ArrowRight, Target, CheckCircle, LockKey, Money, Check, X, SimCard, Plus, CurrencyDollar } from "phosphor-react-native"
+import { useState } from "react"
 import { TouchableOpacity } from "react-native"
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus"
 import { RefreshUserSubscriptionService, UpdateSubscriptionStatusService } from "src/services/subscriptionService"
-import { HasRole } from "@utils/HasRole"
 import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/SubscriptionProfile"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
 import { EAuthType } from "src/enums/EAuthType"
-import { EdocumentType } from "src/enums/EDocumentType"
 import { GetTenantSubscriptionProfileService } from "src/services/tenantsService"
 import dayjs from "dayjs"
 
 export function TenantSubscriptionProfile() {
   const [isActing, setIsActing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const route = useRoute()
-  const { tenant, user, authenticationType } = useAuth()
+  const { tenant, authenticationType } = useAuth()
   const tenantId = tenant.id
-  const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>()
+  const navigation = useNavigation<TenantNavigatorRoutesProps>()
   const userNavigation = useNavigation<UserNavigatorRoutesProps>()
 
   const queryClient = useQueryClient();
@@ -80,7 +76,7 @@ export function TenantSubscriptionProfile() {
           subscriptionId: data.data.id
         })
       } else {
-        tenantNavigation.navigate('subscriptionProfile', {
+        navigation.navigate('subscriptionProfile', {
           tenantIdParams: tenantId,
           subscriptionId: data.data.id
         })
@@ -96,15 +92,7 @@ export function TenantSubscriptionProfile() {
     if (!subscription) {
       return
     }
-
-    if (authenticationType == EAuthType.USER) {
-      userNavigation.navigate('createUserSubscription', {
-        tenantIdParams: tenantId
-      })
-    } else {
-      tenantNavigation.navigate('createUserSubscription', { userId: subscription.userId })
-    }
-
+    navigation.navigate('createTenantsubscription')
   }
 
   const verifySubscriptionStatus = (status: ESubscriptionStatus[]) => {
@@ -121,7 +109,7 @@ export function TenantSubscriptionProfile() {
     if (authenticationType == EAuthType.USER) {
       userNavigation.navigate('invoicesList', { subscriptionId: subscription.id, tenantIdParams: tenantId })
     } else {
-      tenantNavigation.navigate('invoicesList', { subscriptionId: subscription.id, userId: subscription.userId })
+      navigation.navigate('invoicesList', { subscriptionId: subscription.id, userId: subscription.userId })
     }
   }
 
@@ -254,7 +242,7 @@ export function TenantSubscriptionProfile() {
                     </MenuItem.Actions>
                   </MenuItem.Root>
 
-                  <MenuItem.Root onPress={() => tenantNavigation.navigate('updateTenantsubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.planId, subscriptionId: subscription?.id })}>
+                  <MenuItem.Root onPress={() => navigation.navigate('updateTenantsubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.planId, subscriptionId: subscription?.id })}>
                     <MenuItem.Icon icon={SimCard} />
                     <MenuItem.Content title="Alterar plano" description="Altere o plano da sua assinatura" />
                     <MenuItem.Actions>

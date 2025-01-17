@@ -42,11 +42,13 @@ import { UpdateTenantPlan } from "@screens/TenantRoutes/tenantPlans/[id]/UpdateT
 import { UpdateClassData } from "@screens/TenantRoutes/Classes/CRUD/[id]/UpdateClassData";
 import { TenantSubscriptionProfile } from "@screens/TenantRoutes/Subscriptions/[id]/TenantSubscriptionProfile";
 import { UpdateTenantSubscriptionPlan } from "@screens/TenantRoutes/Subscriptions/UpdateTenantSubscriptionPlan";
+import { CreateTenantSubscription } from "@screens/TenantRoutes/Subscriptions/CreateTenantSubscription";
 
 
 export type TenantRoutes = {
   subscriptionProfile: { tenantIdParams?: string, subscriptionId: string };
   createUserSubscription: { userId?: string },
+  createTenantsubscription: undefined,
   students: undefined;
   classes: undefined;
   classProfile: { classId: string, tenantIdParams: string };
@@ -313,6 +315,12 @@ export function TenantRoutes() {
       <Screen
         name="createUserSubscription"
         component={CreateUserSubscription}
+        options={{ tabBarButton: () => (null) }}
+      />
+
+      <Screen
+        name="createTenantsubscription"
+        component={CreateTenantSubscription}
         options={{ tabBarButton: () => (null) }}
       />
 
