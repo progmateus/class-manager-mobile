@@ -84,7 +84,7 @@ export function UpdateTenantSubscriptionPlan() {
       queryClient.invalidateQueries({
         queryKey: ['get-tenant-plans', tenant.id],
       }).then(() => {
-        navigation.navigate('subscriptionProfile', { subscriptionId, tenantIdParams: tenantId })
+        navigation.navigate('tenantSubscriptionProfile')
       })
     }).finally(() => {
       setIsActing(false)
@@ -133,7 +133,7 @@ export function UpdateTenantSubscriptionPlan() {
                         planIdExists == plan.id ? (
                           <Text fontSize={16}>Plano atual</Text>
                         ) : (
-                          <Button w="48" colorScheme="brand.500" rounded="lg" isLoading={isActing} onPress={() => handleSave(plan.id)}>Selecionar</Button>
+                          <Button w="48" bgColor="brand.500" rounded="lg" isLoading={isActing} onPress={() => handleSave(plan.id)}>Selecionar</Button>
                         )
                       }
                     </View>
