@@ -4,6 +4,7 @@ import { ILinkDTO } from "./ILinkDTO";
 import { ESubscriptionStatus } from "src/enums/ESubscriptionStatus";
 import { IImageDTO } from "./IImageDTO";
 import { IExternalBankAccountDTO } from "./IExternalBankAccountDTO";
+import { ISubscriptionProfileDTO } from "@dtos/subscriptions/ISubscriptionProfileDTO";
 
 interface ITenantDTO {
   id: string;
@@ -12,6 +13,7 @@ interface ITenantDTO {
   documentType: EdocumentType;
   status: ETenantStatus;
   subscriptionStatus: ESubscriptionStatus;
+  latestSubscription?: ISubscriptionProfileDTO;
   StripeOnboardUrl?: number;
   AvailableBalance?: number;
   email: string;

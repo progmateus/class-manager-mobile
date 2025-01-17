@@ -15,7 +15,7 @@ export function CreateUserSubscriptionService(tenantId: string, tenantPlanId: st
   })
 }
 
-export function CreateTenantsubscriptionService(tenantId: string, planId: string, classId: string, userId?: string) {
+export function CreateTenantsubscriptionService(tenantId: string, planId: string) {
   return api({
     url: `tenants/${tenantId}/subscriptions`,
     method: 'post',

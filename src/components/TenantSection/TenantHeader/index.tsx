@@ -50,7 +50,7 @@ export function TenantHeader() {
         }
 
         {
-          tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE_EXPIRED && (
+          tenant.latestSubscription?.status == ESubscriptionStatus.INCOMPLETE_EXPIRED && (
             <TouchableOpacity onPress={handleRefreshTenantsubscription}>
               <View px={4} py={3} bgColor="red.400">
                 <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
@@ -63,7 +63,7 @@ export function TenantHeader() {
 
 
         {
-          tenant.subscriptionStatus == ESubscriptionStatus.INCOMPLETE && (
+          tenant.latestSubscription?.status == ESubscriptionStatus.INCOMPLETE && (
             <TouchableOpacity>
               <View px={4} py={3} bgColor="brand.200">
                 <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
