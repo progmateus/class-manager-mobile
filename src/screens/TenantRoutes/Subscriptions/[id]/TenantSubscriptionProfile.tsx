@@ -17,7 +17,7 @@ import { SubscriptionProfileSkeleton } from "@components/skeletons/screens/Subsc
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { UserNavigatorRoutesProps } from "@routes/user.routes"
 import { EAuthType } from "src/enums/EAuthType"
-import { GetTenantSubscriptionProfileService } from "src/services/tenantsService"
+import { GetTenantSubscriptionProfileService, RefreshTenantSubscriptionService } from "src/services/tenantsService"
 import dayjs from "dayjs"
 
 export function TenantSubscriptionProfile() {
@@ -26,7 +26,6 @@ export function TenantSubscriptionProfile() {
   const { tenant, authenticationType } = useAuth()
   const tenantId = tenant.id
   const navigation = useNavigation<TenantNavigatorRoutesProps>()
-  const userNavigation = useNavigation<UserNavigatorRoutesProps>()
 
   const queryClient = useQueryClient();
 
@@ -63,24 +62,17 @@ export function TenantSubscriptionProfile() {
     })
   }
 
-  const handleRefeshUserSubscription = () => {
+  const handleRefreshTenantSubscription = () => {
     if (!subscription || isActing) {
       return
     }
     setIsActing(true)
-    RefreshUserSubscriptionService(subscription?.tenantId, subscription.id).then(({ data }) => {
+    RefreshTenantSubscriptionService(tenant.id).then(({ data }) => {
       fireSuccesToast('Assinatura realizada')
-      if (authenticationType == EAuthType.USER) {
-        userNavigation.navigate('subscriptionProfile', {
-          tenantIdParams: tenantId,
-          subscriptionId: data.data.id
-        })
-      } else {
-        navigation.navigate('subscriptionProfile', {
-          tenantIdParams: tenantId,
-          subscriptionId: data.data.id
-        })
-      }
+      navigation.navigate('subscriptionProfile', {
+        tenantIdParams: tenantId,
+        subscriptionId: data.data.id
+      })
     }).catch(() => {
       fireErrorToast('Ocorreu um erro')
     }).finally(() => {
@@ -106,11 +98,8 @@ export function TenantSubscriptionProfile() {
     if (!subscription) {
       return
     }
-    if (authenticationType == EAuthType.USER) {
-      userNavigation.navigate('invoicesList', { subscriptionId: subscription.id, tenantIdParams: tenantId })
-    } else {
-      navigation.navigate('invoicesList', { subscriptionId: subscription.id, userId: subscription.userId })
-    }
+    console.log(subscription.id)
+    navigation.navigate('invoicesList', { subscriptionId: subscription.id, tenantIdParams: tenant.id })
   }
 
   const onRefresh = async () => {
@@ -145,7 +134,7 @@ export function TenantSubscriptionProfile() {
               <VStack space={8}>
                 {
                   verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
-                    <TouchableOpacity onPress={handleRefeshUserSubscription}>
+                    <TouchableOpacity onPress={handleRefreshTenantSubscription}>
                       <View mt={-8} mx={-4} px={4} py={3} bgColor="red.400">
                         <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
                           A assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura.

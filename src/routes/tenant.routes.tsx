@@ -131,10 +131,12 @@ export function TenantRoutes() {
         name="invoicesList"
         initialParams={{}}
         component={InvoicesList}
+        getId={({ params }) => params?.subscriptionId}
         options={{
           tabBarIcon: ({ color }) => (
             <Receipt color={color} size={iconSize} />
-          )
+          ),
+
         }}
       />
 

@@ -25,13 +25,14 @@ import { EdocumentType } from "src/enums/EDocumentType"
 type RouteParamsProps = {
   tenantIdParams?: string;
   subscriptionId: string;
+  userId?: string;
 }
 
 export function SubscriptionProfile() {
   const [isActing, setIsActing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const route = useRoute()
-  const { tenantIdParams, subscriptionId } = route.params as RouteParamsProps;
+  const { tenantIdParams, subscriptionId, userId } = route.params as RouteParamsProps;
   const { tenant, user, authenticationType } = useAuth()
   const tenantId = tenant?.id ?? tenantIdParams
   const tenantNavigation = useNavigation<TenantNavigatorRoutesProps>()
@@ -142,6 +143,8 @@ export function SubscriptionProfile() {
     if (!subscription) {
       return
     }
+    console.log('opa: ', subscription.id)
+
     if (authenticationType == EAuthType.USER) {
       userNavigation.navigate('invoicesList', { subscriptionId: subscription.id, tenantIdParams: tenantId })
     } else {

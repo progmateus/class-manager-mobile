@@ -120,7 +120,7 @@ export function InvoiceItem({ invoice }: IProps) {
             <Heading fontFamily="heading" fontSize="sm">{formatDate(invoice.expiresAt)}</Heading>
             {
               authenticationType == EAuthType.USER && (
-                <Text color="coolGray.500" fontSize="sm" fontWeight="light">{invoice.tenant?.name} </Text>
+                <Text color="coolGray.500" fontSize="sm" fontWeight="light">{invoice.tenant?.name}</Text>
               )
             }
             <Text color={color} fontSize="sm" fontWeight="light">{convertBillStatus(invoice.status).label} </Text>

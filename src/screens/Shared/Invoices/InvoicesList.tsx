@@ -4,10 +4,10 @@ import { PageHeader } from "@components/PageHeader";
 import { Viewcontainer } from "@components/ViewContainer";
 import { IInvoiceDTO } from "@dtos/invoices/IInvoiceDTO";
 import { useAuth } from "@hooks/useAuth";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { FlatList, Text, View, VStack } from "native-base";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { EAuthType } from "src/enums/EAuthType";
 import { ETargetType } from "src/enums/ETargetType";
 import { ListInvoicesService } from "src/services/invoiceService";
@@ -16,6 +16,7 @@ import { ListInvoicesService } from "src/services/invoiceService";
 type RouteParamsProps = {
   tenantIdParams?: string;
   subscriptionId?: string;
+  userId?: string;
 }
 
 export function InvoicesList() {
@@ -26,16 +27,12 @@ export function InvoicesList() {
 
   const queryClient = useQueryClient()
 
-  const { tenantIdParams, subscriptionId } = route.params as RouteParamsProps;
+  const { tenantIdParams, subscriptionId, userId } = route.params as RouteParamsProps;
 
   const tenantId = tenant?.id ?? tenantIdParams
 
   const loadInvoices = async (page: number) => {
     const targetTypes = [];
-
-    if (subscriptionId) {
-      targetTypes.push(ETargetType.USER)
-    }
 
     if (authenticationType == EAuthType.TENANT && !subscriptionId) {
       targetTypes.push(ETargetType.TENANT)
@@ -56,7 +53,7 @@ export function InvoicesList() {
   }
 
   const { data: results, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<IInvoiceDTO[]>({
-    queryKey: ['get-invoices', user.id, tenantId, subscriptionId],
+    queryKey: ['get-invoices', userId, tenantId, subscriptionId],
     queryFn: ({ pageParam }) => loadInvoices(Number(pageParam)),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam: any) => {
@@ -78,6 +75,14 @@ export function InvoicesList() {
       queryKey: ['get-invoices']
     })
   }
+
+  useFocusEffect(useCallback(() => {
+    console.log({
+      userId: authenticationType == EAuthType.USER ? user.id : undefined,
+      subscriptionId,
+      tenantId
+    })
+  }, []))
 
   return (
     <View flex={1}>
