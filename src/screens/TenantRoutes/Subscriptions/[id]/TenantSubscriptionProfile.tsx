@@ -32,6 +32,7 @@ export function TenantSubscriptionProfile() {
 
   const loadTenantSubscriptionProfile = async () => {
     try {
+      console.log('opaopaopa')
       const { data } = await GetTenantSubscriptionProfileService(tenantId)
       return data.data
     } catch (err) {
@@ -98,13 +99,12 @@ export function TenantSubscriptionProfile() {
     if (!subscription) {
       return
     }
-    console.log(subscription.id)
     navigation.navigate('invoicesList', { subscriptionId: subscription.id, tenantIdParams: tenant.id })
   }
 
   const onRefresh = async () => {
     queryClient.invalidateQueries({
-      queryKey: ['get-subscription-profile', subscription?.id]
+      queryKey: ['get-tenant-subscription-profile', tenantId]
     })
   }
 
@@ -123,6 +123,7 @@ export function TenantSubscriptionProfile() {
       year: 'numeric'
     }).format(dayjs(date, 'YYYY-MM-DD:hh:mm').toDate())
   }
+
 
   return (
     <View flex={1}>

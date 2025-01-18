@@ -7,7 +7,7 @@ import { useTheme } from "native-base";
 import { SubscriptionsList } from "@screens/TenantRoutes/Subscriptions/list/SubscriptionsList";
 import { ClassesList } from "@screens/TenantRoutes/Classes/CRUD/ClassesList";
 import { Dashboard } from "@screens/TenantRoutes/Dashboard";
-import { BookBookmark, Buildings, Calendar, GraduationCap, House, Receipt, UserCircle } from "phosphor-react-native";
+import { BookBookmark, Buildings, Calendar, Crosshair, GraduationCap, House, Receipt, UserCircle } from "phosphor-react-native";
 import { TenantPlansList } from "@screens/TenantRoutes/tenantPlans/TenantPlansList";
 import { CreateTenantPlan } from "@screens/TenantRoutes/tenantPlans/CreateTenantPlan";
 import { CreateClass } from "@screens/TenantRoutes/Classes/CRUD/CreateClass";
@@ -140,20 +140,19 @@ export function TenantRoutes() {
         }}
       />
 
-
       <Screen
-        name="tenantProfile"
-        component={TenantProfile}
+        name="tenantSubscriptionProfile"
+        component={TenantSubscriptionProfile}
         options={{
           tabBarIcon: ({ color }) => (
-            <Buildings color={color} size={iconSize} />
+            <Crosshair color={color} size={iconSize} />
           )
         }}
       />
 
       <Screen
-        name="tenantSubscriptionProfile"
-        component={TenantSubscriptionProfile}
+        name="tenantProfile"
+        component={TenantProfile}
         options={{
           tabBarIcon: ({ color }) => (
             <Buildings color={color} size={iconSize} />

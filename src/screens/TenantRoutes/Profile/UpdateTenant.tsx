@@ -154,9 +154,6 @@ export function UpdateTenant() {
 
 
     setIsLoading(true)
-    console.log({
-      name, description, email, document, links: tenant.links
-    })
     UpdateTenantSertvice({ name, description, email, document, links: tenant.links }, tenant.id).then(() => {
       fireSuccesToast("Empresa atualizada!")
       refreshTenant()

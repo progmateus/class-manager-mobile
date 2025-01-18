@@ -76,14 +76,6 @@ export function InvoicesList() {
     })
   }
 
-  useFocusEffect(useCallback(() => {
-    console.log({
-      userId: authenticationType == EAuthType.USER ? user.id : undefined,
-      subscriptionId,
-      tenantId
-    })
-  }, []))
-
   return (
     <View flex={1}>
       <PageHeader title="Cobranças" />

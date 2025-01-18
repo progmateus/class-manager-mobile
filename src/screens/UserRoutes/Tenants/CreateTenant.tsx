@@ -218,7 +218,6 @@ export function CreateTenant() {
 
 
   const handleNextTab = () => {
-    console.log('handleNextTab')
     if (tab == "username") {
       setPercentage("50")
       setTab("data")

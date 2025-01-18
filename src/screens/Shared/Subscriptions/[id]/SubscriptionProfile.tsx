@@ -143,7 +143,6 @@ export function SubscriptionProfile() {
     if (!subscription) {
       return
     }
-    console.log('opa: ', subscription.id)
 
     if (authenticationType == EAuthType.USER) {
       userNavigation.navigate('invoicesList', { subscriptionId: subscription.id, tenantIdParams: tenantId })
