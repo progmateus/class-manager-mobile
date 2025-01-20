@@ -5,6 +5,7 @@ import { IUserPreviewDTO } from "@dtos/users/IUserPreviewDTO";
 import { EInvoiceStatus } from "src/enums/EInvoiceStatus";
 import { ETargetType } from "src/enums/ETargetType";
 import { EInvoiceType } from "src/enums/EInvoiceType";
+import { IPlanDTO } from "@dtos/subscriptions/IPlanDTO";
 
 export type IInvoiceDTO = {
     id: string;
@@ -21,6 +22,7 @@ export type IInvoiceDTO = {
     expiresAt: Date;
     user?: IUserPreviewDTO;
     tenantPlan?: ITenantPlanDTO;
+    plan?: IPlanDTO;
     subscription?: ISubscriptionPreviewDTO;
     tenant?: ITenantDTO;
     createdAt: Date;
