@@ -232,13 +232,13 @@ export function TenantSubscriptionProfile() {
                     </MenuItem.Actions>
                   </MenuItem.Root>
 
-                  <MenuItem.Root onPress={() => navigation.navigate('updateTenantsubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.planId, subscriptionId: subscription?.id })}>
+                  {/*                   <MenuItem.Root onPress={() => navigation.navigate('updateTenantsubscriptionPlan', { tenantIdParams: tenantId, planIdExists: subscription.planId, subscriptionId: subscription?.id })}>
                     <MenuItem.Icon icon={SimCard} />
                     <MenuItem.Content title="Alterar plano" description="Altere o plano da sua assinatura" />
                     <MenuItem.Actions>
                       <MenuItem.Action icon={ArrowRight} />
                     </MenuItem.Actions>
-                  </MenuItem.Root>
+                  </MenuItem.Root> */}
 
                   <MenuItem.Root onPress={handleNavigateToInvoicesPage}>
                     <MenuItem.Icon icon={CurrencyDollar} />

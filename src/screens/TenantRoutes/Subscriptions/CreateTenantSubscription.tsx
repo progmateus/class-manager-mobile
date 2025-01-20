@@ -41,6 +41,7 @@ export function CreateTenantSubscription() {
   const handleCreateSubscription = (planId: string) => {
     if (isSubimiting) return
 
+    setIsSubmiting(true)
     CreateTenantsubscriptionService(tenant.id, planId).then(async () => {
       fireSuccesToast('Assinatura realizada')
       await queryClient.invalidateQueries({
