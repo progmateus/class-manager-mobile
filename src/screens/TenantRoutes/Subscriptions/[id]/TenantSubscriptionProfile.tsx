@@ -32,7 +32,6 @@ export function TenantSubscriptionProfile() {
 
   const loadTenantSubscriptionProfile = async () => {
     try {
-      console.log('opaopaopa')
       const { data } = await GetTenantSubscriptionProfileService(tenantId)
       return data.data
     } catch (err) {
