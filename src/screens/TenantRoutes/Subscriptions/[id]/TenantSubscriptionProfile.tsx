@@ -133,39 +133,42 @@ export function TenantSubscriptionProfile() {
           : (
             <ScrollContainer onRefresh={onRefresh} isRefreshing={isLoading}>
               <VStack space={8}>
-                {
-                  verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
-                    <TouchableOpacity onPress={handleRefreshTenantSubscription}>
-                      <View mt={-8} mx={-4} px={4} py={3} bgColor="red.400">
-                        <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                          A assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura.
+                <VStack mx={-4} mt={-8} space={1}>
+                  {
+                    verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
+                      <TouchableOpacity onPress={handleRefreshTenantSubscription}>
+                        <View mt={-8} mx={-4} px={4} py={3} bgColor="red.400">
+                          <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                            A assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura.
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    )
+                  }
+
+                  {
+                    subscription.nextPlanId && (
+                      <View mt={-8} mx={-4} px={4} py={3} bgColor="blue.500">
+                        <Text fontSize="sm" fontFamily="body" color="coolGray.100" >
+                          {`Seu plano será alterado para o ${subscription.nextPlan?.name} ao final do ciclo de cobrança atual`}
                         </Text>
                       </View>
-                    </TouchableOpacity>
-                  )
-                }
+                    )
+                  }
 
-                {
-                  subscription.nextPlanId && (
-                    <View mt={-8} mx={-4} px={4} py={3} bgColor="blue.500">
-                      <Text fontSize="sm" fontFamily="body" color="coolGray.100" >
-                        {`Seu plano será alterado para o ${subscription.nextPlan?.name} ao final do ciclo de cobrança atual`}
-                      </Text>
-                    </View>
-                  )
-                }
+                  {
+                    verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE]) && (
+                      <TouchableOpacity>
+                        <View px={4} py={3} bgColor="yellow.400">
+                          <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                            Efetue o pagamento dentro das primeiras 24 horas para que a assinatura seja ativada.
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    )
+                  }
+                </VStack>
 
-                {
-                  verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE]) && (
-                    <TouchableOpacity>
-                      <View px={4} py={3} bgColor="yellow.400">
-                        <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                          Efetue o pagamento dentro das primeiras 24 horas para que a assinatura seja ativada.
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  )
-                }
                 <HStack flex={1} space={6} alignItems="center" mt={2}>
                   <VStack justifyContent="center" alignItems="center">
                     <HStack alignItems="center" space={1}>

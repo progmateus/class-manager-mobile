@@ -166,7 +166,7 @@ export function SubscriptionProfile() {
         isLoading || !subscription ? (<SubscriptionProfileSkeleton />)
           : (
             <ScrollContainer onRefresh={onRefresh} isRefreshing={isLoading}>
-              <VStack space={8}>
+              <VStack space={8} mx={-4}>
                 {
                   verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
                     <TouchableOpacity onPress={handleRefeshUserSubscription}>
