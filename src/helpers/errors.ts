@@ -174,6 +174,10 @@ const errors = [
   {
     message: "UNPAID_SUBSCRIPTION_ALREADY_EXISTS",
     description: "Existem cobranças pendentes"
+  },
+  {
+    message: "ERR_INVALID_REFRESH_TOKEN",
+    description: "Refresh token inválido"
   }
 ]
 export { errors }
