@@ -166,30 +166,33 @@ export function SubscriptionProfile() {
         isLoading || !subscription ? (<SubscriptionProfileSkeleton />)
           : (
             <ScrollContainer onRefresh={onRefresh} isRefreshing={isLoading}>
-              <VStack space={8} mx={-4}>
-                {
-                  verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
-                    <TouchableOpacity onPress={handleRefeshUserSubscription}>
-                      <View px={4} py={3} bgColor="red.400">
-                        <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                          A assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura.
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  )
-                }
+              <VStack space={8} >
+                <VStack mx={-4} mt={-8} space={1}>
+                  {
+                    verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
+                      <TouchableOpacity onPress={handleRefeshUserSubscription}>
+                        <View px={4} py={3} bgColor="red.400">
+                          <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                            A assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura.
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    )
+                  }
 
-                {
-                  verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE]) && (
-                    <TouchableOpacity>
-                      <View px={4} py={3} bgColor="yellow.400">
-                        <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
-                          Efetue o pagamento dentro das primeiras 24 horas para que a assinatura seja ativada.
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  )
-                }
+                  {
+                    verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE]) && (
+                      <TouchableOpacity>
+                        <View px={4} py={3} bgColor="yellow.400">
+                          <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
+                            Efetue o pagamento dentro das primeiras 24 horas para que a assinatura seja ativada.
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    )
+                  }
+                </VStack>
+
                 <HStack justifyContent="space-between">
                   <VStack space={1}>
                     <HStack alignItems="center" space={1}>

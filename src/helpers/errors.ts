@@ -170,6 +170,10 @@ const errors = [
   {
     message: "ERR_ONLY_UPDATE_THE_LATEST_SUBSCRIPTION",
     description: "Só é possivel alterar a assinatura atual do usuário"
+  },
+  {
+    message: "UNPAID_SUBSCRIPTION_ALREADY_EXISTS",
+    description: "Existem cobranças pendentes"
   }
 ]
 export { errors }

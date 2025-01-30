@@ -17,7 +17,7 @@ export function Avatar({ src, alt = "Imagem", type = "user", ...rest }: IProps) 
   const imageRef = useRef<InterfaceImageProps>({} as InterfaceImageProps)
   let finalSrc = "";
   let localSrc = ReactImage.resolveAssetSource(BlankProfileImage).uri
-  finalSrc = src ? `http://192.168.15.5:5062/images/${src}` : localSrc;
+  finalSrc = src ? `http://192.168.15.8:5062/images/${src}` : localSrc;
 
 
   return (

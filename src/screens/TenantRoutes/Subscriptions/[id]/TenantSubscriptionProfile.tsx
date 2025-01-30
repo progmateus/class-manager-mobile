@@ -136,7 +136,7 @@ export function TenantSubscriptionProfile() {
                   {
                     verifySubscriptionStatus([ESubscriptionStatus.INCOMPLETE_EXPIRED]) && (
                       <TouchableOpacity onPress={handleRefreshTenantSubscription}>
-                        <View mt={-8} mx={-4} px={4} py={3} bgColor="red.400">
+                        <View mt={-8} px={4} py={3} bgColor="red.400">
                           <Text fontSize="sm" fontFamily="body" color="coolGray.700" >
                             A assinatura expirou devido ao atraso do pagamento da primeira fatura. Clique aqui para gerar uma nova assinatura.
                           </Text>
@@ -147,7 +147,7 @@ export function TenantSubscriptionProfile() {
 
                   {
                     subscription.nextPlanId && (
-                      <View mt={-8} mx={-4} px={4} py={3} bgColor="blue.500">
+                      <View mt={-8} px={4} py={3} bgColor="blue.500">
                         <Text fontSize="sm" fontFamily="body" color="coolGray.100" >
                           {`Seu plano será alterado para o ${subscription.nextPlan?.name} ao final do ciclo de cobrança atual`}
                         </Text>
